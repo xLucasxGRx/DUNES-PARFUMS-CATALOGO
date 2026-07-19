@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DUNES PARFUMS - Catálogo oficial. Descubre fragancias árabes, de diseñador, nicho y decants exclusivos cuidadosamente seleccionados.">
+    <title>Dunes Parfums | Catálogo de Perfumería Premium</title>
+    
+    <!-- Hojas de Estilo Modularizadas -->
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animaciones.css">
+</head>
+<body>
+
+    <!-- 1. ENCABEZADO PRINCIPAL (HEADER) -->
+    <header class="header-main" id="header-main">
+        <div class="container header-container">
+            <!-- Logotipo y Nombre -->
+            <a href="index.html" class="logo-container" aria-label="Volver al inicio de Dunes Parfums">
+                <div class="logo-icon" aria-hidden="true">D</div>
+                <span class="logo-text">DUNES <span>PARFUMS</span></span>
+            </a>
+
+            <!-- Navegación Desktop -->
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link active">Inicio</a></li>
+                    <li><a href="catalogo.html" class="nav-link">Catálogo</a></li>
+                    <li><a href="index.html#ofertas" class="nav-link">Ofertas</a></li>
+                    <li><a href="catalogo.html?cat=decants" class="nav-link">Decants</a></li>
+                    <li><a href="index.html#contacto" class="nav-link">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Acciones de Cabecera -->
+            <div class="header-actions">
+                <!-- Icono del Carrito con Contador Reactivo -->
+                <a href="carrito.html" class="cart-icon-btn" aria-label="Ver mi pedido en el carrito">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag" aria-hidden="true">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+
+                <!-- Botón Menú Hamburguesa para Móviles -->
+                <button class="burger-menu-btn" id="mobile-menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 2. HERO PRINCIPAL -->
+        <section class="hero-section" id="inicio">
+            <div class="hero-background-decor" aria-hidden="true"></div>
+            <div class="container hero-grid">
+                <!-- Contenido Comercial -->
+                <div class="hero-content reveal">
+                    <span class="hero-subtitle">Alta Perfumería</span>
+                    <h1 class="hero-title">Descubre una fragancia que hable por ti</h1>
+                    <p class="hero-description">
+                        Perfumes árabes, de diseñador, nicho y decants cuidadosamente seleccionados para asegurar exclusividad y duración excepcional.
+                    </p>
+                    <div class="hero-btn-row">
+                        <a href="catalogo.html" class="btn btn-primary">Explorar catálogo</a>
+                        <button class="btn btn-secondary" id="general-whatsapp-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                            </svg>
+                            Consultar por WhatsApp
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Imagen del Hero -->
+                <div class="hero-image-wrapper reveal">
+                    <div class="hero-image-glow" aria-hidden="true"></div>
+                    <div class="hero-decor-circle hero-decor-c1" aria-hidden="true"></div>
+                    <img src="img/banners/hero_perfume.png" alt="Perfume exclusivo Dunes Parfums en base de mármol negro con detalles dorados" class="hero-perfume-img">
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. CATEGORÍAS -->
+        <section class="section-padding" id="categorias">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-subtitle">Colecciones</span>
+                    <h2 class="section-title">Explora por Categorías</h2>
+                </div>
+
+                <div class="categories-grid">
+                    <!-- Tarjeta: Perfumes Árabes -->
+                    <article class="category-card reveal" onclick="window.location.href='catalogo.html?cat=arabes'">
+                        <div class="category-img-container">
+                            <img src="img/categorias/arabes.png" alt="Categoría Perfumes Árabes - Fragancias exóticas y especiadas" class="category-img" loading="lazy">
+                            <div class="category-overlay">
+                                <h3 class="category-name">Perfumes Árabes</h3>
+                                <p class="category-desc">Aromas intensos y misteriosos con notas de Oud, ámbar y especias del desierto.</p>
+                                <span class="category-btn">Explorar</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta: Perfumes de Diseñador -->
+                    <article class="category-card reveal" onclick="window.location.href='catalogo.html?cat=disenador'">
+                        <div class="category-img-container">
+                            <img src="img/categorias/disenador.png" alt="Categoría Perfumes de Diseñador - Grandes marcas de moda" class="category-img" loading="lazy">
+                            <div class="category-overlay">
+                                <h3 class="category-name">Diseñador</h3>
+                                <p class="category-desc">Clásicos modernos y tendencias de las casas de moda más prestigiosas del mundo.</p>
+                                <span class="category-btn">Explorar</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta: Perfumes Nicho -->
+                    <article class="category-card reveal" onclick="window.location.href='catalogo.html?cat=nicho'">
+                        <div class="category-img-container">
+                            <img src="img/categorias/nicho.png" alt="Categoría Perfumes Nicho - Exclusividad artística" class="category-img" loading="lazy">
+                            <div class="category-overlay">
+                                <h3 class="category-name">Perfumes Nicho</h3>
+                                <p class="category-desc">Creaciones artísticas poco comunes, de autor, con la máxima concentración.</p>
+                                <span class="category-btn">Explorar</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta: Decants -->
+                    <article class="category-card reveal" onclick="window.location.href='catalogo.html?cat=decants'">
+                        <div class="category-img-container">
+                            <img src="img/categorias/decants.png" alt="Categoría Decants - Muestras fraccionadas exclusivas" class="category-img" loading="lazy">
+                            <div class="category-overlay">
+                                <h3 class="category-name">Decants</h3>
+                                <p class="category-desc">Muestras de 5ml y 10ml para descubrir tu fragancia ideal antes de comprar la botella.</p>
+                                <span class="category-btn">Explorar</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PRODUCTOS DESTACADOS -->
+        <section class="section-padding featured-section" id="destacados">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-subtitle">Exclusividad</span>
+                    <h2 class="section-title">Fragancias Destacadas</h2>
+                </div>
+
+                <!-- Grid de productos cargado dinámicamente desde js/interfaz.js -->
+                <div class="products-grid" id="productos-destacados-grid">
+                    <!-- Contenido Dinámico de Prueba -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. BENEFICIOS -->
+        <section class="section-padding benefits-section" id="beneficios">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-subtitle">¿Por qué elegirnos?</span>
+                    <h2 class="section-title">Nuestra Garantía Dunes</h2>
+                </div>
+
+                <div class="benefits-grid">
+                    <!-- Beneficio 1: Productos Seleccionados -->
+                    <div class="benefit-card reveal">
+                        <div class="benefit-icon-wrapper" aria-hidden="true">✨</div>
+                        <h3 class="benefit-title">Fragancias 100% Originales</h3>
+                        <p class="benefit-desc">Cada perfume en nuestro catálogo proviene de proveedores oficiales garantizando autenticidad absoluta.</p>
+                    </div>
+
+                    <!-- Beneficio 2: Envíos rápidos -->
+                    <div class="benefit-card reveal">
+                        <div class="benefit-icon-wrapper" aria-hidden="true">🛵</div>
+                        <h3 class="benefit-title">Envíos & Delivery Express</h3>
+                        <p class="benefit-desc">Coordinamos despachos rápidos para que recibas tu fragancia favorita en la puerta de tu hogar.</p>
+                    </div>
+
+                    <!-- Beneficio 3: Atención Personalizada -->
+                    <div class="benefit-card reveal">
+                        <div class="benefit-icon-wrapper" aria-hidden="true">🤝</div>
+                        <h3 class="benefit-title">Asesoría Profesional</h3>
+                        <p class="benefit-desc">¿No sabes qué elegir? Nuestro equipo te asesora por WhatsApp para encontrar tu aroma insignia.</p>
+                    </div>
+
+                    <!-- Beneficio 4: Promoción Decants -->
+                    <div class="benefit-card reveal">
+                        <div class="benefit-icon-wrapper" aria-hidden="true">🎁</div>
+                        <h3 class="benefit-title">Decant de Obsequio</h3>
+                        <p class="benefit-desc">Obtén una muestra de regalo con compras seleccionadas o promociones especiales activas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. OFERTA DESTACADA -->
+        <section class="section-padding weekly-offer-section" id="ofertas">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-subtitle">Oferta Especial</span>
+                    <h2 class="section-title">Fragancia de la Semana</h2>
+                </div>
+
+                <div class="offer-card reveal">
+                    <div class="offer-grid">
+                        <!-- Lado Imagen -->
+                        <div class="offer-img-side">
+                            <span class="offer-badge" id="weekly-offer-badge">20% OFF</span>
+                            <img src="img/productos/khamrah.png" alt="Lattafa Khamrah de 100ml en oferta semanal" class="offer-img" loading="lazy">
+                        </div>
+
+                        <!-- Lado Información -->
+                        <div class="offer-content-side">
+                            <span class="offer-pre">Perfume Árabe Destacado</span>
+                            <h3 class="offer-title">Khamrah - Lattafa</h3>
+                            <p class="offer-desc">
+                                Una fragancia de lujo unisex que combina notas dulces de dátiles, praliné y canela, sobre un fondo cálido y duradero de vainilla y haba tonka. Ideal para climas templados y eventos nocturnos distinguidos.
+                            </p>
+                            
+                            <div class="offer-price-box">
+                                <span class="offer-price-old">$ 65.000</span>
+                                <span class="offer-price-new">$ 52.000</span>
+                            </div>
+
+                            <div class="offer-meta">
+                                <div class="offer-meta-item">
+                                    <span class="offer-meta-icon" aria-hidden="true">🔥</span>
+                                    <span>Stock limitado: 5 unidades</span>
+                                </div>
+                                <div class="offer-meta-item">
+                                    <span class="offer-meta-icon" aria-hidden="true">📅</span>
+                                    <span>Válido hasta agotar stock semanal</span>
+                                </div>
+                            </div>
+
+                            <!-- Botón de compra / enlace WhatsApp -->
+                            <button class="btn btn-primary" onclick="window.whatsappConfig.consultarDisponibilidad('Khamrah', 'Lattafa', '100ml EDP (Semana)')" aria-label="Consultar por Khamrah de Lattafa en WhatsApp">
+                                Consultar Oferta por WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. LLAMADO A WHATSAPP -->
+        <section class="section-padding cta-whatsapp-section" id="contacto">
+            <div class="container reveal">
+                <h2>¿Buscas asesoramiento personalizado?</h2>
+                <p>
+                    Comunícate directamente con nosotros. Te ayudamos a resolver cualquier duda sobre notas olfativas, stock o duración de fragancias. ¡Armamos tu pedido directamente por chat!
+                </p>
+                <button class="btn btn-whatsapp" onclick="window.whatsappConfig.enviarMensajeWhatsApp('Hola Dunes Parfums! Deseo recibir atención para comprar perfumes.')" aria-label="Abrir chat de WhatsApp para asesoramiento">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right: 4px;">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                    Escríbenos ahora
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 8. PIE DE PÁGINA (FOOTER) -->
+    <footer class="footer-main">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Columna: Sobre Nosotros -->
+                <div class="footer-col">
+                    <h3 class="footer-title">Dunes Parfums</h3>
+                    <p class="footer-about-text">
+                        Especialistas en alta perfumería árabe, de diseñador, exclusividades de nicho y decants seleccionados para los amantes de aromas sofisticados.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Siguenos en Instagram">
+                            <span>IG</span>
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Siguenos en Facebook">
+                            <span>FB</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Columna: Menú Rápido -->
+                <div class="footer-col">
+                    <h3 class="footer-title">Navegación</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html" class="footer-link">Inicio</a></li>
+                        <li><a href="catalogo.html" class="footer-link">Catálogo</a></li>
+                        <li><a href="index.html#ofertas" class="footer-link">Ofertas Especiales</a></li>
+                        <li><a href="carrito.html" class="footer-link">Ver Carrito</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna: Categorías -->
+                <div class="footer-col">
+                    <h3 class="footer-title">Categorías</h3>
+                    <ul class="footer-links">
+                        <li><a href="catalogo.html?cat=arabes" class="footer-link">Perfumes Árabes</a></li>
+                        <li><a href="catalogo.html?cat=disenador" class="footer-link">Diseñador</a></li>
+                        <li><a href="catalogo.html?cat=nicho" class="footer-link">Nicho</a></li>
+                        <li><a href="catalogo.html?cat=decants" class="footer-link">Decants / Muestras</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna: Contacto -->
+                <div class="footer-col">
+                    <h3 class="footer-title">Contacto</h3>
+                    <ul class="footer-info-list">
+                        <li>
+                            <span class="footer-info-icon" aria-hidden="true">📍</span>
+                            <span>Envíos a todo el país</span>
+                        </li>
+                        <li>
+                            <span class="footer-info-icon" aria-hidden="true">💬</span>
+                            <span>Atención por WhatsApp</span>
+                        </li>
+                        <li>
+                            <span class="footer-info-icon" aria-hidden="true">✉️</span>
+                            <span>contacto@dunesparfums.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Aviso Comercial Importante -->
+            <div class="footer-disclaimer">
+                <strong>Importante:</strong> Dunes Parfums es un catálogo digital. Todas las órdenes y compras se confirman, coordinan y finalizan a través de nuestro WhatsApp de atención directa.
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 Dunes Parfums. Todos los derechos reservados. Diseñado para experiencias olfativas exclusivas.</p>
+                <p>Desarrollado en HTML5 + CSS3 + JS Puro.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón Flotante de WhatsApp -->
+    <a href="#" class="wa-float-btn" id="whatsapp-floating-btn" aria-label="Chatear con un asesor por WhatsApp" role="button">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top: 4px;">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+    </a>
+
+    <!-- Scripts Modulares (Cargados secuencialmente) -->
+    <script src="js/whatsapp.js"></script>
+    <script src="js/productos.js"></script>
+    <script src="js/carrito.js"></script>
+    <script src="js/interfaz.js"></script>
+    <script src="js/catalogo.js"></script>
+</body>
+</html>

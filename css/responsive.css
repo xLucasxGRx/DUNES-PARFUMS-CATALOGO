@@ -1,0 +1,305 @@
+/**
+ * Dunes Parfums - Estilos Responsivos (CSS Media Queries)
+ * Asegura la perfecta visualización y usabilidad en todos los tamaños de pantalla.
+ */
+
+/* ==========================================================================
+   Dispositivos de Escritorio Medianos y Laptops (Máx 1024px)
+   ========================================================================== */
+@media screen and (max-width: 1024px) {
+    .container {
+        padding: 0 32px;
+    }
+    
+    .hero-perfume-img {
+        max-height: 420px;
+    }
+    
+    .offer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .offer-content-side {
+        padding: 32px;
+    }
+}
+
+/* ==========================================================================
+   Tablets y Dispositivos Medianos (Máx 992px)
+   ========================================================================== */
+@media screen and (max-width: 992px) {
+    .section-padding {
+        padding: 72px 0;
+    }
+    
+    /* Reorganización de Cuadrícula en Hero */
+    .hero-section {
+        padding-top: 100px;
+        min-height: auto;
+        padding-bottom: 72px;
+    }
+    
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .hero-content {
+        align-items: center;
+    }
+    
+    .hero-description {
+        margin: 0 auto;
+    }
+    
+    .hero-btn-row {
+        justify-content: center;
+    }
+    
+    .hero-image-wrapper {
+        order: -1; /* Muestra la imagen arriba en móviles */
+    }
+    
+    .hero-perfume-img {
+        max-height: 360px;
+    }
+
+    /* Menú de Navegación Responsivo (Menú Hamburguesa) */
+    .burger-menu-btn {
+        display: flex;
+    }
+    
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 100vh;
+        background-color: rgba(18, 18, 18, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-left: 1px solid var(--color-border-gold);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        padding: 80px 40px;
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .nav-menu.active {
+        transform: translateX(0);
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+    }
+    
+    .nav-link {
+        font-size: 1.1rem;
+    }
+    
+    /* Transformación del Icono de Hamburguesa a X */
+    .burger-menu-btn.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .burger-menu-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .burger-menu-btn.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* Oferta Semanal */
+    .offer-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .offer-img-side {
+        min-height: 300px;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+    }
+    
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+}
+
+/* ==========================================================================
+   Celulares Grandes y Smartphones en Vertical (Máx 768px)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+    
+    .section-header {
+        margin-bottom: 40px;
+    }
+    
+    /* Cuadrícula de Categorías a 2 columnas */
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
+    .category-card {
+        height: 280px;
+    }
+    
+    .category-overlay {
+        padding: 20px;
+    }
+    
+    .category-name {
+        font-size: 1.2rem;
+    }
+    
+    /* Cuadrícula de Productos a 2 columnas */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
+    .product-image-container {
+        height: 200px;
+        padding: 12px;
+    }
+    
+    .product-info {
+        padding: 12px;
+    }
+    
+    .product-brand {
+        font-size: 0.65rem;
+        margin-bottom: 4px;
+    }
+    
+    .product-title {
+        font-size: 0.9rem;
+    }
+    
+    .product-volume {
+        font-size: 0.75rem;
+        margin-bottom: 8px;
+    }
+    
+    .price-current {
+        font-size: 1.05rem;
+    }
+    
+    .price-old {
+        font-size: 0.8rem;
+    }
+    
+    /* Botones en móviles */
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+    }
+    
+    .product-card-footer .btn {
+        padding: 10px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ==========================================================================
+   Celulares Pequeños (Máx 480px)
+   ========================================================================== */
+@media screen and (max-width: 480px) {
+    /* Ajustes generales de tamaño */
+    html {
+        font-size: 14px;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-description {
+        font-size: 0.95rem;
+    }
+    
+    .hero-perfume-img {
+        max-height: 280px;
+    }
+    
+    /* Categorías y Productos a 1 columna para óptima lectura */
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    
+    .product-image-container {
+        height: 260px;
+    }
+    
+    /* Tarjetas de Beneficios */
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .benefit-card {
+        padding: 16px;
+    }
+    
+    /* Oferta Semanal */
+    .offer-content-side {
+        padding: 24px;
+    }
+    
+    .offer-price-new {
+        font-size: 1.8rem;
+    }
+    
+    /* Footer a una columna */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    /* Botón flotante */
+    .wa-float-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    /* Notificaciones emergentes */
+    #toast-container {
+        left: 20px;
+        right: 20px;
+        top: 80px;
+    }
+    
+    .toast-premium {
+        min-width: 0;
+        width: 100%;
+        padding: 10px 16px;
+    }
+}
