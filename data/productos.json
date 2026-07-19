@@ -175,19 +175,21 @@
     "marca": "Armaf",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 12,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/ArmafMandarinSkyDECANTS.png",
-    "descripcion": "Decant de 10 ml extraído directamente del perfume sellado original.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Decant extraído del perfume original.",
     "mililitrosDisponibles": 120,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d2",
@@ -195,19 +197,21 @@
     "marca": "Bharara",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 45.00,
-    "stock": 7,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/BhararaKingDECANTS.png",
-    "descripcion": "Decant de 10 ml del prestigioso y potente Bharara King.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Decant del potente Bharara King.",
     "mililitrosDisponibles": 70,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d3",
@@ -215,19 +219,21 @@
     "marca": "Afnan",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 6,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/Afnan9pmDECANTS.png",
-    "descripcion": "Muestra premium de 10 ml de la popular fragancia nocturna 9Pm.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Ideal para salidas nocturnas.",
     "mililitrosDisponibles": 60,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d4",
@@ -235,19 +241,21 @@
     "marca": "Afnan",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 5,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/Afnan9amDive DECANTS.png",
-    "descripcion": "Muestra de 10 ml de 9Am Dive, ideal para uso diario y frescura prolongada.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Aroma fresco de uso diario.",
     "mililitrosDisponibles": 55,
     "sobranteMl": 5,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d5",
@@ -255,19 +263,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 5,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaHayaatiDECANTS.png",
-    "descripcion": "Decant de 10 ml de Hayaati de Lattafa, un aroma fresco-dulce versátil.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Perfume fresco-dulce versátil.",
     "mililitrosDisponibles": 50,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d6",
@@ -275,19 +285,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 45.00,
-    "stock": 4,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaAtlasDECANTS.png",
-    "descripcion": "Decant de 10 ml de Atlas, una fragancia marina salada de increíble fijación.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Fragancia marina ultra duradera.",
     "mililitrosDisponibles": 40,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d7",
@@ -295,19 +307,21 @@
     "marca": "Maison Alhambra",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 4,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/SceptreMalachiteDECANTS.png",
-    "descripcion": "Decant de 10 ml de Sceptre Malachite, fragancia especiada fina con ámbar gris.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Acordes de ámbar gris y hierbas finas.",
     "mililitrosDisponibles": 40,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d8",
@@ -315,19 +329,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 4,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaYaraCandyDECANTS.png",
-    "descripcion": "Decant de 10 ml de la novedad frutal dulce Yara Candy.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Novedad frutal y dulce.",
     "mililitrosDisponibles": 45,
     "sobranteMl": 5,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d9",
@@ -335,19 +351,21 @@
     "marca": "Maison Alhambra",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 3,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/JeanLoweInmortalDECANTS.png",
-    "descripcion": "Decant de 10 ml de Jean Lowe Immortel, aroma cítrico y amparado premium.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Acordes cítricos premium.",
     "mililitrosDisponibles": 35,
     "sobranteMl": 5,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d10",
@@ -355,19 +373,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 3,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaVintageRadioDECANTS.png",
-    "descripcion": "Decant de 10 ml de Vintage Radio, fragancia amaderada frutal limpia y moderna.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Aroma amaderado y afrutado moderno.",
     "mililitrosDisponibles": 34,
     "sobranteMl": 4,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d11",
@@ -375,19 +395,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 2,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaKhamrahDECANTS.png",
-    "descripcion": "Muestra de 10 ml de Khamrah Clasico, para experimentar su dulzor gourmand.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Dulzor gourmand e invernal.",
     "mililitrosDisponibles": 20,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d12",
@@ -395,19 +417,21 @@
     "marca": "Club de Nuit",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 2,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/ArmafUrbanmanelixirDECANTS.png",
-    "descripcion": "Muestra de 10 ml de Club de Nuit Urban Man Elixir.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Aroma limpio e intenso.",
     "mililitrosDisponibles": 20,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d13",
@@ -415,19 +439,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 1,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaNadjiaIntenseDECANTS.png",
-    "descripcion": "Decant de 10 ml de Najdia Intense de Lattafa, fresco y duradero.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Fresco e ideal para el gimnasio.",
     "mililitrosDisponibles": 10,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d14",
@@ -435,19 +461,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 10 ml",
-    "formato": "Decant",
-    "precio": 30.00,
-    "stock": 1,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaYaraPinkDECANTS.png",
-    "descripcion": "Decant de 10 ml de Yara Pink, una fragancia femenina cremosa y atalcada.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Dulce, atalcado y cremoso.",
     "mililitrosDisponibles": 10,
     "sobranteMl": 0,
-    "tamanoMl": 10
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d15",
@@ -455,19 +483,21 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 5 ml",
-    "formato": "Decant",
-    "precio": 20.00,
-    "stock": 1,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaJasoorDECANTS.png",
-    "descripcion": "Muestra de 5 ml de Jasoor, aroma afrutado de cuero y cardamomo.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Cuero frutal y cardamomo.",
     "mililitrosDisponibles": 7,
     "sobranteMl": 2,
-    "tamanoMl": 5
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   },
   {
     "id": "d16",
@@ -475,18 +505,20 @@
     "marca": "Lattafa",
     "tipo": "ARABE",
     "categoria": "decants",
-    "presentacion": "Decant 3 ml",
-    "formato": "Decant",
-    "precio": 15.00,
-    "stock": 1,
+    "presentacion": "Decants de 3, 5 y 10 ml",
+    "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaKhamrahQahwaDECANTS.png",
-    "descripcion": "Exclusiva muestra de 3 ml de Khamrah Qahwa con aroma a café.",
-    "destacado": false,
-    "oferta": false,
+    "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. El toque especial de café tostado.",
     "mililitrosDisponibles": 3,
     "sobranteMl": 0,
-    "tamanoMl": 3
+    "destacado": false,
+    "oferta": false,
+    "presentaciones": [
+      { "ml": 3, "nombre": "Decant 3 ml", "precio": 15.00, "disponible": true },
+      { "ml": 5, "nombre": "Decant 5 ml", "precio": 20.00, "disponible": true },
+      { "ml": 10, "nombre": "Decant 10 ml", "precio": 30.00, "disponible": true }
+    ]
   }
 ]

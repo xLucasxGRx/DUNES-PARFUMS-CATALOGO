@@ -1843,3 +1843,119 @@ img {
     }
 }
 
+/* --- Selector de Variantes de Decants --- */
+.detail-variant-selector {
+    margin-bottom: 8px;
+}
+
+.variant-selector-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-bg-dark);
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.variant-options-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.variant-option-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 14px 24px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-bg-light);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    min-width: 110px;
+    font-family: var(--font-body);
+    position: relative;
+}
+
+.variant-option-btn:hover:not(:disabled) {
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 0 8px rgba(197, 160, 89, 0.15);
+}
+
+.variant-option-btn.active {
+    border-color: var(--color-primary-dark);
+    background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(197,160,89,0.12) 100%);
+    box-shadow: 0 0 12px rgba(197, 160, 89, 0.2);
+}
+
+.variant-option-btn.active::after {
+    content: '✓';
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    font-size: 0.7rem;
+    color: var(--color-primary-dark);
+    font-weight: 700;
+}
+
+.variant-option-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: var(--color-border);
+}
+
+.variant-ml {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+}
+
+.variant-price {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+.variant-unavailable {
+    font-size: 0.7rem;
+    color: #ff3b30;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.variant-selected-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+}
+
+.variant-selected-label strong {
+    color: var(--color-text-dark);
+    font-weight: 600;
+}
+
+/* Botón de seleccionar presentación en tarjeta */
+.btn-select-option {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    .variant-options-row {
+        flex-direction: column;
+    }
+    .variant-option-btn {
+        min-width: unset;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 12px 16px;
+    }
+}

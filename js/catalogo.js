@@ -138,33 +138,55 @@ function filtrarYRenderizar(productos, estado, grid) {
     filtrados.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        if (!prod.disponible || prod.stock <= 0) {
+        
+        const esDecant = prod.categoria === 'decants';
+        const estaAgotado = esDecant 
+            ? (!prod.disponible || prod.mililitrosDisponibles < 3)
+            : (!prod.disponible || prod.stock <= 0);
+            
+        if (estaAgotado) {
             card.classList.add('out-of-stock');
         }
 
         // Etiquetas de oferta o agotado
         let tagHtml = '';
-        if (prod.oferta && prod.disponible && prod.stock > 0) {
+        if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
             tagHtml = `<span class="product-tag promo-tag">Oferta</span>`;
-        } else if (!prod.disponible || prod.stock <= 0) {
+        } else if (estaAgotado) {
             tagHtml = `<span class="product-tag out-tag">Agotado</span>`;
         }
 
-        const precioActual = 'S/ ' + prod.precio.toFixed(2);
-        const precioAnteriorHtml = prod.precioAnterior 
+        const precioActual = esDecant ? 'Desde S/ 15.00' : 'S/ ' + prod.precio.toFixed(2);
+        const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
             ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>` 
             : '';
 
-        const presentacionFormateada = prod.formato === 'Sellado' 
-            ? `Sellado / ${prod.presentacion}` 
-            : prod.presentacion;
+        const presentacionFormateada = esDecant ? prod.presentacion : `Sellado / ${prod.presentacion}`;
 
-        const stockHtml = prod.disponible && prod.stock > 0 
-            ? `<span class="product-stock-status">Disponible (${prod.stock} unid.)</span>`
-            : `<span class="product-stock-status out">Agotado</span>`;
+        const stockHtml = esDecant
+            ? (prod.disponible && prod.mililitrosDisponibles >= 3
+                ? `<span class="product-stock-status">Disponible (${prod.mililitrosDisponibles} ml)</span>`
+                : `<span class="product-stock-status out">Agotado</span>`)
+            : (prod.disponible && prod.stock > 0 
+                ? `<span class="product-stock-status">Disponible (${prod.stock} unid.)</span>`
+                : `<span class="product-stock-status out">Agotado</span>`);
 
         let actionBtnHtml = '';
-        if (prod.disponible && prod.stock > 0) {
+        if (esDecant) {
+            if (prod.disponible && prod.mililitrosDisponibles >= 3) {
+                actionBtnHtml = `
+                    <a href="producto.html?id=${prod.id}" class="btn btn-primary btn-select-option">
+                        Seleccionar Presentación
+                    </a>
+                `;
+            } else {
+                actionBtnHtml = `
+                    <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
+                        <span class="btn-icon">💬</span> Consultar
+                    </button>
+                `;
+            }
+        } else if (prod.disponible && prod.stock > 0) {
             actionBtnHtml = `
                 <button class="btn btn-primary btn-add-cart" data-id="${prod.id}" data-nombre="${prod.nombre}">
                     <span class="btn-icon">🛒</span> Agregar
@@ -220,8 +242,7 @@ function vincularEventosGridCatalogo(grid) {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const id = e.currentTarget.dataset.id;
-            const nombre = e.currentTarget.dataset.nombre;
-            window.carritoModulo.agregarAlCarrito(id, nombre);
+            window.carritoModulo.agregarAlCarrito(id, 1, null);
         });
     });
 

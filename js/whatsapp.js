@@ -48,8 +48,12 @@ function enviarPedidoWhatsApp(items, total, cliente) {
     
     items.forEach((item, index) => {
         const subtotal = item.precio * item.cantidad;
+        const presentacionTexto = item.categoria === 'decants' 
+            ? `${item.tamanoMl} ml` 
+            : `Sellado / ${item.tamanoMl} ml`;
+            
         mensaje += `${index + 1}. ${item.nombre}\n`;
-        mensaje += `Presentación: ${item.formato} / ${item.presentacion}\n`;
+        mensaje += `Presentación: ${presentacionTexto}\n`;
         mensaje += `Cantidad: ${item.cantidad}\n`;
         mensaje += `Precio unitario: S/ ${item.precio.toFixed(2)}\n`;
         mensaje += `Subtotal: S/ ${subtotal.toFixed(2)}\n\n`;

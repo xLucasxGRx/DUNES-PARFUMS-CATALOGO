@@ -148,37 +148,59 @@ async function cargarProductosDestacadosHome() {
     destacados.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'product-card reveal';
-        if (!prod.disponible || prod.stock <= 0) {
+
+        const esDecant = prod.categoria === 'decants';
+        const estaAgotado = esDecant
+            ? (!prod.disponible || prod.mililitrosDisponibles < 3)
+            : (!prod.disponible || prod.stock <= 0);
+
+        if (estaAgotado) {
             card.classList.add('out-of-stock');
         }
 
         // Construir etiquetas
         let tagHtml = '';
-        if (prod.oferta && prod.disponible && prod.stock > 0) {
+        if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
             tagHtml = `<span class="product-tag promo-tag">Oferta</span>`;
-        } else if (!prod.disponible || prod.stock <= 0) {
+        } else if (estaAgotado) {
             tagHtml = `<span class="product-tag out-tag">Agotado</span>`;
         }
 
         // Precios
-        const precioActual = formatearMoneda(prod.precio);
-        const precioAnteriorHtml = prod.precioAnterior 
-            ? `<span class="price-old">${formatearMoneda(prod.precioAnterior)}</span>` 
+        const precioActual = esDecant ? 'Desde S/ 15.00' : formatearMoneda(prod.precio);
+        const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
+            ? `<span class="price-old">${formatearMoneda(prod.precioAnterior)}</span>`
             : '';
 
         // Formatear presentación
-        const presentacionFormateada = prod.formato === 'Sellado' 
-            ? `Sellado / ${prod.presentacion}` 
-            : prod.presentacion;
+        const presentacionFormateada = esDecant ? prod.presentacion : `Sellado / ${prod.presentacion}`;
 
         // Estado disponible y stock
-        const stockHtml = prod.disponible && prod.stock > 0 
-            ? `<span class="product-stock-status">Disponible (${prod.stock} unid.)</span>`
-            : `<span class="product-stock-status out">Agotado</span>`;
+        const stockHtml = esDecant
+            ? (prod.disponible && prod.mililitrosDisponibles >= 3
+                ? `<span class="product-stock-status">Disponible (${prod.mililitrosDisponibles} ml)</span>`
+                : `<span class="product-stock-status out">Agotado</span>`)
+            : (prod.disponible && prod.stock > 0
+                ? `<span class="product-stock-status">Disponible (${prod.stock} unid.)</span>`
+                : `<span class="product-stock-status out">Agotado</span>`);
 
         // Botón de acción principal
         let actionBtnHtml = '';
-        if (prod.disponible && prod.stock > 0) {
+        if (esDecant) {
+            if (!estaAgotado) {
+                actionBtnHtml = `
+                    <a href="producto.html?id=${prod.id}" class="btn btn-primary btn-select-option">
+                        Seleccionar Presentación
+                    </a>
+                `;
+            } else {
+                actionBtnHtml = `
+                    <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
+                        <span class="btn-icon">💬</span> Consultar
+                    </button>
+                `;
+            }
+        } else if (!estaAgotado) {
             actionBtnHtml = `
                 <button class="btn btn-primary btn-add-cart" data-id="${prod.id}" data-nombre="${prod.nombre}">
                     <span class="btn-icon">🛒</span> Agregar
@@ -228,16 +250,15 @@ async function cargarProductosDestacadosHome() {
 
 /**
  * Asigna eventos de clic a los botones de comprar y agregar en la cuadrícula
- * @param {HTMLElement} grid 
+ * @param {HTMLElement} grid
  */
 function vincularEventosProductosGrid(grid) {
-    // Botones de agregar al carrito
+    // Botones de agregar al carrito (solo sellados)
     grid.querySelectorAll('.btn-add-cart').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const id = e.currentTarget.dataset.id;
-            const nombre = e.currentTarget.dataset.nombre;
-            window.carritoModulo.agregarAlCarrito(id, nombre);
+            window.carritoModulo.agregarAlCarrito(id, 1, null);
         });
     });
 
@@ -312,11 +333,21 @@ async function cargarDetalleProducto() {
         return;
     }
 
-    const presentacionFormateada = prod.formato === 'Sellado' 
-        ? `Sellado / ${prod.presentacion}` 
-        : prod.presentacion;
+    const esDecant = prod.categoria === 'decants';
 
-    const stockHtml = prod.disponible && prod.stock > 0 
+    if (esDecant) {
+        renderizarDetalleDecant(container, prod);
+    } else {
+        renderizarDetalleSellado(container, prod);
+    }
+}
+
+/**
+ * Renderiza la ficha técnica de un perfume SELLADO
+ */
+function renderizarDetalleSellado(container, prod) {
+    const presentacionFormateada = `Sellado / ${prod.presentacion}`;
+    const stockHtml = prod.disponible && prod.stock > 0
         ? `<span class="detail-stock-badge in-stock">Disponible (${prod.stock} unidades)</span>`
         : `<span class="detail-stock-badge out-of-stock">Agotado</span>`;
 
@@ -359,17 +390,17 @@ async function cargarDetalleProducto() {
                 <span class="detail-brand">${prod.marca}</span>
                 <h2 class="detail-title">${prod.nombre}</h2>
                 <span class="detail-volume">${presentacionFormateada}</span>
-                
+
                 <div class="detail-price-box">
                     <span class="detail-price">${formatearMoneda(prod.precio)}</span>
                 </div>
-                
+
                 <div class="detail-stock-box">
                     ${stockHtml}
                 </div>
 
                 <div class="detail-divider"></div>
-                
+
                 <div class="detail-description">
                     <h3>Descripción de la fragancia:</h3>
                     <p>${prod.descripcion || 'Una fina fragancia de nuestra selección exclusiva.'}</p>
@@ -382,7 +413,7 @@ async function cargarDetalleProducto() {
         </div>
     `;
 
-    // Vincular eventos de detalle
+    // Vincular eventos de detalle sellado
     if (prod.disponible && prod.stock > 0) {
         const minusBtn = document.getElementById('detail-qty-minus');
         const plusBtn = document.getElementById('detail-qty-plus');
@@ -392,11 +423,8 @@ async function cargarDetalleProducto() {
         if (minusBtn && plusBtn && qtyInput) {
             minusBtn.addEventListener('click', () => {
                 let val = parseInt(qtyInput.value) || 1;
-                if (val > 1) {
-                    qtyInput.value = val - 1;
-                }
+                if (val > 1) qtyInput.value = val - 1;
             });
-
             plusBtn.addEventListener('click', () => {
                 let val = parseInt(qtyInput.value) || 1;
                 if (val < prod.stock) {
@@ -406,11 +434,10 @@ async function cargarDetalleProducto() {
                 }
             });
         }
-
         if (addCartBtn) {
             addCartBtn.addEventListener('click', () => {
                 const qty = parseInt(qtyInput.value) || 1;
-                window.carritoModulo.agregarAlCarrito(prod.id, qty);
+                window.carritoModulo.agregarAlCarrito(prod.id, qty, null);
             });
         }
     }
@@ -419,6 +446,214 @@ async function cargarDetalleProducto() {
     if (queryBtn) {
         queryBtn.addEventListener('click', () => {
             window.whatsappConfig.consultarDisponibilidad(prod.nombre, prod.marca, presentacionFormateada);
+        });
+    }
+}
+
+/**
+ * Renderiza la ficha técnica de un perfume DECANT con selector de presentación
+ */
+function renderizarDetalleDecant(container, prod) {
+    const mlDisponibles = prod.mililitrosDisponibles || 0;
+
+    // Determinar la primera presentación seleccionable por defecto (empezando por 3ml)
+    let defaultMl = null;
+    if (prod.presentaciones) {
+        for (const pres of prod.presentaciones) {
+            if (pres.disponible && mlDisponibles >= pres.ml) {
+                defaultMl = pres.ml;
+                break;
+            }
+        }
+    }
+
+    const defaultPres = defaultMl
+        ? prod.presentaciones.find(p => p.ml === defaultMl)
+        : null;
+    const precioInicial = defaultPres ? defaultPres.precio : 15.00;
+    const presentacionInicialTexto = defaultPres ? defaultPres.nombre : 'Decants de 3, 5 y 10 ml';
+
+    const stockHtml = mlDisponibles >= 3
+        ? `<span class="detail-stock-badge in-stock">Disponible (${mlDisponibles} ml en stock)</span>`
+        : `<span class="detail-stock-badge out-of-stock">Agotado</span>`;
+
+    // Generar botones de presentación
+    let presentacionBtnsHtml = '';
+    if (prod.presentaciones) {
+        prod.presentaciones.forEach(pres => {
+            const maxQty = Math.floor(mlDisponibles / pres.ml);
+            const deshabilitado = !pres.disponible || maxQty <= 0;
+            const esDefault = pres.ml === defaultMl;
+            const disabledAttr = deshabilitado ? 'disabled' : '';
+            const activeClass = esDefault ? 'active' : '';
+            const ariaChecked = esDefault ? 'true' : 'false';
+
+            presentacionBtnsHtml += `
+                <button class="variant-option-btn ${activeClass}"
+                        data-ml="${pres.ml}"
+                        data-precio="${pres.precio}"
+                        data-nombre="${pres.nombre}"
+                        data-max="${maxQty}"
+                        role="radio"
+                        aria-checked="${ariaChecked}"
+                        ${disabledAttr}>
+                    <span class="variant-ml">${pres.ml} ml</span>
+                    <span class="variant-price">S/ ${pres.precio.toFixed(2)}</span>
+                    ${deshabilitado ? '<span class="variant-unavailable">Sin stock</span>' : ''}
+                </button>
+            `;
+        });
+    }
+
+    let pickerAndActionsHtml = '';
+    if (mlDisponibles >= 3) {
+        pickerAndActionsHtml = `
+            <div class="detail-variant-selector">
+                <h3 class="variant-selector-title">Selecciona una presentación:</h3>
+                <div class="variant-options-row" role="radiogroup" aria-label="Presentaciones disponibles">
+                    ${presentacionBtnsHtml}
+                </div>
+                <p class="variant-selected-label" id="variant-selected-label">Presentación seleccionada: <strong>${presentacionInicialTexto}</strong></p>
+            </div>
+
+            <div class="detail-divider"></div>
+
+            <div class="detail-qty-picker-row">
+                <span class="qty-label">Cantidad:</span>
+                <div class="qty-picker">
+                    <button class="qty-btn" id="detail-qty-minus">—</button>
+                    <input type="number" id="detail-qty-input" value="1" min="1" max="${defaultPres ? Math.floor(mlDisponibles / defaultMl) : 1}" readonly>
+                    <button class="qty-btn" id="detail-qty-plus">+</button>
+                </div>
+            </div>
+            <div class="detail-btn-row">
+                <button class="btn btn-primary btn-add-cart-detail" id="btn-add-cart-detail" data-id="${prod.id}">
+                    🛒 Agregar al Carrito
+                </button>
+                <button class="btn btn-secondary btn-query-detail" id="btn-query-detail" data-nombre="${prod.nombre}">
+                    💬 Consultar por WhatsApp
+                </button>
+            </div>
+        `;
+    } else {
+        pickerAndActionsHtml = `
+            <div class="detail-btn-row">
+                <button class="btn btn-secondary btn-query-detail" style="width: 100%;" id="btn-query-detail" data-nombre="${prod.nombre}">
+                    💬 Consultar reingreso por WhatsApp
+                </button>
+            </div>
+        `;
+    }
+
+    container.innerHTML = `
+        <div class="product-detail-layout">
+            <div class="detail-image-side">
+                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img">
+            </div>
+            <div class="detail-info-side">
+                <span class="detail-brand">${prod.marca}</span>
+                <h2 class="detail-title">${prod.nombre}</h2>
+                <span class="detail-volume">${prod.presentacion}</span>
+
+                <div class="detail-price-box">
+                    <span class="detail-price" id="detail-dynamic-price">${formatearMoneda(precioInicial)}</span>
+                </div>
+
+                <div class="detail-stock-box">
+                    ${stockHtml}
+                </div>
+
+                <div class="detail-divider"></div>
+
+                <div class="detail-description">
+                    <h3>Descripción de la fragancia:</h3>
+                    <p>${prod.descripcion || 'Una fina fragancia de nuestra selección exclusiva.'}</p>
+                </div>
+
+                <div class="detail-divider"></div>
+
+                ${pickerAndActionsHtml}
+            </div>
+        </div>
+    `;
+
+    // ---- Vincular eventos del selector de presentación ----
+    if (mlDisponibles >= 3) {
+        const variantBtns = container.querySelectorAll('.variant-option-btn');
+        const priceDisplay = document.getElementById('detail-dynamic-price');
+        const selectedLabel = document.getElementById('variant-selected-label');
+        const qtyInput = document.getElementById('detail-qty-input');
+        const minusBtn = document.getElementById('detail-qty-minus');
+        const plusBtn = document.getElementById('detail-qty-plus');
+        const addCartBtn = document.getElementById('btn-add-cart-detail');
+
+        // Estado mutable
+        let selectedMl = defaultMl;
+        let selectedPrecio = precioInicial;
+        let selectedMaxQty = defaultPres ? Math.floor(mlDisponibles / defaultMl) : 1;
+
+        variantBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.disabled) return;
+                // Deseleccionar todas
+                variantBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-checked', 'false');
+                });
+                // Seleccionar actual
+                btn.classList.add('active');
+                btn.setAttribute('aria-checked', 'true');
+
+                selectedMl = parseInt(btn.dataset.ml);
+                selectedPrecio = parseFloat(btn.dataset.precio);
+                selectedMaxQty = parseInt(btn.dataset.max);
+
+                // Actualizar precio visual
+                if (priceDisplay) priceDisplay.textContent = formatearMoneda(selectedPrecio);
+                if (selectedLabel) selectedLabel.innerHTML = `Presentación seleccionada: <strong>${btn.dataset.nombre}</strong>`;
+
+                // Resetear qty
+                if (qtyInput) {
+                    qtyInput.value = 1;
+                    qtyInput.max = selectedMaxQty;
+                }
+            });
+        });
+
+        // Controles de cantidad
+        if (minusBtn && plusBtn && qtyInput) {
+            minusBtn.addEventListener('click', () => {
+                let val = parseInt(qtyInput.value) || 1;
+                if (val > 1) qtyInput.value = val - 1;
+            });
+            plusBtn.addEventListener('click', () => {
+                let val = parseInt(qtyInput.value) || 1;
+                if (val < selectedMaxQty) {
+                    qtyInput.value = val + 1;
+                } else {
+                    window.carritoModulo.mostrarToastPremium(`Máximo ${selectedMaxQty} unidades de ${selectedMl} ml disponibles.`, true);
+                }
+            });
+        }
+
+        // Agregar al carrito
+        if (addCartBtn) {
+            addCartBtn.addEventListener('click', () => {
+                if (!selectedMl) {
+                    window.carritoModulo.mostrarToastPremium('Selecciona una presentación primero.', true);
+                    return;
+                }
+                const qty = parseInt(qtyInput.value) || 1;
+                window.carritoModulo.agregarAlCarrito(prod.id, qty, selectedMl);
+            });
+        }
+    }
+
+    // Consultar por WhatsApp
+    const queryBtn = document.getElementById('btn-query-detail');
+    if (queryBtn) {
+        queryBtn.addEventListener('click', () => {
+            window.whatsappConfig.consultarDisponibilidad(prod.nombre, prod.marca, prod.presentacion);
         });
     }
 }
@@ -486,9 +721,7 @@ async function renderizarCarritoDOM() {
         const subtotal = item.precio * item.cantidad;
         totalGeneral += subtotal;
         
-        const presentacionFormateada = item.formato === 'Sellado' 
-            ? `Sellado / ${item.presentacion}` 
-            : item.presentacion;
+        const presentacionFormateada = item.presentacion;
 
         html += `
             <tr data-id="${item.id}">
