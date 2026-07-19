@@ -45,27 +45,27 @@ function consultarDisponibilidad(nombre, marca, presentacion) {
  */
 function enviarPedidoWhatsApp(items, total, cliente) {
     let mensaje = `Hola, Dunes Parfums 👋\n\nDeseo realizar el siguiente pedido:\n\n`;
-    
+
     items.forEach((item, index) => {
         const subtotal = item.precio * item.cantidad;
-        const presentacionTexto = item.categoria === 'decants' 
-            ? `${item.tamanoMl} ml` 
+        const presentacionTexto = item.categoria === 'decants'
+            ? `${item.tamanoMl} ml`
             : `Sellado / ${item.tamanoMl} ml`;
-            
+
         mensaje += `${index + 1}. ${item.nombre}\n`;
         mensaje += `Presentación: ${presentacionTexto}\n`;
         mensaje += `Cantidad: ${item.cantidad}\n`;
         mensaje += `Precio unitario: S/ ${item.precio.toFixed(2)}\n`;
         mensaje += `Subtotal: S/ ${subtotal.toFixed(2)}\n\n`;
     });
-    
+
     mensaje += `TOTAL DEL PEDIDO: S/ ${total.toFixed(2)}\n\n`;
     mensaje += `Nombre: ${cliente.nombre || ''}\n`;
     mensaje += `Ciudad o distrito: ${cliente.distrito || ''}\n`;
     mensaje += `Tipo de entrega: ${cliente.entrega || ''}\n`;
     mensaje += `Comentario: ${cliente.comentario || ''}\n\n`;
     mensaje += `Quedo atento para confirmar disponibilidad y coordinar el pago.`;
-    
+
     enviarMensajeWhatsApp(mensaje);
 }
 

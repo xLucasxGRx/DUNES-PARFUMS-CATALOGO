@@ -30,7 +30,7 @@ function actualizarContadorCarrito() {
     const contadores = document.querySelectorAll('.cart-count');
     const carrito = obtenerCarrito();
     const cantidadTotal = carrito.reduce((acc, item) => acc + (item.cantidad || 0), 0);
-    
+
     contadores.forEach(contador => {
         if (contador) {
             contador.textContent = cantidadTotal;
@@ -68,7 +68,7 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
 
         let carrito = obtenerCarrito();
         const esDecant = product.categoria === 'decants';
-        
+
         // Clave única en carrito
         const key = idProducto + (esDecant ? `-${tamanoMl}` : '');
         const itemExistente = carrito.find(item => item.id === key);
@@ -109,11 +109,11 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
         }
 
         if (limiteAlcanzado) {
-            const mensajeAviso = esDecant 
+            const mensajeAviso = esDecant
                 ? `Límite alcanzado: ml insuficientes para agregar más (${stockMaximo} unid. máx.).`
                 : `Límite alcanzado: solo hay ${stockMaximo} unidades de ${product.nombre}.`;
             mostrarToastPremium(mensajeAviso, true);
-            
+
             if (cantidadFinal <= 0) {
                 // Si no se puede agregar nada, salir sin modificar carrito
                 return;
@@ -154,7 +154,7 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
 
         guardarCarrito(carrito);
         actualizarContadorCarrito();
-        
+
         if (!limiteAlcanzado) {
             mostrarToastPremium(`S/ ${precioUnitario.toFixed(2)} - ${product.nombre} (${mlItem}ml) agregado.`);
         }
@@ -246,7 +246,7 @@ function eliminarItem(id) {
     guardarCarrito(carrito);
     actualizarContadorCarrito();
     mostrarToastPremium('Producto eliminado del pedido.');
-    
+
     if (window.renderizarCarritoDOM) {
         window.renderizarCarritoDOM();
     }
@@ -259,7 +259,7 @@ function vaciarCarrito() {
     guardarCarrito([]);
     actualizarContadorCarrito();
     mostrarToastPremium('Carrito vaciado.');
-    
+
     if (window.renderizarCarritoDOM) {
         window.renderizarCarritoDOM();
     }
@@ -272,7 +272,7 @@ function vaciarCarrito() {
 async function obtenerItemsCarritoDetallados() {
     const carrito = obtenerCarrito();
     const detallados = [];
-    
+
     for (const item of carrito) {
         // Mapear con nombres de propiedades consistentes
         detallados.push({
@@ -291,7 +291,7 @@ async function obtenerItemsCarritoDetallados() {
             subtotal: item.subtotal
         });
     }
-    
+
     return detallados;
 }
 
@@ -307,14 +307,14 @@ function mostrarToastPremium(mensaje, esAdvertencia = false) {
         container.id = 'toast-container';
         document.body.appendChild(container);
     }
-    
+
     const toast = document.createElement('div');
     toast.className = 'toast-premium';
     if (esAdvertencia) {
         toast.style.borderColor = '#FF3B30';
         toast.style.boxShadow = '0 0 10px rgba(255, 59, 48, 0.2)';
     }
-    
+
     const icono = esAdvertencia ? '⚠️' : '✨';
     toast.innerHTML = `
         <div class="toast-content">
@@ -322,13 +322,13 @@ function mostrarToastPremium(mensaje, esAdvertencia = false) {
             <span class="toast-text">${mensaje}</span>
         </div>
     `;
-    
+
     container.appendChild(toast);
-    
+
     setTimeout(() => {
         toast.classList.add('show');
     }, 10);
-    
+
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => {

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cargar productos
     const productos = await window.productosModulo.obtenerProductos();
-    
+
     // Estado de filtros
     let filtroEstado = {
         busqueda: '',
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const catParam = urlParams.get('cat');
     if (catParam === 'decants' || catParam === 'sellados') {
         filtroEstado.categoria = catParam;
-        
+
         // Actualizar visualmente los botones de categoría
         const categoryFilters = document.querySelectorAll('.filter-category-btn');
         categoryFilters.forEach(btn => {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Inicializar controles de la interfaz
     inicializarFiltrosInterfaz(productos, filtroEstado, grid);
-    
+
     // Renderizado inicial
     filtrarYRenderizar(productos, filtroEstado, grid);
 });
@@ -138,12 +138,12 @@ function filtrarYRenderizar(productos, estado, grid) {
     filtrados.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        
+
         const esDecant = prod.categoria === 'decants';
-        const estaAgotado = esDecant 
+        const estaAgotado = esDecant
             ? (!prod.disponible || prod.mililitrosDisponibles < 3)
             : (!prod.disponible || prod.stock <= 0);
-            
+
         if (estaAgotado) {
             card.classList.add('out-of-stock');
         }
@@ -158,7 +158,7 @@ function filtrarYRenderizar(productos, estado, grid) {
 
         const precioActual = esDecant ? 'Desde S/ 15.00' : 'S/ ' + prod.precio.toFixed(2);
         const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
-            ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>` 
+            ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>`
             : '';
 
         const presentacionFormateada = esDecant ? prod.presentacion : `Sellado / ${prod.presentacion}`;
@@ -167,7 +167,7 @@ function filtrarYRenderizar(productos, estado, grid) {
             ? (prod.disponible && prod.mililitrosDisponibles >= 3
                 ? `<span class="product-stock-status">Disponible (${prod.mililitrosDisponibles} ml)</span>`
                 : `<span class="product-stock-status out">Agotado</span>`)
-            : (prod.disponible && prod.stock > 0 
+            : (prod.disponible && prod.stock > 0
                 ? `<span class="product-stock-status">Disponible (${prod.stock} unid.)</span>`
                 : `<span class="product-stock-status out">Agotado</span>`);
 

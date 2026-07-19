@@ -37,7 +37,7 @@ function inicializarMenuMovil() {
     const burgerBtn = document.getElementById('mobile-menu-toggle');
     const navMenu = document.getElementById('nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     if (burgerBtn && navMenu) {
         burgerBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -92,7 +92,7 @@ function inicializarStickyHeader() {
  */
 function inicializarScrollReveal() {
     const revealElements = document.querySelectorAll('.reveal');
-    
+
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -678,17 +678,17 @@ async function renderizarCarritoDOM() {
             </div>
         `;
         if (totalPriceSpan) totalPriceSpan.textContent = 'S/ 0.00';
-        
+
         // Ocultar o deshabilitar visualmente la columna derecha
         const summaryCol = document.querySelector('.cart-summary-column');
         if (summaryCol) {
             summaryCol.style.opacity = '0.5';
             summaryCol.style.pointerEvents = 'none';
         }
-        
+
         const emptyBtn = document.getElementById('btn-empty-cart');
         if (emptyBtn) emptyBtn.style.display = 'none';
-        
+
         return;
     }
 
@@ -720,7 +720,7 @@ async function renderizarCarritoDOM() {
     items.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         totalGeneral += subtotal;
-        
+
         const presentacionFormateada = item.presentacion;
 
         html += `
@@ -814,7 +814,7 @@ function inicializarCheckoutForm() {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const items = await window.carritoModulo.obtenerItemsCarritoDetallados();
         if (items.length === 0) {
             window.carritoModulo.mostrarToastPremium('El carrito está vacío.', true);
@@ -822,7 +822,7 @@ function inicializarCheckoutForm() {
         }
 
         const total = items.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
-        
+
         const clienteInfo = {
             nombre: document.getElementById('client-name').value.trim(),
             distrito: document.getElementById('client-district').value.trim(),

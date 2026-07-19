@@ -13,7 +13,7 @@ async function obtenerProductos() {
     if (cacheProductos.length > 0) {
         return cacheProductos;
     }
-    
+
     try {
         // En GitHub Pages, la ruta absoluta /data/productos.json puede fallar si está en subdirectorio.
         // Usamos una ruta relativa desde el HTML o la raíz del sitio
