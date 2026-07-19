@@ -4,9 +4,8 @@
  * para construir enlaces de comunicación directa.
  */
 
-// Cambiar por el número real del cliente (con código de país, sin espacios ni símbolos)
-// Ejemplo: '5491123456789' (Argentina), '573001234567' (Colombia), etc.
-const WHATSAPP_PHONE = '5491100000000'; // NÚMERO DE PRUEBA (Etapa 1)
+// Número oficial de WhatsApp en formato internacional (Perú: 51986510573)
+const WHATSAPP_PHONE = '51986510573';
 
 /**
  * Obtiene el enlace directo de WhatsApp con un mensaje opcional
@@ -34,14 +33,43 @@ function enviarMensajeWhatsApp(mensaje) {
  * @param {string} presentacion - Tamaño o presentación
  */
 function consultarDisponibilidad(nombre, marca, presentacion) {
-    const mensaje = `Hola Dunes Parfums! Me gustaría consultar la disponibilidad del perfume: ${marca} - ${nombre} (${presentacion}).`;
+    const mensaje = `Hola, Dunes Parfums 👋\nMe gustaría consultar la disponibilidad del perfume:\nMarca: ${marca}\nNombre: ${nombre}\nPresentación: ${presentacion}.`;
     enviarMensajeWhatsApp(mensaje);
 }
 
-// Hacer disponibles las funciones en el ámbito global para simplificar en esta etapa
+/**
+ * Construye el mensaje estructurado de checkout y redirige al chat oficial de WhatsApp
+ * @param {Array} items - Lista de ítems en el carrito con detalles cargados del producto
+ * @param {number} total - Costo total acumulado
+ * @param {Object} cliente - Datos del formulario del comprador (nombre, distrito, entrega, comentario)
+ */
+function enviarPedidoWhatsApp(items, total, cliente) {
+    let mensaje = `Hola, Dunes Parfums 👋\n\nDeseo realizar el siguiente pedido:\n\n`;
+    
+    items.forEach((item, index) => {
+        const subtotal = item.precio * item.cantidad;
+        mensaje += `${index + 1}. ${item.nombre}\n`;
+        mensaje += `Presentación: ${item.formato} / ${item.presentacion}\n`;
+        mensaje += `Cantidad: ${item.cantidad}\n`;
+        mensaje += `Precio unitario: S/ ${item.precio.toFixed(2)}\n`;
+        mensaje += `Subtotal: S/ ${subtotal.toFixed(2)}\n\n`;
+    });
+    
+    mensaje += `TOTAL DEL PEDIDO: S/ ${total.toFixed(2)}\n\n`;
+    mensaje += `Nombre: ${cliente.nombre || ''}\n`;
+    mensaje += `Ciudad o distrito: ${cliente.distrito || ''}\n`;
+    mensaje += `Tipo de entrega: ${cliente.entrega || ''}\n`;
+    mensaje += `Comentario: ${cliente.comentario || ''}\n\n`;
+    mensaje += `Quedo atento para confirmar disponibilidad y coordinar el pago.`;
+    
+    enviarMensajeWhatsApp(mensaje);
+}
+
+// Hacer disponibles las funciones en el ámbito global
 window.whatsappConfig = {
     phone: WHATSAPP_PHONE,
     obtenerEnlaceWhatsApp,
     enviarMensajeWhatsApp,
-    consultarDisponibilidad
+    consultarDisponibilidad,
+    enviarPedidoWhatsApp
 };

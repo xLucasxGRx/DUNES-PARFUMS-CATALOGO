@@ -45,8 +45,7 @@ async function obtenerProductosPorCategoria(categoria) {
  */
 async function obtenerProductosDestacados() {
     const todos = await obtenerProductos();
-    // Para la página principal, devolvemos los primeros 4 o los que estén marcados como destacados/oferta
-    return todos.filter(p => p.oferta || p.precioAnterior !== null).slice(0, 4);
+    return todos.filter(p => p.destacado === true);
 }
 
 /**

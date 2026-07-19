@@ -50,16 +50,51 @@
         </div>
     </header>
 
-    <main class="container">
-        <!-- Contenido Placeholder de la Etapa 1 -->
-        <section class="placeholder-page-wrapper reveal">
-            <div class="benefit-icon-wrapper" style="width: 80px; height: 80px; font-size: 2.2rem; margin-bottom: 12px;" aria-hidden="true">🔍</div>
-            <h2>Explorador de Catálogo</h2>
-            <p>
-                Estamos preparando la experiencia interactiva completa de exploración. En la siguiente etapa podrás filtrar por marca, tipo de fragancia (árabes, diseñador, nicho, decants), buscar en tiempo real y ordenar por precio.
-            </p>
-            <a href="index.html" class="btn btn-primary">Volver al Inicio</a>
-        </section>
+    <main class="container section-padding" style="margin-top: 100px;">
+        <div class="section-header reveal">
+            <span class="section-subtitle">Exclusividad</span>
+            <h1 class="section-title">Catálogo Completo</h1>
+        </div>
+
+        <!-- Barra de Filtros y Búsqueda -->
+        <div class="catalog-filters-bar reveal">
+            <!-- Caja de Búsqueda -->
+            <div class="filter-search-box">
+                <input type="text" id="search-perfume" placeholder="Buscar por perfume o marca..." aria-label="Buscar perfume">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <!-- Grupos de Categorías -->
+            <div class="filter-categories-group">
+                <button class="filter-category-btn active" data-categoria="todos">Ver Todos</button>
+                <button class="filter-category-btn" data-categoria="sellados">Perfumes Sellados</button>
+                <button class="filter-category-btn" data-categoria="decants">Decants</button>
+            </div>
+
+            <!-- Ordenación y Disponibilidad -->
+            <div class="filter-controls-right">
+                <div class="filter-sort-box">
+                    <select id="sort-price" aria-label="Ordenar por precio">
+                        <option value="default">Relevancia</option>
+                        <option value="price-asc">Menor precio</option>
+                        <option value="price-desc">Mayor precio</option>
+                    </select>
+                </div>
+
+                <div class="filter-available-box">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="filter-available">
+                        <span class="checkmark"></span>
+                        Solo disponibles
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cuadrícula de Productos del Catálogo -->
+        <div class="products-grid" id="catalogo-productos-grid">
+            <!-- Cargado dinámicamente mediante js/catalogo.js -->
+        </div>
     </main>
 
     <!-- Pie de Página -->
