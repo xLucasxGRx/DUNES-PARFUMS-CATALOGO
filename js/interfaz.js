@@ -131,19 +131,23 @@ function formatearMoneda(valor) {
  */
 async function cargarProductosDestacadosHome() {
     const grid = document.getElementById('productos-destacados-grid');
+    const section = document.getElementById('destacados');
     if (!grid) return; // No estamos en index.html o no existe el contenedor
 
     grid.innerHTML = '<div class="loading-spinner">Cargando fragancias exclusivas...</div>';
 
-    // Obtener los productos destacados del módulo
-    const destacados = await window.productosModulo.obtenerProductosDestacados();
+    try {
+        // Obtener los productos destacados del módulo
+        const destacados = await window.productosModulo.obtenerProductosDestacados();
 
-    if (destacados.length === 0) {
-        grid.innerHTML = '<p class="no-products-msg">No se encontraron fragancias destacadas en este momento.</p>';
-        return;
-    }
+        if (!destacados || destacados.length === 0) {
+            if (section) section.style.display = 'none';
+            grid.innerHTML = '';
+            return;
+        }
 
-    grid.innerHTML = ''; // Limpiar spinner
+        if (section) section.style.display = 'block';
+        grid.innerHTML = ''; // Limpiar spinner
 
     destacados.forEach(prod => {
         const card = document.createElement('div');
@@ -246,6 +250,11 @@ async function cargarProductosDestacadosHome() {
 
     // Asignar eventos a los botones recién creados
     vincularEventosProductosGrid(grid);
+    } catch (err) {
+        console.error('Error al cargar fragancias destacadas:', err);
+        if (section) section.style.display = 'none';
+        grid.innerHTML = '';
+    }
 }
 
 /**

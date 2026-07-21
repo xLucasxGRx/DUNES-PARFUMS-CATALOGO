@@ -53,6 +53,13 @@ const ProductosService = (function() {
         return rows;
     }
 
+    function normalizarCabecera(cabecera) {
+        return String(cabecera ?? "")
+            .replace(/^\uFEFF/, "")
+            .trim()
+            .toLowerCase();
+    }
+
     function parseNumber(val) {
         if (val === undefined || val === null || String(val).trim() === '') return null;
         const num = Number(val);
@@ -60,11 +67,13 @@ const ProductosService = (function() {
     }
 
     function parseBoolean(val) {
-        if (val === undefined || val === null) return null;
-        const s = String(val).trim().toLowerCase();
-        if (['true', 'verdadero', '1', 'si', 'sí'].includes(s)) return true;
+        if (val === true) return true;
+        if (val === false) return false;
+        if (val === undefined || val === null) return false;
+        const s = String(val).replace(/^\uFEFF/, "").trim().toLowerCase();
+        if (['true', 'verdadero', '1', 'si', 'sí', 'yes'].includes(s)) return true;
         if (['false', 'falso', '0', 'no'].includes(s)) return false;
-        return null;
+        return false;
     }
 
     function getTipoFromCategoria(cat) {
@@ -86,7 +95,7 @@ const ProductosService = (function() {
         }
         const data = await response.json();
         
-        // Normalizar categorías del respaldo para compatibilidad de Fase 1
+        // Normalizar categorías y booleanos del respaldo
         const dataNormalizada = data.map(p => {
             if (p.categoria === 'sellados' || p.categoria !== 'decants') {
                 let cat = 'arabe';
@@ -98,6 +107,10 @@ const ProductosService = (function() {
                 }
                 p.categoria = cat;
             }
+            p.visible = parseBoolean(p.visible);
+            p.disponible = parseBoolean(p.disponible);
+            p.destacado = parseBoolean(p.destacado);
+            p.oferta = parseBoolean(p.oferta);
             return p;
         });
 
@@ -132,7 +145,7 @@ const ProductosService = (function() {
                 throw new Error("El CSV no contiene datos suficientes.");
             }
 
-            const headers = rows[0].map(h => h.toLowerCase().trim());
+            const headers = rows[0].map(normalizarCabecera);
             const requiredHeaders = ['id', 'nombre', 'marca', 'categoria', 'formato', 'imagen', 'visible'];
             const hasRequiredHeaders = requiredHeaders.every(req => headers.includes(req));
             if (!hasRequiredHeaders) {
@@ -154,14 +167,14 @@ const ProductosService = (function() {
                 });
 
                 // Validaciones básicas de campos mínimos
-                const idNum = parseNumber(rawObj.id);
-                if (idNum === null || idNum <= 0) {
-                    console.warn(`Producto ignorado por datos inválidos en la fila ${i + 1}.`);
+                const idStr = rawObj.id ? String(rawObj.id).trim() : "";
+                if (!idStr) {
+                    console.warn(`Producto ignorado por ID vacío en la fila ${i + 1}.`);
                     continue;
                 }
 
-                if (idsVistos.has(idNum)) {
-                    console.warn(`Producto ignorado por ID duplicado: ${idNum}.`);
+                if (idsVistos.has(idStr)) {
+                    console.warn(`Producto ignorado por ID duplicado: ${idStr}.`);
                     continue;
                 }
 
@@ -170,8 +183,8 @@ const ProductosService = (function() {
                 const imagen = rawObj.imagen ? rawObj.imagen.trim() : "";
                 const visible = parseBoolean(rawObj.visible);
 
-                if (!nombre || !marca || !imagen || visible === null) {
-                    console.warn(`Producto ignorado por datos inválidos en la fila ${i + 1}.`);
+                if (!nombre || !marca || !imagen || visible === false) {
+                    console.warn(`Producto ignorado por datos no visibles o inválidos en la fila ${i + 1}.`);
                     continue;
                 }
 
@@ -183,7 +196,7 @@ const ProductosService = (function() {
                 const formatosPermitidos = ['sellado', 'decant'];
 
                 if (!categoriasPermitidas.includes(categoriaOriginal) || !formatosPermitidos.includes(formatoOriginal)) {
-                    console.warn(`Producto ignorado por datos inválidos en la fila ${i + 1}.`);
+                    console.warn(`Producto ignorado por categoría/formato inválido en la fila ${i + 1}.`);
                     continue;
                 }
 
@@ -191,17 +204,17 @@ const ProductosService = (function() {
 
                 // Normalización de objeto producto
                 const prod = {
-                    id: idNum,
+                    id: idStr,
                     nombre: nombre,
                     marca: marca,
                     tipo: getTipoFromCategoria(categoriaOriginal),
                     categoria: categoriaOriginal,
-                    disponible: parseBoolean(rawObj.disponible) ?? false,
+                    disponible: parseBoolean(rawObj.disponible),
                     visible: visible,
                     imagen: imagen,
                     descripcion: rawObj.descripcion ? rawObj.descripcion.trim() : '',
-                    destacado: parseBoolean(rawObj.destacado) ?? false,
-                    oferta: parseBoolean(rawObj.oferta) ?? false,
+                    destacado: parseBoolean(rawObj.destacado),
+                    oferta: parseBoolean(rawObj.oferta),
                     precioAnterior: parseNumber(rawObj.precio_anterior),
                     orden: parseNumber(rawObj.orden)
                 };
@@ -223,7 +236,7 @@ const ProductosService = (function() {
                     }
 
                     if (presentaciones.length === 0) {
-                        console.warn(`Producto ignorado por datos inválidos en la fila ${i + 1}.`);
+                        console.warn(`Producto ignorado por presentaciones vacías en la fila ${i + 1}.`);
                         continue;
                     }
 
@@ -238,7 +251,7 @@ const ProductosService = (function() {
                     const presentacion = rawObj.presentacion ? rawObj.presentacion.trim() : "";
 
                     if (precio === null || precio <= 0 || stock === null || stock < 0 || !presentacion) {
-                        console.warn(`Producto ignorado por datos inválidos en la fila ${i + 1}.`);
+                        console.warn(`Producto ignorado por datos inválidos de sellado en la fila ${i + 1}.`);
                         continue;
                     }
 
@@ -248,7 +261,7 @@ const ProductosService = (function() {
                     prod.formato = "Sellado";
                 }
 
-                idsVistos.add(idNum);
+                idsVistos.add(idStr);
                 listado.push(prod);
             }
 

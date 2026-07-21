@@ -40,7 +40,17 @@ async function obtenerProductosPorCategoria(categoria) {
  */
 async function obtenerProductosDestacados() {
     const todos = await obtenerProductos();
-    return todos.filter(p => p.destacado === true);
+    return todos
+        .filter(p => p.visible === true && p.destacado === true)
+        .sort((a, b) => {
+            if (a.disponible !== b.disponible) {
+                return Number(b.disponible) - Number(a.disponible);
+            }
+            const ordenA = a.orden !== null && a.orden !== undefined ? Number(a.orden) : 9999;
+            const ordenB = b.orden !== null && b.orden !== undefined ? Number(b.orden) : 9999;
+            return ordenA - ordenB;
+        })
+        .slice(0, 8);
 }
 
 /**
