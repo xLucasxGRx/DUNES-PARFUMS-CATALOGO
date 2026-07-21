@@ -1483,7 +1483,7 @@ function inicializarCheckoutForm() {
         }
         
         const pedido = construirPedidoFinal();
-        window.whatsappConfig.enviarPedidoWhatsApp(items, pedido.subtotalProductos, pedido.datosEntrega);
+        window.whatsappConfig.enviarPedidoWhatsApp(pedido);
     });
 }
 
