@@ -141,6 +141,11 @@
    Celulares Grandes y Smartphones en Vertical (Máx 768px)
    ========================================================================== */
 @media screen and (max-width: 768px) {
+  .logo-img {
+    height: 38px;
+    max-width: 170px;
+  }
+
   .container {
     padding: 0 20px;
   }
