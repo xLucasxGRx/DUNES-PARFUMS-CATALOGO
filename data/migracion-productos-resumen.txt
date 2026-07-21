@@ -1,0 +1,19 @@
+==================================================
+RESUMEN DE MIGRACIÓN DE PRODUCTOS A GOOGLE SHEETS
+==================================================
+Cantidad total de filas exportadas: 26
+Cantidad de perfumes sellados: 10
+Cantidad de decants: 16
+
+--- DETALLE DE VALIDACIONES ---
+IDs duplicados encontrados: 0
+
+Productos ignorados: 0
+
+Productos con campos faltantes: 0
+
+Productos sin imagen: 0
+
+Decants sin alguna presentación: 0
+
+Resultado final de la validación: ÉXITO TOTAL (0 errores)
