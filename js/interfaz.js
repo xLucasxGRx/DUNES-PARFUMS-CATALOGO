@@ -653,7 +653,9 @@ function renderizarDetalleDecant(container, prod) {
     const queryBtn = document.getElementById('btn-query-detail');
     if (queryBtn) {
         queryBtn.addEventListener('click', () => {
-            window.whatsappConfig.consultarDisponibilidad(prod.nombre, prod.marca, prod.presentacion);
+            const activeVariant = container.querySelector('.variant-option-btn.active');
+            const finalPresentation = activeVariant ? activeVariant.dataset.nombre : prod.presentacion;
+            window.whatsappConfig.consultarDisponibilidad(prod.nombre, prod.marca, finalPresentation);
         });
     }
 }
@@ -1286,7 +1288,7 @@ function validarFormularioEntrega(forceShowErrors = false) {
 }
 
 function validarDatosEntrega() {
-    const btnCheckout = document.getElementById('btn-checkout-whatsapp');
+    const btnCheckout = document.getElementById('btn-confirmar-whatsapp');
     if (!btnCheckout) return;
     
     const validation = validarFormularioEntrega(false);
@@ -1460,31 +1462,42 @@ function inicializarCheckoutForm() {
     });
     
     // Submit form handler
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
-        const items = await window.carritoModulo.obtenerItemsCarritoDetallados();
-        if (items.length === 0) {
-            window.carritoModulo.mostrarToastPremium('El carrito está vacío.', true);
-            return;
-        }
-        
-        const validation = validarFormularioEntrega(true);
-        if (!validation.valido) {
-            window.carritoModulo.mostrarToastPremium('Por favor complete todos los datos requeridos correctamente.', true);
-            
-            // Focus the first invalid field
-            const firstErrorFieldId = Object.keys(validation.errores)[0];
-            if (firstErrorFieldId) {
-                const el = document.getElementById(firstErrorFieldId);
-                if (el) el.focus();
-            }
-            return;
-        }
-        
-        const pedido = construirPedidoFinal();
-        window.whatsappConfig.enviarPedidoWhatsApp(pedido);
+        confirmarPedidoWhatsApp(e);
     });
+    
+    // Direct click handler on the button
+    const btnConfirmar = document.getElementById('btn-confirmar-whatsapp');
+    if (btnConfirmar) {
+        btnConfirmar.addEventListener('click', confirmarPedidoWhatsApp);
+    }
+}
+
+async function confirmarPedidoWhatsApp(e) {
+    if (e) e.preventDefault();
+    
+    const items = await window.carritoModulo.obtenerItemsCarritoDetallados();
+    if (items.length === 0) {
+        window.carritoModulo.mostrarToastPremium('El carrito está vacío.', true);
+        return;
+    }
+    
+    const validation = validarFormularioEntrega(true);
+    if (!validation.valido) {
+        window.carritoModulo.mostrarToastPremium('Por favor complete todos los datos requeridos correctamente.', true);
+        
+        // Focus the first invalid field
+        const firstErrorFieldId = Object.keys(validation.errores)[0];
+        if (firstErrorFieldId) {
+            const el = document.getElementById(firstErrorFieldId);
+            if (el) el.focus();
+        }
+        return;
+    }
+    
+    const pedido = construirPedidoFinal();
+    window.whatsappConfig.enviarPedidoWhatsApp(pedido);
 }
 
 window.renderizarCarritoDOM = renderizarCarritoDOM;
@@ -1501,6 +1514,7 @@ window.validarFormularioEntrega = validarFormularioEntrega;
 window.validarDatosEntrega = validarDatosEntrega;
 window.obtenerDatosEntrega = obtenerDatosEntrega;
 window.construirPedidoFinal = construirPedidoFinal;
+window.confirmarPedidoWhatsApp = confirmarPedidoWhatsApp;
 window.actualizarResumenEntrega = actualizarResumenEntrega;
 window.guardarPreferenciaEntrega = guardarPreferenciaEntrega;
 window.cargarPreferenciaEntrega = cargarPreferenciaEntrega;

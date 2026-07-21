@@ -62,17 +62,21 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     }
     
     // Validation before opening WhatsApp
-    if (!items || items.length === 0) {
-        console.error("No se puede abrir WhatsApp: El carrito está vacío.");
-        return;
-    }
-    if (!datosEntrega || !datosEntrega.tipoEntrega) {
-        console.error("No se puede abrir WhatsApp: Modalidad no seleccionada o inválida.");
-        return;
-    }
-    if (typeof subtotalProductos !== 'number' || isNaN(subtotalProductos) ||
+    const showCheckoutError = () => {
+        const errorContainer = document.getElementById('checkout-error-msg');
+        if (errorContainer) {
+            errorContainer.textContent = "No fue posible abrir WhatsApp. Revisa los datos del pedido e inténtalo nuevamente.";
+            errorContainer.style.display = 'block';
+        } else if (window.carritoModulo && typeof window.carritoModulo.mostrarToastPremium === 'function') {
+            window.carritoModulo.mostrarToastPremium("No fue posible abrir WhatsApp. Revisa los datos del pedido e inténtalo nuevamente.", true);
+        }
+    };
+
+    if (!items || items.length === 0 || !datosEntrega || !datosEntrega.tipoEntrega ||
+        typeof subtotalProductos !== 'number' || isNaN(subtotalProductos) ||
         typeof totalFinal !== 'number' || isNaN(totalFinal)) {
-        console.error("No se puede abrir WhatsApp: Totales inválidos.");
+        console.error("No se puede abrir WhatsApp: Datos del pedido inválidos o incompletos.");
+        showCheckoutError();
         return;
     }
 
@@ -158,9 +162,21 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     mensaje += `_Quedo atento para confirmar la disponibilidad y coordinar mi pedido._`;
 
     const mensajeCodificado = encodeURIComponent(mensaje);
+    if (!mensaje || !mensaje.trim() || !mensajeCodificado) {
+        console.error("No se puede abrir WhatsApp: Mensaje vacío.");
+        showCheckoutError();
+        return;
+    }
     const urlWhatsapp = `https://wa.me/51986510573?text=${mensajeCodificado}`;
     
-    window.open(urlWhatsapp, "_blank", "noopener,noreferrer");
+    try {
+        const win = window.open(urlWhatsapp, "_blank", "noopener,noreferrer");
+        if (!win) {
+            window.location.href = urlWhatsapp;
+        }
+    } catch (e) {
+        window.location.href = urlWhatsapp;
+    }
 }
 
 // Hacer disponibles las funciones en el ámbito global
