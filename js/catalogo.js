@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Cargar productos
     const productos = await window.productosModulo.obtenerProductos();
 
+    if (!productos || productos.length === 0) {
+        grid.innerHTML = '<p class="no-products-msg">No fue posible cargar el catálogo en este momento.</p>';
+        return;
+    }
+
     // Estado de filtros
     let filtroEstado = {
         busqueda: '',

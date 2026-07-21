@@ -15,13 +15,8 @@ async function obtenerProductos() {
     }
 
     try {
-        // En GitHub Pages, la ruta absoluta /data/productos.json puede fallar si está en subdirectorio.
-        // Usamos una ruta relativa desde el HTML o la raíz del sitio
-        const response = await fetch('./data/productos.json');
-        if (!response.ok) {
-            throw new Error(`Error HTTP! status: ${response.status}`);
-        }
-        cacheProductos = await response.json();
+        const resultado = await ProductosService.cargarProductos();
+        cacheProductos = resultado.productos || [];
         return cacheProductos;
     } catch (error) {
         console.error('Error al cargar el catálogo de productos:', error);
@@ -55,7 +50,7 @@ async function obtenerProductosDestacados() {
  */
 async function obtenerProductoPorId(id) {
     const todos = await obtenerProductos();
-    return todos.find(p => p.id === id) || null;
+    return todos.find(p => String(p.id) === String(id)) || null;
 }
 
 // Hacer las funciones disponibles globalmente
