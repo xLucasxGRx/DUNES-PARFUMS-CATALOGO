@@ -83,83 +83,70 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     let mensaje = `Hola, *Dunes Parfums* 👋\n\n`;
     mensaje += `Deseo realizar el siguiente pedido:\n\n`;
     
-    mensaje += `*DETALLE DEL PEDIDO*\n`;
-    mensaje += `--------------------\n\n`;
-    
-    items.forEach((item, index) => {
+    // SECTION: Products
+    mensaje += `*Productos*\n\n`;
+    items.forEach(item => {
         const subtotal = item.precio * item.cantidad;
-        const presentacionTexto = item.categoria === 'decants'
-            ? `${item.tamanoMl} ml`
-            : `Sellado / ${item.tamanoMl} ml`;
-            
-        mensaje += `*${index + 1}. ${item.nombre}*\n`;
-        mensaje += `Marca: ${item.marca}\n`;
-        mensaje += `Presentación: ${presentacionTexto}\n`;
-        mensaje += `Cantidad: ${item.cantidad}\n`;
-        mensaje += `Precio unitario: S/${item.precio.toFixed(2)}\n`;
-        mensaje += `Subtotal: *S/${subtotal.toFixed(2)}*\n\n`;
+        let presentacionTexto = `${item.tamanoMl}`;
+        if (item.presentacion) {
+            const match = item.presentacion.match(/(\d+)\s*ml/i);
+            if (match) {
+                presentacionTexto = `${match[1]}`;
+            } else {
+                presentacionTexto = item.presentacion.replace('Sellado / ', '').replace('Decant ', '').replace(' ml', '');
+            }
+        }
+        presentacionTexto = presentacionTexto.trim();
+        if (!presentacionTexto.toLowerCase().endsWith('ml')) {
+            presentacionTexto += ' ml';
+        }
+        mensaje += `• ${item.cantidad} x ${item.nombre} — ${presentacionTexto} — S/${subtotal.toFixed(2)}\n`;
     });
+    mensaje += `\n`;
     
-    mensaje += `*RESUMEN DEL PEDIDO*\n`;
-    mensaje += `--------------------\n\n`;
-    mensaje += `Subtotal de productos: S/${subtotalProductos.toFixed(2)}\n`;
-    
+    // SECTION: Delivery/Entrega
+    mensaje += `*Entrega*\n\n`;
     if (datosEntrega.tipoEntrega === 'delivery-local') {
-        const costoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
-        mensaje += `Delivery local: ${costoTexto}\n\n`;
-        mensaje += `*TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
-        
-        mensaje += `*TIPO DE ENTREGA*\n`;
-        mensaje += `--------------------\n\n`;
         mensaje += `🚚 Delivery local\n`;
-        
         let nombreZona = datosEntrega.nombreZona;
         if (!nombreZona && datosEntrega.zona) {
             const zonaFormateada = datosEntrega.zona.charAt(0).toUpperCase() + datosEntrega.zona.slice(1).replace('-', ' ');
             nombreZona = datosEntrega.zona === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
         }
-        mensaje += `Zona: ${nombreZona}\n\n`;
-        
-        mensaje += `*DATOS DEL CLIENTE*\n`;
-        mensaje += `--------------------\n\n`;
+        mensaje += `Zona: ${nombreZona}\n`;
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
         mensaje += `Celular: ${datosEntrega.celular}\n`;
         mensaje += `Dirección: ${datosEntrega.direccion}\n`;
-        mensaje += `Referencia: ${datosEntrega.referencia}\n\n`;
+        mensaje += `Referencia: ${datosEntrega.referencia}\n`;
+        
+        const costoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
+        mensaje += `Costo de delivery: ${costoTexto}\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'agencia') {
+        mensaje += `📦 Envío por agencia\n`;
         const cargoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
-        mensaje += `Embalaje y llevada a la agencia: ${cargoTexto}\n\n`;
-        mensaje += `*TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
-        
-        mensaje += `*TIPO DE ENTREGA*\n`;
-        mensaje += `--------------------\n\n`;
-        mensaje += `📦 Envío por agencia de transporte\n\n`;
-        mensaje += `_Deseo coordinar por WhatsApp los datos necesarios para el envío._\n\n`;
+        mensaje += `Embalaje y llevada: ${cargoTexto}\n\n`;
+        mensaje += `_Coordinaremos los datos del envío por WhatsApp._\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'recojo-local') {
-        mensaje += `Recojo en local: *GRATIS*\n\n`;
-        mensaje += `*TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
-        
-        mensaje += `*TIPO DE ENTREGA*\n`;
-        mensaje += `--------------------\n\n`;
         mensaje += `📍 Recojo en local\n`;
-        mensaje += `Ubicación: Cacatachi, Tarapoto\n\n`;
-        
-        mensaje += `*DATOS DEL CLIENTE*\n`;
-        mensaje += `--------------------\n\n`;
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
-        mensaje += `Celular: ${datosEntrega.celular}\n\n`;
-        mensaje += `_Deseo coordinar el horario de recojo por WhatsApp._\n\n`;
+        mensaje += `Celular: ${datosEntrega.celular}\n`;
+        
+        const costoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
+        mensaje += `Costo de entrega: ${costoTexto}\n\n`;
+        mensaje += `_Coordinaremos el horario de recojo por WhatsApp._\n\n`;
     }
     
-    if (datosEntrega.comentario) {
-        mensaje += `*COMENTARIOS*\n`;
-        mensaje += `--------------------\n\n`;
-        mensaje += `${datosEntrega.comentario}\n\n`;
+    // SECTION: Comments/Comentarios (if exists)
+    if (datosEntrega.comentario && datosEntrega.comentario.trim()) {
+        mensaje += `*Indicaciones:*\n`;
+        mensaje += `${datosEntrega.comentario.trim()}\n\n`;
     }
     
-    mensaje += `_Quedo atento para confirmar la disponibilidad y coordinar mi pedido._`;
+    // SECTION: Total and footer
+    mensaje += `*Total a pagar: S/${totalFinal.toFixed(2)}*\n\n`;
+    mensaje += `_Quedo atento para confirmar mi pedido._`;
 
     const mensajeCodificado = encodeURIComponent(mensaje);
     if (!mensaje || !mensaje.trim() || !mensajeCodificado) {
