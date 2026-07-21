@@ -1474,11 +1474,11 @@ function inicializarCheckoutForm() {
     }
 }
 
-async function confirmarPedidoWhatsApp(e) {
+function confirmarPedidoWhatsApp(e) {
     if (e) e.preventDefault();
     
-    const items = await window.carritoModulo.obtenerItemsCarritoDetallados();
-    if (items.length === 0) {
+    const rawItems = window.carritoModulo.obtenerCarrito();
+    if (rawItems.length === 0) {
         window.carritoModulo.mostrarToastPremium('El carrito está vacío.', true);
         return;
     }
@@ -1496,7 +1496,33 @@ async function confirmarPedidoWhatsApp(e) {
         return;
     }
     
-    const pedido = construirPedidoFinal();
+    const items = rawItems.map(item => ({
+        id: item.id,
+        idProducto: item.idProducto,
+        nombre: item.nombre,
+        marca: item.marca,
+        imagen: item.imagen,
+        tipo: item.tipo,
+        categoria: item.categoria,
+        presentacion: item.presentacion,
+        formato: item.categoria === 'decants' ? 'Decant' : 'Sellado',
+        tamanoMl: item.tamanoMl,
+        precio: item.precioUnitario,
+        cantidad: item.cantidad,
+        subtotal: item.subtotal
+    }));
+    
+    const { subtotalProductos, costoEntrega, totalFinal } = obtenerTotalesPedido();
+    const datosEntrega = obtenerDatosEntrega();
+    
+    const pedido = {
+        productos: items,
+        subtotalProductos,
+        costoEntrega,
+        totalFinal,
+        datosEntrega
+    };
+    
     window.whatsappConfig.enviarPedidoWhatsApp(pedido);
 }
 
