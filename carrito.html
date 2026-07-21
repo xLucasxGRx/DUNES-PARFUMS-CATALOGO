@@ -26,8 +26,8 @@
                     <li><a href="index.html" class="nav-link">Inicio</a></li>
                     <li><a href="catalogo.html" class="nav-link">Catálogo</a></li>
                     <li><a href="index.html#ofertas" class="nav-link">Ofertas</a></li>
-                    <li><a href="catalogo.html?cat=decants" class="nav-link">Decants</a></li>
-                    <li><a href="index.html#contacto" class="nav-link">Contacto</a></li>
+                    <li><a href="catalogo.html?categoria=decants" class="nav-link">Decants</a></li>
+                    <li><a href="index.html#ubicacion" class="nav-link">Contacto</a></li>
                 </ul>
             </nav>
 
@@ -73,48 +73,172 @@
                 <div class="summary-box">
                     <h3 class="summary-box-title">Detalles de Orden</h3>
                     
-                    <div class="summary-total-row">
+                    <div class="summary-details" style="margin-bottom: 20px; border-bottom: 1px solid var(--color-border); padding-bottom: 15px;">
+                        <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+                            <span>Subtotal Productos:</span>
+                            <span id="cart-subtotal-price" style="font-weight: 600;">S/ 0.00</span>
+                        </div>
+                        <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+                            <span>Tipo de entrega:</span>
+                            <span id="summary-delivery-type" style="font-weight: 600; color: var(--color-text-muted);">Sin seleccionar</span>
+                        </div>
+                        <div class="summary-row" id="summary-delivery-zone-row" style="display: none; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+                            <span>Zona de Delivery:</span>
+                            <span id="summary-delivery-zone" style="font-weight: 600; color: var(--color-text-muted);">-</span>
+                        </div>
+                        <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem;">
+                            <span id="summary-delivery-label">Costo de envío:</span>
+                            <span id="summary-delivery-cost" style="font-weight: 600; color: var(--color-text-muted);">Se calculará en la siguiente etapa</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-total-row" style="margin-bottom: 25px;">
                         <span>Total del Pedido:</span>
                         <span class="summary-total-price" id="cart-total-price">S/ 0.00</span>
                     </div>
 
-                    <form class="checkout-form" id="checkout-form">
-                        <h4 class="form-section-title">Datos de Entrega</h4>
-                        
-                        <div class="form-group">
-                            <label for="client-name">Nombre Completo *</label>
-                            <input type="text" id="client-name" placeholder="Ej. Juan Pérez" required>
+                    <form class="checkout-form" id="checkout-form" novalidate>
+                        <!-- Mensaje de advertencia inicial -->
+                        <div id="checkout-warning" class="checkout-warning-box">
+                            Selecciona un tipo de entrega para continuar.
                         </div>
 
-                        <div class="form-group">
-                            <label for="client-district">Ciudad o Distrito *</label>
-                            <input type="text" id="client-district" placeholder="Ej. Miraflores, Lima" required>
+                        <h4 class="form-section-title" id="seccion-entrega">¿Cómo deseas recibir tu pedido?</h4>
+                        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 15px; margin-top: -10px;">Selecciona una modalidad para continuar con tu compra.</p>
+
+                        <!-- Tarjetas de Selección de Modalidad -->
+                        <div class="delivery-options-grid" role="radiogroup" aria-label="Modalidad de entrega">
+                            <!-- Opción 1: Delivery Local -->
+                            <label class="delivery-option-card" id="card-delivery-local">
+                                <input type="radio" name="tipoEntrega" value="delivery-local" aria-describedby="desc-delivery-local">
+                                <div class="delivery-option-meta">
+                                    <span class="delivery-option-title">Delivery local</span>
+                                    <span class="delivery-option-desc" id="desc-delivery-local">Disponible para Cacatachi, Morales, Tarapoto y La Banda de Shilcayo.</span>
+                                </div>
+                            </label>
+
+                            <!-- Opción 2: Envío por Agencia -->
+                            <label class="delivery-option-card" id="card-agencia">
+                                <input type="radio" name="tipoEntrega" value="agencia" aria-describedby="desc-agencia">
+                                <div class="delivery-option-meta">
+                                    <span class="delivery-option-title">Envío por agencia de transporte</span>
+                                    <span class="delivery-option-desc" id="desc-agencia">Realizamos envíos por agencia a todo el Perú.</span>
+                                </div>
+                            </label>
+
+                            <!-- Opción 3: Recojo en Local -->
+                            <label class="delivery-option-card" id="card-recojo-local">
+                                <input type="radio" name="tipoEntrega" value="recojo-local" aria-describedby="desc-recojo-local">
+                                <div class="delivery-option-meta">
+                                    <span class="delivery-option-title">Recojo en local</span>
+                                    <span class="delivery-option-desc" id="desc-recojo-local">Recoge tu pedido en nuestro local ubicado en Cacatachi, Tarapoto.</span>
+                                </div>
+                            </label>
                         </div>
 
-                        <div class="form-group">
-                            <label for="client-delivery">Tipo de Entrega *</label>
-                            <select id="client-delivery" required>
-                                <option value="" disabled selected>Seleccione opción...</option>
-                                <option value="Delivery Express">Delivery Express (Lima)</option>
-                                <option value="Retiro en oficina">Retiro en local (Previo acuerdo)</option>
-                                <option value="Envío a Provincia">Envío a Provincia (Agencia Shalom/Olva)</option>
-                            </select>
+                        <!-- Bloque Dinámico: Delivery Local -->
+                        <div id="block-delivery-local" style="display: none; margin-bottom: 20px;">
+                            <h5 style="font-size: 0.9rem; font-weight: 700; color: var(--color-text-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Selecciona tu zona *</h5>
+                            <div class="zone-selector-group" role="radiogroup" aria-label="Zonas de delivery local">
+                                <button type="button" class="zone-option-btn" data-zona="cacatachi">Cacatachi</button>
+                                <button type="button" class="zone-option-btn" data-zona="morales">Morales</button>
+                                <button type="button" class="zone-option-btn" data-zona="tarapoto">Tarapoto</button>
+                                <button type="button" class="zone-option-btn" data-zona="banda-shilcayo">La Banda de Shilcayo</button>
+                            </div>
+                            
+                            <!-- Info de Delivery Gratis / Costo -->
+                            <div id="delivery-free-info" style="font-size: 0.85rem; font-weight: 600; color: var(--color-primary-dark); margin-bottom: 20px; background: rgba(212, 175, 55, 0.06); padding: 10px 15px; border-left: 3px solid var(--color-primary-dark); border-radius: var(--border-radius-sm); display: none;">
+                                Delivery gratis por compras desde S/ 30.00.
+                            </div>
+
+                            <div class="form-group">
+                                <label for="delivery-name">Nombre Completo *</label>
+                                <input type="text" id="delivery-name" placeholder="Ej. Juan Pérez" autocomplete="name">
+                                <span class="validation-error-msg" id="delivery-name-error">Ingresa tu nombre para continuar.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="delivery-phone">Número de Celular *</label>
+                                <input type="tel" id="delivery-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
+                                <span class="validation-error-msg" id="delivery-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="delivery-address">Dirección de Entrega *</label>
+                                <input type="text" id="delivery-address" placeholder="Ej. Jr. Independencia 434" autocomplete="street-address">
+                                <span class="validation-error-msg" id="delivery-address-error">Ingresa la dirección donde deseas recibir tu pedido.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="delivery-reference">Referencia de Ubicación *</label>
+                                <input type="text" id="delivery-reference" placeholder="Ej. Al frente de la Plaza de Armas">
+                                <span class="validation-error-msg" id="delivery-reference-error">Agrega una referencia para facilitar la entrega.</span>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="client-comment">Comentarios / Indicaciones</label>
-                            <textarea id="client-comment" rows="3" placeholder="Ej. Casa de fachada portón verde, llamar antes de llegar..."></textarea>
+                        <!-- Bloque Dinámico: Envío por Agencia -->
+                        <div id="block-agencia" style="display: none; margin-bottom: 20px; background-color: var(--color-bg-light); padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius-sm);">
+                            <p style="font-size: 0.95rem; color: var(--color-text); line-height: 1.5; margin: 0 0 10px 0;">
+                                📦 <strong>Envíos por agencia a todo el Perú.</strong>
+                            </p>
+                            <div style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 12px;">
+                                <div>Compras menores de S/30: Embalaje y llevada a la agencia: S/4.00.</div>
+                                <div>Compras desde S/30: Embalaje y llevada a la agencia: GRATIS.</div>
+                            </div>
+                            <!-- Mensaje de gratuidad dinámico para Agencia -->
+                            <div id="agencia-free-info" style="font-size: 0.85rem; font-weight: 600; color: var(--color-primary-dark); padding: 10px 15px; border-left: 3px solid var(--color-primary-dark); border-radius: var(--border-radius-sm); background: rgba(212, 175, 55, 0.06); line-height: 1.4;">
+                                Embalaje y llevada a la agencia gratis desde S/ 30.00.
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn btn-whatsapp btn-checkout" id="btn-checkout-whatsapp">
+                        <!-- Bloque Dinámico: Recojo en Local -->
+                        <div id="block-recojo-local" style="display: none; margin-bottom: 20px;">
+                            <div style="background-color: var(--color-bg-light); padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius-sm); margin-bottom: 20px;">
+                                <p style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary-dark); margin: 0 0 8px 0; text-transform: uppercase;">Recojo en local — Gratis</p>
+                                <p style="font-size: 0.9rem; color: var(--color-text); line-height: 1.5; margin: 0 0 12px 0;">
+                                    Nuestro local está ubicado en <strong>Cacatachi, Tarapoto</strong>. Antes de elegir esta opción, revisa nuestra ubicación para confirmar que puedes acercarte a recoger tu pedido.
+                                </p>
+                                <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;" aria-label="Abrir ubicación de Dunes Parfums en Google Maps">
+                                    📍 Ver ubicación en Google Maps
+                                </a>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recojo-name">Nombre Completo *</label>
+                                <input type="text" id="recojo-name" placeholder="Ej. Juan Pérez" autocomplete="name">
+                                <span class="validation-error-msg" id="recojo-name-error">Ingresa tu nombre para coordinar el recojo.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recojo-phone">Número de Celular *</label>
+                                <input type="tel" id="recojo-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
+                                <span class="validation-error-msg" id="recojo-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
+                            </div>
+                        </div>
+
+                        <!-- Comentario Adicional (se muestra siempre si hay modalidad elegida) -->
+                        <div class="form-group" id="group-comment" style="display: none;">
+                            <label for="client-comment">Comentarios / Indicaciones adicionales</label>
+                            <textarea id="client-comment" rows="3" placeholder="Ej. Entregar por la tarde, llamar al llegar..." maxlength="300"></textarea>
+                        </div>
+
+                        <!-- Bloque de Monto Total Inferior -->
+                        <div id="block-total-pagar" style="margin-top: 25px; margin-bottom: 15px; padding: 15px; background: var(--color-background-light); border-top: 2px solid var(--color-primary-dark); border-radius: var(--border-radius-sm); text-align: center;">
+                            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Monto total a pagar</span>
+                            <span id="total-monto-pagar" style="font-size: 1.6rem; font-weight: 800; color: var(--color-primary-dark); display: block;" aria-live="polite">S/ 0.00</span>
+                            <span id="total-monto-info" style="font-size: 0.8rem; color: var(--color-text-muted); display: none; margin-top: 5px; font-style: italic;"></span>
+                        </div>
+
+                        <!-- Botón WhatsApp -->
+                        <button type="submit" class="btn btn-whatsapp btn-checkout" id="btn-checkout-whatsapp" disabled>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right: 4px;">
                                 <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                             </svg>
-                            Confirmar por WhatsApp
+                            Confirmar pedido por WhatsApp
                         </button>
                     </form>
 
-                    <p class="checkout-note">
+                    <p class="checkout-note" style="margin-top: 15px;">
                         * Tu pedido será enviado a nuestro WhatsApp oficial para confirmar el stock final, cotizar el costo de delivery exacto y coordinar la transferencia de pago.
                     </p>
                 </div>
@@ -154,17 +278,18 @@
                 <div class="footer-col">
                     <h3 class="footer-title">Categorías</h3>
                     <ul class="footer-links">
-                        <li><a href="catalogo.html?cat=arabes" class="footer-link">Perfumes Árabes</a></li>
-                        <li><a href="catalogo.html?cat=disenador" class="footer-link">Diseñador</a></li>
-                        <li><a href="catalogo.html?cat=nicho" class="footer-link">Nicho</a></li>
-                        <li><a href="catalogo.html?cat=decants" class="footer-link">Decants / Muestras</a></li>
+                        <li><a href="catalogo.html?categoria=arabe" class="footer-link">Perfumes Árabes</a></li>
+                        <li><a href="catalogo.html?categoria=disenador" class="footer-link">Diseñador</a></li>
+                        <li><a href="catalogo.html?categoria=nicho" class="footer-link">Nicho</a></li>
+                        <li><a href="catalogo.html?categoria=decants" class="footer-link">Decants / Muestras</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
                     <h3 class="footer-title">Contacto</h3>
                     <ul class="footer-info-list">
-                        <li>📍 Envíos a todo el Perú</li>
+                        <li>📍 Cacatachi, Tarapoto · Delivery local · Envíos a todo el Perú</li>
+                        <li>🗺️ <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: underline;" aria-label="Ver ubicación de Dunes Parfums en Google Maps">Ver ubicación</a></li>
                         <li>💬 Atención por WhatsApp</li>
                         <li>✉️ dunesparfums@gmail.com</li>
                     </ul>

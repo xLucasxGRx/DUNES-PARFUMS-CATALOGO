@@ -59,12 +59,43 @@ function enviarPedidoWhatsApp(items, total, cliente) {
         mensaje += `Subtotal: S/ ${subtotal.toFixed(2)}\n\n`;
     });
 
-    mensaje += `TOTAL DEL PEDIDO: S/ ${total.toFixed(2)}\n\n`;
-    mensaje += `Nombre: ${cliente.nombre || ''}\n`;
-    mensaje += `Ciudad o distrito: ${cliente.distrito || ''}\n`;
-    mensaje += `Tipo de entrega: ${cliente.entrega || ''}\n`;
-    mensaje += `Comentario: ${cliente.comentario || ''}\n\n`;
-    mensaje += `Quedo atento para confirmar disponibilidad y coordinar el pago.`;
+    mensaje += `SUBTOTAL DE PRODUCTOS: S/ ${total.toFixed(2)}\n`;
+
+    if (cliente.tipoEntrega === 'delivery-local') {
+        mensaje += `TIPO DE ENTREGA: Delivery local\n`;
+        const zonaFormateada = cliente.zona.charAt(0).toUpperCase() + cliente.zona.slice(1).replace('-', ' ');
+        const zonaDisplay = cliente.zona === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
+        mensaje += `ZONA: ${zonaDisplay}\n`;
+        mensaje += `Nombre: ${cliente.nombre}\n`;
+        mensaje += `Celular: ${cliente.celular}\n`;
+        mensaje += `Dirección: ${cliente.direccion}\n`;
+        mensaje += `Referencia: ${cliente.referencia}\n`;
+        const costoTexto = cliente.costoEntrega === 0 ? 'GRATIS' : `S/ ${cliente.costoEntrega.toFixed(2)}`;
+        mensaje += `COSTO DE DELIVERY: ${costoTexto}\n`;
+        mensaje += `TOTAL DEL PEDIDO: S/ ${cliente.totalFinal.toFixed(2)}\n`;
+    } else if (cliente.tipoEntrega === 'agencia') {
+        mensaje += `TIPO DE ENTREGA: Envío por agencia de transporte\n`;
+        const cargoTexto = cliente.costoEntrega === 0 ? 'GRATIS' : `S/ ${cliente.costoEntrega.toFixed(2)}`;
+        mensaje += `EMBALAJE Y LLEVADA A LA AGENCIA: ${cargoTexto}\n`;
+        mensaje += `TOTAL DEL PEDIDO: S/ ${cliente.totalFinal.toFixed(2)}\n`;
+        mensaje += `Deseo coordinar el envío por agencia mediante WhatsApp.\n`;
+    } else if (cliente.tipoEntrega === 'recojo-local') {
+        mensaje += `TIPO DE ENTREGA: Recojo en local\n`;
+        mensaje += `COSTO DE ENTREGA: GRATIS\n`;
+        mensaje += `TOTAL DEL PEDIDO: S/ ${cliente.totalFinal.toFixed(2)}\n\n`;
+        mensaje += `DATOS DEL CLIENTE:\n`;
+        mensaje += `Nombre: ${cliente.nombre}\n`;
+        mensaje += `Celular: ${cliente.celular}\n\n`;
+        mensaje += `Deseo coordinar el horario de recojo en su local de Cacatachi, Tarapoto.\n`;
+    } else {
+        mensaje += `TOTAL DEL PEDIDO: S/ ${cliente.totalFinal.toFixed(2)}\n`;
+    }
+
+    if (cliente.comentario) {
+        mensaje += `Comentario: ${cliente.comentario}\n`;
+    }
+
+    mensaje += `\nQuedo atento para confirmar disponibilidad y coordinar el pago.`;
 
     enviarMensajeWhatsApp(mensaje);
 }

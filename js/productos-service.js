@@ -85,9 +85,25 @@ const ProductosService = (function() {
             throw new Error(`Error HTTP al cargar el respaldo! status: ${response.status}`);
         }
         const data = await response.json();
+        
+        // Normalizar categorías del respaldo para compatibilidad de Fase 1
+        const dataNormalizada = data.map(p => {
+            if (p.categoria === 'sellados' || p.categoria !== 'decants') {
+                let cat = 'arabe';
+                if (p.tipo) {
+                    const t = String(p.tipo).trim().toLowerCase();
+                    if (t === 'arabe') cat = 'arabe';
+                    else if (t === 'disenador' || t === 'diseñador') cat = 'disenador';
+                    else if (t === 'nicho') cat = 'nicho';
+                }
+                p.categoria = cat;
+            }
+            return p;
+        });
+
         console.log("Google Sheets no disponible. Productos cargados desde respaldo local.");
         return {
-            productos: data,
+            productos: dataNormalizada,
             origen: "json-respaldo"
         };
     }
@@ -179,7 +195,7 @@ const ProductosService = (function() {
                     nombre: nombre,
                     marca: marca,
                     tipo: getTipoFromCategoria(categoriaOriginal),
-                    categoria: categoriaOriginal === 'decants' ? 'decants' : 'sellados',
+                    categoria: categoriaOriginal,
                     disponible: parseBoolean(rawObj.disponible) ?? false,
                     visible: visible,
                     imagen: imagen,

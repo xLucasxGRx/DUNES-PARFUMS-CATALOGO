@@ -755,7 +755,16 @@ async function renderizarCarritoDOM() {
     `;
 
     container.innerHTML = html;
-    if (totalPriceSpan) totalPriceSpan.textContent = formatearMoneda(totalGeneral);
+    if (typeof actualizarInterfazEntrega === 'function') {
+        actualizarInterfazEntrega();
+    } else {
+        if (totalPriceSpan) totalPriceSpan.textContent = formatearMoneda(totalGeneral);
+        const subtotalPriceSpan = document.getElementById('cart-subtotal-price');
+        if (subtotalPriceSpan) subtotalPriceSpan.textContent = formatearMoneda(totalGeneral);
+        if (typeof validarDatosEntrega === 'function') {
+            validarDatosEntrega();
+        }
+    }
 
     // Asignar eventos de botones del carrito
     vincularEventosCarritoDOM(container);
@@ -805,34 +814,699 @@ function vincularEventosCarritoDOM(container) {
     }
 }
 
-/**
- * Inicializa el formulario de checkout y vincula el envío a WhatsApp
- */
+const CONFIG_DELIVERY_LOCAL = {
+    montoMinimoGratis: 30,
+    zonas: {
+        cacatachi: { nombre: "Cacatachi", costo: 0 },
+        morales: { nombre: "Morales", costo: 3 },
+        tarapoto: { nombre: "Tarapoto", costo: 4 },
+        "banda-shilcayo": { nombre: "La Banda de Shilcayo", costo: 5 }
+    }
+};
+
+const CONFIG_ENVIO_AGENCIA = {
+    montoMinimoGratis: 30,
+    cargoMenorAlMinimo: 4
+};
+
+function calcularCargoAgencia(subtotal) {
+    const subtotalNumerico = Number(subtotal);
+    if (!Number.isFinite(subtotalNumerico) || subtotalNumerico < 0) {
+        return 0;
+    }
+    return subtotalNumerico >= CONFIG_ENVIO_AGENCIA.montoMinimoGratis ? 0 : CONFIG_ENVIO_AGENCIA.cargoMenorAlMinimo;
+}
+
+let selectedDeliveryType = null;
+let selectedDeliveryZone = null;
+
+function obtenerTipoEntregaSeleccionado() {
+    return selectedDeliveryType;
+}
+
+function obtenerZonaSeleccionada() {
+    return selectedDeliveryZone;
+}
+
+function calcularCostoDeliveryLocal(subtotal, zona) {
+    const subtotalNumerico = Number(subtotal);
+    if (!Number.isFinite(subtotalNumerico) || subtotalNumerico < 0) {
+        return 0;
+    }
+    
+    if (zona === 'cacatachi') {
+        return 0;
+    }
+    
+    if (subtotalNumerico >= CONFIG_DELIVERY_LOCAL.montoMinimoGratis) {
+        return 0;
+    }
+    
+    const zonaConfig = CONFIG_DELIVERY_LOCAL.zonas[zona];
+    return zonaConfig ? zonaConfig.costo : 0;
+}
+
+function actualizarBotonesZona(subtotal) {
+    const subtotalNumerico = Number(subtotal) || 0;
+    const isFree = subtotalNumerico >= CONFIG_DELIVERY_LOCAL.montoMinimoGratis;
+    
+    const btnCacatachi = document.querySelector('.zone-option-btn[data-zona="cacatachi"]');
+    const btnMorales = document.querySelector('.zone-option-btn[data-zona="morales"]');
+    const btnTarapoto = document.querySelector('.zone-option-btn[data-zona="tarapoto"]');
+    const btnBanda = document.querySelector('.zone-option-btn[data-zona="banda-shilcayo"]');
+    
+    if (btnCacatachi) {
+        btnCacatachi.innerHTML = `Cacatachi<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">Gratis</span>`;
+    }
+    if (btnMorales) {
+        const costText = isFree ? 'Gratis' : `S/ ${CONFIG_DELIVERY_LOCAL.zonas.morales.costo.toFixed(2)}`;
+        btnMorales.innerHTML = `Morales<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">${costText}</span>`;
+    }
+    if (btnTarapoto) {
+        const costText = isFree ? 'Gratis' : `S/ ${CONFIG_DELIVERY_LOCAL.zonas.tarapoto.costo.toFixed(2)}`;
+        btnTarapoto.innerHTML = `Tarapoto<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">${costText}</span>`;
+    }
+    if (btnBanda) {
+        const costText = isFree ? 'Gratis' : `S/ ${CONFIG_DELIVERY_LOCAL.zonas['banda-shilcayo'].costo.toFixed(2)}`;
+        btnBanda.innerHTML = `La Banda de Shilcayo<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">${costText}</span>`;
+    }
+}
+
+function actualizarMensajeDeliveryGratis(subtotal, zona) {
+    const infoBox = document.getElementById('delivery-free-info');
+    if (!infoBox) return;
+    
+    const subtotalNumerico = Number(subtotal) || 0;
+    if (subtotalNumerico === 0) {
+        infoBox.style.display = 'none';
+        return;
+    }
+    
+    infoBox.style.display = 'block';
+    
+    if (subtotalNumerico >= CONFIG_DELIVERY_LOCAL.montoMinimoGratis) {
+        infoBox.textContent = "¡Tu delivery es gratis!";
+        infoBox.style.color = "var(--color-primary-dark)";
+        infoBox.style.borderColor = "var(--color-primary-dark)";
+        infoBox.style.background = "rgba(212, 175, 55, 0.06)";
+        return;
+    }
+    
+    const faltante = CONFIG_DELIVERY_LOCAL.montoMinimoGratis - subtotalNumerico;
+    
+    if (zona === 'cacatachi') {
+        infoBox.textContent = "Delivery gratis en Cacatachi.";
+        infoBox.style.color = "var(--color-primary-dark)";
+        infoBox.style.borderColor = "var(--color-primary-dark)";
+        infoBox.style.background = "rgba(212, 175, 55, 0.06)";
+    } else {
+        infoBox.textContent = `Te falta${faltante === 1 ? '' : 'n'} S/ ${faltante.toFixed(2)} para obtener delivery gratis.`;
+        infoBox.style.color = "#FF9500";
+        infoBox.style.borderColor = "#FF9500";
+        infoBox.style.background = "rgba(255, 149, 0, 0.05)";
+    }
+}
+
+function actualizarMensajeAgenciaGratis(subtotal) {
+    const infoBox = document.getElementById('agencia-free-info');
+    if (!infoBox) return;
+    
+    const subtotalNumerico = Number(subtotal) || 0;
+    if (subtotalNumerico === 0) {
+        infoBox.style.display = 'none';
+        return;
+    }
+    
+    infoBox.style.display = 'block';
+    
+    if (subtotalNumerico >= CONFIG_ENVIO_AGENCIA.montoMinimoGratis) {
+        infoBox.textContent = "¡Embalaje y llevada a la agencia gratis!";
+        infoBox.style.color = "var(--color-primary-dark)";
+        infoBox.style.borderColor = "var(--color-primary-dark)";
+        infoBox.style.background = "rgba(212, 175, 55, 0.06)";
+        return;
+    }
+    
+    const faltante = CONFIG_ENVIO_AGENCIA.montoMinimoGratis - subtotalNumerico;
+    infoBox.textContent = `Te falta${faltante === 1 ? '' : 'n'} S/ ${faltante.toFixed(2)} para obtener el beneficio gratis.`;
+    infoBox.style.color = "#FF9500";
+    infoBox.style.borderColor = "#FF9500";
+    infoBox.style.background = "rgba(255, 149, 0, 0.05)";
+}
+
+function actualizarInterfazEntrega() {
+    const warningBox = document.getElementById('checkout-warning');
+    const blockDelivery = document.getElementById('block-delivery-local');
+    const blockAgencia = document.getElementById('block-agencia');
+    const blockRecojo = document.getElementById('block-recojo-local');
+    const groupComment = document.getElementById('group-comment');
+    
+    if (!warningBox || !blockDelivery || !blockAgencia || !blockRecojo || !groupComment) return;
+    
+    blockDelivery.style.display = 'none';
+    blockAgencia.style.display = 'none';
+    blockRecojo.style.display = 'none';
+    groupComment.style.display = 'none';
+    
+    // Hide all validation errors when switching modalities
+    document.querySelectorAll('.validation-error-msg').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    document.querySelectorAll('.delivery-option-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+
+    if (selectedDeliveryType) {
+        warningBox.style.display = 'none';
+        groupComment.style.display = 'block';
+        
+        const selectedCard = document.getElementById(`card-${selectedDeliveryType}`);
+        if (selectedCard) selectedCard.classList.add('selected');
+        
+        if (selectedDeliveryType === 'delivery-local') {
+            blockDelivery.style.display = 'block';
+            document.getElementById('delivery-name').required = true;
+            document.getElementById('delivery-phone').required = true;
+            document.getElementById('delivery-address').required = true;
+            document.getElementById('delivery-reference').required = true;
+            document.getElementById('recojo-name').required = false;
+            document.getElementById('recojo-phone').required = false;
+        } else if (selectedDeliveryType === 'agencia') {
+            blockAgencia.style.display = 'block';
+            document.getElementById('delivery-name').required = false;
+            document.getElementById('delivery-phone').required = false;
+            document.getElementById('delivery-address').required = false;
+            document.getElementById('delivery-reference').required = false;
+            document.getElementById('recojo-name').required = false;
+            document.getElementById('recojo-phone').required = false;
+        } else if (selectedDeliveryType === 'recojo-local') {
+            blockRecojo.style.display = 'block';
+            document.getElementById('recojo-name').required = true;
+            document.getElementById('recojo-phone').required = true;
+            document.getElementById('delivery-name').required = false;
+            document.getElementById('delivery-phone').required = false;
+            document.getElementById('delivery-address').required = false;
+            document.getElementById('delivery-reference').required = false;
+        }
+    } else {
+        warningBox.style.display = 'block';
+        document.getElementById('delivery-name').required = false;
+        document.getElementById('delivery-phone').required = false;
+        document.getElementById('delivery-address').required = false;
+        document.getElementById('delivery-reference').required = false;
+        document.getElementById('recojo-name').required = false;
+        document.getElementById('recojo-phone').required = false;
+    }
+    
+    const items = window.carritoModulo.obtenerCarrito();
+    const subtotal = items.reduce((acc, item) => acc + (item.precioUnitario * item.cantidad), 0);
+    
+    actualizarBotonesZona(subtotal);
+    actualizarMensajeDeliveryGratis(subtotal, selectedDeliveryZone);
+    actualizarMensajeAgenciaGratis(subtotal);
+    actualizarResumenEntrega();
+    validarDatosEntrega();
+}
+
+function obtenerTotalesPedido() {
+    const items = window.carritoModulo.obtenerCarrito();
+    const subtotalProductos = items.reduce((acc, item) => acc + (item.precioUnitario * item.cantidad), 0);
+    
+    let costoEntrega = 0;
+    let conceptoEntrega = 'Costo de envío:';
+    
+    if (subtotalProductos > 0) {
+        if (selectedDeliveryType === 'delivery-local') {
+            conceptoEntrega = 'Costo de delivery:';
+            if (selectedDeliveryZone) {
+                costoEntrega = calcularCostoDeliveryLocal(subtotalProductos, selectedDeliveryZone);
+            } else {
+                costoEntrega = 0;
+            }
+        } else if (selectedDeliveryType === 'agencia') {
+            conceptoEntrega = 'Embalaje y llevada a la agencia:';
+            costoEntrega = calcularCargoAgencia(subtotalProductos);
+        } else if (selectedDeliveryType === 'recojo-local') {
+            conceptoEntrega = 'Costo de entrega:';
+            costoEntrega = 0;
+        }
+    } else {
+        if (selectedDeliveryType === 'agencia') {
+            conceptoEntrega = 'Embalaje y llevada a la agencia:';
+        } else if (selectedDeliveryType === 'delivery-local') {
+            conceptoEntrega = 'Costo de delivery:';
+        }
+    }
+    
+    const totalFinal = subtotalProductos === 0 ? 0 : (subtotalProductos + costoEntrega);
+    
+    return {
+        subtotalProductos,
+        costoEntrega,
+        conceptoEntrega,
+        totalFinal
+    };
+}
+
+function actualizarResumenEntrega() {
+    const summaryType = document.getElementById('summary-delivery-type');
+    const summaryZoneRow = document.getElementById('summary-delivery-zone-row');
+    const summaryZone = document.getElementById('summary-delivery-zone');
+    const summaryCost = document.getElementById('summary-delivery-cost');
+    const labelSpan = document.getElementById('summary-delivery-label');
+    const totalSpan = document.getElementById('cart-total-price');
+    const subtotalSpan = document.getElementById('cart-subtotal-price');
+    
+    const totalMontoPagar = document.getElementById('total-monto-pagar');
+    const totalMontoInfo = document.getElementById('total-monto-info');
+    
+    if (!summaryType) return;
+    
+    const { subtotalProductos, costoEntrega, conceptoEntrega, totalFinal } = obtenerTotalesPedido();
+    
+    if (subtotalSpan) subtotalSpan.textContent = formatearMoneda(subtotalProductos);
+    if (labelSpan) labelSpan.textContent = conceptoEntrega;
+    
+    if (selectedDeliveryType === 'delivery-local') {
+        summaryType.textContent = 'Delivery local';
+        if (summaryZoneRow) summaryZoneRow.style.display = 'flex';
+        
+        if (selectedDeliveryZone) {
+            const zonaFormateada = selectedDeliveryZone.charAt(0).toUpperCase() + selectedDeliveryZone.slice(1).replace('-', ' ');
+            if (summaryZone) {
+                summaryZone.textContent = selectedDeliveryZone === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
+            }
+            if (summaryCost) {
+                summaryCost.textContent = costoEntrega === 0 ? 'GRATIS' : formatearMoneda(costoEntrega);
+            }
+        } else {
+            if (summaryZone) summaryZone.textContent = 'Sin seleccionar';
+            if (summaryCost) summaryCost.textContent = 'Selecciona una zona';
+        }
+    } else if (selectedDeliveryType === 'agencia') {
+        summaryType.textContent = 'Envío por agencia de transporte';
+        if (summaryZoneRow) summaryZoneRow.style.display = 'none';
+        if (summaryCost) {
+            if (subtotalProductos === 0) {
+                summaryCost.textContent = 'Se calculará en la siguiente etapa';
+            } else {
+                summaryCost.textContent = costoEntrega === 0 ? 'GRATIS' : formatearMoneda(costoEntrega);
+            }
+        }
+    } else if (selectedDeliveryType === 'recojo-local') {
+        summaryType.textContent = 'Recojo en local';
+        if (summaryZoneRow) summaryZoneRow.style.display = 'none';
+        if (summaryCost) summaryCost.textContent = 'GRATIS';
+    } else {
+        summaryType.textContent = 'Sin seleccionar';
+        if (summaryZoneRow) summaryZoneRow.style.display = 'none';
+        if (summaryCost) summaryCost.textContent = 'Se calculará en la siguiente etapa';
+    }
+    
+    if (totalSpan) totalSpan.textContent = formatearMoneda(totalFinal);
+    if (totalMontoPagar) totalMontoPagar.textContent = formatearMoneda(totalFinal);
+    
+    if (totalMontoInfo) {
+        if (subtotalProductos === 0) {
+            totalMontoInfo.textContent = '';
+            totalMontoInfo.style.display = 'none';
+        } else if (!selectedDeliveryType) {
+            totalMontoInfo.textContent = 'Selecciona el tipo de entrega para confirmar el total.';
+            totalMontoInfo.style.display = 'block';
+        } else if (selectedDeliveryType === 'delivery-local' && !selectedDeliveryZone) {
+            totalMontoInfo.textContent = 'Selecciona una zona para confirmar el total.';
+            totalMontoInfo.style.display = 'block';
+        } else {
+            totalMontoInfo.textContent = '';
+            totalMontoInfo.style.display = 'none';
+        }
+    }
+}
+
+function validarFormularioEntrega(forceShowErrors = false) {
+    const items = window.carritoModulo.obtenerCarrito();
+    const result = {
+        valido: true,
+        errores: {}
+    };
+    
+    if (items.length === 0) {
+        result.valido = false;
+        return result;
+    }
+    
+    if (!selectedDeliveryType) {
+        result.valido = false;
+        return result;
+    }
+    
+    // Reset all aria-invalid attributes first
+    const allInputs = [
+        'delivery-name', 'delivery-phone', 'delivery-address', 'delivery-reference',
+        'recojo-name', 'recojo-phone'
+    ];
+    allInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('aria-invalid', 'false');
+    });
+    
+    if (selectedDeliveryType === 'delivery-local') {
+        const nameInput = document.getElementById('delivery-name');
+        const phoneInput = document.getElementById('delivery-phone');
+        const addressInput = document.getElementById('delivery-address');
+        const referenceInput = document.getElementById('delivery-reference');
+        
+        const name = nameInput ? nameInput.value.trim() : '';
+        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
+        const address = addressInput ? addressInput.value.trim() : '';
+        const reference = referenceInput ? referenceInput.value.trim() : '';
+        
+        // Name validation
+        const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\'\.]+$/;
+        const isNameValid = name.length >= 2 && name.length <= 80 && nameRegex.test(name);
+        const nameError = document.getElementById('delivery-name-error');
+        if (nameError) {
+            const show = (forceShowErrors && !isNameValid) || (name.length > 0 && !isNameValid);
+            nameError.style.display = show ? 'block' : 'none';
+        }
+        if (!isNameValid) {
+            result.valido = false;
+            result.errores['delivery-name'] = 'Ingresa tu nombre para continuar.';
+            if (nameInput) nameInput.setAttribute('aria-invalid', 'true');
+        }
+        
+        // Phone validation
+        const phoneRegex = /^[0-9]{9}$/;
+        const isPhoneValid = phoneRegex.test(phone);
+        const phoneError = document.getElementById('delivery-phone-error');
+        if (phoneError) {
+            const show = (forceShowErrors && !isPhoneValid) || (phone.length > 0 && !isPhoneValid);
+            phoneError.style.display = show ? 'block' : 'none';
+        }
+        if (!isPhoneValid) {
+            result.valido = false;
+            result.errores['delivery-phone'] = 'Ingresa un número de celular válido de 9 dígitos.';
+            if (phoneInput) phoneInput.setAttribute('aria-invalid', 'true');
+        }
+        
+        // Zone validation
+        const validZones = ['cacatachi', 'morales', 'tarapoto', 'banda-shilcayo'];
+        const isZoneValid = validZones.includes(selectedDeliveryZone);
+        if (!isZoneValid) {
+            result.valido = false;
+            result.errores['zone-selector'] = 'Selecciona la zona donde deseas recibir tu pedido.';
+        }
+        
+        // Address validation
+        const isAddressValid = address.length >= 3;
+        const addressError = document.getElementById('delivery-address-error');
+        if (addressError) {
+            const show = (forceShowErrors && !isAddressValid) || (address.length > 0 && !isAddressValid);
+            addressError.style.display = show ? 'block' : 'none';
+        }
+        if (!isAddressValid) {
+            result.valido = false;
+            result.errores['delivery-address'] = 'Ingresa la dirección donde deseas recibir tu pedido.';
+            if (addressInput) addressInput.setAttribute('aria-invalid', 'true');
+        }
+        
+        // Reference validation
+        const isReferenceValid = reference.length >= 3;
+        const referenceError = document.getElementById('delivery-reference-error');
+        if (referenceError) {
+            const show = (forceShowErrors && !isReferenceValid) || (reference.length > 0 && !isReferenceValid);
+            referenceError.style.display = show ? 'block' : 'none';
+        }
+        if (!isReferenceValid) {
+            result.valido = false;
+            result.errores['delivery-reference'] = 'Agrega una referencia para facilitar la entrega.';
+            if (referenceInput) referenceInput.setAttribute('aria-invalid', 'true');
+        }
+        
+    } else if (selectedDeliveryType === 'recojo-local') {
+        const nameInput = document.getElementById('recojo-name');
+        const phoneInput = document.getElementById('recojo-phone');
+        
+        const name = nameInput ? nameInput.value.trim() : '';
+        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
+        
+        // Name validation
+        const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\'\.]+$/;
+        const isNameValid = name.length >= 2 && name.length <= 80 && nameRegex.test(name);
+        const nameError = document.getElementById('recojo-name-error');
+        if (nameError) {
+            const show = (forceShowErrors && !isNameValid) || (name.length > 0 && !isNameValid);
+            nameError.style.display = show ? 'block' : 'none';
+        }
+        if (!isNameValid) {
+            result.valido = false;
+            result.errores['recojo-name'] = 'Ingresa tu nombre para coordinar el recojo.';
+            if (nameInput) nameInput.setAttribute('aria-invalid', 'true');
+        }
+        
+        // Phone validation
+        const phoneRegex = /^[0-9]{9}$/;
+        const isPhoneValid = phoneRegex.test(phone);
+        const phoneError = document.getElementById('recojo-phone-error');
+        if (phoneError) {
+            const show = (forceShowErrors && !isPhoneValid) || (phone.length > 0 && !isPhoneValid);
+            phoneError.style.display = show ? 'block' : 'none';
+        }
+        if (!isPhoneValid) {
+            result.valido = false;
+            result.errores['recojo-phone'] = 'Ingresa un número de celular válido de 9 dígitos.';
+            if (phoneInput) phoneInput.setAttribute('aria-invalid', 'true');
+        }
+    } else if (selectedDeliveryType === 'agencia') {
+        // Agencia is always valid as no fields are required
+    }
+    
+    return result;
+}
+
+function validarDatosEntrega() {
+    const btnCheckout = document.getElementById('btn-checkout-whatsapp');
+    if (!btnCheckout) return;
+    
+    const validation = validarFormularioEntrega(false);
+    btnCheckout.disabled = !validation.valido;
+}
+
+function obtenerDatosEntrega() {
+    const commentInput = document.getElementById('client-comment');
+    const comment = commentInput ? commentInput.value.trim() : '';
+    
+    if (selectedDeliveryType === 'delivery-local') {
+        const nameInput = document.getElementById('delivery-name');
+        const phoneInput = document.getElementById('delivery-phone');
+        const addressInput = document.getElementById('delivery-address');
+        const referenceInput = document.getElementById('delivery-reference');
+        
+        const name = nameInput ? nameInput.value.trim() : '';
+        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
+        const address = addressInput ? addressInput.value.trim() : '';
+        const reference = referenceInput ? referenceInput.value.trim() : '';
+        
+        let nombreZona = '';
+        if (selectedDeliveryZone) {
+            const zonaFormateada = selectedDeliveryZone.charAt(0).toUpperCase() + selectedDeliveryZone.slice(1).replace('-', ' ');
+            nombreZona = selectedDeliveryZone === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
+        }
+        
+        return {
+            tipoEntrega: 'delivery-local',
+            nombre: name,
+            celular: phone,
+            zona: selectedDeliveryZone,
+            nombreZona: nombreZona,
+            direccion: address,
+            referencia: reference,
+            comentario: comment
+        };
+    } else if (selectedDeliveryType === 'agencia') {
+        return {
+            tipoEntrega: 'agencia',
+            comentario: comment
+        };
+    } else if (selectedDeliveryType === 'recojo-local') {
+        const nameInput = document.getElementById('recojo-name');
+        const phoneInput = document.getElementById('recojo-phone');
+        
+        const name = nameInput ? nameInput.value.trim() : '';
+        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
+        
+        return {
+            tipoEntrega: 'recojo-local',
+            nombre: name,
+            celular: phone,
+            comentario: comment
+        };
+    }
+    return null;
+}
+
+function construirPedidoFinal() {
+    const items = window.carritoModulo.obtenerCarrito();
+    const { subtotalProductos, costoEntrega, conceptoEntrega, totalFinal } = obtenerTotalesPedido();
+    const datosEntrega = obtenerDatosEntrega();
+    
+    return {
+        productos: items,
+        subtotalProductos,
+        tipoEntrega: selectedDeliveryType,
+        datosEntrega,
+        conceptoEntrega,
+        costoEntrega,
+        totalFinal,
+        comentarios: datosEntrega ? datosEntrega.comentario : ''
+    };
+}
+
+function guardarPreferenciaEntrega() {
+    try {
+        const pref = {
+            tipoEntrega: selectedDeliveryType,
+            zona: selectedDeliveryZone
+        };
+        localStorage.setItem('dunes_delivery_pref', JSON.stringify(pref));
+    } catch (e) {
+        console.error('Error al guardar preferencia de entrega:', e);
+    }
+}
+
+function cargarPreferenciaEntrega() {
+    try {
+        const raw = localStorage.getItem('dunes_delivery_pref');
+        if (!raw) return;
+        
+        const pref = JSON.parse(raw);
+        if (pref && ['delivery-local', 'agencia', 'recojo-local'].includes(pref.tipoEntrega)) {
+            selectedDeliveryType = pref.tipoEntrega;
+            
+            // Validate zone value
+            if (pref.tipoEntrega === 'delivery-local' && ['cacatachi', 'morales', 'tarapoto', 'banda-shilcayo'].includes(pref.zona)) {
+                selectedDeliveryZone = pref.zona;
+            } else {
+                selectedDeliveryZone = null;
+            }
+            
+            // Check radio button in DOM
+            const radio = document.querySelector(`input[name="tipoEntrega"][value="${selectedDeliveryType}"]`);
+            if (radio) radio.checked = true;
+            
+            // Update selected class for zone buttons in DOM
+            if (selectedDeliveryZone) {
+                const zoneBtn = document.querySelector(`.zone-option-btn[data-zona="${selectedDeliveryZone}"]`);
+                if (zoneBtn) zoneBtn.classList.add('selected');
+            }
+        }
+    } catch (e) {
+        console.error('Error al cargar preferencia de entrega:', e);
+    }
+}
+
 function inicializarCheckoutForm() {
     const form = document.getElementById('checkout-form');
     if (!form) return;
-
+    
+    // Load preferences
+    cargarPreferenciaEntrega();
+    actualizarInterfazEntrega();
+    
+    // Listeners for radio buttons (modality)
+    form.querySelectorAll('input[name="tipoEntrega"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            selectedDeliveryType = e.target.value;
+            // When switching modality, if it is not delivery-local, clear zone selection
+            if (selectedDeliveryType !== 'delivery-local') {
+                selectedDeliveryZone = null;
+                form.querySelectorAll('.zone-option-btn').forEach(btn => btn.classList.remove('selected'));
+            }
+            guardarPreferenciaEntrega();
+            actualizarInterfazEntrega();
+        });
+    });
+    
+    // Listeners for zone buttons (only relevant for delivery-local)
+    form.querySelectorAll('.zone-option-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            form.querySelectorAll('.zone-option-btn').forEach(b => b.classList.remove('selected'));
+            e.currentTarget.classList.add('selected');
+            selectedDeliveryZone = e.currentTarget.dataset.zona;
+            guardarPreferenciaEntrega();
+            actualizarInterfazEntrega();
+        });
+    });
+    
+    // Listeners for text/tel inputs
+    const inputs = [
+        'delivery-name', 'delivery-phone', 'delivery-address', 'delivery-reference',
+        'recojo-name', 'recojo-phone'
+    ];
+    inputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', () => {
+                if (id.includes('phone')) {
+                    input.value = input.value.replace(/[^0-9]/g, '');
+                }
+                validarDatosEntrega();
+            });
+            input.addEventListener('blur', () => {
+                validarFormularioEntrega(false);
+            });
+        }
+    });
+    
+    // Submit form handler
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+        
         const items = await window.carritoModulo.obtenerItemsCarritoDetallados();
         if (items.length === 0) {
             window.carritoModulo.mostrarToastPremium('El carrito está vacío.', true);
             return;
         }
-
-        const total = items.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
-
-        const clienteInfo = {
-            nombre: document.getElementById('client-name').value.trim(),
-            distrito: document.getElementById('client-district').value.trim(),
-            entrega: document.getElementById('client-delivery').value,
-            comentario: document.getElementById('client-comment').value.trim()
-        };
-
-        window.whatsappConfig.enviarPedidoWhatsApp(items, total, clienteInfo);
+        
+        const validation = validarFormularioEntrega(true);
+        if (!validation.valido) {
+            window.carritoModulo.mostrarToastPremium('Por favor complete todos los datos requeridos correctamente.', true);
+            
+            // Focus the first invalid field
+            const firstErrorFieldId = Object.keys(validation.errores)[0];
+            if (firstErrorFieldId) {
+                const el = document.getElementById(firstErrorFieldId);
+                if (el) el.focus();
+            }
+            return;
+        }
+        
+        const pedido = construirPedidoFinal();
+        window.whatsappConfig.enviarPedidoWhatsApp(items, pedido.subtotalProductos, pedido.datosEntrega);
     });
 }
 
-// Exponer renderizador para que carrito.js pueda dispararlo
 window.renderizarCarritoDOM = renderizarCarritoDOM;
+window.CONFIG_DELIVERY_LOCAL = CONFIG_DELIVERY_LOCAL;
+window.obtenerTipoEntregaSeleccionado = obtenerTipoEntregaSeleccionado;
+window.obtenerZonaSeleccionada = obtenerZonaSeleccionada;
+window.obtenerTotalesPedido = obtenerTotalesPedido;
+window.calcularCargoAgencia = calcularCargoAgencia;
+window.calcularCostoDeliveryLocal = calcularCostoDeliveryLocal;
+window.actualizarBotonesZona = actualizarBotonesZona;
+window.actualizarMensajeDeliveryGratis = actualizarMensajeDeliveryGratis;
+window.actualizarInterfazEntrega = actualizarInterfazEntrega;
+window.validarFormularioEntrega = validarFormularioEntrega;
+window.validarDatosEntrega = validarDatosEntrega;
+window.obtenerDatosEntrega = obtenerDatosEntrega;
+window.construirPedidoFinal = construirPedidoFinal;
+window.actualizarResumenEntrega = actualizarResumenEntrega;
+window.guardarPreferenciaEntrega = guardarPreferenciaEntrega;
+window.cargarPreferenciaEntrega = cargarPreferenciaEntrega;
+window.inicializarCheckoutForm = inicializarCheckoutForm;
+
+
+
+
+

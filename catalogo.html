@@ -26,8 +26,8 @@
                     <li><a href="index.html" class="nav-link">Inicio</a></li>
                     <li><a href="catalogo.html" class="nav-link active">Catálogo</a></li>
                     <li><a href="index.html#ofertas" class="nav-link">Ofertas</a></li>
-                    <li><a href="catalogo.html?cat=decants" class="nav-link">Decants</a></li>
-                    <li><a href="index.html#contacto" class="nav-link">Contacto</a></li>
+                    <li><a href="catalogo.html?categoria=decants" class="nav-link">Decants</a></li>
+                    <li><a href="index.html#ubicacion" class="nav-link">Contacto</a></li>
                 </ul>
             </nav>
 
@@ -52,8 +52,9 @@
 
     <main class="container section-padding" style="margin-top: 100px;">
         <div class="section-header reveal">
-            <span class="section-subtitle">Exclusividad</span>
-            <h1 class="section-title">Catálogo Completo</h1>
+            <span class="section-subtitle" id="catalogo-subtitulo">Exclusividad</span>
+            <h1 class="section-title" id="catalogo-titulo">Nuestro catálogo</h1>
+            <p id="catalogo-descripcion" style="margin-top: 10px; color: var(--color-text-muted); font-size: 1rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.5;">Explora todos nuestros perfumes y decants disponibles.</p>
         </div>
 
         <!-- Barra de Filtros y Búsqueda -->
@@ -65,10 +66,12 @@
             </div>
 
             <!-- Grupos de Categorías -->
-            <div class="filter-categories-group">
-                <button class="filter-category-btn active" data-categoria="todos">Ver Todos</button>
-                <button class="filter-category-btn" data-categoria="sellados">Perfumes Sellados</button>
-                <button class="filter-category-btn" data-categoria="decants">Decants</button>
+            <div class="filter-categories-group" role="group" aria-label="Categorías del catálogo">
+                <button class="filter-category-btn active" data-categoria="todos" aria-pressed="true">Ver Todos</button>
+                <button class="filter-category-btn" data-categoria="arabe" aria-pressed="false">Perfumes Árabes</button>
+                <button class="filter-category-btn" data-categoria="disenador" aria-pressed="false">Diseñador</button>
+                <button class="filter-category-btn" data-categoria="nicho" aria-pressed="false">Nicho</button>
+                <button class="filter-category-btn" data-categoria="decants" aria-pressed="false">Decants</button>
             </div>
 
             <!-- Ordenación y Disponibilidad -->
@@ -91,10 +94,55 @@
             </div>
         </div>
 
+        <!-- Contador de Resultados -->
+        <div class="catalog-results-counter reveal" style="margin-bottom: 20px; font-size: 0.95rem; color: var(--color-text-muted); font-weight: 500;">
+            <span id="results-count">0 productos encontrados</span>
+        </div>
+
         <!-- Cuadrícula de Productos del Catálogo -->
         <div class="products-grid" id="catalogo-productos-grid">
             <!-- Cargado dinámicamente mediante js/catalogo.js -->
         </div>
+
+        <!-- Contenedor para estados especiales del catálogo (vacío, error, etc.) -->
+        <div id="estado-catalogo" style="display: none; text-align: center; padding: 50px 30px; background-color: var(--color-bg-light); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); max-width: 650px; margin: 40px auto; box-shadow: var(--box-shadow-sm);" class="reveal">
+            <!-- Icono decorativo -->
+            <div id="estado-catalogo-icon" class="empty-state-icon" style="font-size: 3rem; margin-bottom: 20px; color: var(--color-primary-dark); line-height: 1;">🔍</div>
+            
+            <!-- Título del Estado -->
+            <h2 id="estado-catalogo-titulo" style="font-family: var(--font-title); font-size: 1.6rem; color: var(--color-text); margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">Sin stock disponible</h2>
+            
+            <!-- Descripción Principal -->
+            <p id="estado-catalogo-mensaje" style="color: var(--color-text-muted); font-size: 1rem; line-height: 1.6; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">Actualmente no tenemos perfumes disponibles en esta categoría.</p>
+            
+            <!-- Divisor decorativo dorado -->
+            <div style="width: 50px; height: 2px; background: var(--color-gold-gradient); margin: 0 auto 30px;"></div>
+            
+            <!-- Bloque de Cotización -->
+            <div id="estado-catalogo-cotizar-bloque" style="margin-bottom: 30px;">
+                <h3 id="estado-catalogo-cotizar-titulo" style="font-family: var(--font-title); font-size: 1.15rem; color: var(--color-text); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">¿No encuentras lo que buscas?</h3>
+                <p id="estado-catalogo-cotizar-texto" style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;">Cotiza el perfume que buscas y te ayudamos a conseguirlo.</p>
+            </div>
+            
+            <!-- Contenedor de Acciones -->
+            <div id="estado-catalogo-acciones" style="display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center;">
+                <!-- Botón de WhatsApp -->
+                <a id="estado-catalogo-btn-wa" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 28px; text-transform: uppercase; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right: 4px;">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                    <span id="estado-catalogo-btn-wa-texto">Cotizar aquí tu perfume</span>
+                </a>
+                
+                <!-- Acción secundaria (ej. limpiar búsqueda o ver agotados) -->
+                <button id="estado-catalogo-btn-secundario" class="btn btn-secondary" style="display: none; font-size: 0.85rem; font-weight: 600; padding: 10px 20px;">
+                    Ver también productos agotados
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenedor para la cotización secundaria al final del catálogo (cuando sí hay productos) -->
+        <div id="cotizacion-secundaria-container" class="reveal" style="display: none; margin-top: 50px;"></div>
     </main>
 
     <!-- Pie de Página -->
@@ -129,17 +177,18 @@
                 <div class="footer-col">
                     <h3 class="footer-title">Categorías</h3>
                     <ul class="footer-links">
-                        <li><a href="catalogo.html?cat=arabes" class="footer-link">Perfumes Árabes</a></li>
-                        <li><a href="catalogo.html?cat=disenador" class="footer-link">Diseñador</a></li>
-                        <li><a href="catalogo.html?cat=nicho" class="footer-link">Nicho</a></li>
-                        <li><a href="catalogo.html?cat=decants" class="footer-link">Decants / Muestras</a></li>
+                        <li><a href="catalogo.html?categoria=arabe" class="footer-link">Perfumes Árabes</a></li>
+                        <li><a href="catalogo.html?categoria=disenador" class="footer-link">Diseñador</a></li>
+                        <li><a href="catalogo.html?categoria=nicho" class="footer-link">Nicho</a></li>
+                        <li><a href="catalogo.html?categoria=decants" class="footer-link">Decants / Muestras</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
                     <h3 class="footer-title">Contacto</h3>
                     <ul class="footer-info-list">
-                        <li>📍 Envíos a todo el Perú</li>
+                        <li>📍 Cacatachi, Tarapoto · Delivery local · Envíos a todo el Perú</li>
+                        <li>🗺️ <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: underline;" aria-label="Ver ubicación de Dunes Parfums en Google Maps">Ver ubicación</a></li>
                         <li>💬 Atención por WhatsApp</li>
                         <li>✉️ dunesparfums@gmail.com</li>
                     </ul>
