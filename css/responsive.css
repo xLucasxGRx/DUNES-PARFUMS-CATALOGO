@@ -214,6 +214,143 @@
     padding: 10px;
     font-size: 0.75rem;
   }
+
+  /* --- Carrito de Compras en Móvil (Fase 10) --- */
+  .cart-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .cart-table-wrapper {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .cart-table, 
+  .cart-table thead, 
+  .cart-table tbody, 
+  .cart-table th, 
+  .cart-table td, 
+  .cart-table tr { 
+    display: block; 
+  }
+  
+  .cart-table thead {
+    display: none;
+  }
+  
+  .cart-table tr {
+    background-color: var(--color-bg-card-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    margin-bottom: 16px;
+    padding: 16px;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .cart-table td {
+    border: none;
+    padding: 6px 0;
+    width: 100%;
+  }
+  
+  .cart-td-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 12px !important;
+    margin-bottom: 8px;
+  }
+  
+  .cart-item-img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .cart-item-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  
+  .cart-td-price,
+  .cart-td-qty,
+  .cart-td-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  
+  .cart-td-price::before {
+    content: "Precio unitario:";
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+  
+  .cart-td-qty::before {
+    content: "Cantidad:";
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+  
+  .cart-td-subtotal::before {
+    content: "Subtotal:";
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+  
+  .cart-td-subtotal {
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-top: 1px dashed var(--color-border);
+    padding-top: 10px !important;
+    margin-top: 6px;
+  }
+  
+  .cart-td-remove {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: auto;
+    padding: 0 !important;
+  }
+  
+  .btn-remove-item {
+    font-size: 1.3rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(255, 59, 48, 0.05);
+  }
+  
+  .qty-picker.compact {
+    margin-left: auto;
+  }
+  
+  .cart-actions-row {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .cart-actions-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .zone-selector-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .summary-box {
+    padding: 20px;
+  }
 }
 
 /* ==========================================================================
