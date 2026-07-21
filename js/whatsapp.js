@@ -7,6 +7,25 @@
 // Número oficial de WhatsApp en formato internacional (Perú: 51986510573)
 const WHATSAPP_PHONE = '51986510573';
 
+// Configuración centralizada de emojis para evitar corrupción de codificación
+const EMOJIS = Object.freeze({
+    saludo: String.fromCodePoint(0x1F44B),
+    productos: String.fromCodePoint(0x1F6CD) + String.fromCodePoint(0xFE0F),
+    delivery: String.fromCodePoint(0x1F69A),
+    agencia: String.fromCodePoint(0x1F4E6),
+    recojo: String.fromCodePoint(0x1F4CD),
+    total: String.fromCodePoint(0x1F4B0)
+});
+
+/**
+ * Verifica si el string del mensaje contiene el carácter de reemplazo Unicode U+FFFD ()
+ * @param {string} texto 
+ * @returns {boolean}
+ */
+function contieneCaracterReemplazo(texto) {
+    return texto.includes("\uFFFD");
+}
+
 /**
  * Obtiene el enlace directo de WhatsApp con un mensaje opcional
  * @param {string} mensaje - Mensaje codificado para enviar
@@ -33,7 +52,7 @@ function enviarMensajeWhatsApp(mensaje) {
  * @param {string} presentacion - Tamaño o presentación
  */
 function consultarDisponibilidad(nombre, marca, presentacion) {
-    const mensaje = `Hola, Dunes Parfums 👋\nMe gustaría consultar la disponibilidad del perfume:\nMarca: ${marca}\nNombre: ${nombre}\nPresentación: ${presentacion}.`;
+    const mensaje = `Hola, Dunes Parfums ${EMOJIS.saludo}\nMe gustaría consultar la disponibilidad del perfume:\nMarca: ${marca}\nNombre: ${nombre}\nPresentación: ${presentacion}.`;
     enviarMensajeWhatsApp(mensaje);
 }
 
@@ -62,13 +81,13 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     }
     
     // Validation before opening WhatsApp
-    const showCheckoutError = () => {
+    const showCheckoutError = (msg = "No fue posible abrir WhatsApp. Revisa los datos del pedido e inténtalo nuevamente.") => {
         const errorContainer = document.getElementById('checkout-error-msg');
         if (errorContainer) {
-            errorContainer.textContent = "No fue posible abrir WhatsApp. Revisa los datos del pedido e inténtalo nuevamente.";
+            errorContainer.textContent = msg;
             errorContainer.style.display = 'block';
         } else if (window.carritoModulo && typeof window.carritoModulo.mostrarToastPremium === 'function') {
-            window.carritoModulo.mostrarToastPremium("No fue posible abrir WhatsApp. Revisa los datos del pedido e inténtalo nuevamente.", true);
+            window.carritoModulo.mostrarToastPremium(msg, true);
         }
     };
 
@@ -80,11 +99,11 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
         return;
     }
 
-    let mensaje = `Hola, *Dunes Parfums* 👋\n\n`;
+    let mensaje = `Hola, *Dunes Parfums* ${EMOJIS.saludo}\n\n`;
     mensaje += `Deseo realizar el siguiente pedido:\n\n`;
     
     // SECTION: Products
-    mensaje += `*🛍️ PRODUCTOS*\n\n`;
+    mensaje += `*${EMOJIS.productos} PRODUCTOS*\n\n`;
     items.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         let presentacionTexto = `${item.tamanoMl}`;
@@ -106,7 +125,7 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     
     // SECTION: Delivery/Entrega
     if (datosEntrega.tipoEntrega === 'delivery-local') {
-        mensaje += `*🚚 ENTREGA*\n\n`;
+        mensaje += `*${EMOJIS.delivery} ENTREGA*\n\n`;
         mensaje += `Delivery local\n`;
         let nombreZona = datosEntrega.nombreZona;
         if (!nombreZona && datosEntrega.zona) {
@@ -127,14 +146,14 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
         mensaje += `Costo de delivery: ${costoTexto}\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'agencia') {
-        mensaje += `*📦 ENTREGA*\n\n`;
+        mensaje += `*${EMOJIS.agencia} ENTREGA*\n\n`;
         mensaje += `Envío por agencia\n`;
         const cargoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
         mensaje += `Embalaje y llevada: ${cargoTexto}\n\n`;
         mensaje += `_Coordinaremos los datos del envío por WhatsApp._\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'recojo-local') {
-        mensaje += `*📍 ENTREGA*\n\n`;
+        mensaje += `*${EMOJIS.recojo} ENTREGA*\n\n`;
         mensaje += `Recojo en local\n`;
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
         mensaje += `Celular: ${datosEntrega.celular}\n`;
@@ -145,8 +164,15 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     }
     
     // SECTION: Total and footer
-    mensaje += `*💰 TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
+    mensaje += `*${EMOJIS.total} TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
     mensaje += `_Quedo atento para confirmar mi pedido._`;
+
+    // U+FFFD prevention check
+    if (contieneCaracterReemplazo(mensaje)) {
+        console.error("El mensaje contiene el carácter Unicode de reemplazo U+FFFD");
+        showCheckoutError("No fue posible preparar correctamente el mensaje de WhatsApp.");
+        return;
+    }
 
     const mensajeCodificado = encodeURIComponent(mensaje);
     if (!mensaje || !mensaje.trim() || !mensajeCodificado) {
