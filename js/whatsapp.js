@@ -7,40 +7,13 @@
 // Número oficial de WhatsApp en formato internacional (Perú: 51986510573)
 const WHATSAPP_PHONE = '51986510573';
 
-// Secuencias de escape UTF-8 URL exactas para los emojis (reemplazo post-encodeURIComponent)
-const EMOJIS_URL = Object.freeze({
-    SALUDO: "%F0%9F%91%8B",            // 👋
-    PRODUCTOS: "%F0%9F%9B%8D%EF%B8%8F", // 🛍️
-    DELIVERY: "%F0%9F%9A%9A",         // 🚚
-    AGENCIA: "%F0%9F%93%A6",          // 📦
-    RECOJO: "%F0%9F%93%8D",           // 📍
-    TOTAL: "%F0%9F%92%B0"             // 💰
-});
-
-/**
- * Reemplaza los marcadores ASCII codificados por sus secuencias UTF-8 URL exactas
- * @param {string} textoCodificado 
- * @returns {string}
- */
-function insertarEmojisEnMensajeCodificado(textoCodificado) {
-    return textoCodificado
-        .replaceAll(encodeURIComponent("{{SALUDO}}"), EMOJIS_URL.SALUDO)
-        .replaceAll(encodeURIComponent("{{PRODUCTOS}}"), EMOJIS_URL.PRODUCTOS)
-        .replaceAll(encodeURIComponent("{{DELIVERY}}"), EMOJIS_URL.DELIVERY)
-        .replaceAll(encodeURIComponent("{{AGENCIA}}"), EMOJIS_URL.AGENCIA)
-        .replaceAll(encodeURIComponent("{{RECOJO}}"), EMOJIS_URL.RECOJO)
-        .replaceAll(encodeURIComponent("{{TOTAL}}"), EMOJIS_URL.TOTAL);
-}
-
 /**
  * Obtiene el enlace directo de WhatsApp con un mensaje opcional
  * @param {string} mensaje - Mensaje codificado o texto plano
  * @returns {string} - URL de WhatsApp
  */
 function obtenerEnlaceWhatsApp(mensaje = '') {
-    const textoCodificado = encodeURIComponent(mensaje);
-    const textoConEmojis = insertarEmojisEnMensajeCodificado(textoCodificado);
-    return `https://wa.me/${WHATSAPP_PHONE}?text=${textoConEmojis}`;
+    return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(mensaje)}`;
 }
 
 /**
@@ -59,16 +32,16 @@ function enviarMensajeWhatsApp(mensaje) {
  * @param {string} presentacion - Tamaño o presentación
  */
 function consultarDisponibilidad(nombre, marca, presentacion) {
-    const mensaje = `Hola, Dunes Parfums {{SALUDO}}\nMe gustaría consultar la disponibilidad del perfume:\nMarca: ${marca}\nNombre: ${nombre}\nPresentación: ${presentacion}.`;
+    const mensaje = `Hola, Dunes Parfums\nMe gustaría consultar la disponibilidad del perfume:\nMarca: ${marca}\nNombre: ${nombre}\nPresentación: ${presentacion}.`;
     enviarMensajeWhatsApp(mensaje);
 }
 
 /**
- * Genera el cuerpo de texto del mensaje de pedido formateado para WhatsApp usando marcadores ASCII.
+ * Genera el cuerpo de texto del mensaje de pedido formateado para WhatsApp (sin emojis).
  * @param {Object} pedido 
  * @returns {string}
  */
-function generarMensajeWhatsAppConMarcadores(pedido) {
+function generarMensajeWhatsApp(pedido) {
     let items, subtotalProductos, datosEntrega, costoEntrega, totalFinal;
     
     if (pedido && pedido.productos) {
@@ -85,11 +58,11 @@ function generarMensajeWhatsAppConMarcadores(pedido) {
         return '';
     }
     
-    let mensaje = `Hola, *Dunes Parfums* {{SALUDO}}\n\n`;
+    let mensaje = `Hola, *Dunes Parfums*\n\n`;
     mensaje += `Deseo realizar el siguiente pedido:\n\n`;
     
     // SECTION: Products
-    mensaje += `*{{PRODUCTOS}} PRODUCTOS*\n\n`;
+    mensaje += `*PRODUCTOS*\n\n`;
     items.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         let presentacionTexto = `${item.tamanoMl}`;
@@ -110,8 +83,8 @@ function generarMensajeWhatsAppConMarcadores(pedido) {
     mensaje += `\n`;
     
     // SECTION: Delivery/Entrega
+    mensaje += `*ENTREGA*\n\n`;
     if (datosEntrega.tipoEntrega === 'delivery-local') {
-        mensaje += `*{{DELIVERY}} ENTREGA*\n\n`;
         mensaje += `Delivery local\n`;
         let nombreZona = datosEntrega.nombreZona;
         if (!nombreZona && datosEntrega.zona) {
@@ -131,14 +104,12 @@ function generarMensajeWhatsAppConMarcadores(pedido) {
         mensaje += `Costo de delivery: ${costoTexto}\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'agencia') {
-        mensaje += `*{{AGENCIA}} ENTREGA*\n\n`;
         mensaje += `Envío por agencia\n`;
         const cargoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
         mensaje += `Embalaje y llevada: ${cargoTexto}\n\n`;
         mensaje += `_Coordinaremos los datos del envío por WhatsApp._\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'recojo-local') {
-        mensaje += `*{{RECOJO}} ENTREGA*\n\n`;
         mensaje += `Recojo en local\n`;
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
         mensaje += `Celular: ${datosEntrega.celular}\n`;
@@ -149,7 +120,7 @@ function generarMensajeWhatsAppConMarcadores(pedido) {
     }
     
     // SECTION: Total and footer
-    mensaje += `*{{TOTAL}} TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
+    mensaje += `*TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
     mensaje += `_Quedo atento para confirmar mi pedido._`;
     
     return mensaje;
@@ -205,38 +176,18 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
         totalFinal
     };
 
-    const mensajeConMarcadores = generarMensajeWhatsAppConMarcadores(pedido);
-    if (!mensajeConMarcadores || !mensajeConMarcadores.trim()) {
+    const mensaje = generarMensajeWhatsApp(pedido);
+    if (!mensaje || !mensaje.trim()) {
         console.error("No se puede abrir WhatsApp: Mensaje vacío.");
         showCheckoutError();
         return;
     }
 
-    // 1. Encode main text to URI percent-encoding
-    const mensajeCodificado = encodeURIComponent(mensajeConMarcadores);
+    const urlWhatsapp = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(mensaje)}`;
 
-    // 2. Replace ASCII placeholders with exact byte UTF-8 hex sequences
-    const mensajeFinalCodificado = insertarEmojisEnMensajeCodificado(mensajeCodificado);
-
-    // 3. Construct WhatsApp URL directly (WITHOUT double encoding / URLSearchParams)
-    const urlWhatsapp = `https://wa.me/${WHATSAPP_PHONE}?text=${mensajeFinalCodificado}`;
-
-    // 4. Strict validation checks before opening WhatsApp
     if (urlWhatsapp.includes("%EF%BF%BD") || urlWhatsapp.includes("\uFFFD")) {
         console.error("La URL contiene el carácter de reemplazo Unicode corrupto %EF%BF%BD / U+FFFD");
         showCheckoutError("No fue posible preparar correctamente el mensaje.");
-        return;
-    }
-
-    if (urlWhatsapp.includes("%7B%7B") || urlWhatsapp.includes("%7D%7D")) {
-        console.error("La URL contiene marcadores sin reemplazar");
-        showCheckoutError("No fue posible completar el formato del mensaje.");
-        return;
-    }
-
-    if (urlWhatsapp.includes("%25F0%259F")) {
-        console.error("Se detectó doble codificación URI en la URL de WhatsApp");
-        showCheckoutError("Error al codificar el enlace del pedido.");
         return;
     }
 
@@ -257,6 +208,5 @@ window.whatsappConfig = {
     enviarMensajeWhatsApp,
     consultarDisponibilidad,
     enviarPedidoWhatsApp,
-    insertarEmojisEnMensajeCodificado,
-    generarMensajeWhatsAppConMarcadores
+    generarMensajeWhatsApp
 };
