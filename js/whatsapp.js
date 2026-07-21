@@ -84,7 +84,7 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     mensaje += `Deseo realizar el siguiente pedido:\n\n`;
     
     // SECTION: Products
-    mensaje += `*Productos*\n\n`;
+    mensaje += `*🛍️ PRODUCTOS*\n\n`;
     items.forEach(item => {
         const subtotal = item.precio * item.cantidad;
         let presentacionTexto = `${item.tamanoMl}`;
@@ -105,9 +105,9 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
     mensaje += `\n`;
     
     // SECTION: Delivery/Entrega
-    mensaje += `*Entrega*\n\n`;
     if (datosEntrega.tipoEntrega === 'delivery-local') {
-        mensaje += `🚚 Delivery local\n`;
+        mensaje += `*🚚 ENTREGA*\n\n`;
+        mensaje += `Delivery local\n`;
         let nombreZona = datosEntrega.nombreZona;
         if (!nombreZona && datosEntrega.zona) {
             const zonaFormateada = datosEntrega.zona.charAt(0).toUpperCase() + datosEntrega.zona.slice(1).replace('-', ' ');
@@ -117,19 +117,25 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
         mensaje += `Celular: ${datosEntrega.celular}\n`;
         mensaje += `Dirección: ${datosEntrega.direccion}\n`;
-        mensaje += `Referencia: ${datosEntrega.referencia}\n`;
+        
+        // Reference is optional and only printed if set
+        if (datosEntrega.referencia && datosEntrega.referencia.trim()) {
+            mensaje += `Referencia: ${datosEntrega.referencia.trim()}\n`;
+        }
         
         const costoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
         mensaje += `Costo de delivery: ${costoTexto}\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'agencia') {
-        mensaje += `📦 Envío por agencia\n`;
+        mensaje += `*📦 ENTREGA*\n\n`;
+        mensaje += `Envío por agencia\n`;
         const cargoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
         mensaje += `Embalaje y llevada: ${cargoTexto}\n\n`;
         mensaje += `_Coordinaremos los datos del envío por WhatsApp._\n\n`;
         
     } else if (datosEntrega.tipoEntrega === 'recojo-local') {
-        mensaje += `📍 Recojo en local\n`;
+        mensaje += `*📍 ENTREGA*\n\n`;
+        mensaje += `Recojo en local\n`;
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
         mensaje += `Celular: ${datosEntrega.celular}\n`;
         
@@ -138,14 +144,8 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
         mensaje += `_Coordinaremos el horario de recojo por WhatsApp._\n\n`;
     }
     
-    // SECTION: Comments/Comentarios (if exists)
-    if (datosEntrega.comentario && datosEntrega.comentario.trim()) {
-        mensaje += `*Indicaciones:*\n`;
-        mensaje += `${datosEntrega.comentario.trim()}\n\n`;
-    }
-    
     // SECTION: Total and footer
-    mensaje += `*Total a pagar: S/${totalFinal.toFixed(2)}*\n\n`;
+    mensaje += `*💰 TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
     mensaje += `_Quedo atento para confirmar mi pedido._`;
 
     const mensajeCodificado = encodeURIComponent(mensaje);

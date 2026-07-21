@@ -961,14 +961,12 @@ function actualizarInterfazEntrega() {
     const blockDelivery = document.getElementById('block-delivery-local');
     const blockAgencia = document.getElementById('block-agencia');
     const blockRecojo = document.getElementById('block-recojo-local');
-    const groupComment = document.getElementById('group-comment');
     
-    if (!warningBox || !blockDelivery || !blockAgencia || !blockRecojo || !groupComment) return;
+    if (!warningBox || !blockDelivery || !blockAgencia || !blockRecojo) return;
     
     blockDelivery.style.display = 'none';
     blockAgencia.style.display = 'none';
     blockRecojo.style.display = 'none';
-    groupComment.style.display = 'none';
     
     // Hide all validation errors when switching modalities
     document.querySelectorAll('.validation-error-msg').forEach(el => {
@@ -981,7 +979,6 @@ function actualizarInterfazEntrega() {
 
     if (selectedDeliveryType) {
         warningBox.style.display = 'none';
-        groupComment.style.display = 'block';
         
         const selectedCard = document.getElementById(`card-${selectedDeliveryType}`);
         if (selectedCard) selectedCard.classList.add('selected');
@@ -1233,17 +1230,10 @@ function validarFormularioEntrega(forceShowErrors = false) {
             if (addressInput) addressInput.setAttribute('aria-invalid', 'true');
         }
         
-        // Reference validation
-        const isReferenceValid = reference.length >= 3;
+        // Reference is optional
         const referenceError = document.getElementById('delivery-reference-error');
         if (referenceError) {
-            const show = (forceShowErrors && !isReferenceValid) || (reference.length > 0 && !isReferenceValid);
-            referenceError.style.display = show ? 'block' : 'none';
-        }
-        if (!isReferenceValid) {
-            result.valido = false;
-            result.errores['delivery-reference'] = 'Agrega una referencia para facilitar la entrega.';
-            if (referenceInput) referenceInput.setAttribute('aria-invalid', 'true');
+            referenceError.style.display = 'none';
         }
         
     } else if (selectedDeliveryType === 'recojo-local') {
@@ -1296,9 +1286,6 @@ function validarDatosEntrega() {
 }
 
 function obtenerDatosEntrega() {
-    const commentInput = document.getElementById('client-comment');
-    const comment = commentInput ? commentInput.value.trim() : '';
-    
     if (selectedDeliveryType === 'delivery-local') {
         const nameInput = document.getElementById('delivery-name');
         const phoneInput = document.getElementById('delivery-phone');
@@ -1323,13 +1310,11 @@ function obtenerDatosEntrega() {
             zona: selectedDeliveryZone,
             nombreZona: nombreZona,
             direccion: address,
-            referencia: reference,
-            comentario: comment
+            referencia: reference
         };
     } else if (selectedDeliveryType === 'agencia') {
         return {
-            tipoEntrega: 'agencia',
-            comentario: comment
+            tipoEntrega: 'agencia'
         };
     } else if (selectedDeliveryType === 'recojo-local') {
         const nameInput = document.getElementById('recojo-name');
@@ -1341,8 +1326,7 @@ function obtenerDatosEntrega() {
         return {
             tipoEntrega: 'recojo-local',
             nombre: name,
-            celular: phone,
-            comentario: comment
+            celular: phone
         };
     }
     return null;
@@ -1360,8 +1344,7 @@ function construirPedidoFinal() {
         datosEntrega,
         conceptoEntrega,
         costoEntrega,
-        totalFinal,
-        comentarios: datosEntrega ? datosEntrega.comentario : ''
+        totalFinal
     };
 }
 
