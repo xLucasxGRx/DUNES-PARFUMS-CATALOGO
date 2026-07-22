@@ -3,9 +3,6 @@
  * Establece la identidad visual, tipografías, variables y diseño de secciones.
  */
 
-/* Importación de Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
-
 /* Variables de Diseño */
 :root {
     /* Paleta de Colores Premium */
@@ -39,9 +36,13 @@
     --color-whatsapp: #25D366;
     /* Color WhatsApp Oficial */
 
-    /* Tipografías */
-    --font-titles: 'Playfair Display', Georgia, serif;
-    --font-body: 'Montserrat', sans-serif;
+    /* Tipografías Oficiales Unificadas (Fase U2) */
+    --font-heading: 'Cormorant Garamond', Georgia, serif;
+    --font-title: 'Cormorant Garamond', Georgia, serif;
+    --font-titles: 'Cormorant Garamond', Georgia, serif;
+    --font-product-name: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Montserrat', Arial, sans-serif;
+    --font-ui: 'Montserrat', Arial, sans-serif;
 
     /* Variables de Espaciado y Bordes */
     --border-radius-sm: 4px;
