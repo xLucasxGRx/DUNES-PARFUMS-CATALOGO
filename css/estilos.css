@@ -113,32 +113,40 @@ img {
     padding: 0 24px;
 }
 
-/* Botones Comunes */
+/* Botones Comunes y Componentes Base (Fase 4) */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 28px;
-    font-size: 0.9rem;
+    min-height: 44px;
+    padding: 10px 24px;
+    font-size: var(--text-sm);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: var(--border-radius-sm);
-    border: none;
+    letter-spacing: 0.8px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid transparent;
     cursor: pointer;
-    transition: var(--transition-smooth);
+    transition: var(--transition-base);
     gap: 8px;
+    user-select: none;
+}
+
+.btn:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
 }
 
 .btn-primary {
     background: var(--color-gold-gradient);
     color: var(--color-text-light);
     box-shadow: var(--shadow-sm);
+    border: none;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(158, 125, 59, 0.4);
+    box-shadow: var(--shadow-gold);
 }
 
 .btn-secondary {
@@ -147,17 +155,31 @@ img {
     border: 1px solid var(--color-border-gold);
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover:not(:disabled) {
     background: var(--color-gold-gradient);
     color: var(--color-text-light);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--color-text-dark);
+    border: 1px solid var(--color-border-strong);
+}
+
+.btn-outline:hover:not(:disabled) {
+    border-color: var(--color-primary-dark);
+    color: var(--color-primary-dark);
+    background-color: rgba(var(--color-gold-rgb), 0.05);
 }
 
 .btn-whatsapp {
     background-color: var(--color-whatsapp);
     color: var(--color-text-light);
     font-weight: 700;
-    transition: var(--transition-smooth);
+    border: none;
+    transition: var(--transition-base);
 }
 
 .btn-whatsapp:hover:not(:disabled) {
@@ -185,7 +207,7 @@ img {
 .btn-light-glass:hover {
     background: var(--color-text-light);
     color: var(--color-bg-dark);
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
 /* 1. Encabezado Principal */
