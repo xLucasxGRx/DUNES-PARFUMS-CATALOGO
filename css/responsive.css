@@ -453,51 +453,97 @@
     grid-template-columns: 1fr;
   }
 
-  /* Rediseño del Catálogo en Móvil (Fase 7: Formato Horizontal Compacto) */
+  /* Rediseño del Catálogo en Móvil (Formato Horizontal Compacto & Estructura Equilibrada) */
   #catalogo-productos-grid,
   .products-grid {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    grid-auto-rows: auto !important;
+    gap: 12px !important;
     max-width: 100% !important;
     margin: 0 !important;
+    align-items: start !important;
   }
 
   #catalogo-productos-grid .product-card,
   .products-grid .product-card {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 125px !important;
+    grid-template-columns: minmax(0, 1fr) 118px !important;
     grid-template-areas:
-      "info image"
-      "footer image" !important;
-    padding: 14px !important;
-    gap: 6px 12px !important;
-    align-items: center !important;
-    min-height: 155px !important;
-    border-radius: var(--border-radius-md) !important;
-    background-color: var(--color-surface) !important;
-    border: 1px solid var(--color-border) !important;
-    box-shadow: var(--shadow-xs) !important;
+      "info visual"
+      "actions actions" !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    padding: 12px 14px !important;
+    gap: 10px 12px !important;
+    align-items: start !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+    background-color: var(--catalog-card-background, #FFFEFC) !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    box-shadow: 0 4px 12px rgba(31, 24, 12, 0.06) !important;
     transition: var(--transition-base) !important;
   }
 
   #catalogo-productos-grid .product-image-container,
   .products-grid .product-image-container {
-    grid-area: image !important;
-    height: 130px !important;
-    width: 125px !important;
-    border-radius: var(--border-radius-sm) !important;
-    overflow: hidden !important;
+    grid-area: visual !important;
     position: relative !important;
-    background-color: var(--color-bg-light) !important;
+    height: 125px !important;
+    width: 118px !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    background: radial-gradient(circle at center, rgba(196, 154, 62, 0.12), transparent 68%), #fffdf8 !important;
     margin: 0 !important;
+    padding: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
   }
 
   #catalogo-productos-grid .product-img,
   .products-grid .product-img {
     height: 100% !important;
     width: 100% !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
     object-fit: contain !important;
-    padding: 6px !important;
+    object-position: center !important;
+    padding: 0 !important;
+  }
+
+  /* Insignias móviles compactas sobre imagen */
+  #catalogo-productos-grid .product-category-badge,
+  .products-grid .product-category-badge {
+    position: absolute !important;
+    top: 6px !important;
+    right: 6px !important;
+    font-size: 9px !important;
+    padding: 3px 6px !important;
+    line-height: 1 !important;
+    max-width: 90px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    z-index: 3 !important;
+    border-radius: 12px !important;
+  }
+
+  #catalogo-productos-grid .product-tag.promo-tag,
+  .products-grid .product-tag.promo-tag,
+  #catalogo-productos-grid .product-tag.out-tag,
+  .products-grid .product-tag.out-tag {
+    position: absolute !important;
+    top: 6px !important;
+    left: 6px !important;
+    font-size: 9px !important;
+    padding: 3px 6px !important;
+    line-height: 1 !important;
+    z-index: 3 !important;
   }
 
   #catalogo-productos-grid .product-actions-overlay,
@@ -512,16 +558,21 @@
     flex-direction: column !important;
     gap: 3px !important;
     padding: 0 !important;
-    justify-content: center !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+    min-width: 0 !important;
   }
 
   #catalogo-productos-grid .product-brand,
   .products-grid .product-brand {
-    font-size: 0.75rem !important;
-    color: var(--color-text-muted) !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: var(--catalog-gold, #B18225) !important;
     text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
     line-height: 1.2 !important;
+    margin: 0 !important;
   }
 
   #catalogo-productos-grid .product-title,
@@ -529,74 +580,135 @@
   #catalogo-productos-grid .product-title-link,
   .products-grid .product-title-link {
     font-family: 'Cormorant Garamond', Georgia, serif !important;
-    font-size: 1.15rem !important;
+    font-size: 19px !important;
     font-weight: 600 !important;
     color: var(--catalog-text, #171717) !important;
-    line-height: 1.15 !important;
+    line-height: 1.12 !important;
     margin: 0 !important;
   }
 
   #catalogo-productos-grid .product-volume,
   .products-grid .product-volume {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.8rem !important;
+    font-size: 12px !important;
     color: var(--catalog-text-secondary, #6F6F6F) !important;
     font-weight: 400 !important;
+    margin: 0 !important;
   }
 
   #catalogo-productos-grid .product-stock-row,
   .products-grid .product-stock-row {
-    margin: 2px 0 !important;
+    margin: 2px 0 0 !important;
   }
 
   #catalogo-productos-grid .product-stock-status,
   .products-grid .product-stock-status {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.75rem !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
   }
 
   #catalogo-productos-grid .product-price-row,
   .products-grid .product-price-row {
     margin-top: 4px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #catalogo-productos-grid .prices,
+  .products-grid .prices {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px 8px !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
 
   #catalogo-productos-grid .price-current,
   .products-grid .price-current {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 1.25rem !important;
+    font-size: 20px !important;
     font-weight: 700 !important;
     color: var(--catalog-text, #171717) !important;
+    line-height: 1 !important;
+    margin: 0 !important;
   }
 
   #catalogo-productos-grid .price-old,
   .products-grid .price-old {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 0.8rem !important;
-    color: var(--color-text-muted) !important;
+    font-size: 12px !important;
+    color: #777777 !important;
     text-decoration: line-through !important;
-    margin-right: 6px !important;
+    margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .discount-badge,
+  .products-grid .discount-badge {
+    padding: 3px 6px !important;
+    font-size: 10px !important;
+    border-radius: 12px !important;
   }
 
   #catalogo-productos-grid .product-card-footer,
   .products-grid .product-card-footer {
-    grid-area: footer !important;
-    margin-top: 4px !important;
+    grid-area: actions !important;
+    margin-top: 2px !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
 
   #catalogo-productos-grid .product-card-footer .card-buttons-flex,
   .products-grid .product-card-footer .card-buttons-flex {
     display: grid !important;
-    grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr) !important;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr) !important;
     gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
   }
 
   #catalogo-productos-grid .product-card-footer .btn,
   .products-grid .product-card-footer .btn {
     padding: 6px 8px !important;
-    font-size: 0.75rem !important;
-    min-height: 40px !important;
+    font-size: 11px !important;
+    min-height: 42px !important;
+    height: 42px !important;
     width: 100% !important;
     letter-spacing: 0.5px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Ajustes específicos para 360px y 320px */
+  @media screen and (max-width: 360px) {
+    #catalogo-productos-grid .product-card,
+    .products-grid .product-card {
+      grid-template-columns: minmax(0, 1fr) 105px !important;
+      padding: 10px 12px !important;
+      gap: 8px 10px !important;
+    }
+
+    #catalogo-productos-grid .product-image-container,
+    .products-grid .product-image-container {
+      height: 110px !important;
+      width: 105px !important;
+    }
+
+    #catalogo-productos-grid .product-title,
+    .products-grid .product-title,
+    #catalogo-productos-grid .product-title-link,
+    .products-grid .product-title-link {
+      font-size: 17px !important;
+    }
+
+    #catalogo-productos-grid .price-current,
+    .products-grid .price-current {
+      font-size: 18px !important;
+    }
   }
 
   /* Tarjetas de Beneficios */
