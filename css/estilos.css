@@ -113,101 +113,180 @@ img {
     box-sizing: border-box;
 }
 
-/* Botones Comunes y Componentes Base (Fase 4) */
+/* ==========================================================================
+   Sistema Unificado de Botones (Fase U4)
+   ========================================================================== */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 44px;
-    padding: 10px 24px;
-    font-size: var(--text-sm);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    border-radius: var(--border-radius-md);
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: var(--transition-base);
     gap: 8px;
+    min-height: 46px;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    box-sizing: border-box;
     user-select: none;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 
-.btn:focus-visible {
-    outline: 3px solid var(--color-primary);
+.btn:focus-visible,
+button:focus-visible,
+a.btn:focus-visible,
+.qty-btn:focus-visible,
+.zone-option-btn:focus-visible {
+    outline: 3px solid rgba(177, 130, 37, 0.4);
     outline-offset: 3px;
 }
 
+/* 1. Variante Principal (Dorado) */
 .btn-primary {
-    background: var(--color-gold-gradient);
-    color: var(--color-text-light);
-    box-shadow: var(--shadow-sm);
-    border: none;
+    background-color: var(--color-primary, #B18225);
+    background-image: linear-gradient(135deg, #C5A059 0%, #B18225 100%);
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 6px rgba(177, 130, 37, 0.2);
 }
 
-.btn-primary:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-gold);
+@media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover:not(:disabled) {
+        background-color: var(--color-primary-dark, #8E671D);
+        background-image: none;
+        color: #FFFFFF;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(177, 130, 37, 0.3);
+    }
 }
 
-.btn-secondary {
-    background-color: var(--color-bg-dark);
-    color: var(--color-text-light);
-    border: 1px solid var(--color-border-gold);
-}
-
-.btn-secondary:hover:not(:disabled) {
-    background: var(--color-gold-gradient);
-    color: var(--color-text-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--color-text-dark);
-    border: 1px solid var(--color-border-strong);
-}
-
-.btn-outline:hover:not(:disabled) {
-    border-color: var(--color-primary-dark);
-    color: var(--color-primary-dark);
-    background-color: rgba(var(--color-gold-rgb), 0.05);
-}
-
-.btn-whatsapp {
-    background-color: var(--color-whatsapp);
-    color: var(--color-text-light);
-    font-weight: 700;
-    border: none;
-    transition: var(--transition-base);
-}
-
-.btn-whatsapp:hover:not(:disabled) {
-    background-color: #20ba56;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-    transform: translateY(-2px);
-}
-
-.btn-whatsapp:disabled {
-    background-color: #555555;
-    color: #aaaaaa;
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
     box-shadow: none;
 }
 
-.btn-light-glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: var(--color-text-light);
+/* 2. Variante Oscura / Secundaria */
+.btn-secondary,
+.btn-dark {
+    background-color: var(--color-text, #171717);
+    color: #FFFFFF;
+    border: 1px solid var(--color-primary-dark, #8E671D);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn-light-glass:hover {
-    background: var(--color-text-light);
-    color: var(--color-bg-dark);
-    transform: scale(1.03);
+@media (hover: hover) and (pointer: fine) {
+    .btn-secondary:hover:not(:disabled),
+    .btn-dark:hover:not(:disabled) {
+        background-color: #262626;
+        border-color: var(--color-primary, #B18225);
+        color: #FFFFFF;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.btn-secondary:active:not(:disabled),
+.btn-dark:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* 3. Variante Outline / Fichas Compactas */
+.btn-outline,
+.btn-details-compact {
+    background-color: transparent;
+    color: var(--color-primary-dark, #5D4517);
+    border: 1px solid #D8C39A;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-outline:hover:not(:disabled),
+    .btn-details-compact:hover:not(:disabled) {
+        border-color: var(--color-primary, #B18225);
+        color: var(--color-primary-dark, #5D4517);
+        background-color: rgba(177, 130, 37, 0.08);
+        transform: translateY(-1px);
+    }
+}
+
+.btn-outline:active:not(:disabled),
+.btn-details-compact:active:not(:disabled) {
+    transform: translateY(0);
+    background-color: rgba(177, 130, 37, 0.12);
+}
+
+/* 4. Variante Peligro (Vaciar Carrito, Eliminar) */
+.btn-danger,
+.btn-empty-cart-danger {
+    background-color: transparent;
+    border: 1px solid #DC2626;
+    color: #DC2626;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-danger:hover:not(:disabled),
+    .btn-empty-cart-danger:hover:not(:disabled) {
+        background-color: rgba(220, 38, 38, 0.08);
+        border-color: #DC2626;
+        color: #DC2626;
+        transform: translateY(-1px);
+    }
+}
+
+.btn-danger:active:not(:disabled),
+.btn-empty-cart-danger:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* 5. Variante WhatsApp Exclusiva */
+.btn-whatsapp {
+    background-color: #25D366;
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-whatsapp:hover:not(:disabled) {
+        background-color: #20BA5A;
+        color: #FFFFFF;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+}
+
+.btn-whatsapp:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Estado Inactivo / Deshabilitado */
+.btn:disabled,
+button:disabled,
+.btn.disabled {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Alineación de Iconos dentro de Botones */
+.btn svg,
+.btn [data-lucide],
+.btn i,
+.btn .btn-icon-svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* 1. Encabezado Principal (Fase 5 Rediseño) */
@@ -1025,12 +1104,9 @@ img {
     max-width: 100%;
     box-sizing: border-box;
     min-height: 46px;
-    background: var(--catalog-white, #FFFFFF);
-    border: 1px solid #D8C39A;
-    color: #5D4517;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     border-radius: 8px;
     padding-inline: 8px;
     white-space: nowrap;
@@ -1040,14 +1116,7 @@ img {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    transition: var(--transition-base);
-}
-
-.btn-details-compact:hover {
-    border-color: var(--catalog-gold-hover, #C49A3E);
-    color: var(--catalog-gold-hover, #C49A3E);
-    background: rgba(196, 154, 62, 0.08);
+    gap: 6px;
 }
 
 .card-buttons-flex .btn-add-cart,
@@ -1058,11 +1127,11 @@ img {
     max-width: 100%;
     box-sizing: border-box;
     min-height: 46px;
-    background: var(--catalog-black-button, #171717);
-    color: var(--catalog-white, #FFFFFF);
+    background-color: var(--catalog-black-button, #171717);
+    color: #FFFFFF;
     border: 1px solid #B8892B;
     border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -1073,25 +1142,26 @@ img {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 6px;
     padding-inline: 8px;
-    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
 }
 
 .card-buttons-flex .btn-icon-svg,
 .btn-details-compact .btn-icon-svg {
     flex-shrink: 0;
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .card-buttons-flex .btn-add-cart:hover,
     .card-buttons-flex .btn-select-option:hover,
     .card-buttons-flex .btn-query-wa:hover {
-        background: var(--catalog-gold, #B18225);
-        color: var(--catalog-white, #FFFFFF);
-        transform: translateY(-2px);
+        background-color: var(--color-primary-dark, #8E671D);
+        border-color: var(--color-primary, #B18225);
+        color: #FFFFFF;
+        transform: translateY(-1px);
     }
 }
 
@@ -1855,17 +1925,25 @@ img {
 .qty-btn {
     background: none;
     border: none;
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+    font-family: var(--font-body);
     font-size: 1rem;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--color-text-dark);
-    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 200ms ease, color 200ms ease;
 }
 
-.qty-btn:hover {
-    background-color: var(--color-border);
+@media (hover: hover) and (pointer: fine) {
+    .qty-btn:hover:not(:disabled) {
+        background-color: rgba(177, 130, 37, 0.12);
+        color: var(--color-primary-dark, #8E671D);
+    }
 }
 
 .qty-picker input {
@@ -2006,32 +2084,31 @@ img {
 .btn-remove-item {
     background: none;
     border: none;
-    font-size: 1.5rem;
-    color: #ff3b30;
+    min-width: 36px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #DC2626;
     cursor: pointer;
-    transition: var(--transition-smooth);
+    border-radius: 6px;
+    transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
     line-height: 1;
 }
 
-.btn-remove-item:hover {
-    transform: scale(1.2);
+@media (hover: hover) and (pointer: fine) {
+    .btn-remove-item:hover:not(:disabled) {
+        background-color: rgba(220, 38, 38, 0.08);
+        color: #DC2626;
+        transform: translateY(-1px);
+    }
 }
 
 .cart-actions-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.btn-empty-cart-danger {
-    background: none;
-    border: 1px solid #ff3b30;
-    color: #ff3b30;
-}
-
-.btn-empty-cart-danger:hover {
-    background-color: #ff3b30;
-    color: white;
 }
 
 /* Resumen del Carrito */
@@ -2173,7 +2250,7 @@ img {
 }
 
 .delivery-zone-name {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body);
     font-size: 13px;
     font-weight: 600;
     color: var(--catalog-text, #171717);
