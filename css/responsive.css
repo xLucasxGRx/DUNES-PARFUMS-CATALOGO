@@ -290,24 +290,20 @@
   }
 
   /* --- Carrito de Compras en Móvil (Fase 10) --- */
-  html, body {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-  }
-
   .cart-layout {
     grid-template-columns: 1fr !important;
     gap: 24px !important;
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
     box-sizing: border-box !important;
-    overflow-x: hidden !important;
   }
 
   .cart-items-column,
   .cart-summary-column {
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
     box-sizing: border-box !important;
   }
   
@@ -318,8 +314,8 @@
     background: transparent !important;
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
     box-sizing: border-box !important;
-    overflow-x: hidden !important;
   }
 
   .cart-table, 
@@ -329,6 +325,10 @@
   .cart-table td, 
   .cart-table tr { 
     display: block !important; 
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
   }
   
   .cart-table thead {
@@ -354,6 +354,7 @@
     min-height: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
     box-sizing: border-box !important;
     align-items: center !important;
   }
@@ -364,6 +365,7 @@
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
+    min-width: 0 !important;
     box-sizing: border-box !important;
   }
   
@@ -476,6 +478,7 @@
     padding-top: 8px !important;
     margin-top: 4px !important;
     width: 100% !important;
+    min-width: 0 !important;
   }
   
   #cart-table-container .cart-td-qty::before,
@@ -490,14 +493,16 @@
     align-items: center !important;
     justify-content: flex-end !important;
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
     color: var(--catalog-text, #171717) !important;
     border-top: 1px solid #F0E6D2 !important;
     padding-top: 8px !important;
     margin-top: 4px !important;
     width: 100% !important;
+    min-width: 0 !important;
     text-align: right !important;
+    white-space: nowrap !important;
   }
   
   #cart-table-container .cart-td-subtotal::before,
@@ -514,6 +519,9 @@
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    width: 92px !important;
+    max-width: 100% !important;
+    flex-shrink: 0 !important;
     height: 32px !important;
     min-height: 32px !important;
     background-color: #F8F6F0 !important;
@@ -526,7 +534,7 @@
   }
 
   .qty-picker.compact .qty-btn {
-    width: 32px !important;
+    width: 30px !important;
     height: 32px !important;
     min-height: 32px !important;
     padding: 0 !important;
@@ -556,7 +564,7 @@
   }
 
   .qty-picker.compact .qty-input-cart {
-    width: 36px !important;
+    width: 32px !important;
     height: 32px !important;
     min-height: 32px !important;
     padding: 0 !important;
@@ -572,6 +580,39 @@
     box-sizing: border-box !important;
     -webkit-appearance: none !important;
     -moz-appearance: textfield !important;
+  }
+
+  .summary-box {
+    padding: 20px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .summary-row {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .summary-row-label {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+  }
+
+  .summary-row-value {
+    flex: 0 1 auto !important;
+    max-width: 58% !important;
+    text-align: right !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
   }
   
   .cart-actions-row {

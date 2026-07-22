@@ -2153,11 +2153,62 @@ button:disabled,
     padding-bottom: 12px;
 }
 
+.summary-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.summary-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.summary-row-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--color-text);
+    overflow-wrap: break-word;
+}
+
+.summary-row-value {
+    flex: 0 1 auto;
+    max-width: 58%;
+    text-align: right;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+#cart-subtotal-price.summary-row-value,
+.summary-total-price {
+    white-space: nowrap;
+    color: var(--color-primary-dark);
+}
+
 .summary-total-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     font-size: 1.1rem;
+    font-weight: 600;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
     font-weight: 600;
 }
 
