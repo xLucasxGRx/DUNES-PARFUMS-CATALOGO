@@ -49,11 +49,15 @@
   }
 
   .logo-img {
-    height: 32px;
+    height: 36px;
+    background: transparent !important;
   }
 
   .logo-container {
-    padding: 4px 10px;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .burger-menu-btn {
