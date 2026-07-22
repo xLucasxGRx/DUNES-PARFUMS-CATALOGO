@@ -448,19 +448,141 @@
     max-height: 280px;
   }
 
-  /* Categorías y Productos a 1 columna para óptima lectura */
+  /* Categorías a 1 columna */
   .categories-grid {
     grid-template-columns: 1fr;
   }
 
+  /* Rediseño del Catálogo en Móvil (Fase 7: Formato Horizontal Compacto) */
+  #catalogo-productos-grid,
   .products-grid {
-    grid-template-columns: 1fr;
-    max-width: 320px;
-    margin: 0 auto;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    max-width: 100% !important;
+    margin: 0 !important;
   }
 
-  .product-image-container {
-    height: 260px;
+  #catalogo-productos-grid .product-card,
+  .products-grid .product-card {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 125px !important;
+    grid-template-areas:
+      "info image"
+      "footer image" !important;
+    padding: 14px !important;
+    gap: 6px 12px !important;
+    align-items: center !important;
+    min-height: 155px !important;
+    border-radius: var(--border-radius-md) !important;
+    background-color: var(--color-surface) !important;
+    border: 1px solid var(--color-border) !important;
+    box-shadow: var(--shadow-xs) !important;
+    transition: var(--transition-base) !important;
+  }
+
+  #catalogo-productos-grid .product-image-container,
+  .products-grid .product-image-container {
+    grid-area: image !important;
+    height: 130px !important;
+    width: 125px !important;
+    border-radius: var(--border-radius-sm) !important;
+    overflow: hidden !important;
+    position: relative !important;
+    background-color: var(--color-bg-light) !important;
+    margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-img,
+  .products-grid .product-img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: contain !important;
+    padding: 6px !important;
+  }
+
+  #catalogo-productos-grid .product-actions-overlay,
+  .products-grid .product-actions-overlay {
+    display: none !important;
+  }
+
+  #catalogo-productos-grid .product-info,
+  .products-grid .product-info {
+    grid-area: info !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+  }
+
+  #catalogo-productos-grid .product-brand,
+  .products-grid .product-brand {
+    font-size: 0.75rem !important;
+    color: var(--color-text-muted) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.2 !important;
+  }
+
+  #catalogo-productos-grid .product-title,
+  .products-grid .product-title {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: var(--color-text-dark) !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-volume,
+  .products-grid .product-volume {
+    font-size: 0.8rem !important;
+    color: var(--color-primary-dark) !important;
+    font-weight: 500 !important;
+  }
+
+  #catalogo-productos-grid .product-stock-row,
+  .products-grid .product-stock-row {
+    margin: 2px 0 !important;
+  }
+
+  #catalogo-productos-grid .product-stock-status,
+  .products-grid .product-stock-status {
+    font-size: 0.75rem !important;
+  }
+
+  #catalogo-productos-grid .product-price-row,
+  .products-grid .product-price-row {
+    margin-top: 4px !important;
+  }
+
+  #catalogo-productos-grid .price-current,
+  .products-grid .price-current {
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    color: var(--color-text-dark) !important;
+  }
+
+  #catalogo-productos-grid .price-old,
+  .products-grid .price-old {
+    font-size: 0.8rem !important;
+    color: var(--color-text-muted) !important;
+    text-decoration: line-through !important;
+    margin-right: 6px !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer,
+  .products-grid .product-card-footer {
+    grid-area: footer !important;
+    margin-top: 4px !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer .btn,
+  .products-grid .product-card-footer .btn {
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
+    min-height: 38px !important;
+    width: 100% !important;
+    letter-spacing: 0.5px !important;
   }
 
   /* Tarjetas de Beneficios */
