@@ -2083,6 +2083,78 @@ img {
     font-weight: 300;
 }
 
+/* --- Estilos de Opciones de Zona de Delivery --- */
+.zone-selector-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.zone-option-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #FFFEFC;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.zone-option-btn:hover {
+    border-color: var(--catalog-gold, #B18225);
+    background-color: #FFFDF8;
+}
+
+.zone-option-btn.active,
+.zone-option-btn.selected {
+    border-color: var(--catalog-gold, #B18225);
+    background-color: #FFFDF8;
+    box-shadow: 0 3px 10px rgba(177, 130, 37, 0.12);
+}
+
+.delivery-zone-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--catalog-text, #171717);
+    white-space: normal;
+}
+
+.delivery-zone-separator {
+    flex: 1;
+    border-bottom: 1px dashed #D8D2C6;
+    min-width: 16px;
+    margin-bottom: 2px;
+}
+
+.delivery-zone-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--catalog-text, #171717);
+    white-space: nowrap;
+}
+
+.delivery-zone-price.gratis {
+    color: #159447;
+    background-color: #EBF7EE;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    border: 1px solid rgba(21, 148, 71, 0.2);
+}
+
 .empty-cart-message {
     text-align: center;
     padding: 60px 40px;

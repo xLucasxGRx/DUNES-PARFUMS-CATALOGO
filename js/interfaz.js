@@ -1007,26 +1007,28 @@ function actualizarBotonesZona(subtotal) {
     const subtotalNumerico = Number(subtotal) || 0;
     const isFree = subtotalNumerico >= CONFIG_DELIVERY_LOCAL.montoMinimoGratis;
     
-    const btnCacatachi = document.querySelector('.zone-option-btn[data-zona="cacatachi"]');
-    const btnMorales = document.querySelector('.zone-option-btn[data-zona="morales"]');
-    const btnTarapoto = document.querySelector('.zone-option-btn[data-zona="tarapoto"]');
-    const btnBanda = document.querySelector('.zone-option-btn[data-zona="banda-shilcayo"]');
-    
-    if (btnCacatachi) {
-        btnCacatachi.innerHTML = `Cacatachi<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">Gratis</span>`;
-    }
-    if (btnMorales) {
-        const costText = isFree ? 'Gratis' : `S/ ${CONFIG_DELIVERY_LOCAL.zonas.morales.costo.toFixed(2)}`;
-        btnMorales.innerHTML = `Morales<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">${costText}</span>`;
-    }
-    if (btnTarapoto) {
-        const costText = isFree ? 'Gratis' : `S/ ${CONFIG_DELIVERY_LOCAL.zonas.tarapoto.costo.toFixed(2)}`;
-        btnTarapoto.innerHTML = `Tarapoto<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">${costText}</span>`;
-    }
-    if (btnBanda) {
-        const costText = isFree ? 'Gratis' : `S/ ${CONFIG_DELIVERY_LOCAL.zonas['banda-shilcayo'].costo.toFixed(2)}`;
-        btnBanda.innerHTML = `La Banda de Shilcayo<br><span style="font-size: 0.75rem; font-weight: 500; color: var(--color-primary-dark);">${costText}</span>`;
-    }
+    const zonas = [
+        { key: 'cacatachi', name: 'Cacatachi', freeAlways: true, cost: 0 },
+        { key: 'morales', name: 'Morales', cost: CONFIG_DELIVERY_LOCAL.zonas.morales.costo },
+        { key: 'tarapoto', name: 'Tarapoto', cost: CONFIG_DELIVERY_LOCAL.zonas.tarapoto.costo },
+        { key: 'banda-shilcayo', name: 'La Banda de Shilcayo', cost: CONFIG_DELIVERY_LOCAL.zonas['banda-shilcayo'].costo }
+    ];
+
+    zonas.forEach(z => {
+        const btn = document.querySelector(`.zone-option-btn[data-zona="${z.key}"]`);
+        if (!btn) return;
+
+        const esGratis = z.freeAlways || isFree;
+        const priceBadgeHtml = esGratis
+            ? `<span class="delivery-zone-price gratis">GRATIS</span>`
+            : `<span class="delivery-zone-price">S/ ${z.cost.toFixed(2)}</span>`;
+
+        btn.innerHTML = `
+            <span class="delivery-zone-name">${z.name}</span>
+            <span class="delivery-zone-separator"></span>
+            ${priceBadgeHtml}
+        `;
+    });
 }
 
 function actualizarMensajeDeliveryGratis(subtotal, zona) {
