@@ -395,19 +395,12 @@ function filtrarYRenderizar(productos, estado, grid) {
                     estado.soloDisponibles = false;
                     filtrarYRenderizar(productos, estado, grid);
                 });
-            }
-
-            estadoEl.style.display = 'block';
-            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-        }
-                    estado.soloDisponibles = false;
-                    filtrarYRenderizar(productos, estado, grid);
-                });
             } else {
                 newSecBtn.style.display = 'none';
             }
 
             estadoEl.style.display = 'block';
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
         }
         actualizarContador(0, estado.categoria);
         return;
