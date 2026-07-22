@@ -32,6 +32,17 @@
     padding: 72px 0;
   }
 
+  .ubicacion-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .ubicacion-mapa,
+  .mapa-iframe-wrapper {
+    min-height: 350px;
+    height: 350px;
+  }
+
   /* Reorganización de Cuadrícula en Hero */
   .hero-section {
     padding-top: 100px;
