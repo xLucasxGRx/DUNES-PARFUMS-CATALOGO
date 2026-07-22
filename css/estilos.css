@@ -738,6 +738,11 @@ img {
     line-height: 1;
 }
 
+/* Categoría móvil interna (Oculta por defecto en escritorio) */
+.product-category-mobile {
+    display: none;
+}
+
 /* Cinta de Oferta (Superior Izquierda) */
 .product-tag.promo-tag {
     position: absolute;

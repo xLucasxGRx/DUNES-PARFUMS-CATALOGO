@@ -446,10 +446,20 @@ function filtrarYRenderizar(productos, estado, grid) {
         }
 
         let categoryBadgeText = 'CATÁLOGO';
-        if (prod.categoria === 'arabe') categoryBadgeText = 'PERFUME ÁRABE';
-        else if (prod.categoria === 'disenador') categoryBadgeText = 'DISEÑADOR';
-        else if (prod.categoria === 'nicho') categoryBadgeText = 'NICHO';
-        else if (prod.categoria === 'decants') categoryBadgeText = 'DECANT';
+        let categoryBadgeShort = 'CATÁLOGO';
+        if (prod.categoria === 'arabe') {
+            categoryBadgeText = 'PERFUME ÁRABE';
+            categoryBadgeShort = 'ÁRABE';
+        } else if (prod.categoria === 'disenador') {
+            categoryBadgeText = 'DISEÑADOR';
+            categoryBadgeShort = 'DISEÑADOR';
+        } else if (prod.categoria === 'nicho') {
+            categoryBadgeText = 'NICHO';
+            categoryBadgeShort = 'NICHO';
+        } else if (prod.categoria === 'decants') {
+            categoryBadgeText = 'DECANT';
+            categoryBadgeShort = 'DECANT';
+        }
 
         const precioMinDecant = (esDecant && prod.presentaciones && prod.presentaciones.length > 0)
             ? prod.presentaciones[0].precio 
@@ -541,6 +551,7 @@ function filtrarYRenderizar(productos, estado, grid) {
         const divInfo = document.createElement('div');
         divInfo.className = 'product-info';
         divInfo.innerHTML = `
+            <span class="product-category-mobile">${categoryBadgeShort}</span>
             <span class="product-brand"></span>
             <h3 class="product-title"><a href="producto.html?id=${prod.id}" class="product-title-link"></a></h3>
             <span class="product-volume">${presentacionFormateada}</span>
