@@ -295,7 +295,7 @@
     gap: 24px;
   }
   
-  /* Rediseño del Carrito en Celular (Formato Compacto y Ordenado) */
+  /* Rediseño del Carrito en Celular (Estructura Grid 3 Columnas × 2 Filas) */
   .cart-table-wrapper {
     border: none !important;
     box-shadow: none !important;
@@ -317,22 +317,22 @@
   
   .cart-table tr {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-columns: 80px minmax(0, 1fr) 36px !important;
     grid-template-areas:
-      "product remove"
-      "qty subtotal" !important;
+      "image info remove"
+      "qty subtotal subtotal" !important;
     background-color: var(--catalog-card-background, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     border-radius: 14px !important;
     margin-bottom: 12px !important;
     padding: 12px 14px !important;
-    gap: 10px 12px !important;
+    gap: 8px 12px !important;
     position: relative !important;
     box-shadow: 0 4px 12px rgba(31, 24, 12, 0.05) !important;
     height: auto !important;
     min-height: 0 !important;
     box-sizing: border-box !important;
-    align-items: center !important;
+    align-items: start !important;
   }
   
   .cart-table td {
@@ -344,20 +344,14 @@
   }
   
   .cart-td-product {
-    grid-area: product !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    min-width: 0 !important;
+    display: contents !important;
   }
   
   .cart-item-img {
-    width: 70px !important;
-    height: 70px !important;
-    min-width: 70px !important;
+    grid-area: image !important;
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
     object-fit: contain !important;
     object-position: center !important;
     border-radius: 8px !important;
@@ -368,10 +362,12 @@
   }
   
   .cart-item-meta {
+    grid-area: info !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 2px !important;
     min-width: 0 !important;
+    padding-right: 4px !important;
   }
 
   .cart-item-brand {
@@ -429,9 +425,10 @@
     border: 1px solid rgba(220, 53, 69, 0.2) !important;
     cursor: pointer !important;
     transition: var(--transition-base) !important;
+    margin: 0 !important;
   }
 
-  /* Fila inferior de acciones (Cantidad a la izquierda, Subtotal a la derecha) */
+  /* Fila inferior: Cantidad (abajo izquierda) y Subtotal (abajo derecha) */
   .cart-td-qty {
     grid-area: qty !important;
     display: flex !important;
@@ -439,7 +436,7 @@
     justify-content: flex-start !important;
     border-top: 1px solid #F0E6D2 !important;
     padding-top: 8px !important;
-    margin-top: 2px !important;
+    margin-top: 4px !important;
     width: 100% !important;
   }
   
@@ -458,8 +455,9 @@
     color: var(--catalog-text, #171717) !important;
     border-top: 1px solid #F0E6D2 !important;
     padding-top: 8px !important;
-    margin-top: 2px !important;
+    margin-top: 4px !important;
     width: 100% !important;
+    text-align: right !important;
   }
   
   .cart-td-subtotal::before {
@@ -482,8 +480,8 @@
   }
 
   .qty-picker.compact .qty-btn {
-    width: 32px !important;
-    height: 32px !important;
+    width: 30px !important;
+    height: 30px !important;
     border-radius: 6px !important;
     background-color: #FFFFFF !important;
     border: 1px solid #D6C49E !important;
@@ -497,8 +495,8 @@
   }
 
   .qty-picker.compact .qty-input-cart {
-    width: 38px !important;
-    height: 32px !important;
+    width: 36px !important;
+    height: 30px !important;
     text-align: center !important;
     font-family: 'Montserrat', sans-serif !important;
     font-size: 13px !important;
