@@ -525,19 +525,23 @@
   }
 
   #catalogo-productos-grid .product-title,
-  .products-grid .product-title {
-    font-size: 0.95rem !important;
-    font-weight: 700 !important;
-    color: var(--color-text-dark) !important;
-    line-height: 1.25 !important;
+  .products-grid .product-title,
+  #catalogo-productos-grid .product-title-link,
+  .products-grid .product-title-link {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+    color: var(--catalog-text, #171717) !important;
+    line-height: 1.15 !important;
     margin: 0 !important;
   }
 
   #catalogo-productos-grid .product-volume,
   .products-grid .product-volume {
+    font-family: 'Montserrat', sans-serif !important;
     font-size: 0.8rem !important;
-    color: var(--color-primary-dark) !important;
-    font-weight: 500 !important;
+    color: var(--catalog-text-secondary, #6F6F6F) !important;
+    font-weight: 400 !important;
   }
 
   #catalogo-productos-grid .product-stock-row,
@@ -547,6 +551,7 @@
 
   #catalogo-productos-grid .product-stock-status,
   .products-grid .product-stock-status {
+    font-family: 'Montserrat', sans-serif !important;
     font-size: 0.75rem !important;
   }
 
@@ -557,13 +562,15 @@
 
   #catalogo-productos-grid .price-current,
   .products-grid .price-current {
-    font-size: 1.1rem !important;
-    font-weight: 800 !important;
-    color: var(--color-text-dark) !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: var(--catalog-text, #171717) !important;
   }
 
   #catalogo-productos-grid .price-old,
   .products-grid .price-old {
+    font-family: 'Montserrat', sans-serif !important;
     font-size: 0.8rem !important;
     color: var(--color-text-muted) !important;
     text-decoration: line-through !important;
@@ -576,11 +583,18 @@
     margin-top: 4px !important;
   }
 
+  #catalogo-productos-grid .product-card-footer .card-buttons-flex,
+  .products-grid .product-card-footer .card-buttons-flex {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr) !important;
+    gap: 8px !important;
+  }
+
   #catalogo-productos-grid .product-card-footer .btn,
   .products-grid .product-card-footer .btn {
-    padding: 8px 12px !important;
+    padding: 6px 8px !important;
     font-size: 0.75rem !important;
-    min-height: 38px !important;
+    min-height: 40px !important;
     width: 100% !important;
     letter-spacing: 0.5px !important;
   }

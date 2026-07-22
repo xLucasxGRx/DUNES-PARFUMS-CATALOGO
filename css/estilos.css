@@ -643,20 +643,23 @@ img {
 /* ==========================================================================
    Fase 7.2 — Rediseño Premium del Catálogo de Productos
    ========================================================================== */
+/* ==========================================================================
+   Fase 7.3 — Ajuste Final de Proporciones, Tipografía y Acciones de Tarjetas
+   ========================================================================== */
 #catalogo-productos-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (min-width: 1320px) {
     #catalogo-productos-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 24px;
     }
 }
 
-@media screen and (max-width: 860px) {
+@media screen and (max-width: 991px) {
     #catalogo-productos-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
@@ -665,35 +668,36 @@ img {
 
 /* Tarjeta Principal del Catálogo */
 .product-card {
-    background: var(--catalog-card-bg, #FFFEFC);
-    border: 1px solid var(--catalog-border, #E8D4AA);
+    background: var(--catalog-card-background, #FFFEFC);
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(31, 24, 12, 0.08), 0 2px 6px rgba(31, 24, 12, 0.04);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    min-width: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .product-card:hover {
-        transform: translateY(-6px);
-        border-color: #C8A250;
+        transform: translateY(-5px);
+        border-color: var(--catalog-gold-hover, #C49A3E);
         box-shadow: 0 16px 35px rgba(31, 24, 12, 0.14);
     }
 
     .product-card:hover .product-img {
-        transform: scale(1.04);
+        transform: scale(1.03);
     }
 }
 
-/* Contenedor Cuadrado de la Imagen */
+/* Área de Imagen en Escritorio */
 .product-image-container {
     position: relative;
-    aspect-ratio: 1 / 1;
-    height: auto;
-    padding: 24px;
-    background: radial-gradient(circle at center, rgba(218, 178, 85, 0.18), rgba(255, 255, 255, 0) 55%), linear-gradient(180deg, #FFFDF8, #FFFFFF);
+    height: clamp(280px, 22vw, 320px);
+    padding: 20px;
+    background: radial-gradient(circle at center, rgba(196, 154, 62, 0.16) 0%, rgba(196, 154, 62, 0.06) 38%, transparent 68%), linear-gradient(180deg, #FFFDF8 0%, #FFFFFF 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -706,7 +710,9 @@ img {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
-    transition: transform 0.3s ease;
+    object-position: center;
+    transform-origin: center;
+    transition: transform 300ms ease;
 }
 
 /* Cápsula de Categoría (Superior Derecha) */
@@ -714,17 +720,18 @@ img {
     position: absolute;
     top: 12px;
     right: 12px;
-    background-color: var(--catalog-button, #181818);
+    background-color: var(--catalog-black-button, #171717);
     color: var(--catalog-white, #FFFFFF);
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.65rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 20px;
     z-index: 3;
     box-shadow: var(--shadow-xs);
+    line-height: 1;
 }
 
 /* Cinta de Oferta (Superior Izquierda) */
@@ -732,33 +739,35 @@ img {
     position: absolute;
     top: 12px;
     left: 12px;
-    background: var(--catalog-button, #181818);
-    color: var(--catalog-gold-light, #E7C87B);
-    border: 1px solid var(--catalog-gold, #B68A32);
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.65rem;
+    background: var(--catalog-black-button, #171717);
+    color: #E7C87B;
+    border: 1px solid var(--catalog-gold, #B18225);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 4px;
     z-index: 3;
+    line-height: 1;
 }
 
 .product-tag.out-tag {
     position: absolute;
     top: 12px;
     left: 12px;
-    background-color: #727272;
+    background-color: #6F6F6F;
     color: #FFFFFF;
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.65rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 4px;
     z-index: 3;
+    line-height: 1;
 }
 
 /* Acciones Hover Overlay */
@@ -781,64 +790,75 @@ img {
     opacity: 1;
 }
 
-/* Info del Producto */
+/* Contenedor de Información */
 .product-info {
-    padding: 24px;
+    padding: 22px 24px 24px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex: 1;
+    min-height: 0;
+    gap: 8px;
 }
 
 .product-brand {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-family: 'Montserrat', sans-serif;
     font-size: 13px;
     font-weight: 700;
-    letter-spacing: 1px;
-    color: var(--catalog-gold, #B68A32);
+    letter-spacing: 1.2px;
+    color: var(--catalog-gold, #B18225);
     text-transform: uppercase;
-    margin-bottom: 6px;
+    line-height: 1.2;
+    margin: 0;
 }
 
 .product-title {
-    font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--catalog-text, #181818);
-    line-height: 1.25;
-    margin-bottom: 6px;
+    margin: 0;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 1.12;
+    color: var(--catalog-text, #171717);
 }
 
 .product-title-link {
-    font-family: var(--font-heading, 'Playfair Display', serif);
-    color: var(--catalog-text, #181818);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--catalog-text, #171717);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .product-title-link:hover {
-    color: var(--catalog-gold, #B68A32);
+    color: var(--catalog-gold-hover, #C49A3E);
 }
 
 .product-volume {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
     font-size: 14px;
-    color: var(--catalog-text-secondary, #727272);
-    margin-bottom: 10px;
-    font-weight: 500;
+    font-weight: 400;
+    color: var(--catalog-text-secondary, #6F6F6F);
+    line-height: 1.35;
 }
 
-/* Punto y Estado de Stock */
+/* Stock en Línea Limpia */
 .product-stock-status {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 13px;
-    font-weight: 600;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    align-self: flex-start;
+    gap: 7px;
+    margin: 2px 0 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
 }
 
 .product-stock-status.in-stock {
-    color: var(--catalog-green, #169B45);
+    color: var(--catalog-green, #159447);
 }
 
 .product-stock-status.out {
@@ -847,73 +867,109 @@ img {
 
 .stock-dot {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
     border-radius: 50%;
     background-color: currentColor;
 }
 
 /* Fila de Precios */
 .product-price-row {
-    margin-top: auto;
-    margin-bottom: 18px;
+    margin-top: 4px;
 }
 
 .prices {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    min-width: 0;
 }
 
 .price-current {
-    font-family: var(--font-heading, 'Playfair Display', serif);
-    font-size: 1.65rem;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
     font-weight: 700;
-    color: var(--catalog-text, #181818);
+    color: var(--catalog-text, #171717);
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .price-old {
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.95rem;
-    color: var(--catalog-text-secondary, #727272);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #777777;
     text-decoration: line-through;
+    white-space: nowrap;
 }
 
 .discount-badge {
+    flex-shrink: 0;
+    padding: 5px 9px;
     background: #F1D89C;
     color: #8B4315;
     border-radius: 20px;
-    padding: 4px 10px;
-    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-family: 'Montserrat', sans-serif;
     font-size: 11px;
     font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
 }
 
-/* Footer tarjeta */
+/* Fila de Acciones en Escritorio */
 .product-card-footer {
     margin-top: auto;
+    padding-top: 12px;
 }
 
 .card-buttons-flex {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
     gap: 10px;
     width: 100%;
+}
+
+.btn-details-compact {
+    min-height: 48px;
+    background: var(--catalog-white, #FFFFFF);
+    border: 1px solid #D8C39A;
+    color: #5D4517;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 8px 10px;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-base);
+}
+
+.btn-details-compact:hover {
+    border-color: var(--catalog-gold-hover, #C49A3E);
+    color: var(--catalog-gold-hover, #C49A3E);
+    background: rgba(196, 154, 62, 0.08);
 }
 
 .card-buttons-flex .btn-add-cart,
 .card-buttons-flex .btn-select-option,
 .card-buttons-flex .btn-query-wa {
     min-height: 48px;
-    background: var(--catalog-button, #181818);
+    background: var(--catalog-black-button, #171717);
     color: var(--catalog-white, #FFFFFF);
-    border: 1px solid var(--catalog-gold, #B68A32);
+    border: 1px solid #B8892B;
     border-radius: 8px;
-    font-family: var(--font-body, 'Montserrat', sans-serif);
-    font-size: 0.8rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    white-space: nowrap;
     transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
@@ -921,7 +977,7 @@ img {
     .card-buttons-flex .btn-add-cart:hover,
     .card-buttons-flex .btn-select-option:hover,
     .card-buttons-flex .btn-query-wa:hover {
-        background: var(--catalog-gold, #B68A32);
+        background: var(--catalog-gold, #B18225);
         color: var(--catalog-white, #FFFFFF);
         transform: translateY(-2px);
     }

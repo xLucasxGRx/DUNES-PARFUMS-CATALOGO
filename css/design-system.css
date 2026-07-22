@@ -1,31 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap');
 
 /**
- * Dunes Parfums - Design System & Visual Foundation (Fase 4 & 7.2)
+ * Dunes Parfums - Design System & Visual Foundation (Fase 4 & 7.3)
  * Centraliza la paleta oficial, escala tipográfica, espaciados, radios, sombras,
  * componentes base (botones, tarjetas, formularios, badges) y accesibilidad.
  */
 
 :root {
     /* ==========================================================================
-       Tipografía Premium (Fase 7.2)
+       Tipografía Premium (Fase 7.3)
        ========================================================================== */
-    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-heading: 'Cormorant Garamond', Georgia, serif;
+    --font-title: 'Cormorant Garamond', Georgia, serif;
     --font-body: 'Montserrat', Arial, sans-serif;
-    --font-titles: 'Playfair Display', Georgia, serif;
+    --font-titles: 'Cormorant Garamond', Georgia, serif;
 
     /* ==========================================================================
-       Paleta Premium del Catálogo (Fase 7.2)
+       Paleta Premium del Catálogo (Fase 7.3)
        ========================================================================== */
-    --catalog-page-bg: #FAF8F4;
-    --catalog-card-bg: #FFFEFC;
-    --catalog-text: #181818;
-    --catalog-text-secondary: #727272;
-    --catalog-gold: #B68A32;
-    --catalog-gold-light: #E7C87B;
-    --catalog-border: #E8D4AA;
-    --catalog-green: #169B45;
-    --catalog-button: #181818;
+    --catalog-background: #FAF8F4;
+    --catalog-card-background: #FFFEFC;
+    --catalog-text: #171717;
+    --catalog-text-secondary: #6F6F6F;
+    --catalog-gold: #B18225;
+    --catalog-gold-border: #E7D3A5;
+    --catalog-gold-hover: #C49A3E;
+    --catalog-green: #159447;
+    --catalog-black-button: #171717;
     --catalog-white: #FFFFFF;
 
     /* ==========================================================================
