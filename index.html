@@ -418,6 +418,16 @@
         </svg>
     </a>
 
+    <!-- Librería Oficial de Iconos -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+
     <!-- Scripts Modulares (Cargados secuencialmente) -->
     <script src="js/config.js"></script>
     <script src="js/productos-service.js?v=20260721-correcion-desktop-logo-1"></script>

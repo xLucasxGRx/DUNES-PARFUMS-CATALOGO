@@ -417,7 +417,7 @@ function inicializarEnlacesWhatsApp() {
     if (floatWaBtn) {
         floatWaBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const msg = 'Hola, Dunes Parfums 👋\nMe gustaría recibir asesoría sobre sus perfumes sellados y decants.';
+            const msg = 'Hola, Dunes Parfums\nMe gustaría recibir asesoría sobre sus perfumes sellados y decants.';
             window.whatsappConfig.enviarMensajeWhatsApp(msg);
         });
     }
@@ -427,7 +427,7 @@ function inicializarEnlacesWhatsApp() {
     if (generalWaBtn) {
         generalWaBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const msg = 'Hola, Dunes Parfums 👋\nMe comunico desde la web para recibir asesoramiento personalizado en alta perfumería.';
+            const msg = 'Hola, Dunes Parfums\nMe comunico desde la web para recibir asesoramiento personalizado en alta perfumería.';
             window.whatsappConfig.enviarMensajeWhatsApp(msg);
         });
     }
@@ -446,12 +446,13 @@ async function cargarDetalleProducto() {
     if (!id) {
         container.innerHTML = `
             <div class="placeholder-page-wrapper">
-                <div class="benefit-icon-wrapper" style="width: 80px; height: 80px; font-size: 2.2rem; margin-bottom: 12px;" aria-hidden="true">⚠️</div>
+                <div class="benefit-icon-wrapper" style="width: 80px; height: 80px; margin-bottom: 12px;" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lg"></i></div>
                 <h2>Error de Selección</h2>
                 <p>No se ha especificado ningún perfume para visualizar.</p>
                 <a href="catalogo.html" class="btn btn-primary">Ver Catálogo</a>
             </div>
         `;
+        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
         return;
     }
 
@@ -459,12 +460,13 @@ async function cargarDetalleProducto() {
     if (!prod) {
         container.innerHTML = `
             <div class="placeholder-page-wrapper">
-                <div class="benefit-icon-wrapper" style="width: 80px; height: 80px; font-size: 2.2rem; margin-bottom: 12px;" aria-hidden="true">🔍</div>
+                <div class="benefit-icon-wrapper" style="width: 80px; height: 80px; margin-bottom: 12px;" aria-hidden="true"><i data-lucide="search" class="icon-lg"></i></div>
                 <h2>No Encontrado</h2>
                 <p>La fragancia solicitada no figura en nuestro stock actual.</p>
                 <a href="catalogo.html" class="btn btn-primary">Ver Catálogo</a>
             </div>
         `;
+        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
         return;
     }
 
@@ -499,10 +501,10 @@ function renderizarDetalleSellado(container, prod) {
             </div>
             <div class="detail-btn-row">
                 <button class="btn btn-primary btn-add-cart-detail" id="btn-add-cart-detail" data-id="${prod.id}">
-                    🛒 Agregar al Carrito
+                    <i data-lucide="shopping-bag" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Agregar al Carrito
                 </button>
                 <button class="btn btn-secondary btn-query-detail" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    💬 Consultar por WhatsApp
+                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar por WhatsApp
                 </button>
             </div>
         `;
@@ -510,7 +512,7 @@ function renderizarDetalleSellado(container, prod) {
         pickerAndActionsHtml = `
             <div class="detail-btn-row">
                 <button class="btn btn-secondary btn-query-detail" style="width: 100%;" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    💬 Consultar reingreso por WhatsApp
+                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar reingreso por WhatsApp
                 </button>
             </div>
         `;
@@ -663,10 +665,10 @@ function renderizarDetalleDecant(container, prod) {
             </div>
             <div class="detail-btn-row">
                 <button class="btn btn-primary btn-add-cart-detail" id="btn-add-cart-detail" data-id="${prod.id}">
-                    🛒 Agregar al Carrito
+                    <i data-lucide="shopping-bag" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Agregar al Carrito
                 </button>
                 <button class="btn btn-secondary btn-query-detail" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    💬 Consultar por WhatsApp
+                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar por WhatsApp
                 </button>
             </div>
         `;
@@ -674,7 +676,7 @@ function renderizarDetalleDecant(container, prod) {
         pickerAndActionsHtml = `
             <div class="detail-btn-row">
                 <button class="btn btn-secondary btn-query-detail" style="width: 100%;" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    💬 Consultar reingreso por WhatsApp
+                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar reingreso por WhatsApp
                 </button>
             </div>
         `;
@@ -808,12 +810,13 @@ async function renderizarCarritoDOM() {
     if (items.length === 0) {
         container.innerHTML = `
             <div class="empty-cart-message">
-                <span style="font-size: 3rem; display: block; margin-bottom: 12px;" aria-hidden="true">🛒</span>
+                <div style="margin-bottom: 12px;" aria-hidden="true"><i data-lucide="shopping-bag" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i></div>
                 <h3>Tu pedido está vacío</h3>
                 <p>Explora nuestro catálogo de perfumes y decants para agregar productos.</p>
                 <a href="catalogo.html" class="btn btn-primary" style="margin-top: 20px;">Ir al Catálogo</a>
             </div>
         `;
+        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
         if (totalPriceSpan) totalPriceSpan.textContent = 'S/ 0.00';
 
         // Ocultar o deshabilitar visualmente la columna derecha

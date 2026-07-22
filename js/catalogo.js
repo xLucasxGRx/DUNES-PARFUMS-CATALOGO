@@ -287,7 +287,8 @@ function filtrarYRenderizar(productos, estado, grid) {
         }
 
         if (estadoEl && mensajeEl) {
-            document.getElementById('estado-catalogo-icon').textContent = '🛍️';
+            const iconContainer = document.getElementById('estado-catalogo-icon');
+            if (iconContainer) iconContainer.innerHTML = '<i data-lucide="shopping-bag" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
             document.getElementById('estado-catalogo-titulo').textContent = 'Sin stock disponible';
             mensajeEl.textContent = config.sinStockMensaje;
             
@@ -309,6 +310,7 @@ function filtrarYRenderizar(productos, estado, grid) {
             if (secBtn) secBtn.style.display = 'none';
 
             estadoEl.style.display = 'block';
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
         }
         actualizarContador(0, estado.categoria);
         return;
@@ -362,9 +364,11 @@ function filtrarYRenderizar(productos, estado, grid) {
             const newSecBtn = secBtn.cloneNode(true);
             secBtn.parentNode.replaceChild(newSecBtn, secBtn);
 
+            const iconContainer = document.getElementById('estado-catalogo-icon');
+
             // CASO C — La búsqueda no encuentra coincidencias
             if (estado.busqueda) {
-                document.getElementById('estado-catalogo-icon').textContent = '🔍';
+                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="search" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
                 document.getElementById('estado-catalogo-titulo').textContent = 'No encontramos resultados';
                 mensajeEl.textContent = 'No encontramos productos que coincidan con tu búsqueda.';
                 
@@ -379,7 +383,7 @@ function filtrarYRenderizar(productos, estado, grid) {
             }
             // CASO B — Filtro “Solo disponibles” excluyó todos
             else if (estado.soloDisponibles) {
-                document.getElementById('estado-catalogo-icon').textContent = '📭';
+                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="package-x" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
                 document.getElementById('estado-catalogo-titulo').textContent = 'Sin stock disponible';
                 mensajeEl.textContent = 'No hay productos disponibles con los filtros seleccionados.';
                 
@@ -388,6 +392,14 @@ function filtrarYRenderizar(productos, estado, grid) {
                 newSecBtn.addEventListener('click', () => {
                     const availableCheckbox = document.getElementById('filter-available');
                     if (availableCheckbox) availableCheckbox.checked = false;
+                    estado.soloDisponibles = false;
+                    filtrarYRenderizar(productos, estado, grid);
+                });
+            }
+
+            estadoEl.style.display = 'block';
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+        }
                     estado.soloDisponibles = false;
                     filtrarYRenderizar(productos, estado, grid);
                 });
@@ -607,7 +619,7 @@ function filtrarYRenderizar(productos, estado, grid) {
                 <h3 style="font-family: var(--font-title); font-size: 1.25rem; color: var(--color-text); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"></h3>
                 <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;"></p>
                 <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;" aria-label="${config.ariaLabel}">
-                    <span style="font-size: 1.1rem; line-height: 1; margin-right: 4px;">💬</span>
+                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 4px;"></i>
                     <span></span>
                 </a>
             </div>

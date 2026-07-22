@@ -2302,13 +2302,14 @@ img {
 }
 
 .variant-option-btn.active::after {
-    content: '✓';
+    content: '';
     position: absolute;
-    top: 4px;
+    top: 6px;
     right: 8px;
-    font-size: 0.7rem;
-    color: var(--color-primary-dark);
-    font-weight: 700;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-primary-dark);
 }
 
 .variant-option-btn:disabled {

@@ -157,3 +157,12 @@
         scroll-behavior: auto !important;
     }
 }
+
+/* ==========================================================================
+   Utilidades Estándar de Iconos (Fase U3)
+   ========================================================================== */
+.icon-xs { width: 14px; height: 14px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+.icon-sm { width: 18px; height: 18px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+.icon-md { width: 20px; height: 20px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+.icon-lg { width: 24px; height: 24px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+.icon-xl { width: 32px; height: 32px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
