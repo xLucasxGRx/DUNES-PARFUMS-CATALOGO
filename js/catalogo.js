@@ -565,15 +565,17 @@ function filtrarYRenderizar(productos, estado, grid) {
                     ${discountBadgeHtml}
                 </div>
             </div>
-            <div class="product-card-footer">
-                ${actionBtnHtml}
-            </div>
         `;
         divInfo.querySelector('.product-brand').textContent = prod.marca;
         divInfo.querySelector('.product-title-link').textContent = prod.nombre;
 
+        const divFooter = document.createElement('div');
+        divFooter.className = 'product-card-footer';
+        divFooter.innerHTML = actionBtnHtml;
+
         card.appendChild(divContainer);
         card.appendChild(divInfo);
+        card.appendChild(divFooter);
         grid.appendChild(card);
     });
 
