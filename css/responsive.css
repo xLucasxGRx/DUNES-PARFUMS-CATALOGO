@@ -337,18 +337,18 @@
   
   #cart-table-container .cart-table tr,
   .cart-table tr {
+    position: relative !important;
     display: grid !important;
-    grid-template-columns: 72px minmax(0, 1fr) auto !important;
+    grid-template-columns: 72px minmax(0, 1fr) !important;
     grid-template-areas:
-      "image info remove"
-      "qty qty subtotal" !important;
+      "image info"
+      "qty subtotal" !important;
     background-color: var(--catalog-card-background, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     border-radius: 14px !important;
     margin-bottom: 12px !important;
     padding: 12px 14px !important;
     gap: 8px 12px !important;
-    position: relative !important;
     box-shadow: 0 4px 12px rgba(31, 24, 12, 0.05) !important;
     height: auto !important;
     min-height: 0 !important;
@@ -396,7 +396,9 @@
     flex-direction: column !important;
     gap: 2px !important;
     min-width: 0 !important;
-    padding-right: 4px !important;
+    width: 100% !important;
+    padding-right: 36px !important;
+    box-sizing: border-box !important;
   }
 
   #cart-table-container .cart-item-brand,
@@ -419,7 +421,12 @@
     color: var(--catalog-text, #171717) !important;
     line-height: 1.15 !important;
     margin: 0 !important;
-    word-break: break-word !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
   }
 
   #cart-table-container .cart-item-volume,
@@ -438,22 +445,23 @@
 
   #cart-table-container .cart-td-remove,
   .cart-td-remove {
-    grid-area: remove !important;
-    position: static !important;
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: flex-end !important;
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 5 !important;
     width: auto !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
+    display: block !important;
   }
   
   #cart-table-container .btn-remove-item,
   .btn-remove-item {
     font-size: 1.1rem !important;
-    width: 32px !important;
-    height: 32px !important;
-    min-height: 32px !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;

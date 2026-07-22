@@ -2209,8 +2209,6 @@ button:disabled,
     min-width: 0;
     box-sizing: border-box;
 }
-    font-weight: 600;
-}
 
 .summary-total-price {
     font-size: 1.5rem;
