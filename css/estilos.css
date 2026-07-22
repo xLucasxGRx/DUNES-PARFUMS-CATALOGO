@@ -236,6 +236,57 @@ img {
     height: 72px;
 }
 
+@media screen and (min-width: 992px) {
+    .header-container {
+        display: grid !important;
+        grid-template-columns: minmax(240px, auto) 1fr minmax(80px, auto) !important;
+        align-items: center !important;
+        height: 80px !important;
+        width: min(100% - 64px, 1500px) !important;
+        margin-inline: auto !important;
+        gap: 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    .logo-container {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        flex-shrink: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .logo-img {
+        height: 50px !important;
+        width: auto !important;
+        max-width: 260px !important;
+        object-fit: contain !important;
+        display: block !important;
+        background: transparent !important;
+    }
+
+    .nav-menu {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+
+    .header-actions {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .logo-img {
+        height: 56px !important;
+        max-width: 280px !important;
+    }
+}
+
 /* Branding Principal Transparente (Fase 5 Visual Fix) */
 .logo-container {
     display: inline-flex;
