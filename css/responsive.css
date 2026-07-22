@@ -290,9 +290,25 @@
   }
 
   /* --- Carrito de Compras en Móvil (Fase 10) --- */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
   .cart-layout {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  .cart-items-column,
+  .cart-summary-column {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
   
   /* Rediseño del Carrito en Celular (Formato Horizontal Compacto & Estructura Limpia) */
@@ -300,6 +316,10 @@
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
   }
 
   .cart-table, 
@@ -318,10 +338,10 @@
   #cart-table-container .cart-table tr,
   .cart-table tr {
     display: grid !important;
-    grid-template-columns: 72px minmax(0, 1fr) 36px !important;
+    grid-template-columns: 72px minmax(0, 1fr) auto !important;
     grid-template-areas:
       "image info remove"
-      "qty subtotal subtotal" !important;
+      "qty qty subtotal" !important;
     background-color: var(--catalog-card-background, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     border-radius: 14px !important;
@@ -332,8 +352,10 @@
     box-shadow: 0 4px 12px rgba(31, 24, 12, 0.05) !important;
     height: auto !important;
     min-height: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     box-sizing: border-box !important;
-    align-items: start !important;
+    align-items: center !important;
   }
   
   #cart-table-container .cart-table td,
@@ -426,9 +448,10 @@
   
   #cart-table-container .btn-remove-item,
   .btn-remove-item {
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
     width: 32px !important;
     height: 32px !important;
+    min-height: 32px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -439,6 +462,7 @@
     cursor: pointer !important;
     transition: var(--transition-base) !important;
     margin: 0 !important;
+    padding: 0 !important;
   }
 
   /* Fila inferior: Cantidad (abajo izquierda) y Subtotal (abajo derecha) */
@@ -487,33 +511,57 @@
   
   .qty-picker.compact {
     margin: 0 !important;
-    display: flex !important;
+    display: inline-flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    justify-content: center !important;
+    height: 32px !important;
+    min-height: 32px !important;
     background-color: #F8F6F0 !important;
     border: 1px solid #E5D8B8 !important;
     border-radius: 8px !important;
-    padding: 2px 4px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    gap: 0 !important;
   }
 
   .qty-picker.compact .qty-btn {
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 6px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    border-radius: 0 !important;
     background-color: #FFFFFF !important;
-    border: 1px solid #D6C49E !important;
-    font-size: 14px !important;
+    border: none !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 15px !important;
     font-weight: 700 !important;
     color: #171717 !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
+    box-sizing: border-box !important;
+    user-select: none !important;
+  }
+
+  .qty-picker.compact .qty-btn:first-child {
+    border-right: 1px solid #E5D8B8 !important;
+  }
+
+  .qty-picker.compact .qty-btn:last-child {
+    border-left: 1px solid #E5D8B8 !important;
   }
 
   .qty-picker.compact .qty-input-cart {
     width: 36px !important;
-    height: 30px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 32px !important;
     text-align: center !important;
     font-family: 'Montserrat', sans-serif !important;
     font-size: 13px !important;
@@ -521,6 +569,9 @@
     background: transparent !important;
     border: none !important;
     color: #171717 !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
   }
   
   .cart-actions-row {

@@ -1914,12 +1914,14 @@ button:disabled,
 }
 
 .qty-picker {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
+    border-radius: 8px;
     overflow: hidden;
     background-color: var(--color-bg-light);
+    height: 40px;
+    box-sizing: border-box;
 }
 
 .qty-btn {
@@ -1928,14 +1930,18 @@ button:disabled,
     width: 40px;
     height: 40px;
     min-height: 40px;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 1.1rem;
     cursor: pointer;
     font-weight: 700;
     color: var(--color-text-dark);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
     transition: background-color 200ms ease, color 200ms ease;
 }
 
@@ -1947,17 +1953,29 @@ button:disabled,
 }
 
 .qty-picker input {
-    width: 50px;
-    height: 38px;
+    width: 48px;
+    height: 40px;
     border: none;
     border-left: 1px solid var(--color-border);
     border-right: 1px solid var(--color-border);
     text-align: center;
     font-family: var(--font-body);
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 700;
     background-color: white;
     outline: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
+
+.qty-picker input::-webkit-outer-spin-button,
+.qty-picker input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 }
 
 .detail-btn-row {
