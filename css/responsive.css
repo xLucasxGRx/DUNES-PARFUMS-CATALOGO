@@ -43,6 +43,60 @@
     height: 350px;
   }
 
+  /* Header y Navegación Móvil (Fase 5) */
+  .header-container {
+    height: 64px;
+  }
+
+  .logo-img {
+    height: 32px;
+  }
+
+  .logo-container {
+    padding: 4px 10px;
+  }
+
+  .burger-menu-btn {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    background-color: rgba(18, 18, 18, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border-gold);
+    padding: 24px 32px;
+    transform: translateY(-150%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .nav-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .nav-link {
+    font-size: 0.95rem;
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
   /* Reorganización de Cuadrícula en Hero */
   .hero-section {
     padding-top: 100px;
