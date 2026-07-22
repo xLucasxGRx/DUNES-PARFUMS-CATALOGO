@@ -2126,29 +2126,7 @@ img {
     }
 }
 
-@media screen and (max-width: 600px) {
 
-    .cart-table th:nth-child(2),
-    .cart-table td:nth-child(2),
-    .cart-table th:nth-child(4),
-    .cart-table td:nth-child(4) {
-        display: none;
-        /* Ocultar columna precio unitario y subtotal en pantallas muy pequeñas */
-    }
-
-    .cart-td-product {
-        gap: 8px;
-    }
-
-    .cart-item-img {
-        width: 50px;
-        height: 50px;
-    }
-
-    .cart-table td {
-        padding: 12px 8px;
-    }
-}
 
 /* --- Selector de Variantes de Decants --- */
 .detail-variant-selector {

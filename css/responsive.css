@@ -295,7 +295,7 @@
     gap: 24px;
   }
   
-  /* Rediseño del Carrito en Celular (Estructura Grid 3 Columnas × 2 Filas) */
+  /* Rediseño del Carrito en Celular (Formato Horizontal Compacto & Estructura Limpia) */
   .cart-table-wrapper {
     border: none !important;
     box-shadow: none !important;
@@ -315,9 +315,10 @@
     display: none !important;
   }
   
+  #cart-table-container .cart-table tr,
   .cart-table tr {
     display: grid !important;
-    grid-template-columns: 80px minmax(0, 1fr) 36px !important;
+    grid-template-columns: 72px minmax(0, 1fr) 36px !important;
     grid-template-areas:
       "image info remove"
       "qty subtotal subtotal" !important;
@@ -335,6 +336,7 @@
     align-items: start !important;
   }
   
+  #cart-table-container .cart-table td,
   .cart-table td {
     border: none !important;
     padding: 0 !important;
@@ -343,15 +345,17 @@
     box-sizing: border-box !important;
   }
   
+  #cart-table-container .cart-td-product,
   .cart-td-product {
     display: contents !important;
   }
   
+  #cart-table-container .cart-item-img,
   .cart-item-img {
     grid-area: image !important;
-    width: 80px !important;
-    height: 80px !important;
-    min-width: 80px !important;
+    width: 72px !important;
+    height: 72px !important;
+    min-width: 72px !important;
     object-fit: contain !important;
     object-position: center !important;
     border-radius: 8px !important;
@@ -361,6 +365,7 @@
     flex-shrink: 0 !important;
   }
   
+  #cart-table-container .cart-item-meta,
   .cart-item-meta {
     grid-area: info !important;
     display: flex !important;
@@ -370,6 +375,7 @@
     padding-right: 4px !important;
   }
 
+  #cart-table-container .cart-item-brand,
   .cart-item-brand {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 10px !important;
@@ -378,8 +384,10 @@
     text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
     line-height: 1.2 !important;
+    margin: 0 !important;
   }
   
+  #cart-table-container .cart-item-title,
   .cart-item-title {
     font-family: 'Cormorant Garamond', Georgia, serif !important;
     font-size: 17px !important;
@@ -390,17 +398,21 @@
     word-break: break-word !important;
   }
 
+  #cart-table-container .cart-item-volume,
   .cart-item-volume {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 11px !important;
     color: var(--catalog-text-secondary, #6F6F6F) !important;
     font-weight: 400 !important;
+    margin: 0 !important;
   }
 
+  #cart-table-container .cart-td-price,
   .cart-td-price {
     display: none !important;
   }
 
+  #cart-table-container .cart-td-remove,
   .cart-td-remove {
     grid-area: remove !important;
     position: static !important;
@@ -412,6 +424,7 @@
     padding: 0 !important;
   }
   
+  #cart-table-container .btn-remove-item,
   .btn-remove-item {
     font-size: 1.2rem !important;
     width: 32px !important;
@@ -429,6 +442,7 @@
   }
 
   /* Fila inferior: Cantidad (abajo izquierda) y Subtotal (abajo derecha) */
+  #cart-table-container .cart-td-qty,
   .cart-td-qty {
     grid-area: qty !important;
     display: flex !important;
@@ -440,10 +454,12 @@
     width: 100% !important;
   }
   
+  #cart-table-container .cart-td-qty::before,
   .cart-td-qty::before {
     display: none !important;
   }
   
+  #cart-table-container .cart-td-subtotal,
   .cart-td-subtotal {
     grid-area: subtotal !important;
     display: flex !important;
@@ -460,6 +476,7 @@
     text-align: right !important;
   }
   
+  #cart-table-container .cart-td-subtotal::before,
   .cart-td-subtotal::before {
     content: "Subtotal: " !important;
     font-size: 12px !important;
