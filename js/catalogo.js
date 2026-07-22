@@ -438,16 +438,18 @@ function filtrarYRenderizar(productos, estado, grid) {
             ? (!prod.disponible || prod.mililitrosDisponibles < 3)
             : (!prod.disponible || prod.stock <= 0);
 
-        if (estaAgotado) {
-            card.classList.add('out-of-stock');
-        }
-
         let tagHtml = '';
         if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
-            tagHtml = `<span class="product-tag promo-tag">Oferta</span>`;
+            tagHtml = `<span class="product-tag promo-tag">OFERTA</span>`;
         } else if (estaAgotado) {
-            tagHtml = `<span class="product-tag out-tag">Agotado</span>`;
+            tagHtml = `<span class="product-tag out-tag">AGOTADO</span>`;
         }
+
+        let categoryBadgeText = 'CATÁLOGO';
+        if (prod.categoria === 'arabe') categoryBadgeText = 'PERFUME ÁRABE';
+        else if (prod.categoria === 'disenador') categoryBadgeText = 'DISEÑADOR';
+        else if (prod.categoria === 'nicho') categoryBadgeText = 'NICHO';
+        else if (prod.categoria === 'decants') categoryBadgeText = 'DECANT';
 
         const precioMinDecant = (esDecant && prod.presentaciones && prod.presentaciones.length > 0)
             ? prod.presentaciones[0].precio 
@@ -458,42 +460,68 @@ function filtrarYRenderizar(productos, estado, grid) {
             ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>`
             : '';
 
-        const presentacionFormateada = esDecant ? prod.presentacion : `Sellado / ${prod.presentacion}`;
+        let discountBadgeHtml = '';
+        if (!esDecant && prod.precioAnterior && prod.precioAnterior > prod.precio) {
+            const pct = Math.round(((prod.precioAnterior - prod.precio) / prod.precioAnterior) * 100);
+            if (pct > 0) {
+                discountBadgeHtml = `<span class="discount-badge">${pct}% OFF</span>`;
+            }
+        }
+
+        const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion}`;
 
         const stockHtml = esDecant
             ? (prod.disponible && prod.mililitrosDisponibles >= 3
-                ? `<span class="product-stock-status">Disponible (${prod.mililitrosDisponibles} ml)</span>`
-                : `<span class="product-stock-status out">Agotado</span>`)
+                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.mililitrosDisponibles} ml)</span>`
+                : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`)
             : (prod.disponible && prod.stock > 0
-                ? `<span class="product-stock-status">Disponible (${prod.stock} unid.)</span>`
-                : `<span class="product-stock-status out">Agotado</span>`);
+                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.stock} unid.)</span>`
+                : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`);
 
         let actionBtnHtml = '';
+        const detailsBtnHtml = `
+            <a href="producto.html?id=${prod.id}" class="btn btn-outline btn-details-compact" aria-label="Ver detalles de ${prod.nombre}">
+                <svg class="btn-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Detalles
+            </a>
+        `;
+
         if (esDecant) {
             if (prod.disponible && prod.mililitrosDisponibles >= 3) {
                 actionBtnHtml = `
-                    <a href="producto.html?id=${prod.id}" class="btn btn-primary btn-select-option">
-                        Seleccionar Presentación
-                    </a>
+                    <div class="card-buttons-flex">
+                        ${detailsBtnHtml}
+                        <a href="producto.html?id=${prod.id}" class="btn btn-primary btn-select-option">
+                            Opciones
+                        </a>
+                    </div>
                 `;
             } else {
                 actionBtnHtml = `
-                    <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
-                        <svg class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Consultar
-                    </button>
+                    <div class="card-buttons-flex">
+                        ${detailsBtnHtml}
+                        <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
+                            <svg class="btn-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Consultar
+                        </button>
+                    </div>
                 `;
             }
         } else if (prod.disponible && prod.stock > 0) {
             actionBtnHtml = `
-                <button class="btn btn-primary btn-add-cart" data-id="${prod.id}" data-nombre="${prod.nombre}">
-                    <svg class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> Agregar
-                </button>
+                <div class="card-buttons-flex">
+                    ${detailsBtnHtml}
+                    <button class="btn btn-primary btn-add-cart" data-id="${prod.id}" data-nombre="${prod.nombre}">
+                        <svg class="btn-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> Agregar
+                    </button>
+                </div>
             `;
         } else {
             actionBtnHtml = `
-                <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
-                    <svg class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Consultar
-                </button>
+                <div class="card-buttons-flex">
+                    ${detailsBtnHtml}
+                    <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
+                        <svg class="btn-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Consultar
+                    </button>
+                </div>
             `;
         }
 
@@ -501,18 +529,20 @@ function filtrarYRenderizar(productos, estado, grid) {
         divContainer.className = 'product-image-container';
         divContainer.innerHTML = `
             ${tagHtml}
-            <img src="${prod.imagen}" alt="" class="product-img" loading="lazy">
+            <span class="product-category-badge">${categoryBadgeText}</span>
+            <a href="producto.html?id=${prod.id}" class="product-img-link" aria-label="Ver detalles de ${prod.nombre}">
+                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy">
+            </a>
             <div class="product-actions-overlay">
                 <a href="producto.html?id=${prod.id}" class="btn btn-light-glass btn-view-details">Ver Detalles</a>
             </div>
         `;
-        divContainer.querySelector('.product-img').setAttribute('alt', `${prod.nombre} - ${prod.marca}`);
 
         const divInfo = document.createElement('div');
         divInfo.className = 'product-info';
         divInfo.innerHTML = `
             <span class="product-brand"></span>
-            <h3 class="product-title"></h3>
+            <h3 class="product-title"><a href="producto.html?id=${prod.id}" class="product-title-link"></a></h3>
             <span class="product-volume">${presentacionFormateada}</span>
             <div class="product-stock-row">
                 ${stockHtml}
@@ -521,6 +551,7 @@ function filtrarYRenderizar(productos, estado, grid) {
                 <div class="prices">
                     ${precioAnteriorHtml}
                     <span class="price-current">${precioActual}</span>
+                    ${discountBadgeHtml}
                 </div>
             </div>
             <div class="product-card-footer">
@@ -528,7 +559,7 @@ function filtrarYRenderizar(productos, estado, grid) {
             </div>
         `;
         divInfo.querySelector('.product-brand').textContent = prod.marca;
-        divInfo.querySelector('.product-title').textContent = prod.nombre;
+        divInfo.querySelector('.product-title-link').textContent = prod.nombre;
 
         card.appendChild(divContainer);
         card.appendChild(divInfo);

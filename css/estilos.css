@@ -640,69 +640,125 @@ img {
     gap: 30px;
 }
 
-/* Tarjeta de Producto */
+/* ==========================================================================
+   Fase 7.2 — Rediseño Premium del Catálogo de Productos
+   ========================================================================== */
+#catalogo-productos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+}
+
+@media screen and (max-width: 1200px) {
+    #catalogo-productos-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+    }
+}
+
+@media screen and (max-width: 860px) {
+    #catalogo-productos-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+}
+
+/* Tarjeta Principal del Catálogo */
 .product-card {
-    background-color: var(--color-bg-card-light);
-    border-radius: var(--border-radius-md);
+    background: var(--catalog-card-bg, #FFFEFC);
+    border: 1px solid var(--catalog-border, #E8D4AA);
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 24px rgba(31, 24, 12, 0.08), 0 2px 6px rgba(31, 24, 12, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     display: flex;
     flex-direction: column;
-    transition: var(--transition-smooth);
 }
 
-.product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
-    border-color: rgba(212, 175, 55, 0.2);
+@media (hover: hover) and (pointer: fine) {
+    .product-card:hover {
+        transform: translateY(-6px);
+        border-color: #C8A250;
+        box-shadow: 0 16px 35px rgba(31, 24, 12, 0.14);
+    }
+
+    .product-card:hover .product-img {
+        transform: scale(1.04);
+    }
 }
 
+/* Contenedor Cuadrado de la Imagen */
 .product-image-container {
     position: relative;
-    height: 280px;
-    background-color: #f7f7f7;
-    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    padding: 24px;
+    background: radial-gradient(circle at center, rgba(218, 178, 85, 0.18), rgba(255, 255, 255, 0) 55%), linear-gradient(180deg, #FFFDF8, #FFFFFF);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    overflow: hidden;
 }
 
 .product-img {
+    width: 100%;
+    height: 100%;
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
-    transition: var(--transition-smooth);
+    transition: transform 0.3s ease;
 }
 
-.product-card:hover .product-img {
-    transform: scale(1.05);
-}
-
-/* Etiquetas */
-.product-tag {
+/* Cápsula de Categoría (Superior Derecha) */
+.product-category-badge {
     position: absolute;
     top: 12px;
-    left: 12px;
-    padding: 4px 10px;
-    font-size: 0.7rem;
+    right: 12px;
+    background-color: var(--catalog-button, #181818);
+    color: var(--catalog-white, #FFFFFF);
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: var(--border-radius-sm);
+    padding: 4px 10px;
+    border-radius: 20px;
+    z-index: 3;
+    box-shadow: var(--shadow-xs);
+}
+
+/* Cinta de Oferta (Superior Izquierda) */
+.product-tag.promo-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--catalog-button, #181818);
+    color: var(--catalog-gold-light, #E7C87B);
+    border: 1px solid var(--catalog-gold, #B68A32);
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
     z-index: 3;
 }
 
-.promo-tag {
-    background-color: var(--color-bg-dark);
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-}
-
-.out-tag {
-    background-color: #8E8E93;
-    color: white;
+.product-tag.out-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: #727272;
+    color: #FFFFFF;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    z-index: 3;
 }
 
 /* Acciones Hover Overlay */
@@ -727,76 +783,148 @@ img {
 
 /* Info del Producto */
 .product-info {
-    padding: 20px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
 
 .product-brand {
-    font-size: 0.75rem;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--catalog-gold, #B68A32);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--color-text-muted);
-    font-weight: 600;
     margin-bottom: 6px;
 }
 
 .product-title {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-text-dark);
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--catalog-text, #181818);
+    line-height: 1.25;
+    margin-bottom: 6px;
+}
+
+.product-title-link {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    color: var(--catalog-text, #181818);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.product-title-link:hover {
+    color: var(--catalog-gold, #B68A32);
 }
 
 .product-volume {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    margin-bottom: 12px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 14px;
+    color: var(--catalog-text-secondary, #727272);
+    margin-bottom: 10px;
+    font-weight: 500;
 }
 
+/* Punto y Estado de Stock */
+.product-stock-status {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.product-stock-status.in-stock {
+    color: var(--catalog-green, #169B45);
+}
+
+.product-stock-status.out {
+    color: var(--color-danger, #DC3545);
+}
+
+.stock-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+/* Fila de Precios */
 .product-price-row {
     margin-top: auto;
-    margin-bottom: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin-bottom: 18px;
 }
 
 .prices {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
 .price-current {
-    font-size: 1.2rem;
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.65rem;
     font-weight: 700;
-    color: var(--color-primary-dark);
+    color: var(--catalog-text, #181818);
 }
 
 .price-old {
-    font-size: 0.9rem;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.95rem;
+    color: var(--catalog-text-secondary, #727272);
     text-decoration: line-through;
-    color: var(--color-text-muted);
+}
+
+.discount-badge {
+    background: #F1D89C;
+    color: #8B4315;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 11px;
+    font-weight: 700;
 }
 
 /* Footer tarjeta */
 .product-card-footer {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
+    margin-top: auto;
 }
 
-.product-card-footer .btn {
-    padding: 8px 16px;
-    font-size: 0.75rem;
+.card-buttons-flex {
+    display: flex;
+    gap: 10px;
     width: 100%;
+}
+
+.card-buttons-flex .btn-add-cart,
+.card-buttons-flex .btn-select-option,
+.card-buttons-flex .btn-query-wa {
+    min-height: 48px;
+    background: var(--catalog-button, #181818);
+    color: var(--catalog-white, #FFFFFF);
+    border: 1px solid var(--catalog-gold, #B68A32);
+    border-radius: 8px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .card-buttons-flex .btn-add-cart:hover,
+    .card-buttons-flex .btn-select-option:hover,
+    .card-buttons-flex .btn-query-wa:hover {
+        background: var(--catalog-gold, #B68A32);
+        color: var(--catalog-white, #FFFFFF);
+        transform: translateY(-2px);
+    }
 }
 
 /* Estado Agotado en tarjeta */
