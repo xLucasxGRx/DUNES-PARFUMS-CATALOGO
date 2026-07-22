@@ -2283,3 +2283,31 @@ img {
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-sm);
 }
+
+/* ==========================================================================
+   Iconos SVG Unificados (Fase 3)
+   ========================================================================== */
+.btn-icon-svg {
+    display: inline-block;
+    vertical-align: text-bottom;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.benefit-icon-svg {
+    display: inline-block;
+    color: var(--color-primary-dark);
+    margin-bottom: 12px;
+}
+
+.search-icon-svg {
+    display: inline-block;
+    vertical-align: middle;
+    color: var(--color-text-muted);
+}
+
+.empty-state-svg {
+    display: inline-block;
+    color: var(--color-primary-dark);
+    margin-bottom: 16px;
+}

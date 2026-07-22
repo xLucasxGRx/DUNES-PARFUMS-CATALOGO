@@ -64,7 +64,9 @@
             <!-- Caja de Búsqueda -->
             <div class="filter-search-box">
                 <input type="text" id="search-perfume" placeholder="Buscar por perfume o marca..." aria-label="Buscar perfume">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon">
+                    <svg class="search-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </span>
             </div>
 
             <!-- Grupos de Categorías -->
@@ -109,7 +111,9 @@
         <!-- Contenedor para estados especiales del catálogo (vacío, error, etc.) -->
         <div id="estado-catalogo" style="display: none; text-align: center; padding: 50px 30px; background-color: var(--color-bg-light); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); max-width: 650px; margin: 40px auto; box-shadow: var(--box-shadow-sm);" class="reveal">
             <!-- Icono decorativo -->
-            <div id="estado-catalogo-icon" class="empty-state-icon" style="font-size: 3rem; margin-bottom: 20px; color: var(--color-primary-dark); line-height: 1;">🔍</div>
+            <div id="estado-catalogo-icon" class="empty-state-icon" style="margin-bottom: 20px; color: var(--color-primary-dark); line-height: 1;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
             
             <!-- Título del Estado -->
             <h2 id="estado-catalogo-titulo" style="font-family: var(--font-title); font-size: 1.6rem; color: var(--color-text); margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">Sin stock disponible</h2>
