@@ -53,31 +53,43 @@ const ProductosService = (function() {
         return rows;
     }
 
-    function normalizarCabecera(cabecera) {
-        return String(cabecera ?? "")
+    function limpiarValorImportado(valor) {
+        return String(valor ?? "")
             .replace(/^\uFEFF/, "")
             .trim()
-            .toLowerCase();
+            .replace(/^['’]+/, "")
+            .trim();
+    }
+
+    function normalizarCabecera(cabecera) {
+        return limpiarValorImportado(cabecera).toLowerCase();
+    }
+
+    function normalizarNumero(valor, respaldo = null) {
+        if (valor === undefined || valor === null) return respaldo;
+        const limpio = limpiarValorImportado(valor).replace(",", ".");
+        if (limpio === '') return respaldo;
+        const numero = Number(limpio);
+        return Number.isFinite(numero) ? numero : respaldo;
     }
 
     function parseNumber(val) {
-        if (val === undefined || val === null || String(val).trim() === '') return null;
-        const num = Number(val);
-        return isNaN(num) ? null : num;
+        return normalizarNumero(val, null);
+    }
+
+    function normalizarBooleano(valor) {
+        if (valor === true) return true;
+        if (valor === false) return false;
+        const limpio = limpiarValorImportado(valor).toLowerCase();
+        return ["true", "1", "si", "sí", "yes", "verdadero"].includes(limpio);
     }
 
     function parseBoolean(val) {
-        if (val === true) return true;
-        if (val === false) return false;
-        if (val === undefined || val === null) return false;
-        const s = String(val).replace(/^\uFEFF/, "").trim().toLowerCase();
-        if (['true', 'verdadero', '1', 'si', 'sí', 'yes'].includes(s)) return true;
-        if (['false', 'falso', '0', 'no'].includes(s)) return false;
-        return false;
+        return normalizarBooleano(val);
     }
 
     function getTipoFromCategoria(cat) {
-        const c = String(cat).trim().toLowerCase();
+        const c = limpiarValorImportado(cat).toLowerCase();
         if (c === 'arabe') return 'ARABE';
         if (c === 'disenador') return 'DISENADOR';
         if (c === 'nicho') return 'NICHO';
