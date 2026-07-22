@@ -1,5 +1,5 @@
 id,nombre,marca,categoria,formato,presentacion,precio,precio_3ml,precio_5ml,precio_10ml,stock,mililitros_disponibles,disponible,visible,destacado,oferta,precio_anterior,imagen,descripcion,orden
-p1,Khamrah Clasico,Lattafa,arabe,sellado,100 ml,155,,,,3,,TRUE,TRUE,TRUE,FALSE,,img/productos/LattafaKhamrah.png,"Fragancia de lujo con notas de dátiles, praliné, canela y vainilla.",1
+p1,Khamrah Clasico,Lattafa,arabe,sellado,100 ml,155,,,,3,,TRUE,TRUE,TRUE,TRUE,180,img/productos/LattafaKhamrah.png,"Fragancia de lujo con notas de dátiles, praliné, canela y vainilla.",1
 p2,Honor and Glory,Lattafa,arabe,sellado,100 ml,145,,,,1,,TRUE,TRUE,FALSE,FALSE,,img/productos/LattafaHonorandGlory.png,Combinación tropical y cremosa con acordes de piña brulée y especias.,2
 p3,Khamrah Qahwa,Lattafa,arabe,sellado,100 ml,155,,,,2,,TRUE,TRUE,TRUE,FALSE,,img/productos/LattafaKhamrahQahwa.png,Fusión del clásico Khamrah con un fondo estimulante de café tostado.,3
 p4,Mandarin Sky,Armaf,arabe,sellado,100 ml,160,,,,2,,TRUE,TRUE,TRUE,FALSE,,img/productos/ArmafMandarinSky.png,"Aroma cítrico frutal con notas de mandarina, haba tonka y caramelo.",4

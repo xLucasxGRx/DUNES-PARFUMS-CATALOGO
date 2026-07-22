@@ -14,8 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Inicializar animaciones de revelación con Intersection Observer
     inicializarScrollReveal();
 
-    // 4. Renderizar productos destacados en la página de inicio
+    // 4. Renderizar productos destacados y oferta especial en la página de inicio
     cargarProductosDestacadosHome();
+    cargarOfertaEspecialHome();
 
     // 5. Configurar enlaces de WhatsApp y botones flotantes
     inicializarEnlacesWhatsApp();
@@ -254,6 +255,131 @@ async function cargarProductosDestacadosHome() {
         console.error('Error al cargar fragancias destacadas:', err);
         if (section) section.style.display = 'none';
         grid.innerHTML = '';
+    }
+}
+
+/**
+ * Carga y renderiza dinámicamente la Oferta Especial en index.html
+ */
+async function cargarOfertaEspecialHome() {
+    const section = document.getElementById('ofertas');
+    if (!section) return;
+
+    try {
+        const prod = await window.productosModulo.obtenerProductoOferta();
+
+        if (!prod) {
+            section.style.display = 'none';
+            return;
+        }
+
+        section.style.display = 'block';
+
+        const badgeEl = document.getElementById('weekly-offer-badge');
+        const imgEl = document.getElementById('weekly-offer-img');
+        const subtitleEl = document.getElementById('weekly-offer-subtitle');
+        const titleEl = document.getElementById('weekly-offer-title');
+        const descEl = document.getElementById('weekly-offer-desc');
+        const priceOldEl = document.getElementById('weekly-offer-price-old');
+        const priceNewEl = document.getElementById('weekly-offer-price-new');
+        const stockEl = document.getElementById('weekly-offer-stock');
+        const validityEl = document.getElementById('weekly-offer-validity');
+        const btnEl = document.getElementById('weekly-offer-btn');
+
+        const esDecant = prod.categoria === 'decants';
+        const estaAgotado = esDecant
+            ? (!prod.disponible || (prod.mililitrosDisponibles !== undefined && prod.mililitrosDisponibles < 3))
+            : (!prod.disponible || (prod.stock !== undefined && prod.stock <= 0));
+
+        // Subtítulo
+        if (subtitleEl) {
+            subtitleEl.textContent = prod.ofertaSubtitulo || (esDecant ? 'DECANT DESTACADO' : 'PERFUME ÁRABE DESTACADO');
+        }
+
+        // Título
+        if (titleEl) {
+            titleEl.textContent = prod.ofertaTitulo || `${prod.nombre} - ${prod.marca}`;
+        }
+
+        // Descripción
+        if (descEl) {
+            descEl.textContent = prod.descripcion || 'Descubre esta fragancia seleccionada especialmente por Dunes Parfums.';
+        }
+
+        // Imagen
+        if (imgEl) {
+            imgEl.src = prod.imagen;
+            imgEl.alt = `${prod.nombre} - ${prod.marca} en oferta especial`;
+        }
+
+        // Precios y Descuento
+        const precioActual = esDecant ? (prod.precio || 15) : prod.precio;
+        if (priceNewEl) {
+            priceNewEl.textContent = esDecant ? 'Desde S/ 15.00' : formatearMoneda(precioActual);
+        }
+
+        const precioAnterior = prod.precioAnterior;
+        const tieneDescuentoValido = !esDecant &&
+            typeof precioAnterior === 'number' &&
+            precioAnterior > precioActual &&
+            precioActual > 0;
+
+        if (tieneDescuentoValido) {
+            if (priceOldEl) {
+                priceOldEl.textContent = formatearMoneda(precioAnterior);
+                priceOldEl.style.display = 'inline-block';
+            }
+            const porcentaje = Math.round(((precioAnterior - precioActual) / precioAnterior) * 100);
+            if (badgeEl && porcentaje > 0) {
+                badgeEl.textContent = `${porcentaje}% OFF`;
+                badgeEl.style.display = 'inline-block';
+            } else if (badgeEl) {
+                badgeEl.style.display = 'none';
+            }
+        } else {
+            if (priceOldEl) priceOldEl.style.display = 'none';
+            if (badgeEl) badgeEl.style.display = 'none';
+        }
+
+        // Stock
+        if (stockEl) {
+            if (prod.ofertaTextoStock) {
+                stockEl.textContent = prod.ofertaTextoStock;
+            } else if (estaAgotado) {
+                stockEl.textContent = 'Actualmente agotado';
+            } else if (esDecant) {
+                stockEl.textContent = `Stock disponible: ${prod.mililitrosDisponibles || 0} ml`;
+            } else if (prod.stock === 1) {
+                stockEl.textContent = 'Última unidad disponible';
+            } else {
+                stockEl.textContent = `Stock disponible: ${prod.stock} unidades`;
+            }
+        }
+
+        // Vigencia
+        if (validityEl) {
+            validityEl.textContent = prod.ofertaVigencia || 'Válido hasta agotar stock.';
+        }
+
+        // Botón y evento WhatsApp sin emojis
+        if (btnEl) {
+            const textoBoton = prod.ofertaTextoBoton || (estaAgotado ? 'CONSULTAR DISPONIBILIDAD' : 'CONSULTAR OFERTA POR WHATSAPP');
+            btnEl.textContent = textoBoton;
+
+            btnEl.onclick = (e) => {
+                e.preventDefault();
+                let msg = `Hola, Dunes Parfums.\n\nDeseo consultar la oferta de:\n${prod.nombre}\nPresentación: ${prod.presentacion || (esDecant ? 'Decant' : 'Sellado')}\nPrecio de oferta: S/${precioActual.toFixed(2)}`;
+                if (tieneDescuentoValido) {
+                    msg += `\nPrecio anterior: S/${precioAnterior.toFixed(2)}`;
+                }
+                const url = `https://wa.me/51986510573?text=${encodeURIComponent(msg)}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+            };
+        }
+
+    } catch (err) {
+        console.error('Error al cargar la oferta especial:', err);
+        section.style.display = 'none';
     }
 }
 

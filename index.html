@@ -212,40 +212,38 @@
                     <h2 class="section-title">Fragancia de la Semana</h2>
                 </div>
 
-                <div class="offer-card reveal">
+                <div class="offer-card reveal" id="weekly-offer-card">
                     <div class="offer-grid">
                         <!-- Lado Imagen -->
                         <div class="offer-img-side">
-                            <span class="offer-badge" id="weekly-offer-badge">14% OFF</span>
-                            <img src="img/productos/LattafaKhamrah.png" alt="Lattafa Khamrah Clasico de 100 ml en oferta semanal" class="offer-img" loading="lazy">
+                            <span class="offer-badge" id="weekly-offer-badge" style="display: none;">14% OFF</span>
+                            <img src="" alt="Oferta especial" class="offer-img" id="weekly-offer-img" loading="lazy">
                         </div>
 
                         <!-- Lado Información -->
                         <div class="offer-content-side">
-                            <span class="offer-pre">Perfume Árbe Destacado</span>
-                            <h3 class="offer-title">Khamrah Clasico - Lattafa</h3>
-                            <p class="offer-desc">
-                                Una fragancia de lujo unisex que combina notas dulces de dátiles, praliné y canela, sobre un fondo cálido y duradero de vainilla y haba tonka. Ideal para climas templados y eventos nocturnos distinguidos.
+                            <span class="offer-pre" id="weekly-offer-subtitle">PERFUME ÁRABE DESTACADO</span>
+                            <h3 class="offer-title" id="weekly-offer-title">Cargando Oferta...</h3>
+                            <p class="offer-desc" id="weekly-offer-desc">
+                                Descubre esta fragancia seleccionada especialmente por Dunes Parfums.
                             </p>
                             
-                            <div class="offer-price-box">
-                                <span class="offer-price-old">S/ 180.00</span>
-                                <span class="offer-price-new">S/ 155.00</span>
+                            <div class="offer-price-box" id="weekly-offer-price-box">
+                                <span class="offer-price-old" id="weekly-offer-price-old" style="display: none;"></span>
+                                <span class="offer-price-new" id="weekly-offer-price-new"></span>
                             </div>
 
                             <div class="offer-meta">
-                                <div class="offer-meta-item">
-                                    <span class="offer-meta-icon" aria-hidden="true">🔥</span>
-                                    <span>Stock limitado: 3 unidades</span>
+                                <div class="offer-meta-item" id="weekly-offer-stock-item">
+                                    <span id="weekly-offer-stock">Stock disponible</span>
                                 </div>
-                                <div class="offer-meta-item">
-                                    <span class="offer-meta-icon" aria-hidden="true">📅</span>
-                                    <span>Válido hasta agotar stock semanal</span>
+                                <div class="offer-meta-item" id="weekly-offer-validity-item">
+                                    <span id="weekly-offer-validity">Válido hasta agotar stock</span>
                                 </div>
                             </div>
 
                             <!-- Botón de compra / enlace WhatsApp -->
-                            <button class="btn btn-primary" onclick="window.whatsappConfig.consultarDisponibilidad('Khamrah Clasico', 'Lattafa', '100 ml')" aria-label="Consultar por Khamrah Clasico de Lattafa en WhatsApp">
+                            <button class="btn btn-primary" id="weekly-offer-btn" aria-label="Consultar oferta por WhatsApp">
                                 Consultar Oferta por WhatsApp
                             </button>
                         </div>
@@ -320,35 +318,62 @@
                                  <a href="https://wa.me/51986510573?text=Hola%2C%20deseo%20consultar%20la%20ubicaci%C3%B3n%20de%20Dunes%20Parfums%20en%20Cacatachi%2C%20Tarapoto." target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;" aria-label="Consultar ubicación por WhatsApp">
                                      💬 Consultar Ubicación por WhatsApp
                                  </a>
-                             </div>
-                         </div>
-                     </div>
+        <!-- 7. UBICACIÓN Y CONTACTO -->
+        <section class="section-padding location-section" id="ubicacion">
+            <div class="container">
+                <div class="section-header reveal">
+                    <span class="section-subtitle">Visítanos</span>
+                    <h2 class="section-title">Ubicación y Atención</h2>
+                </div>
 
-                     <!-- Bloque del Mapa Integrado -->
-                     <div class="map-container-wrapper" style="width: 100%;">
-                         <div class="map-container">
-                             <iframe
-                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.551980893049!2d-76.4475459!3d-6.4515598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91ba0990ab18215d%3A0xab3ee9fce3ec8775!2sDunes%20Parfums!5e0!3m2!1ses-419!2spe!4v1710000000000!5m2!1ses-419!2spe"
-                                 width="100%"
-                                 height="100%"
-                                 style="border: 0;"
-                                 allowfullscreen=""
-                                 loading="lazy"
-                                 referrerpolicy="no-referrer-when-downgrade"
-                                 title="Ubicación de Dunes Parfums en Cacatachi, Tarapoto">
-                             </iframe>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </section>
-     </main>
+                <div class="location-grid">
+                    <!-- Información de Contacto y Tienda -->
+                    <div class="location-info-side reveal">
+                        <div class="location-card">
+                            <h3 class="location-title">Dunes Parfums</h3>
+                            <p class="location-desc">
+                                Atención personalizada para elección de fragancias árabes, diseñador y nicho en Tarapoto y envíos asegurados a todo el Perú.
+                            </p>
+
+                            <ul class="location-details-list">
+                                <li>
+                                    <strong>Dirección:</strong> Cacatachi, Tarapoto, San Martín, Perú.
+                                </li>
+                                <li>
+                                    <strong>Modalidades:</strong> Delivery local, Envío por agencia y Recojo en local.
+                                </li>
+                                <li>
+                                    <strong>Horario de atención:</strong> Lunes a Sábado: 9:00 am - 8:00 pm.
+                                </li>
+                                <li>
+                                    <strong>Atención directa:</strong> WhatsApp oficial (+51 986 510 573).
+                                </li>
+                            </ul>
+
+                            <div class="location-btn-box">
+                                <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-maps-direct" aria-label="Abrir mapa en Google Maps">
+                                    Abrir en Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mapa de Google Maps Integrado -->
+                    <div class="location-map-side reveal">
+                        <div class="map-wrapper">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.717144983054!2d-76.4447366249683!3d-6.430349993560731!2m2!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91b7470077884d41%3A0x7d6f5fbca9e7e7a8!2sDunes%20Parfums!5e0!3m2!1ses!2spe!4v1700000000000!5m2!1ses!2spe" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de ubicación oficial de Dunes Parfums"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- 8. PIE DE PÁGINA (FOOTER) -->
     <footer class="footer-main">
         <div class="container">
             <div class="footer-grid">
-                <!-- Columna: Sobre Nosotros -->
+                <!-- Columna: Marca y Redes -->
                 <div class="footer-col">
                     <h3 class="footer-title">Dunes Parfums</h3>
                     <p class="footer-about-text">
@@ -391,19 +416,15 @@
                     <h3 class="footer-title">Contacto</h3>
                     <ul class="footer-info-list">
                         <li>
-                            <span class="footer-info-icon" aria-hidden="true">📍</span>
                             <span>Cacatachi, Tarapoto · Delivery local · Envíos a todo el Perú</span>
                         </li>
                         <li>
-                            <span class="footer-info-icon" aria-hidden="true">🗺️</span>
                             <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: underline;" aria-label="Ver ubicación de Dunes Parfums en Google Maps">Ver ubicación</a>
                         </li>
                         <li>
-                            <span class="footer-info-icon" aria-hidden="true">💬</span>
                             <span>Atención por WhatsApp</span>
                         </li>
                         <li>
-                            <span class="footer-info-icon" aria-hidden="true">✉️</span>
                             <span>dunesparfums@gmail.com</span>
                         </li>
                     </ul>
@@ -432,11 +453,11 @@
 
     <!-- Scripts Modulares (Cargados secuencialmente) -->
     <script src="js/config.js"></script>
-    <script src="js/productos-service.js?v=20260721-destacados-final"></script>
+    <script src="js/productos-service.js?v=20260721-oferta-dinamica-1"></script>
     <script src="js/whatsapp.js"></script>
-    <script src="js/productos.js?v=20260721-destacados-final"></script>
+    <script src="js/productos.js?v=20260721-oferta-dinamica-1"></script>
     <script src="js/carrito.js"></script>
-    <script src="js/interfaz.js?v=20260721-destacados-final"></script>
+    <script src="js/interfaz.js?v=20260721-oferta-dinamica-1"></script>
     <script src="js/catalogo.js"></script>
 </body>
 </html>

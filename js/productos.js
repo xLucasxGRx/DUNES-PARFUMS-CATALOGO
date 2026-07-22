@@ -63,10 +63,37 @@ async function obtenerProductoPorId(id) {
     return todos.find(p => String(p.id) === String(id)) || null;
 }
 
+/**
+ * Obtiene el producto activo para la Oferta Especial (visible = true && oferta = true)
+ * Si hay múltiples, selecciona el primero según el campo orden y emite un warning en consola.
+ * @returns {Promise<Object|null>}
+ */
+async function obtenerProductoOferta() {
+    const todos = await obtenerProductos();
+    const ofertas = todos
+        .filter(p => p.visible === true && p.oferta === true)
+        .sort((a, b) => {
+            const ordenA = a.orden !== null && a.orden !== undefined ? Number(a.orden) : 9999;
+            const ordenB = b.orden !== null && b.orden !== undefined ? Number(b.orden) : 9999;
+            return ordenA - ordenB;
+        });
+
+    if (ofertas.length === 0) {
+        return null;
+    }
+
+    if (ofertas.length > 1) {
+        console.warn(`Hay más de una oferta activa (${ofertas.length}). Se mostrará la primera según el campo orden: "${ofertas[0].nombre}".`);
+    }
+
+    return ofertas[0];
+}
+
 // Hacer las funciones disponibles globalmente
 window.productosModulo = {
     obtenerProductos,
     obtenerProductosPorCategoria,
     obtenerProductosDestacados,
-    obtenerProductoPorId
+    obtenerProductoPorId,
+    obtenerProductoOferta
 };

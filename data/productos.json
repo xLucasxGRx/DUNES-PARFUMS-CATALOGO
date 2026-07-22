@@ -14,7 +14,8 @@
     "imagen": "img/productos/LattafaKhamrah.png",
     "descripcion": "Fragancia de lujo con notas de dátiles, praliné, canela y vainilla.",
     "destacado": true,
-    "oferta": false
+    "oferta": true,
+    "precioAnterior": 180.00
   },
   {
     "id": "p2",
