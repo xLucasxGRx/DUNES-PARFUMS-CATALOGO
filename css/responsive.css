@@ -700,10 +700,10 @@
   }
 
   /* ==========================================================================
-     COMPACTACIÓN DEL CHECKOUT EN CELULAR (FASE U8.3)
+     COMPACTACIÓN Y ELIMINACIÓN DE ESPACIOS INTERNOS DEL CHECKOUT EN CELULAR (FASE U8.3)
      ========================================================================== */
   #page-carrito main.section-padding {
-    padding-top: 48px !important;
+    padding-top: 40px !important;
     padding-bottom: 24px !important;
     padding-inline: 14px !important;
   }
@@ -712,9 +712,24 @@
     gap: 16px !important;
   }
 
+  #page-carrito .cart-summary-column,
+  #page-carrito .summary-box,
+  #page-carrito #customer-form,
+  #page-carrito .delivery-section,
+  #page-carrito #block-delivery-options,
+  #page-carrito #block-agencia,
+  #page-carrito #block-recojo-local,
+  #page-carrito #block-total-pagar {
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    justify-content: flex-start !important;
+    align-content: flex-start !important;
+  }
+
   #page-carrito .summary-box {
     padding: 16px 14px !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 26px !important;
     border-radius: 12px !important;
   }
 
@@ -723,6 +738,7 @@
   #page-carrito .summary-title {
     font-size: 1.15rem !important;
     margin-bottom: 12px !important;
+    margin-top: 0 !important;
   }
 
   #page-carrito .summary-row {
@@ -741,6 +757,8 @@
     gap: 8px !important;
     border-radius: 8px !important;
     min-height: 44px !important;
+    height: auto !important;
+    margin-bottom: 0 !important;
   }
 
   #page-carrito .delivery-option-title {
@@ -767,6 +785,7 @@
     padding: 9px 11px !important;
     font-size: 0.8rem !important;
     min-height: 40px !important;
+    height: auto !important;
     border-radius: 8px !important;
   }
 
@@ -791,6 +810,11 @@
     font-size: 0.78rem !important;
   }
 
+  #page-carrito #customer-form {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
   #page-carrito .form-group {
     margin-bottom: 10px !important;
     gap: 3px !important;
@@ -812,7 +836,8 @@
 
   #page-carrito #block-total-pagar {
     padding: 12px 14px !important;
-    margin-bottom: 12px !important;
+    margin-top: 22px !important;
+    margin-bottom: 0 !important;
     border-radius: 8px !important;
   }
 
@@ -824,13 +849,16 @@
     min-height: 46px !important;
     padding: 10px 16px !important;
     font-size: 0.88rem !important;
-    margin-top: 8px !important;
+    margin-top: 18px !important;
+    margin-bottom: 0 !important;
     border-radius: 8px !important;
   }
 
+  #page-carrito .checkout-note,
   #page-carrito .footer-disclaimer,
   #page-carrito .cart-info-note {
-    margin-top: 8px !important;
+    margin-top: 16px !important;
+    margin-bottom: 0 !important;
     font-size: 0.76rem !important;
     line-height: 1.35 !important;
   }
