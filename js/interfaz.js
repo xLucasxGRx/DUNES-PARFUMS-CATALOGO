@@ -160,7 +160,7 @@ async function cargarProductosDestacadosHome() {
             : (!prod.disponible || prod.stock <= 0);
 
         if (estaAgotado) {
-            card.classList.add('out-of-stock');
+            card.classList.add('out-of-stock', 'is-soldout');
         }
 
         // Construir etiquetas

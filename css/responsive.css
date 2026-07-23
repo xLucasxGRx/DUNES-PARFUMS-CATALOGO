@@ -702,6 +702,23 @@
     transition: var(--transition-base) !important;
   }
 
+  #catalogo-productos-grid .product-card.out-of-stock,
+  .products-grid .product-card.out-of-stock,
+  #catalogo-productos-grid .product-card.is-soldout,
+  .products-grid .product-card.is-soldout {
+    background: linear-gradient(180deg, rgba(255, 244, 244, 0.95), rgba(255, 250, 250, 0.98)) !important;
+    border: 1px solid #e6b8b8 !important;
+    border-top: 4px solid #c96b6b !important;
+    box-shadow: 0 4px 14px rgba(120, 40, 40, 0.08) !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-image-container,
+  .products-grid .product-card.out-of-stock .product-image-container,
+  #catalogo-productos-grid .product-card.is-soldout .product-image-container,
+  .products-grid .product-card.is-soldout .product-image-container {
+    background: radial-gradient(circle at center, rgba(190, 70, 70, 0.10), transparent 65%), #fff8f8 !important;
+  }
+
   #catalogo-productos-grid .product-image-container,
   .products-grid .product-image-container {
     grid-area: image !important;
@@ -753,7 +770,16 @@
   }
 
   #catalogo-productos-grid .product-tag.promo-tag,
-  .products-grid .product-tag.promo-tag,
+  .products-grid .product-tag.promo-tag {
+    position: absolute !important;
+    top: 6px !important;
+    left: 6px !important;
+    font-size: 9px !important;
+    padding: 3px 6px !important;
+    line-height: 1 !important;
+    z-index: 3 !important;
+  }
+
   #catalogo-productos-grid .product-tag.out-tag,
   .products-grid .product-tag.out-tag {
     position: absolute !important;
@@ -763,6 +789,10 @@
     padding: 3px 6px !important;
     line-height: 1 !important;
     z-index: 3 !important;
+    background-color: #3A3D42 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #525860 !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
   }
 
   #catalogo-productos-grid .product-actions-overlay,
@@ -916,6 +946,14 @@
     position: static !important;
     margin: 0 !important;
     transform: none !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer .btn-query-wa,
+  .products-grid .product-card-footer .btn-query-wa,
+  .btn-query-wa {
+    background-color: #4A2828 !important;
+    border: 1px solid #8C4444 !important;
+    color: #FFFFFF !important;
   }
 
   #catalogo-productos-grid .btn-details-compact .btn-icon-svg,

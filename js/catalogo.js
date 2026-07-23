@@ -443,6 +443,10 @@ function filtrarYRenderizar(productos, estado, grid) {
             ? (!prod.disponible || prod.mililitrosDisponibles < 3)
             : (!prod.disponible || prod.stock <= 0);
 
+        if (estaAgotado) {
+            card.classList.add('out-of-stock', 'is-soldout');
+        }
+
         let tagHtml = '';
         if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
             tagHtml = `<span class="product-tag promo-tag">OFERTA</span>`;

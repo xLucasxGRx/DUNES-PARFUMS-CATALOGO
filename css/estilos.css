@@ -903,8 +903,9 @@ button:disabled,
     position: absolute;
     top: 12px;
     left: 12px;
-    background-color: #6F6F6F;
+    background-color: #A83232;
     color: #FFFFFF;
+    border: 1px solid #8C2828;
     font-family: 'Montserrat', sans-serif;
     font-size: 11px;
     font-weight: 700;
@@ -914,6 +915,7 @@ button:disabled,
     border-radius: 4px;
     z-index: 3;
     line-height: 1;
+    box-shadow: 0 2px 6px rgba(140, 40, 40, 0.25);
 }
 
 /* Acciones Hover Overlay */
@@ -989,35 +991,36 @@ button:disabled,
     line-height: 1.35;
 }
 
-/* Stock en Línea Limpia */
+/* Stock en Línea Limpia con Diferenciación */
 .product-stock-status {
     display: inline-flex;
     align-items: center;
     align-self: flex-start;
     gap: 6px;
     margin: 2px 0 0;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    border-radius: 0;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     line-height: 1.3;
 }
 
 .product-stock-status.in-stock {
-    color: var(--catalog-green, #159447);
+    color: #159447;
+    background-color: rgba(21, 148, 71, 0.08);
 }
 
 .product-stock-status.out {
-    color: var(--color-danger, #DC3545);
+    color: #9C2727;
+    background-color: rgba(200, 50, 50, 0.12);
+    font-weight: 700;
 }
 
 .stock-dot {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     flex-shrink: 0;
     border-radius: 50%;
     background-color: currentColor;
@@ -1120,8 +1123,7 @@ button:disabled,
 }
 
 .card-buttons-flex .btn-add-cart,
-.card-buttons-flex .btn-select-option,
-.card-buttons-flex .btn-query-wa {
+.card-buttons-flex .btn-select-option {
     width: 100%;
     min-width: 0;
     max-width: 100%;
@@ -1147,6 +1149,34 @@ button:disabled,
     transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
 }
 
+/* Botón de Consultar para Producto Agotado (Estilo Rojo Oscuro Sobrio) */
+.card-buttons-flex .btn-query-wa,
+.btn-query-wa {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 46px;
+    background-color: #4A2828 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #8C4444 !important;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding-inline: 8px;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
 .card-buttons-flex .btn-icon-svg,
 .btn-details-compact .btn-icon-svg {
     flex-shrink: 0;
@@ -1156,18 +1186,54 @@ button:disabled,
 
 @media (hover: hover) and (pointer: fine) {
     .card-buttons-flex .btn-add-cart:hover,
-    .card-buttons-flex .btn-select-option:hover,
-    .card-buttons-flex .btn-query-wa:hover {
+    .card-buttons-flex .btn-select-option:hover {
         background-color: var(--color-primary-dark, #8E671D);
         border-color: var(--color-primary, #B18225);
         color: #FFFFFF;
         transform: translateY(-1px);
     }
+
+    .card-buttons-flex .btn-query-wa:hover,
+    .btn-query-wa:hover {
+        background-color: #381E1E !important;
+        border-color: #6D3434 !important;
+        color: #FFFFFF !important;
+        transform: none !important;
+    }
 }
 
-/* Estado Agotado en tarjeta */
-.product-card.out-of-stock .product-img {
-    filter: grayscale(0.8) opacity(0.6);
+/* Estado Agotado en Tarjeta de Producto (Tonalidad Rojo Suave Elegante Premium) */
+.product-card.out-of-stock,
+.product-card.is-soldout {
+    background: linear-gradient(180deg, rgba(255, 244, 244, 0.95), rgba(255, 250, 250, 0.98)) !important;
+    border: 1px solid #e6b8b8 !important;
+    border-top: 4px solid #c96b6b !important;
+    box-shadow: 0 8px 22px rgba(120, 40, 40, 0.08) !important;
+}
+
+.product-card.out-of-stock .product-image-container,
+.product-card.is-soldout .product-image-container {
+    background: radial-gradient(circle at center, rgba(190, 70, 70, 0.10), transparent 65%), #fff8f8 !important;
+}
+
+.product-card.out-of-stock .product-img,
+.product-card.is-soldout .product-img {
+    filter: grayscale(20%) saturate(75%) brightness(0.96) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .product-card.out-of-stock:hover,
+    .product-card.is-soldout:hover {
+        transform: translateY(-2px);
+        border-color: #d89e9e !important;
+        border-top-color: #b85252 !important;
+        box-shadow: 0 10px 25px rgba(120, 40, 40, 0.12) !important;
+    }
+
+    .product-card.out-of-stock:hover .product-img,
+    .product-card.is-soldout:hover .product-img {
+        transform: scale(1.01) !important;
+    }
 }
 
 /* 5. Sección de Beneficios */
