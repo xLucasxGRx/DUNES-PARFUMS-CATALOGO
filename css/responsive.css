@@ -700,6 +700,24 @@
   }
 
   /* ==========================================================================
+     COMPACTAR ESPACIO SUPERIOR DE DETALLE DE PRODUCTO EN MÓVIL
+     ========================================================================== */
+  #page-producto main.section-padding,
+  #page-producto main.container {
+    padding-top: 24px !important;
+    margin-top: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  #page-producto #product-detail-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  /* ==========================================================================
      COMPACTACIÓN Y ELIMINACIÓN DE ESPACIOS INTERNOS DEL CHECKOUT EN CELULAR (FASE U8.3)
      ========================================================================== */
   #page-carrito main.section-padding {
@@ -1523,7 +1541,7 @@
     margin-inline: auto !important;
     box-sizing: border-box !important;
     padding-inline: 14px !important;
-    margin-top: 76px !important;
+    margin-top: 0 !important;
     padding-bottom: 24px !important;
   }
 
