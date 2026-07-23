@@ -341,6 +341,14 @@
     <script src="js/productos.js"></script>
     <script src="js/carrito.js"></script>
     <script src="js/interfaz.js"></script>
-    <script src="js/catalogo.js"></script>
+    <!-- Iconos Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+        });
+    </script>
 </body>
 </html>
