@@ -612,10 +612,10 @@ function filtrarYRenderizar(productos, estado, grid) {
         }
 
         secContainer.innerHTML = `
-            <div class="secondary-quote-block" style="text-align: center; padding: 40px 20px; background-color: var(--color-bg-light); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); max-width: 600px; margin: 40px auto; box-shadow: var(--box-shadow-sm);">
-                <h3 style="font-family: var(--font-title); font-size: 1.25rem; color: var(--color-text); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"></h3>
-                <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;"></p>
-                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;" aria-label="${config.ariaLabel}">
+            <div class="secondary-quote-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px 20px; background-color: var(--surface-card, #FFFEFC); border: 1px solid var(--catalog-gold-border, #E7D3A5); border-radius: var(--radius-card, 16px); max-width: 600px; margin: 36px auto; box-shadow: var(--shadow-sm, 0 4px 12px rgba(31, 24, 12, 0.05));">
+                <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: #171717; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;"></h3>
+                <p style="font-family: 'Montserrat', sans-serif; color: #6F6F6F; font-size: 0.92rem; line-height: 1.5; margin-bottom: 18px; text-align: center; max-width: 480px;"></p>
+                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin: 0 auto;" aria-label="${config.ariaLabel}">
                     <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 4px;"></i>
                     <span></span>
                 </a>

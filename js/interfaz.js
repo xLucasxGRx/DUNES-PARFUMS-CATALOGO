@@ -940,17 +940,74 @@ function vincularEventosCarritoDOM(container) {
         });
     });
 
-    // Vaciar carrito
+    // Vaciar carrito con Modal Personalizado
     const emptyBtn = document.getElementById('btn-empty-cart');
     if (emptyBtn) {
-        // Clonar botón para limpiar event listeners antiguos y evitar duplicación
         const newEmptyBtn = emptyBtn.cloneNode(true);
         emptyBtn.parentNode.replaceChild(newEmptyBtn, emptyBtn);
-        newEmptyBtn.addEventListener('click', () => {
-            if (confirm('¿Estás seguro de que deseas vaciar el pedido actual?')) {
+
+        const modal = document.getElementById('modal-confirm-vaciar');
+        const btnCancelar = document.getElementById('btn-cancelar-vaciar');
+        const btnConfirmar = document.getElementById('btn-confirmar-vaciar');
+
+        const abrirModalVaciar = () => {
+            if (modal) {
+                modal.style.display = 'flex';
+                requestAnimationFrame(() => modal.classList.add('active'));
+                modal.setAttribute('aria-hidden', 'false');
+                if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+            } else if (window.carritoModulo && window.carritoModulo.vaciarCarrito) {
                 window.carritoModulo.vaciarCarrito();
             }
+        };
+
+        const cerrarModalVaciar = () => {
+            if (modal) {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    modal.setAttribute('aria-hidden', 'true');
+                }, 200);
+            }
+        };
+
+        newEmptyBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            abrirModalVaciar();
         });
+
+        if (btnCancelar && !btnCancelar.dataset.bound) {
+            btnCancelar.dataset.bound = 'true';
+            btnCancelar.addEventListener('click', (e) => {
+                e.preventDefault();
+                cerrarModalVaciar();
+            });
+        }
+
+        if (btnConfirmar && !btnConfirmar.dataset.bound) {
+            btnConfirmar.dataset.bound = 'true';
+            btnConfirmar.addEventListener('click', (e) => {
+                e.preventDefault();
+                cerrarModalVaciar();
+                if (window.carritoModulo && window.carritoModulo.vaciarCarrito) {
+                    window.carritoModulo.vaciarCarrito();
+                }
+            });
+        }
+
+        if (modal && !modal.dataset.bound) {
+            modal.dataset.bound = 'true';
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    cerrarModalVaciar();
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    cerrarModalVaciar();
+                }
+            });
+        }
     }
 }
 

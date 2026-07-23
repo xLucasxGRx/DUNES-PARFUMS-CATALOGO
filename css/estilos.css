@@ -2478,23 +2478,32 @@ button:disabled,
 
 /* --- Selector de Variantes de Decants --- */
 .detail-variant-selector {
-    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 16px;
+    width: 100%;
 }
 
 .variant-selector-title {
-    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--color-bg-dark);
-    margin-bottom: 16px;
+    color: var(--catalog-text, #171717);
+    margin-bottom: 12px;
     font-weight: 700;
+    text-align: center;
 }
 
 .variant-options-row {
     display: flex;
+    justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 12px;
+    width: 100%;
 }
 
 .variant-option-btn {
@@ -2563,14 +2572,17 @@ button:disabled,
 }
 
 .variant-selected-label {
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.85rem;
-    color: var(--color-text-muted);
-    font-weight: 400;
+    color: var(--color-text-muted, #6F6F6F);
+    font-weight: 500;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .variant-selected-label strong {
-    color: var(--color-text-dark);
-    font-weight: 600;
+    color: var(--catalog-text, #171717);
+    font-weight: 700;
 }
 
 /* Botón de seleccionar presentación en tarjeta */
@@ -3036,4 +3048,196 @@ button:disabled,
     display: inline-block;
     color: var(--color-primary-dark);
     margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   CENTRADO DE BLOQUES INFORMATIVOS & MODAL VACIAR CARRITO (FASE U8.3)
+   ========================================================================== */
+
+/* Bloque de Cotización Secundaria */
+.secondary-quote-block {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 32px 24px !important;
+    background-color: var(--surface-card, #FFFEFC) !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    border-radius: var(--radius-card, 16px) !important;
+    max-width: 600px !important;
+    margin: 36px auto !important;
+    box-shadow: var(--shadow-sm, 0 4px 12px rgba(31, 24, 12, 0.05)) !important;
+    box-sizing: border-box !important;
+}
+
+.secondary-quote-block h3 {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-size: 1.35rem !important;
+    color: var(--catalog-text, #171717) !important;
+    margin-bottom: 8px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    text-align: center !important;
+}
+
+.secondary-quote-block p {
+    font-family: 'Montserrat', sans-serif !important;
+    color: var(--color-text-muted, #6F6F6F) !important;
+    font-size: 0.92rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+    max-width: 480px !important;
+}
+
+.secondary-quote-block .btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin: 0 auto !important;
+}
+
+/* Modal Personalizado para Vaciar Carrito */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(18, 18, 18, 0.70);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 250ms ease;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+    opacity: 1;
+}
+
+.modal-card {
+    background-color: var(--surface-card, #FFFEFC);
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: var(--radius-card, 18px);
+    width: 100%;
+    max-width: 420px;
+    padding: 28px 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transform: translateY(10px) scale(0.98);
+    transition: transform 250ms ease;
+    box-sizing: border-box;
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0) scale(1);
+}
+
+.modal-icon-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: rgba(201, 59, 59, 0.10);
+    border: 1px solid rgba(201, 59, 59, 0.25);
+    color: #C93B3B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--catalog-text, #171717);
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-message {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.92rem;
+    color: var(--catalog-text-secondary, #6F6F6F);
+    line-height: 1.5;
+    margin: 0 0 24px 0;
+    max-width: 340px;
+}
+
+.modal-actions-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-modal-cancel {
+    flex: 1;
+    min-height: 44px;
+    padding: 10px 16px;
+    background-color: #FAF8F4;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: var(--radius-control, 8px);
+    color: var(--catalog-text, #171717);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.btn-modal-cancel:hover {
+    background-color: #F3ECDC;
+    border-color: #C49A3E;
+}
+
+.btn-modal-danger {
+    flex: 1.2;
+    min-height: 44px;
+    padding: 10px 16px;
+    background-color: #C93B3B;
+    border: 1px solid #B02A2A;
+    border-radius: var(--radius-control, 8px);
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+.btn-modal-danger:hover {
+    background-color: #A82828;
+    box-shadow: 0 4px 12px rgba(201, 59, 59, 0.3);
+}
+
+@media screen and (max-width: 480px) {
+    .modal-card {
+        padding: 22px 18px;
+    }
+
+    .modal-actions-row {
+        flex-direction: column-reverse;
+        gap: 8px;
+    }
+
+    .btn-modal-cancel,
+    .btn-modal-danger {
+        width: 100%;
+        flex: none;
+    }
 }
