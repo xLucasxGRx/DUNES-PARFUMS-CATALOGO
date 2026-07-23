@@ -1424,6 +1424,11 @@
     font-size: 0.78rem !important;
   }
 
+  #page-carrito .agencia-condition-row {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+
   .hero-title {
     font-size: 1.85rem !important;
   }
