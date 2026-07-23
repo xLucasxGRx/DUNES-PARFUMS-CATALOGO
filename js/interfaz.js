@@ -1300,10 +1300,15 @@ let estadoCuponTemporal = {
 };
 
 function recalcularCuponEstado() {
-    if (!estadoCuponTemporal.codigo || !estadoCuponTemporal.cupon) {
+    if (!estadoCuponTemporal.codigo) {
         estadoCuponTemporal.aplicado = false;
         estadoCuponTemporal.resultado = null;
         return null;
+    }
+
+    if (!estadoCuponTemporal.cupon) {
+        estadoCuponTemporal.aplicado = false;
+        return estadoCuponTemporal.resultado;
     }
 
     const items = window.carritoModulo ? window.carritoModulo.obtenerCarrito() : [];
@@ -1601,6 +1606,12 @@ function actualizarResumenEntrega() {
             }
         } else {
             discountRow.style.display = 'none';
+            if (discountLabel) {
+                discountLabel.textContent = 'Descuento:';
+            }
+            if (discountValue) {
+                discountValue.textContent = '- S/ 0.00';
+            }
         }
     }
 

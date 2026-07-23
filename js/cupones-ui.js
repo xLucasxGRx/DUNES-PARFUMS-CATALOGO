@@ -21,19 +21,17 @@ const CuponesUI = (function () {
 
         switch (estado) {
             case 'codigo_vacio':
-                return 'Ingresa un código de cupón.';
             case 'cupon_no_encontrado':
-                return 'El código ingresado no es válido.';
+            case 'tipo_invalido':
+            case 'valor_invalido':
+            case 'fecha_invalida':
+                return 'CUPÓN NO VÁLIDO';
             case 'cupon_inactivo':
                 return 'Este cupón no se encuentra disponible.';
             case 'cupon_no_iniciado':
                 return 'Este cupón todavía no está disponible.';
             case 'cupon_vencido':
                 return 'Este cupón ya venció.';
-            case 'fecha_invalida':
-            case 'tipo_invalido':
-            case 'valor_invalido':
-                return 'No pudimos validar este cupón.';
             case 'carrito_vacio':
                 return 'Agrega productos antes de aplicar un cupón.';
             case 'sin_productos_elegibles':
@@ -44,11 +42,11 @@ const CuponesUI = (function () {
                 }
                 return 'El pedido no alcanza la compra mínima para este cupón.';
             case 'error_servicio':
-                return 'No pudimos consultar los cupones. Inténtalo nuevamente.';
+                return 'No pudimos validar el cupón. Inténtalo nuevamente.';
             case 'cupon_valido':
                 return 'Cupón aplicado correctamente.';
             default:
-                return resultado.mensaje || 'Ocurrió una novedad con el cupón.';
+                return 'CUPÓN NO VÁLIDO';
         }
     }
 
@@ -103,7 +101,7 @@ const CuponesUI = (function () {
                 feedbackBox.className = 'coupon-feedback feedback-warning';
                 feedbackBox.textContent = obtenerMensajeUsuario(resultado);
             }
-        } else if (resultado && !resultado.valido && resultado.estado !== 'codigo_vacio') {
+        } else if (resultado && !resultado.valido) {
             // Estado: ERROR O INVÁLIDO PERMANENTE TRAS INTENTO DE APLICACIÓN
             if (entryRow) entryRow.style.display = 'flex';
             if (appliedStateBox) appliedStateBox.style.display = 'none';
@@ -152,7 +150,7 @@ const CuponesUI = (function () {
         if (!codigo) {
             sincronizarInterfazCupon({
                 aplicado: false,
-                resultado: { valido: false, estado: 'codigo_vacio', mensaje: 'Ingresa un código de cupón.' }
+                resultado: { valido: false, estado: 'codigo_vacio', mensaje: 'CUPÓN NO VÁLIDO' }
             });
             return;
         }
