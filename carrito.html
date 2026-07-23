@@ -103,6 +103,24 @@
                             <span id="summary-delivery-label">Costo de envío:</span>
                             <span id="summary-delivery-cost" style="font-weight: 600; color: var(--color-text-muted);">Se calculará en la siguiente etapa</span>
                         </div>
+
+                        <!-- Bloque de Cupones -->
+                        <div class="coupon-section" id="coupon-section">
+                            <div class="coupon-entry-row" id="coupon-entry-row">
+                                <label for="coupon-code" class="sr-only">Código de cupón</label>
+                                <input type="text" id="coupon-code" class="coupon-input" placeholder="¿Tienes un cupón?" maxlength="40" autocomplete="off" spellcheck="false">
+                                <button type="button" id="coupon-apply-btn" class="btn-coupon-apply">Aplicar</button>
+                            </div>
+                            <div id="coupon-feedback" class="coupon-feedback" aria-live="polite" style="display: none;"></div>
+                            <div id="coupon-applied-state" class="coupon-applied-state" style="display: none;">
+                                <div class="coupon-applied-info">
+                                    <i data-lucide="tag" class="coupon-applied-icon" aria-hidden="true"></i>
+                                    <span id="coupon-applied-code" class="coupon-applied-code"></span>
+                                    <span id="coupon-applied-saving" class="coupon-applied-saving"></span>
+                                </div>
+                                <button type="button" id="coupon-remove-btn" class="coupon-remove-btn">Quitar</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="summary-total-row" style="margin-bottom: 25px;">
@@ -376,6 +394,7 @@
     <script src="js/productos-service.js"></script>
     <script src="js/cupones-service.js"></script>
     <script src="js/cupones.js"></script>
+    <script src="js/cupones-ui.js"></script>
     <script src="js/whatsapp.js?v=20260721-noemoji-1"></script>
     <script src="js/productos.js"></script>
     <script src="js/carrito.js"></script>
