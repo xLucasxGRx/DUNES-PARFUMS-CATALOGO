@@ -1017,3 +1017,330 @@
     padding: 10px 16px;
   }
 }
+
+/* ==========================================================================
+   Página de Detalle del Producto - Ajustes Responsivos Móviles (Fase U4)
+   Garantiza estructura de 1 sola columna sin desbordamientos ni cortes en <= 767px
+   ========================================================================== */
+@media screen and (max-width: 767px) {
+  /* 1. Contenedor principal en móvil */
+  #page-producto main.container,
+  #page-producto #product-detail-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-inline: auto !important;
+    box-sizing: border-box !important;
+    padding-inline: 14px !important;
+    margin-top: 76px !important;
+    padding-bottom: 24px !important;
+  }
+
+  /* 2. Tarjeta de detalle (1 sola columna limpia) */
+  #page-producto .product-detail-layout,
+  .product-detail-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    padding: 16px !important;
+    gap: 16px !important;
+    border-radius: 16px !important;
+    background-color: var(--color-bg-card-light, #FFFEFC) !important;
+    border: 1px solid var(--color-border, #E7D3A5) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+    margin: 0 auto !important;
+  }
+
+  /* 3. Lado de la imagen compacta */
+  #page-producto .detail-image-side,
+  .detail-image-side {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important; /* Elimina min-height heredada de escritorio */
+    box-sizing: border-box !important;
+    padding: 12px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: #f8f6f0 !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(197, 160, 89, 0.15) !important;
+  }
+
+  #page-producto .detail-product-img,
+  .detail-product-img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 300px !important; /* Compacta y proporcionada */
+    object-fit: contain !important;
+    padding: 4px !important;
+    min-height: 0 !important;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08)) !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* 4. Bloque de información */
+  #page-producto .detail-info-side,
+  .detail-info-side {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 4px 0 0 0 !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .detail-brand {
+    font-size: 0.8rem !important;
+    letter-spacing: 1.5px !important;
+    margin-bottom: 4px !important;
+    word-break: break-word !important;
+  }
+
+  .detail-title {
+    font-size: 1.65rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 6px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .detail-volume {
+    font-size: 0.9rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  .detail-price-box {
+    margin-bottom: 8px !important;
+  }
+
+  .detail-price {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+  }
+
+  .detail-stock-badge {
+    margin-bottom: 12px !important;
+    padding: 5px 10px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .detail-divider {
+    height: 1px !important;
+    margin: 12px 0 !important;
+    background-color: var(--color-border, #E5E5E5) !important;
+  }
+
+  .detail-description {
+    margin-bottom: 4px !important;
+  }
+
+  .detail-description h3 {
+    font-size: 0.85rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  .detail-description p {
+    font-size: 0.9rem !important;
+    line-height: 1.55 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* 5. Selector de Presentaciones (Decants: 3ml, 5ml, 10ml) */
+  #page-producto .detail-variant-selector,
+  .detail-variant-selector {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin-bottom: 8px !important;
+  }
+
+  .variant-selector-title {
+    font-size: 0.85rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .variant-options-row,
+  .presentation-options {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin-bottom: 10px !important;
+  }
+
+  .variant-option-btn,
+  .presentation-option {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 12px 16px !important;
+    height: auto !important;
+    min-height: 46px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    position: relative !important;
+  }
+
+  .variant-ml {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+  }
+
+  .variant-price {
+    font-size: 0.88rem !important;
+  }
+
+  /* 6. Control de Cantidad compacto y centrado */
+  #page-producto .detail-qty-picker-row,
+  .detail-qty-picker-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin-bottom: 16px !important;
+  }
+
+  .qty-label {
+    font-size: 0.9rem !important;
+  }
+
+  .qty-picker {
+    height: 40px !important;
+    min-height: 40px !important;
+    box-sizing: border-box !important;
+  }
+
+  .qty-btn {
+    width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    font-size: 1.1rem !important;
+  }
+
+  .qty-picker input {
+    width: 48px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* 7. Botones de acción inferiores */
+  #page-producto .detail-btn-row,
+  .detail-btn-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    margin-top: 4px !important;
+  }
+
+  #page-producto .detail-btn-row .btn,
+  .detail-btn-row .btn,
+  .btn-add-cart-detail,
+  .btn-query-detail {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+    padding: 12px 16px !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.2 !important;
+    border-radius: 10px !important;
+  }
+
+  /* 8. Botón flotante de WhatsApp sin obstrucción */
+  #page-producto .wa-float-btn,
+  .wa-float-btn {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 1.3rem !important;
+    z-index: 99 !important;
+  }
+
+  #page-producto footer.footer-main {
+    padding-bottom: 70px !important;
+  }
+}
+
+/* Ajustes adicionales seguros en 390px o menos */
+@media screen and (max-width: 390px) {
+  #page-producto main.container,
+  #page-producto #product-detail-container {
+    padding-inline: 10px !important;
+  }
+
+  #page-producto .product-detail-layout,
+  .product-detail-layout {
+    padding: 14px !important;
+    gap: 14px !important;
+  }
+
+  .detail-product-img {
+    max-height: 250px !important;
+  }
+
+  .detail-title {
+    font-size: 1.45rem !important;
+  }
+
+  .detail-price {
+    font-size: 1.6rem !important;
+  }
+
+  .detail-btn-row {
+    gap: 10px !important;
+  }
+
+  .detail-btn-row .btn,
+  .btn-add-cart-detail,
+  .btn-query-detail {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-inline: 8px !important;
+    font-size: 0.84rem !important;
+  }
+}
+
