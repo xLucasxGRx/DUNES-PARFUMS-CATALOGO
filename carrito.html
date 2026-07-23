@@ -120,34 +120,46 @@
                             <!-- Opción 1: Delivery Local -->
                             <label class="delivery-option-card" id="card-delivery-local">
                                 <input type="radio" name="tipoEntrega" value="delivery-local" aria-describedby="desc-delivery-local">
+                                <div class="delivery-option-icon" aria-hidden="true">
+                                    <i data-lucide="truck" class="icon-md"></i>
+                                </div>
                                 <div class="delivery-option-meta">
                                     <span class="delivery-option-title">Delivery local</span>
-                                    <span class="delivery-option-desc" id="desc-delivery-local">Disponible para Cacatachi, Morales, Tarapoto y La Banda de Shilcayo.</span>
+                                    <span class="delivery-option-desc" id="desc-delivery-local">Cacatachi, Morales, Tarapoto y La Banda.</span>
                                 </div>
+                                <span class="delivery-option-badge">Desde GRATIS</span>
                             </label>
 
                             <!-- Opción 2: Envío por Agencia -->
                             <label class="delivery-option-card" id="card-agencia">
                                 <input type="radio" name="tipoEntrega" value="agencia" aria-describedby="desc-agencia">
-                                <div class="delivery-option-meta">
-                                    <span class="delivery-option-title">Envío por agencia de transporte</span>
-                                    <span class="delivery-option-desc" id="desc-agencia">Realizamos envíos por agencia a todo el Perú.</span>
+                                <div class="delivery-option-icon" aria-hidden="true">
+                                    <i data-lucide="package-check" class="icon-md"></i>
                                 </div>
+                                <div class="delivery-option-meta">
+                                    <span class="delivery-option-title">Envío por agencia</span>
+                                    <span class="delivery-option-desc" id="desc-agencia">Envíos a todo el Perú por agencia.</span>
+                                </div>
+                                <span class="delivery-option-badge">Desde S/ 0.00</span>
                             </label>
 
                             <!-- Opción 3: Recojo en Local -->
                             <label class="delivery-option-card" id="card-recojo-local">
                                 <input type="radio" name="tipoEntrega" value="recojo-local" aria-describedby="desc-recojo-local">
+                                <div class="delivery-option-icon" aria-hidden="true">
+                                    <i data-lucide="store" class="icon-md"></i>
+                                </div>
                                 <div class="delivery-option-meta">
                                     <span class="delivery-option-title">Recojo en local</span>
-                                    <span class="delivery-option-desc" id="desc-recojo-local">Recoge tu pedido en nuestro local ubicado en Cacatachi, Tarapoto.</span>
+                                    <span class="delivery-option-desc" id="desc-recojo-local">Recoge en nuestro local en Cacatachi.</span>
                                 </div>
+                                <span class="delivery-option-badge gratis">GRATIS</span>
                             </label>
                         </div>
 
                         <!-- Bloque Dinámico: Delivery Local -->
                         <div id="block-delivery-local" style="display: none; margin-bottom: 20px;">
-                            <h5 style="font-size: 0.9rem; font-weight: 700; color: var(--color-text-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Selecciona tu zona *</h5>
+                            <h5 style="font-size: 0.9rem; font-weight: 700; color: var(--color-text-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Selecciona tu zona <span class="required-star">*</span></h5>
                             <div class="zone-selector-group" role="radiogroup" aria-label="Zonas de delivery local">
                                 <button type="button" class="zone-option-btn" data-zona="cacatachi">Cacatachi</button>
                                 <button type="button" class="zone-option-btn" data-zona="morales">Morales</button>
@@ -161,25 +173,25 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="delivery-name">Nombre Completo *</label>
+                                <label for="delivery-name">Nombre Completo <span class="required-star">*</span></label>
                                 <input type="text" id="delivery-name" placeholder="Ej. Juan Pérez" autocomplete="name">
                                 <span class="validation-error-msg" id="delivery-name-error">Ingresa tu nombre para continuar.</span>
                             </div>
 
                             <div class="form-group">
-                                <label for="delivery-phone">Número de Celular *</label>
+                                <label for="delivery-phone">Número de Celular <span class="required-star">*</span></label>
                                 <input type="tel" id="delivery-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
                                 <span class="validation-error-msg" id="delivery-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
                             </div>
 
                             <div class="form-group">
-                                <label for="delivery-address">Dirección de Entrega *</label>
+                                <label for="delivery-address">Dirección de Entrega <span class="required-star">*</span></label>
                                 <input type="text" id="delivery-address" placeholder="Ej. Jr. Independencia 434" autocomplete="street-address">
                                 <span class="validation-error-msg" id="delivery-address-error">Ingresa la dirección donde deseas recibir tu pedido.</span>
                             </div>
 
                             <div class="form-group">
-                                <label for="delivery-reference">Referencia de ubicación (opcional)</label>
+                                <label for="delivery-reference">Referencia de ubicación <span class="optional-text">(opcional)</span></label>
                                 <input type="text" id="delivery-reference" placeholder="Ej. Al frente de la Plaza de Armas">
                                 <span class="validation-error-msg" id="delivery-reference-error"></span>
                             </div>
@@ -188,7 +200,7 @@
                         <!-- Bloque Dinámico: Envío por Agencia -->
                         <div id="block-agencia" style="display: none; margin-bottom: 20px; background-color: var(--color-bg-light); padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius-sm);">
                             <p style="font-size: 0.95rem; color: var(--color-text); line-height: 1.5; margin: 0 0 10px 0;">
-                                📦 <strong>Envíos por agencia a todo el Perú.</strong>
+                                <i data-lucide="package-check" class="icon-sm" style="color: var(--catalog-gold, #B18225); vertical-align: middle; margin-right: 4px;"></i> <strong>Envíos por agencia a todo el Perú.</strong>
                             </p>
                             <div style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 12px;">
                                 <div>Compras menores de S/30: Embalaje y llevada a la agencia: S/4.00.</div>
@@ -208,18 +220,18 @@
                                     Nuestro local está ubicado en <strong>Cacatachi, Tarapoto</strong>. Antes de elegir esta opción, revisa nuestra ubicación para confirmar que puedes acercarte a recoger tu pedido.
                                 </p>
                                 <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;" aria-label="Abrir ubicación de Dunes Parfums en Google Maps">
-                                    📍 Ver ubicación en Google Maps
+                                    <i data-lucide="map-pin" class="icon-xs"></i> Ver ubicación en Google Maps
                                 </a>
                             </div>
 
                             <div class="form-group">
-                                <label for="recojo-name">Nombre Completo *</label>
+                                <label for="recojo-name">Nombre Completo <span class="required-star">*</span></label>
                                 <input type="text" id="recojo-name" placeholder="Ej. Juan Pérez" autocomplete="name">
                                 <span class="validation-error-msg" id="recojo-name-error">Ingresa tu nombre para coordinar el recojo.</span>
                             </div>
 
                             <div class="form-group">
-                                <label for="recojo-phone">Número de Celular *</label>
+                                <label for="recojo-phone">Número de Celular <span class="required-star">*</span></label>
                                 <input type="tel" id="recojo-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
                                 <span class="validation-error-msg" id="recojo-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
                             </div>

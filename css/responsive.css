@@ -636,12 +636,15 @@
     justify-content: center;
   }
   
+  #page-carrito .zone-selector-group,
   .zone-selector-group {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
   }
   
+  #page-carrito .summary-box,
   .summary-box {
-    padding: 20px;
+    padding: 20px !important;
   }
 }
 
@@ -1383,4 +1386,94 @@
     font-size: 0.84rem !important;
   }
 }
+
+/* ==========================================================================
+   FASE U7 — Estabilización Responsive Global (320px a 1920px)
+   ========================================================================== */
+
+/* 1. Ajustes para Ultra-Small (320px - 360px) */
+@media screen and (max-width: 360px) {
+  .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .logo-img {
+    max-width: 140px !important;
+    height: auto !important;
+  }
+
+  #page-carrito .delivery-option-card {
+    grid-template-columns: auto 1fr !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+  }
+
+  #page-carrito .delivery-option-badge {
+    grid-column: 1 / -1 !important;
+    text-align: left !important;
+    align-self: flex-start !important;
+    margin-top: 2px !important;
+  }
+
+  #page-carrito .delivery-zone-name {
+    font-size: 0.78rem !important;
+  }
+
+  #page-carrito .delivery-zone-price {
+    font-size: 0.78rem !important;
+  }
+
+  .hero-title {
+    font-size: 1.85rem !important;
+  }
+}
+
+/* 2. Ajustes para Celulares Estándar y Medianos (361px - 430px) */
+@media screen and (min-width: 361px) and (max-width: 430px) {
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .logo-img {
+    max-width: 160px !important;
+  }
+}
+
+/* 3. Ajustes para Laptops y Pantallas Anchas (1366px, 1440px, 1920px) */
+@media screen and (min-width: 1366px) {
+  .container {
+    max-width: 1340px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .container {
+    max-width: 1400px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .container {
+    max-width: 1560px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 28px !important;
+  }
+}
+
 
