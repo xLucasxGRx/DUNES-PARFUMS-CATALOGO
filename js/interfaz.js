@@ -1245,24 +1245,150 @@ function actualizarInterfazEntrega() {
     validarDatosEntrega();
 }
 
+// ==========================================================================
+// Estado Temporal del Cupón en Memoria (Fase C3)
+// ==========================================================================
+let estadoCuponTemporal = {
+    codigo: '',
+    cupon: null,
+    resultado: null,
+    aplicado: false
+};
+
+function recalcularCuponEstado() {
+    if (!estadoCuponTemporal.codigo || !estadoCuponTemporal.cupon) {
+        estadoCuponTemporal.aplicado = false;
+        estadoCuponTemporal.resultado = null;
+        return null;
+    }
+
+    const items = window.carritoModulo ? window.carritoModulo.obtenerCarrito() : [];
+    if (!items || items.length === 0) {
+        estadoCuponTemporal.aplicado = false;
+        estadoCuponTemporal.resultado = {
+            valido: false,
+            codigo: estadoCuponTemporal.codigo,
+            estado: 'carrito_vacio',
+            mensaje: 'El carrito está vacío.',
+            cupon: estadoCuponTemporal.cupon,
+            subtotalBruto: 0,
+            subtotalElegible: 0,
+            descuento: 0,
+            subtotalNeto: 0,
+            montoFaltante: 0
+        };
+        return estadoCuponTemporal.resultado;
+    }
+
+    const subtotalBruto = items.reduce((acc, item) => acc + ((Number(item.precioUnitario ?? item.precio) || 0) * (Number(item.cantidad) || 0)), 0);
+
+    if (window.cuponesModulo && typeof window.cuponesModulo.validarCupon === 'function') {
+        const resultado = window.cuponesModulo.validarCupon(estadoCuponTemporal.cupon, {
+            items,
+            subtotalBruto,
+            codigo: estadoCuponTemporal.codigo
+        });
+        estadoCuponTemporal.resultado = resultado;
+        estadoCuponTemporal.aplicado = resultado.valido;
+        return resultado;
+    }
+
+    return null;
+}
+
+async function aplicarCuponTemporal(codigo) {
+    if (!codigo || typeof codigo !== 'string' || !codigo.trim()) {
+        quitarCuponTemporal();
+        return { valido: false, estado: 'codigo_vacio', mensaje: 'Código vacío.' };
+    }
+
+    const codigoLimpio = codigo.trim().toUpperCase();
+    const items = window.carritoModulo ? window.carritoModulo.obtenerCarrito() : [];
+    const subtotalBruto = items.reduce((acc, item) => acc + ((Number(item.precioUnitario ?? item.precio) || 0) * (Number(item.cantidad) || 0)), 0);
+
+    if (!window.cuponesModulo || typeof window.cuponesModulo.validarCuponPorCodigo !== 'function') {
+        return { valido: false, estado: 'error_servicio', mensaje: 'Servicio de cupones no disponible.' };
+    }
+
+    const resultado = await window.cuponesModulo.validarCuponPorCodigo(codigoLimpio, {
+        items,
+        subtotalBruto
+    });
+
+    estadoCuponTemporal = {
+        codigo: codigoLimpio,
+        cupon: resultado.cupon || null,
+        resultado: resultado,
+        aplicado: resultado.valido
+    };
+
+    if (typeof actualizarResumenEntrega === 'function') {
+        actualizarResumenEntrega();
+    }
+
+    return resultado;
+}
+
+function quitarCuponTemporal() {
+    estadoCuponTemporal = {
+        codigo: '',
+        cupon: null,
+        resultado: null,
+        aplicado: false
+    };
+
+    if (typeof actualizarResumenEntrega === 'function') {
+        actualizarResumenEntrega();
+    }
+
+    return obtenerEstadoCuponTemporal();
+}
+
+function obtenerEstadoCuponTemporal() {
+    return { ...estadoCuponTemporal };
+}
+
+function recalcularCuponTemporal() {
+    recalcularCuponEstado();
+    if (typeof actualizarResumenEntrega === 'function') {
+        actualizarResumenEntrega();
+    }
+    return obtenerEstadoCuponTemporal();
+}
+
+// Exponer API pública temporal para pruebas por consola (Fase C3)
+window.cuponesCheckout = {
+    aplicarCupon: aplicarCuponTemporal,
+    quitarCupon: quitarCuponTemporal,
+    obtenerEstado: obtenerEstadoCuponTemporal,
+    recalcularCupon: recalcularCuponTemporal
+};
+
 function obtenerTotalesPedido() {
-    const items = window.carritoModulo.obtenerCarrito();
-    const subtotalProductos = items.reduce((acc, item) => acc + (item.precioUnitario * item.cantidad), 0);
-    
+    const items = window.carritoModulo ? window.carritoModulo.obtenerCarrito() : [];
+    const subtotalBruto = items.reduce((acc, item) => acc + ((Number(item.precioUnitario ?? item.precio) || 0) * (Number(item.cantidad) || 0)), 0);
+
+    // Recalcular estado del cupón con los ítems actuales
+    const resultadoCupon = recalcularCuponEstado();
+    const descuento = (resultadoCupon && resultadoCupon.valido) ? resultadoCupon.descuento : 0;
+    const subtotalNeto = Math.max(0, subtotalBruto - descuento);
+
     let costoEntrega = 0;
     let conceptoEntrega = 'Costo de envío:';
-    
-    if (subtotalProductos > 0) {
+
+    if (subtotalBruto > 0) {
         if (selectedDeliveryType === 'delivery-local') {
             conceptoEntrega = 'Costo de delivery:';
             if (selectedDeliveryZone) {
-                costoEntrega = calcularCostoDeliveryLocal(subtotalProductos, selectedDeliveryZone);
+                // REGLA OBLIGATORIA: Delivery gratis se evalúa SOBRE EL SUBTOTAL BRUTO antes del cupón
+                costoEntrega = calcularCostoDeliveryLocal(subtotalBruto, selectedDeliveryZone);
             } else {
                 costoEntrega = 0;
             }
         } else if (selectedDeliveryType === 'agencia') {
             conceptoEntrega = 'Embalaje y llevada a la agencia:';
-            costoEntrega = calcularCargoAgencia(subtotalProductos);
+            // REGLA OBLIGATORIA: Agencia gratis se evalúa SOBRE EL SUBTOTAL BRUTO antes del cupón
+            costoEntrega = calcularCargoAgencia(subtotalBruto);
         } else if (selectedDeliveryType === 'recojo-local') {
             conceptoEntrega = 'Costo de entrega:';
             costoEntrega = 0;
@@ -1274,14 +1400,25 @@ function obtenerTotalesPedido() {
             conceptoEntrega = 'Costo de delivery:';
         }
     }
-    
-    const totalFinal = subtotalProductos === 0 ? 0 : (subtotalProductos + costoEntrega);
-    
+
+    // FÓRMULA OFICIAL: totalFinal = subtotalNeto + costoEntrega
+    const totalFinal = subtotalBruto === 0 ? 0 : (subtotalNeto + costoEntrega);
+
     return {
-        subtotalProductos,
+        subtotalBruto,
+        subtotalProductos: subtotalBruto, // Compatibilidad con código previo
+        descuento,
+        subtotalNeto,
         costoEntrega,
         conceptoEntrega,
-        totalFinal
+        totalFinal,
+        cuponAplicado: (resultadoCupon && resultadoCupon.valido) ? {
+            codigo: resultadoCupon.codigo,
+            tipo: resultadoCupon.cupon ? resultadoCupon.cupon.tipo : '',
+            valor: resultadoCupon.cupon ? resultadoCupon.cupon.valor : 0,
+            descuento: resultadoCupon.descuento
+        } : null,
+        resultadoCupon
     };
 }
 
@@ -1293,17 +1430,37 @@ function actualizarResumenEntrega() {
     const labelSpan = document.getElementById('summary-delivery-label');
     const totalSpan = document.getElementById('cart-total-price');
     const subtotalSpan = document.getElementById('cart-subtotal-price');
-    
+
+    const discountRow = document.getElementById('coupon-discount-row') || document.getElementById('summary-discount-row');
+    const discountLabel = document.getElementById('coupon-discount-label') || document.getElementById('summary-discount-label');
+    const discountValue = document.getElementById('coupon-discount-value') || document.getElementById('summary-discount-amount');
+
     const totalMontoPagar = document.getElementById('total-monto-pagar');
     const totalMontoInfo = document.getElementById('total-monto-info');
     
     if (!summaryType) return;
     
-    const { subtotalProductos, costoEntrega, conceptoEntrega, totalFinal } = obtenerTotalesPedido();
+    const totales = obtenerTotalesPedido();
+    const { subtotalProductos, subtotalNeto, descuento, costoEntrega, conceptoEntrega, totalFinal, cuponAplicado } = totales;
     
     if (subtotalSpan) subtotalSpan.textContent = formatearMoneda(subtotalProductos);
     if (labelSpan) labelSpan.textContent = conceptoEntrega;
     
+    // Actualizar fila de descuento
+    if (discountRow) {
+        if (cuponAplicado && descuento > 0) {
+            discountRow.style.display = 'flex';
+            if (discountLabel) {
+                discountLabel.textContent = `Descuento (${cuponAplicado.codigo}):`;
+            }
+            if (discountValue) {
+                discountValue.textContent = `- S/ ${descuento.toFixed(2)}`;
+            }
+        } else {
+            discountRow.style.display = 'none';
+        }
+    }
+
     if (selectedDeliveryType === 'delivery-local') {
         summaryType.textContent = 'Delivery local';
         if (summaryZoneRow) summaryZoneRow.style.display = 'flex';
