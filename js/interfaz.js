@@ -1246,13 +1246,57 @@ function actualizarInterfazEntrega() {
 }
 
 // ==========================================================================
-// Estado Temporal del Cupón en Memoria (Fase C3)
+// Persistencia del Cupón en LocalStorage (Fase C4)
+// Clave: dunes_coupon_v1 (solo guarda versión, código normalizado y fecha)
 // ==========================================================================
+const LOCALSTORAGE_COUPON_KEY = 'dunes_coupon_v1';
+
+function guardarCuponPersistido(codigo) {
+    if (!codigo || typeof codigo !== 'string') return;
+    try {
+        const payload = {
+            version: 1,
+            codigo: codigo.trim().toUpperCase(),
+            guardadoEn: new Date().toISOString()
+        };
+        localStorage.setItem(LOCALSTORAGE_COUPON_KEY, JSON.stringify(payload));
+    } catch (e) {
+        console.warn('[CuponesPersistencia] No se pudo guardar el cupón en localStorage:', e);
+    }
+}
+
+function obtenerCuponPersistido() {
+    try {
+        const raw = localStorage.getItem(LOCALSTORAGE_COUPON_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || parsed.version !== 1 || !parsed.codigo || typeof parsed.codigo !== 'string') {
+            eliminarCuponPersistido();
+            return null;
+        }
+        return parsed.codigo.trim().toUpperCase();
+    } catch (e) {
+        console.warn('[CuponesPersistencia] Error al leer el cupón persistido, limpiando clave:', e);
+        eliminarCuponPersistido();
+        return null;
+    }
+}
+
+function eliminarCuponPersistido() {
+    try {
+        localStorage.removeItem(LOCALSTORAGE_COUPON_KEY);
+    } catch (e) {
+        console.warn('[CuponesPersistencia] Error al eliminar el cupón de localStorage:', e);
+    }
+}
+
 let estadoCuponTemporal = {
     codigo: '',
     cupon: null,
     resultado: null,
-    aplicado: false
+    aplicado: false,
+    persistido: false,
+    restaurado: false
 };
 
 function recalcularCuponEstado() {
@@ -1277,6 +1321,11 @@ function recalcularCuponEstado() {
             subtotalNeto: 0,
             montoFaltante: 0
         };
+
+        // Si el carrito está completamente vacío, eliminar cupón persistido
+        eliminarCuponPersistido();
+        estadoCuponTemporal.persistido = false;
+
         return estadoCuponTemporal.resultado;
     }
 
@@ -1290,13 +1339,30 @@ function recalcularCuponEstado() {
         });
         estadoCuponTemporal.resultado = resultado;
         estadoCuponTemporal.aplicado = resultado.valido;
+
+        const estadosQueConservanCodigo = [
+            'cupon_valido',
+            'monto_minimo_no_alcanzado',
+            'sin_productos_elegibles',
+            'cupon_no_iniciado',
+            'error_servicio'
+        ];
+
+        if (estadosQueConservanCodigo.includes(resultado.estado)) {
+            guardarCuponPersistido(estadoCuponTemporal.codigo);
+            estadoCuponTemporal.persistido = true;
+        } else {
+            eliminarCuponPersistido();
+            estadoCuponTemporal.persistido = false;
+        }
+
         return resultado;
     }
 
     return null;
 }
 
-async function aplicarCuponTemporal(codigo) {
+async function aplicarCuponTemporal(codigo, esRestauracion = false) {
     if (!codigo || typeof codigo !== 'string' || !codigo.trim()) {
         quitarCuponTemporal();
         return { valido: false, estado: 'codigo_vacio', mensaje: 'Código vacío.' };
@@ -1307,7 +1373,29 @@ async function aplicarCuponTemporal(codigo) {
     const subtotalBruto = items.reduce((acc, item) => acc + ((Number(item.precioUnitario ?? item.precio) || 0) * (Number(item.cantidad) || 0)), 0);
 
     if (!window.cuponesModulo || typeof window.cuponesModulo.validarCuponPorCodigo !== 'function') {
-        return { valido: false, estado: 'error_servicio', mensaje: 'Servicio de cupones no disponible.' };
+        const resultadoError = {
+            valido: false,
+            codigo: codigoLimpio,
+            estado: 'error_servicio',
+            mensaje: 'Servicio de cupones no disponible.',
+            cupon: null,
+            subtotalBruto,
+            subtotalElegible: 0,
+            descuento: 0,
+            subtotalNeto: subtotalBruto,
+            montoFaltante: 0
+        };
+        estadoCuponTemporal = {
+            codigo: codigoLimpio,
+            cupon: null,
+            resultado: resultadoError,
+            aplicado: false,
+            persistido: true,
+            restaurado: esRestauracion
+        };
+        guardarCuponPersistido(codigoLimpio);
+        if (typeof actualizarResumenEntrega === 'function') actualizarResumenEntrega();
+        return resultadoError;
     }
 
     const resultado = await window.cuponesModulo.validarCuponPorCodigo(codigoLimpio, {
@@ -1319,8 +1407,26 @@ async function aplicarCuponTemporal(codigo) {
         codigo: codigoLimpio,
         cupon: resultado.cupon || null,
         resultado: resultado,
-        aplicado: resultado.valido
+        aplicado: resultado.valido,
+        persistido: true,
+        restaurado: esRestauracion
     };
+
+    const estadosQueConservanCodigo = [
+        'cupon_valido',
+        'monto_minimo_no_alcanzado',
+        'sin_productos_elegibles',
+        'cupon_no_iniciado',
+        'error_servicio'
+    ];
+
+    if (estadosQueConservanCodigo.includes(resultado.estado)) {
+        guardarCuponPersistido(codigoLimpio);
+        estadoCuponTemporal.persistido = true;
+    } else {
+        eliminarCuponPersistido();
+        estadoCuponTemporal.persistido = false;
+    }
 
     if (typeof actualizarResumenEntrega === 'function') {
         actualizarResumenEntrega();
@@ -1334,8 +1440,12 @@ function quitarCuponTemporal() {
         codigo: '',
         cupon: null,
         resultado: null,
-        aplicado: false
+        aplicado: false,
+        persistido: false,
+        restaurado: false
     };
+
+    eliminarCuponPersistido();
 
     if (typeof actualizarResumenEntrega === 'function') {
         actualizarResumenEntrega();
@@ -1345,7 +1455,10 @@ function quitarCuponTemporal() {
 }
 
 function obtenerEstadoCuponTemporal() {
-    return { ...estadoCuponTemporal };
+    return {
+        ...estadoCuponTemporal,
+        codigoPersistido: obtenerCuponPersistido()
+    };
 }
 
 function recalcularCuponTemporal() {
@@ -1356,12 +1469,42 @@ function recalcularCuponTemporal() {
     return obtenerEstadoCuponTemporal();
 }
 
-// Exponer API pública temporal para pruebas por consola (Fase C3)
+let restauracionIniciada = false;
+let restauracionPromise = null;
+
+async function restaurarCuponPersistido() {
+    if (restauracionIniciada && restauracionPromise) {
+        return restauracionPromise;
+    }
+
+    const codigoPersistido = obtenerCuponPersistido();
+    if (!codigoPersistido) {
+        return null;
+    }
+
+    restauracionIniciada = true;
+    restauracionPromise = (async () => {
+        try {
+            const resultado = await aplicarCuponTemporal(codigoPersistido, true);
+            return resultado;
+        } catch (e) {
+            console.error('[CuponesCheckout] Error al restaurar el cupón persistido:', e);
+            return null;
+        } finally {
+            restauracionIniciada = false;
+        }
+    })();
+
+    return restauracionPromise;
+}
+
+// Exponer API pública para pruebas por consola (Fases C3 y C4)
 window.cuponesCheckout = {
     aplicarCupon: aplicarCuponTemporal,
     quitarCupon: quitarCuponTemporal,
     obtenerEstado: obtenerEstadoCuponTemporal,
-    recalcularCupon: recalcularCuponTemporal
+    recalcularCupon: recalcularCuponTemporal,
+    restaurarCuponPersistido: restaurarCuponPersistido
 };
 
 function obtenerTotalesPedido() {

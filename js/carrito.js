@@ -245,6 +245,11 @@ function eliminarItem(id) {
     carrito = carrito.filter(item => item.id !== id);
     guardarCarrito(carrito);
     actualizarContadorCarrito();
+
+    if (carrito.length === 0 && window.cuponesCheckout && typeof window.cuponesCheckout.quitarCupon === 'function') {
+        window.cuponesCheckout.quitarCupon();
+    }
+
     mostrarToastPremium('Producto eliminado del pedido.');
 
     if (window.renderizarCarritoDOM) {
@@ -258,6 +263,11 @@ function eliminarItem(id) {
 function vaciarCarrito() {
     guardarCarrito([]);
     actualizarContadorCarrito();
+
+    if (window.cuponesCheckout && typeof window.cuponesCheckout.quitarCupon === 'function') {
+        window.cuponesCheckout.quitarCupon();
+    }
+
     mostrarToastPremium('Carrito vaciado.');
 
     if (window.renderizarCarritoDOM) {
