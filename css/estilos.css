@@ -2244,18 +2244,17 @@ button:disabled,
 .summary-row-label {
     flex: 1 1 auto;
     min-width: 0;
-    color: var(--color-text);
-    overflow-wrap: break-word;
+    color: var(--color-text-muted);
 }
 
 .summary-row-value {
-    flex: 0 1 auto;
-    max-width: 58%;
+    flex: 0 0 auto;
+    max-width: 60%;
     text-align: right;
     font-weight: 600;
-    color: var(--color-text-muted);
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    color: var(--color-text-dark);
+    white-space: normal;
+    word-break: normal;
 }
 
 #cart-subtotal-price.summary-row-value,

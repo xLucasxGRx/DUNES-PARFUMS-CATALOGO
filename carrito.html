@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/animaciones.css">
 </head>
-<body>
+<body id="page-carrito" class="page-carrito">
 
     <!-- Cabecera Principal -->
     <header class="header-main" id="header-main">
@@ -188,7 +188,7 @@
                         <!-- Bloque Dinámico: Envío por Agencia -->
                         <div id="block-agencia" style="display: none; margin-bottom: 20px; background-color: var(--color-bg-light); padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius-sm);">
                             <p style="font-size: 0.95rem; color: var(--color-text); line-height: 1.5; margin: 0 0 10px 0;">
-                                <i data-lucide="package" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> <strong>Envíos por agencia a todo el Perú.</strong>
+                                📦 <strong>Envíos por agencia a todo el Perú.</strong>
                             </p>
                             <div style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 12px;">
                                 <div>Compras menores de S/30: Embalaje y llevada a la agencia: S/4.00.</div>
@@ -208,202 +208,7 @@
                                     Nuestro local está ubicado en <strong>Cacatachi, Tarapoto</strong>. Antes de elegir esta opción, revisa nuestra ubicación para confirmar que puedes acercarte a recoger tu pedido.
                                 </p>
                                 <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;" aria-label="Abrir ubicación de Dunes Parfums en Google Maps">
-                                    <i data-lucide="map-pin" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> Ver ubicación en Google Maps
-                                </a>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="recojo-name">Nombre Completo *</label>
-                                <input type="text" id="recojo-name" placeholder="Ej. Juan Pérez" autocomplete="name">
-                                <span class="validation-error-msg" id="recojo-name-error">Ingresa tu nombre para coordinar el recojo.</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="recojo-phone">Número de Celular *</label>
-                                <input type="tel" id="recojo-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
-                                <span class="validation-error-msg" id="recojo-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
-                            </div>
-                        </div>
-
-
-
-                        <!-- Bloque de Monto Total Inferior -->
-                        <div id="block-total-pagar" style="margin-top: 25px; margin-bottom: 15px; padding: 15px; background: var(--color-background-light); border-top: 2px solid var(--color-primary-dark); border-radius: var(--border-radius-sm); text-align: center;">
-                            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Monto total a pagar</span>
-                            <span id="total-monto-pagar" style="font-size: 1.6rem; font-weight: 800; color: var(--color-primary-dark); display: block;" aria-live="polite">S/ 0.00</span>
-                            <span id="total-monto-info" style="font-size: 0.8rem; color: var(--color-text-muted); display: none; margin-top: 5px; font-style: italic;"></span>
-                        </div>
-
-                        <!-- Error de checkout general -->
-                        <div id="checkout-error-msg" class="validation-error-msg" style="display: none; margin-bottom: 15px; text-align: center;"></div>
-
-                        <!-- Botón WhatsApp -->
-                        <button type="button" class="btn btn-whatsapp btn-checkout" id="btn-confirmar-whatsapp" disabled>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right: 4px;">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                            </svg>
-                            Confirmar pedido por WhatsApp
-                        </button>
-                    </form>
-
-                    <p class="checkout-note" style="margin-top: 15px;">
-                        * Tu pedido será enviado a nuestro WhatsApp oficial para confirmar el stock final, cotizar el costo de delivery exacto y coordinar la transferencia de pago.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Pie de Página -->
-    <footer class="footer-main">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3 class="footer-title">Dunes Parfums</h3>
-                    <p class="footer-about-text">
-                        Especialistas en alta perfumería árabe, de diseñador, exclusividades de nicho y decants seleccionados para los amantes de aromas sofisticados.
-                    </p>
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/dunes.parfums" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram">
-                            <span>IG</span>
-                        </a>
-                        <a href="https://www.tiktok.com/@dunes.parfums" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="TikTok">
-                    <button class="btn btn-secondary btn-empty-cart-danger" id="btn-empty-cart">Vaciar Carrito</button>
-                </div>
-            </div>
-
-            <!-- Formulario y Resumen de Compra (Columna derecha) -->
-            <div class="cart-summary-column">
-                <div class="summary-box">
-                    <h3 class="summary-box-title">Detalles de Orden</h3>
-                    
-                    <div class="summary-details">
-                        <div class="summary-row">
-                            <span class="summary-row-label">Subtotal Productos:</span>
-                            <span class="summary-row-value" id="cart-subtotal-price">S/ 0.00</span>
-                        </div>
-                        <div class="summary-row">
-                            <span class="summary-row-label">Tipo de entrega:</span>
-                            <span class="summary-row-value" id="summary-delivery-type">Sin seleccionar</span>
-                        </div>
-                        <div class="summary-row" id="summary-delivery-zone-row" style="display: none;">
-                            <span class="summary-row-label">Zona de Delivery:</span>
-                            <span class="summary-row-value" id="summary-delivery-zone">-</span>
-                        </div>
-                        <div class="summary-row">
-                            <span class="summary-row-label" id="summary-delivery-label">Costo de envío:</span>
-                            <span class="summary-row-value" id="summary-delivery-cost">Se calculará en la siguiente etapa</span>
-                        </div>
-                    </div>
-                    
-                    <div class="summary-total-row" style="margin-bottom: 25px;">
-                        <span>Total del Pedido:</span>
-                        <span class="summary-total-price" id="cart-total-price">S/ 0.00</span>
-                    </div>
-
-                    <form class="checkout-form" id="checkout-form" novalidate>
-                        <!-- Mensaje de advertencia inicial -->
-                        <div id="checkout-warning" class="checkout-warning-box">
-                            Selecciona un tipo de entrega para continuar.
-                        </div>
-
-                        <h4 class="form-section-title" id="seccion-entrega">¿Cómo deseas recibir tu pedido?</h4>
-                        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 15px; margin-top: -10px;">Selecciona una modalidad para continuar con tu compra.</p>
-
-                        <!-- Tarjetas de Selección de Modalidad -->
-                        <div class="delivery-options-grid" role="radiogroup" aria-label="Modalidad de entrega">
-                            <!-- Opción 1: Delivery Local -->
-                            <label class="delivery-option-card" id="card-delivery-local">
-                                <input type="radio" name="tipoEntrega" value="delivery-local" aria-describedby="desc-delivery-local">
-                                <div class="delivery-option-meta">
-                                    <span class="delivery-option-title">Delivery local</span>
-                                    <span class="delivery-option-desc" id="desc-delivery-local">Disponible para Cacatachi, Morales, Tarapoto y La Banda de Shilcayo.</span>
-                                </div>
-                            </label>
-
-                            <!-- Opción 2: Envío por Agencia -->
-                            <label class="delivery-option-card" id="card-agencia">
-                                <input type="radio" name="tipoEntrega" value="agencia" aria-describedby="desc-agencia">
-                                <div class="delivery-option-meta">
-                                    <span class="delivery-option-title">Envío por agencia de transporte</span>
-                                    <span class="delivery-option-desc" id="desc-agencia">Realizamos envíos por agencia a todo el Perú.</span>
-                                </div>
-                            </label>
-
-                            <!-- Opción 3: Recojo en Local -->
-                            <label class="delivery-option-card" id="card-recojo-local">
-                                <input type="radio" name="tipoEntrega" value="recojo-local" aria-describedby="desc-recojo-local">
-                                <div class="delivery-option-meta">
-                                    <span class="delivery-option-title">Recojo en local</span>
-                                    <span class="delivery-option-desc" id="desc-recojo-local">Recoge tu pedido en nuestro local ubicado en Cacatachi, Tarapoto.</span>
-                                </div>
-                            </label>
-                        </div>
-
-                        <!-- Bloque Dinámico: Delivery Local -->
-                        <div id="block-delivery-local" style="display: none; margin-bottom: 20px;">
-                            <h5 style="font-size: 0.9rem; font-weight: 700; color: var(--color-text-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Selecciona tu zona *</h5>
-                            <div class="zone-selector-group" role="radiogroup" aria-label="Zonas de delivery local">
-                                <button type="button" class="zone-option-btn" data-zona="cacatachi">Cacatachi</button>
-                                <button type="button" class="zone-option-btn" data-zona="morales">Morales</button>
-                                <button type="button" class="zone-option-btn" data-zona="tarapoto">Tarapoto</button>
-                                <button type="button" class="zone-option-btn" data-zona="banda-shilcayo">La Banda de Shilcayo</button>
-                            </div>
-                            
-                            <!-- Info de Delivery Gratis / Costo -->
-                            <div id="delivery-free-info" style="font-size: 0.85rem; font-weight: 600; color: var(--color-primary-dark); margin-bottom: 20px; background: rgba(212, 175, 55, 0.06); padding: 10px 15px; border-left: 3px solid var(--color-primary-dark); border-radius: var(--border-radius-sm); display: none;">
-                                Delivery gratis por compras desde S/ 30.00.
-                            </div>
-
-                            <div class="form-group">
-                                <label for="delivery-name">Nombre Completo *</label>
-                                <input type="text" id="delivery-name" placeholder="Ej. Juan Pérez" autocomplete="name">
-                                <span class="validation-error-msg" id="delivery-name-error">Ingresa tu nombre para continuar.</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="delivery-phone">Número de Celular *</label>
-                                <input type="tel" id="delivery-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
-                                <span class="validation-error-msg" id="delivery-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="delivery-address">Dirección de Entrega *</label>
-                                <input type="text" id="delivery-address" placeholder="Ej. Jr. Independencia 434" autocomplete="street-address">
-                                <span class="validation-error-msg" id="delivery-address-error">Ingresa la dirección donde deseas recibir tu pedido.</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="delivery-reference">Referencia de ubicación (opcional)</label>
-                                <input type="text" id="delivery-reference" placeholder="Ej. Al frente de la Plaza de Armas">
-                                <span class="validation-error-msg" id="delivery-reference-error"></span>
-                            </div>
-                        </div>
-
-                        <!-- Bloque Dinámico: Envío por Agencia -->
-                        <div id="block-agencia" style="display: none; margin-bottom: 20px; background-color: var(--color-bg-light); padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius-sm);">
-                            <p style="font-size: 0.95rem; color: var(--color-text); line-height: 1.5; margin: 0 0 10px 0;">
-                                <i data-lucide="package" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> <strong>Envíos por agencia a todo el Perú.</strong>
-                            </p>
-                            <div style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 12px;">
-                                <div>Compras menores de S/30: Embalaje y llevada a la agencia: S/4.00.</div>
-                                <div>Compras desde S/30: Embalaje y llevada a la agencia: GRATIS.</div>
-                            </div>
-                            <!-- Mensaje de gratuidad dinámico para Agencia -->
-                            <div id="agencia-free-info" style="font-size: 0.85rem; font-weight: 600; color: var(--color-primary-dark); padding: 10px 15px; border-left: 3px solid var(--color-primary-dark); border-radius: var(--border-radius-sm); background: rgba(212, 175, 55, 0.06); line-height: 1.4;">
-                                Embalaje y llevada a la agencia gratis desde S/ 30.00.
-                            </div>
-                        </div>
-
-                        <!-- Bloque Dinámico: Recojo en Local -->
-                        <div id="block-recojo-local" style="display: none; margin-bottom: 20px;">
-                            <div style="background-color: var(--color-bg-light); padding: 15px; border: 1px solid var(--color-border); border-radius: var(--border-radius-sm); margin-bottom: 20px;">
-                                <p style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary-dark); margin: 0 0 8px 0; text-transform: uppercase;">Recojo en local — Gratis</p>
-                                <p style="font-size: 0.9rem; color: var(--color-text); line-height: 1.5; margin: 0 0 12px 0;">
-                                    Nuestro local está ubicado en <strong>Cacatachi, Tarapoto</strong>. Antes de elegir esta opción, revisa nuestra ubicación para confirmar que puedes acercarte a recoger tu pedido.
-                                </p>
-                                <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;" aria-label="Abrir ubicación de Dunes Parfums en Google Maps">
-                                    <i data-lucide="map-pin" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> Ver ubicación en Google Maps
+                                    📍 Ver ubicación en Google Maps
                                 </a>
                             </div>
 
@@ -491,10 +296,10 @@
                 <div class="footer-col">
                     <h3 class="footer-title">Contacto</h3>
                     <ul class="footer-info-list">
-                        <li><i data-lucide="map-pin" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> <span>Cacatachi, Tarapoto · Delivery local · Envíos a todo el Perú</span></li>
-                        <li><i data-lucide="map" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: underline;" aria-label="Ver ubicación de Dunes Parfums en Google Maps">Ver ubicación</a></li>
-                        <li><i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> <span>Atención por WhatsApp</span></li>
-                        <li><i data-lucide="mail" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i> <span>dunesparfums@gmail.com</span></li>
+                        <li>📍 Cacatachi, Tarapoto · Delivery local · Envíos a todo el Perú</li>
+                        <li>🗺️ <a href="https://maps.app.goo.gl/WrCDtiNSP3fiBcJu9?g_st=ic" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: underline;" aria-label="Ver ubicación de Dunes Parfums en Google Maps">Ver ubicación</a></li>
+                        <li>💬 Atención por WhatsApp</li>
+                        <li>✉️ dunesparfums@gmail.com</li>
                     </ul>
                 </div>
             </div>
@@ -516,16 +321,6 @@
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
         </svg>
     </a>
-
-    <!-- Librería Oficial de Iconos -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof lucide !== 'undefined' && lucide.createIcons) {
-                lucide.createIcons();
-            }
-        });
-    </script>
 
     <!-- Scripts Modulares -->
     <script src="js/config.js"></script>

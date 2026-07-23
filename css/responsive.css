@@ -611,16 +611,18 @@
   .summary-row-label {
     flex: 1 1 auto !important;
     min-width: 0 !important;
-    overflow-wrap: break-word !important;
-    word-break: break-word !important;
+    color: var(--color-text-secondary, #6F6F6F) !important;
   }
 
   .summary-row-value {
-    flex: 0 1 auto !important;
-    max-width: 58% !important;
+    flex: 0 0 auto !important;
+    max-width: 60% !important;
     text-align: right !important;
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
+    font-weight: 600 !important;
+    color: var(--color-text-dark, #171717) !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
   }
   
   .cart-actions-row {
