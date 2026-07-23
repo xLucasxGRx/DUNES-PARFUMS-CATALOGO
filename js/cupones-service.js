@@ -214,7 +214,9 @@ const CuponesService = (function () {
         promesaCarga = (async () => {
             const urlConfig = (typeof CONFIG_CUPONES !== 'undefined' && CONFIG_CUPONES.sheetsCsvUrl)
                 ? CONFIG_CUPONES.sheetsCsvUrl
-                : "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?output=csv";
+                : ((typeof CONFIG !== 'undefined' && CONFIG.GOOGLE_SHEETS_CUPONES_CSV_URL)
+                    ? CONFIG.GOOGLE_SHEETS_CUPONES_CSV_URL
+                    : "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=716279816&single=true&output=csv");
 
             const timeoutMs = (typeof CONFIG_CUPONES !== 'undefined' && CONFIG_CUPONES.timeoutMs)
                 ? CONFIG_CUPONES.timeoutMs
