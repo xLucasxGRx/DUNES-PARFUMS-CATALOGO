@@ -700,6 +700,142 @@
   }
 
   /* ==========================================================================
+     COMPACTACIÓN DEL CHECKOUT EN CELULAR (FASE U8.3)
+     ========================================================================== */
+  #page-carrito main.section-padding {
+    padding-top: 48px !important;
+    padding-bottom: 24px !important;
+    padding-inline: 14px !important;
+  }
+
+  #page-carrito .cart-layout {
+    gap: 16px !important;
+  }
+
+  #page-carrito .summary-box {
+    padding: 16px 14px !important;
+    margin-bottom: 16px !important;
+    border-radius: 12px !important;
+  }
+
+  #page-carrito .summary-box h2,
+  #page-carrito .summary-box h3,
+  #page-carrito .summary-title {
+    font-size: 1.15rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  #page-carrito .summary-row {
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+    padding-bottom: 6px !important;
+  }
+
+  #page-carrito .delivery-options-grid {
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+  }
+
+  #page-carrito .delivery-option-card {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+    border-radius: 8px !important;
+    min-height: 44px !important;
+  }
+
+  #page-carrito .delivery-option-title {
+    font-size: 0.86rem !important;
+    line-height: 1.2 !important;
+  }
+
+  #page-carrito .delivery-option-desc {
+    font-size: 0.74rem !important;
+    line-height: 1.25 !important;
+  }
+
+  #page-carrito .delivery-option-badge {
+    font-size: 0.72rem !important;
+    padding: 2px 7px !important;
+  }
+
+  #page-carrito .zone-selector-group {
+    gap: 6px !important;
+    margin-bottom: 12px !important;
+  }
+
+  #page-carrito .zone-option-btn {
+    padding: 9px 11px !important;
+    font-size: 0.8rem !important;
+    min-height: 40px !important;
+    border-radius: 8px !important;
+  }
+
+  #page-carrito #block-agencia,
+  #page-carrito #block-recojo-local {
+    padding: 12px 14px !important;
+    margin-bottom: 14px !important;
+    border-radius: 8px !important;
+  }
+
+  #page-carrito .agencia-conditions-wrapper {
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+  }
+
+  #page-carrito .agencia-condition-row {
+    padding: 8px 10px !important;
+  }
+
+  #page-carrito #agencia-free-info {
+    padding: 8px 10px !important;
+    font-size: 0.78rem !important;
+  }
+
+  #page-carrito .form-group {
+    margin-bottom: 10px !important;
+    gap: 3px !important;
+  }
+
+  #page-carrito label {
+    font-size: 0.8rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  #page-carrito input[type="text"],
+  #page-carrito input[type="tel"] {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 8px 12px !important;
+    font-size: 0.86rem !important;
+    border-radius: 8px !important;
+  }
+
+  #page-carrito #block-total-pagar {
+    padding: 12px 14px !important;
+    margin-bottom: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  #page-carrito #total-monto-pagar {
+    font-size: 1.45rem !important;
+  }
+
+  #page-carrito .btn-checkout {
+    min-height: 46px !important;
+    padding: 10px 16px !important;
+    font-size: 0.88rem !important;
+    margin-top: 8px !important;
+    border-radius: 8px !important;
+  }
+
+  #page-carrito .footer-disclaimer,
+  #page-carrito .cart-info-note {
+    margin-top: 8px !important;
+    font-size: 0.76rem !important;
+    line-height: 1.35 !important;
+  }
+
+  /* ==========================================================================
      REDISEÑO DE ENCABEZADO Y FILTROS DEL CATÁLOGO EN MÓVIL (FASE U8.2)
      ========================================================================== */
   #page-catalogo main.section-padding {
