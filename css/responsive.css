@@ -687,6 +687,164 @@
     grid-template-columns: 1fr;
   }
 
+  /* ==========================================================================
+     REDISEÑO DE ENCABEZADO Y FILTROS DEL CATÁLOGO EN MÓVIL (FASE U8.2)
+     ========================================================================== */
+  #page-catalogo main.section-padding {
+    padding-top: 48px !important;
+    padding-bottom: 24px !important;
+  }
+
+  #page-catalogo .section-header {
+    margin-bottom: 14px !important;
+    gap: 4px !important;
+  }
+
+  #page-catalogo .section-subtitle {
+    font-size: 0.72rem !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 2px !important;
+  }
+
+  #page-catalogo .section-title {
+    font-size: 1.55rem !important;
+    line-height: 1.15 !important;
+  }
+
+  #page-catalogo #catalogo-descripcion {
+    font-size: 0.82rem !important;
+    margin-top: 4px !important;
+    line-height: 1.35 !important;
+    max-width: 92% !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* Tarjeta de Filtros Móvil Compacta */
+  #page-catalogo .catalog-filters-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 12px 14px !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+    border-radius: 12px !important;
+    background-color: var(--surface-card, #FFFEFC) !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    box-shadow: 0 2px 8px rgba(31, 24, 12, 0.04) !important;
+  }
+
+  /* Buscador Full Width y Altura Compacta */
+  #page-catalogo .filter-search-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-search-box input {
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 10px 14px 10px 38px !important;
+    font-size: 0.84rem !important;
+    border-radius: 8px !important;
+    border-color: var(--catalog-gold-border, #E7D3A5) !important;
+    box-sizing: border-box !important;
+  }
+
+  #page-catalogo .filter-search-box .search-icon {
+    left: 12px !important;
+  }
+
+  /* Categorías en Fila Única con Desplazamiento Horizontal Habilitado */
+  #page-catalogo .filter-categories-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE/Edge */
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    padding-bottom: 2px !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-categories-group::-webkit-scrollbar {
+    display: none !important; /* Chrome/Safari/Webkit */
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  #page-catalogo .filter-category-btn {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    padding: 7px 14px !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    box-sizing: border-box !important;
+    line-height: 1.2 !important;
+  }
+
+  #page-catalogo .filter-category-btn.active {
+    background: var(--color-gold-gradient, linear-gradient(135deg, #C49A3E 0%, #8E671D 100%)) !important;
+    color: #FFFFFF !important;
+    border-color: #8E671D !important;
+  }
+
+  /* Ordenación y Disponibilidad en 1 Sola Fila */
+  #page-catalogo .filter-controls-right {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-sort-box {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-sort-box select {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 6px 10px !important;
+    font-size: 0.8rem !important;
+    border-radius: 6px !important;
+    border-color: var(--catalog-gold-border, #E7D3A5) !important;
+    background-color: #FFFFFF !important;
+    box-sizing: border-box !important;
+  }
+
+  #page-catalogo .filter-available-box {
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #page-catalogo .checkbox-container {
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: var(--catalog-text, #171717) !important;
+    white-space: nowrap !important;
+    padding-left: 24px !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .catalog-results-counter {
+    margin-bottom: 10px !important;
+    font-size: 0.8rem !important;
+  }
+
   /* Rediseño del Catálogo en Móvil (Formato Horizontal Compacto & Estructura Equilibrada) */
   #catalogo-productos-grid,
   .products-grid {
