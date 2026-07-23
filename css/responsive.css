@@ -223,6 +223,19 @@
     margin-bottom: 40px;
   }
 
+  #page-catalogo main.section-padding,
+  #page-carrito main.section-padding,
+  #page-producto main.section-padding {
+    padding-top: 76px !important;
+    padding-bottom: 32px !important;
+  }
+
+  #page-catalogo .section-header,
+  #page-carrito .section-header,
+  #page-producto .section-header {
+    margin-bottom: 20px !important;
+  }
+
   /* Cuadrícula de Categorías a 2 columnas */
   .categories-grid {
     grid-template-columns: repeat(2, 1fr);

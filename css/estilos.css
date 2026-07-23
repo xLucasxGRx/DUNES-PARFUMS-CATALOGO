@@ -637,6 +637,20 @@ button:disabled,
     gap: 12px;
 }
 
+/* Encabezados Internos Compactos (Catálogo, Carrito y Producto) */
+#page-catalogo main.section-padding,
+#page-carrito main.section-padding,
+#page-producto main.section-padding {
+    padding-top: 104px;
+    padding-bottom: 48px;
+}
+
+#page-catalogo .section-header,
+#page-carrito .section-header,
+#page-producto .section-header {
+    margin-bottom: 28px;
+}
+
 .section-subtitle {
     font-size: 0.8rem;
     text-transform: uppercase;
