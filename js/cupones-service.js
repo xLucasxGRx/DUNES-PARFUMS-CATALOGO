@@ -70,6 +70,15 @@ const CuponesService = (function () {
             .trim();
     }
 
+    function normalizarTexto(txt) {
+        if (txt === null || txt === undefined) return '';
+        return String(txt)
+            .trim()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    }
+
     function normalizarBooleano(valor) {
         if (typeof valor === 'boolean') return valor;
         const str = limpiarValor(valor).toLowerCase();
@@ -84,11 +93,13 @@ const CuponesService = (function () {
         return Number.isFinite(num) ? num : fallback;
     }
 
-    function normalizarListaPipe(valor) {
-        const str = limpiarValor(valor);
+    function normalizarLista(val) {
+        const str = limpiarValor(val);
         if (!str) return [];
-        return str.split('|').map(s => s.trim().toLowerCase()).filter(Boolean);
+        const items = str.split('|').map(s => normalizarTexto(s)).filter(Boolean);
+        return [...new Set(items)];
     }
+    const normalizarListaPipe = normalizarLista;
 
     function normalizarFecha(valor) {
         const str = limpiarValor(valor);

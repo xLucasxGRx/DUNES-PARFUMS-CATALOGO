@@ -1065,6 +1065,16 @@ function obtenerZonaSeleccionada() {
     return selectedDeliveryZone;
 }
 
+function seleccionarTipoEntrega(tipo) {
+    selectedDeliveryType = tipo;
+    return selectedDeliveryType;
+}
+
+function seleccionarZonaEntrega(zona) {
+    selectedDeliveryZone = zona;
+    return selectedDeliveryZone;
+}
+
 function calcularCostoDeliveryLocal(subtotal, zona) {
     const subtotalNumerico = Number(subtotal);
     if (!Number.isFinite(subtotalNumerico) || subtotalNumerico < 0) {
@@ -2070,6 +2080,8 @@ window.renderizarCarritoDOM = renderizarCarritoDOM;
 window.CONFIG_DELIVERY_LOCAL = CONFIG_DELIVERY_LOCAL;
 window.obtenerTipoEntregaSeleccionado = obtenerTipoEntregaSeleccionado;
 window.obtenerZonaSeleccionada = obtenerZonaSeleccionada;
+window.seleccionarTipoEntrega = seleccionarTipoEntrega;
+window.seleccionarZonaEntrega = seleccionarZonaEntrega;
 window.obtenerTotalesPedido = obtenerTotalesPedido;
 window.calcularCargoAgencia = calcularCargoAgencia;
 window.calcularCostoDeliveryLocal = calcularCostoDeliveryLocal;

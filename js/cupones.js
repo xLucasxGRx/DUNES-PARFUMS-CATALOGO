@@ -65,8 +65,8 @@ const CuponesModulo = (function () {
             if (alcance === 'todos') {
                 subtotalElegible += subtotalItem;
             } else if (alcance === 'categorias') {
-                const catItem = String(item.categoria || '').trim().toLowerCase();
-                const permitidas = (cupon.categoriasPermitidas || []).map(c => String(c).trim().toLowerCase());
+                const catItem = (typeof normalizarTexto === 'function' ? normalizarTexto(item.categoria) : String(item.categoria || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+                const permitidas = (cupon.categoriasPermitidas || []).map(c => (typeof normalizarTexto === 'function' ? normalizarTexto(c) : String(c || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
                 if (permitidas.includes(catItem)) {
                     subtotalElegible += subtotalItem;
                 }
