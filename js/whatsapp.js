@@ -42,30 +42,31 @@ function consultarDisponibilidad(nombre, marca, presentacion) {
  * @returns {string}
  */
 function generarMensajeWhatsApp(pedido) {
-    let items, subtotalProductos, datosEntrega, costoEntrega, totalFinal;
-    
-    if (pedido && pedido.productos) {
-        items = pedido.productos;
-        subtotalProductos = pedido.subtotalProductos;
-        datosEntrega = pedido.datosEntrega;
-        costoEntrega = pedido.costoEntrega;
-        totalFinal = pedido.totalFinal;
-    } else {
+    if (!pedido || !pedido.productos || pedido.productos.length === 0 || !pedido.datosEntrega) {
         return '';
     }
-    
-    if (!items || items.length === 0 || !datosEntrega || !datosEntrega.tipoEntrega) {
-        return '';
-    }
-    
+
+    const { productos: items, datosEntrega } = pedido;
+    const subtotalBruto = typeof pedido.subtotalBruto === 'number'
+        ? pedido.subtotalBruto
+        : (typeof pedido.subtotalProductos === 'number' ? pedido.subtotalProductos : 0);
+
+    const cuponAplicado = (pedido.cuponAplicado && (pedido.descuento > 0)) ? pedido.cuponAplicado : null;
+    const descuento = cuponAplicado ? (Number(pedido.descuento) || 0) : 0;
+    const subtotalNeto = cuponAplicado ? Math.max(0, subtotalBruto - descuento) : subtotalBruto;
+    const costoEntrega = Number(pedido.costoEntrega) || 0;
+    const totalFinal = typeof pedido.totalFinal === 'number' ? pedido.totalFinal : (subtotalNeto + costoEntrega);
+
     let mensaje = `Hola, *Dunes Parfums*\n\n`;
     mensaje += `Deseo realizar el siguiente pedido:\n\n`;
-    
-    // SECTION: Products
+
+    // SECCIÓN: PRODUCTOS
     mensaje += `*PRODUCTOS*\n\n`;
     items.forEach(item => {
-        const subtotal = item.precio * item.cantidad;
-        let presentacionTexto = `${item.tamanoMl}`;
+        const cant = Number(item.cantidad) || 1;
+        const precioUnit = Number(item.precioUnitario ?? item.precio) || 0;
+        const subtotal = cant * precioUnit;
+        let presentacionTexto = item.tamanoMl ? `${item.tamanoMl}` : '';
         if (item.presentacion) {
             const match = item.presentacion.match(/(\d+)\s*ml/i);
             if (match) {
@@ -75,54 +76,63 @@ function generarMensajeWhatsApp(pedido) {
             }
         }
         presentacionTexto = presentacionTexto.trim();
-        if (!presentacionTexto.toLowerCase().endsWith('ml')) {
+        if (presentacionTexto && !presentacionTexto.toLowerCase().endsWith('ml')) {
             presentacionTexto += ' ml';
         }
-        mensaje += `• ${item.cantidad} x ${item.nombre} — ${presentacionTexto} — S/${subtotal.toFixed(2)}\n`;
+        const detallePres = presentacionTexto ? ` — ${presentacionTexto}` : '';
+        mensaje += `• ${cant} x ${item.nombre}${detallePres} — S/${subtotal.toFixed(2)}\n`;
     });
     mensaje += `\n`;
-    
-    // SECTION: Delivery/Entrega
-    mensaje += `*ENTREGA*\n\n`;
+
+    // SECCIÓN: RESUMEN Y CUPÓN
+    mensaje += `*RESUMEN DEL PEDIDO*\n\n`;
+    mensaje += `Subtotal de productos: S/${subtotalBruto.toFixed(2)}\n`;
+
+    if (cuponAplicado && descuento > 0) {
+        mensaje += `Cupón aplicado: ${cuponAplicado.codigo}\n`;
+        mensaje += `Descuento: -S/${descuento.toFixed(2)}\n`;
+        mensaje += `Subtotal con descuento: S/${subtotalNeto.toFixed(2)}\n`;
+    }
+
+    const costoTexto = costoEntrega === 0 ? 'GRATIS' : `S/${costoEntrega.toFixed(2)}`;
+
     if (datosEntrega.tipoEntrega === 'delivery-local') {
-        mensaje += `Delivery local\n`;
         let nombreZona = datosEntrega.nombreZona;
         if (!nombreZona && datosEntrega.zona) {
             const zonaFormateada = datosEntrega.zona.charAt(0).toUpperCase() + datosEntrega.zona.slice(1).replace('-', ' ');
             nombreZona = datosEntrega.zona === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
         }
-        mensaje += `Zona: ${nombreZona}\n`;
+        mensaje += `Tipo de entrega: Delivery local (${nombreZona || 'Local'})\n`;
+        mensaje += `Costo de entrega: ${costoTexto}\n`;
+    } else if (datosEntrega.tipoEntrega === 'agencia') {
+        mensaje += `Tipo de entrega: Envío por agencia\n`;
+        mensaje += `Embalaje y llevada: ${costoTexto}\n`;
+    } else if (datosEntrega.tipoEntrega === 'recojo-local') {
+        mensaje += `Tipo de entrega: Recojo en local\n`;
+        mensaje += `Costo de entrega: ${costoTexto}\n`;
+    }
+
+    mensaje += `*TOTAL DEL PEDIDO: S/${totalFinal.toFixed(2)}*\n\n`;
+
+    // SECCIÓN: DATOS DEL CLIENTE
+    mensaje += `*DATOS DEL CLIENTE*\n\n`;
+    if (datosEntrega.tipoEntrega === 'delivery-local') {
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
         mensaje += `Celular: ${datosEntrega.celular}\n`;
         mensaje += `Dirección: ${datosEntrega.direccion}\n`;
-        
         if (datosEntrega.referencia && datosEntrega.referencia.trim()) {
             mensaje += `Referencia: ${datosEntrega.referencia.trim()}\n`;
         }
-        
-        const costoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
-        mensaje += `Costo de delivery: ${costoTexto}\n\n`;
-        
     } else if (datosEntrega.tipoEntrega === 'agencia') {
-        mensaje += `Envío por agencia\n`;
-        const cargoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
-        mensaje += `Embalaje y llevada: ${cargoTexto}\n\n`;
-        mensaje += `_Coordinaremos los datos del envío por WhatsApp._\n\n`;
-        
+        mensaje += `_Coordinaremos los datos del envío por agencia por WhatsApp._\n`;
     } else if (datosEntrega.tipoEntrega === 'recojo-local') {
-        mensaje += `Recojo en local\n`;
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
         mensaje += `Celular: ${datosEntrega.celular}\n`;
-        
-        const costoTexto = costoEntrega === 0 ? '*GRATIS*' : `S/${costoEntrega.toFixed(2)}`;
-        mensaje += `Costo de entrega: ${costoTexto}\n\n`;
-        mensaje += `_Coordinaremos el horario de recojo por WhatsApp._\n\n`;
+        mensaje += `_Coordinaremos el horario de recojo por WhatsApp._\n`;
     }
-    
-    // SECTION: Total and footer
-    mensaje += `*TOTAL A PAGAR: S/${totalFinal.toFixed(2)}*\n\n`;
-    mensaje += `_Quedo atento para confirmar mi pedido._`;
-    
+
+    mensaje += `\n_Quedo atento para confirmar mi pedido._`;
+
     return mensaje;
 }
 
@@ -133,23 +143,27 @@ function generarMensajeWhatsApp(pedido) {
  * @param {Object} [cliente] 
  */
 function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
-    let items, subtotalProductos, datosEntrega, costoEntrega, totalFinal;
-    
+    let pedido;
+
     if (itemsOrPedido && itemsOrPedido.productos) {
-        const pedido = itemsOrPedido;
-        items = pedido.productos;
-        subtotalProductos = pedido.subtotalProductos;
-        datosEntrega = pedido.datosEntrega;
-        costoEntrega = pedido.costoEntrega;
-        totalFinal = pedido.totalFinal;
+        pedido = itemsOrPedido;
     } else {
-        items = itemsOrPedido;
-        subtotalProductos = total;
-        datosEntrega = cliente;
-        costoEntrega = cliente ? cliente.costoEntrega : 0;
-        totalFinal = cliente ? cliente.totalFinal : total;
+        const items = itemsOrPedido;
+        const datosEntrega = cliente;
+        const subtotalBruto = total;
+        const costoEntrega = cliente ? (cliente.costoEntrega || 0) : 0;
+        const totalFinal = cliente ? (cliente.totalFinal || total) : total;
+
+        pedido = {
+            productos: items,
+            subtotalBruto,
+            subtotalProductos: subtotalBruto,
+            costoEntrega,
+            totalFinal,
+            datosEntrega
+        };
     }
-    
+
     const showCheckoutError = (msg = "No fue posible abrir WhatsApp. Revisa los datos del pedido e inténtalo nuevamente.") => {
         const errorContainer = document.getElementById('checkout-error-msg');
         if (errorContainer) {
@@ -160,21 +174,11 @@ function enviarPedidoWhatsApp(itemsOrPedido, total, cliente) {
         }
     };
 
-    if (!items || items.length === 0 || !datosEntrega || !datosEntrega.tipoEntrega ||
-        typeof subtotalProductos !== 'number' || isNaN(subtotalProductos) ||
-        typeof totalFinal !== 'number' || isNaN(totalFinal)) {
+    if (!pedido || !pedido.productos || pedido.productos.length === 0 || !pedido.datosEntrega || !pedido.datosEntrega.tipoEntrega) {
         console.error("No se puede abrir WhatsApp: Datos del pedido inválidos o incompletos.");
         showCheckoutError();
         return;
     }
-
-    const pedido = {
-        productos: items,
-        subtotalProductos,
-        datosEntrega,
-        costoEntrega,
-        totalFinal
-    };
 
     const mensaje = generarMensajeWhatsApp(pedido);
     if (!mensaje || !mensaje.trim()) {

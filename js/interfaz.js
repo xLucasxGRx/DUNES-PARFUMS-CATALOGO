@@ -1987,17 +1987,17 @@ function inicializarCheckoutForm() {
 
 function confirmarPedidoWhatsApp(e) {
     if (e) e.preventDefault();
-    
+
     const rawItems = window.carritoModulo.obtenerCarrito();
-    if (rawItems.length === 0) {
+    if (!rawItems || rawItems.length === 0) {
         window.carritoModulo.mostrarToastPremium('El carrito está vacío.', true);
         return;
     }
-    
+
     const validation = validarFormularioEntrega(true);
     if (!validation.valido) {
         window.carritoModulo.mostrarToastPremium('Por favor complete todos los datos requeridos correctamente.', true);
-        
+
         // Focus the first invalid field
         const firstErrorFieldId = Object.keys(validation.errores)[0];
         if (firstErrorFieldId) {
@@ -2006,7 +2006,32 @@ function confirmarPedidoWhatsApp(e) {
         }
         return;
     }
-    
+
+    // Revalidación final del cupón y totales antes de generar el mensaje
+    if (window.cuponesCheckout && typeof window.cuponesCheckout.recalcularCupon === 'function') {
+        window.cuponesCheckout.recalcularCupon();
+    }
+
+    const totales = obtenerTotalesPedido();
+    const { subtotalBruto, subtotalNeto, descuento, costoEntrega, totalFinal, cuponAplicado, resultadoCupon } = totales;
+
+    // Control de consistencia del total visual vs calculado
+    const totalDOMText = document.getElementById('cart-total-price') ? document.getElementById('cart-total-price').textContent : '';
+    let totalDOMNum = null;
+    if (totalDOMText) {
+        const match = totalDOMText.match(/[\d.]+/);
+        if (match) totalDOMNum = parseFloat(match[0]);
+    }
+
+    if (totalDOMNum !== null && Math.abs(totalDOMNum - totalFinal) > 0.01) {
+        actualizarResumenEntrega();
+        if (window.cuponesUI && typeof window.cuponesUI.sincronizarInterfazCupon === 'function') {
+            window.cuponesUI.sincronizarInterfazCupon();
+        }
+        window.carritoModulo.mostrarToastPremium('No pudimos actualizar el total del pedido. Inténtalo nuevamente.', true);
+        return;
+    }
+
     const items = rawItems.map(item => ({
         id: item.id,
         idProducto: item.idProducto,
@@ -2020,20 +2045,24 @@ function confirmarPedidoWhatsApp(e) {
         tamanoMl: item.tamanoMl,
         precio: item.precioUnitario,
         cantidad: item.cantidad,
-        subtotal: item.subtotal
+        subtotal: (Number(item.precioUnitario) || 0) * (Number(item.cantidad) || 0)
     }));
-    
-    const { subtotalProductos, costoEntrega, totalFinal } = obtenerTotalesPedido();
+
     const datosEntrega = obtenerDatosEntrega();
-    
+
     const pedido = {
         productos: items,
-        subtotalProductos,
+        subtotalBruto,
+        subtotalProductos: subtotalBruto,
+        descuento,
+        subtotalNeto,
         costoEntrega,
         totalFinal,
+        cuponAplicado,
+        resultadoCupon,
         datosEntrega
     };
-    
+
     window.whatsappConfig.enviarPedidoWhatsApp(pedido);
 }
 
