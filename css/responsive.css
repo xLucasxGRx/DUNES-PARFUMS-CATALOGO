@@ -343,13 +343,13 @@
     grid-template-areas:
       "image info"
       "qty subtotal" !important;
-    background-color: var(--catalog-card-background, #FFFEFC) !important;
-    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    background-color: var(--surface-card, #FFFEFC) !important;
+    border: var(--border-card, 1px solid var(--catalog-gold-border, #E7D3A5)) !important;
     border-radius: 14px !important;
     margin-bottom: 12px !important;
     padding: 12px 14px !important;
     gap: 8px 12px !important;
-    box-shadow: 0 4px 12px rgba(31, 24, 12, 0.05) !important;
+    box-shadow: var(--shadow-sm, 0 4px 12px rgba(31, 24, 12, 0.05)) !important;
     height: auto !important;
     min-height: 0 !important;
     width: 100% !important;
