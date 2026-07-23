@@ -940,75 +940,95 @@ function vincularEventosCarritoDOM(container) {
         });
     });
 
-    // Vaciar carrito con Modal Personalizado
-    const emptyBtn = document.getElementById('btn-empty-cart');
-    if (emptyBtn) {
-        const newEmptyBtn = emptyBtn.cloneNode(true);
-        emptyBtn.parentNode.replaceChild(newEmptyBtn, emptyBtn);
+    // Inicializar Modal de Vaciar Carrito (Singleton Handler)
+    inicializarModalVaciarCarrito();
+}
 
-        const modal = document.getElementById('modal-confirm-vaciar');
-        const btnCancelar = document.getElementById('btn-cancelar-vaciar');
-        const btnConfirmar = document.getElementById('btn-confirmar-vaciar');
+/**
+ * Inicializa el modal personalizado de confirmación de vaciar carrito (una sola vez)
+ */
+function inicializarModalVaciarCarrito() {
+    const modal = document.getElementById('modal-confirm-vaciar');
+    if (!modal || modal.dataset.initialized === 'true') return;
+    modal.dataset.initialized = 'true';
 
-        const abrirModalVaciar = () => {
-            if (modal) {
-                modal.style.display = 'flex';
-                requestAnimationFrame(() => modal.classList.add('active'));
-                modal.setAttribute('aria-hidden', 'false');
-                if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-            } else if (window.carritoModulo && window.carritoModulo.vaciarCarrito) {
+    const btnCancelar = document.getElementById('btn-cancelar-vaciar');
+    const btnConfirmar = document.getElementById('btn-confirmar-vaciar');
+    const modalCard = modal.querySelector('.modal-card');
+
+    function abrirModal() {
+        modal.style.display = 'flex';
+        requestAnimationFrame(() => {
+            modal.classList.add('active');
+        });
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+    }
+
+    function cerrarModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            if (!modal.classList.contains('active')) {
+                modal.style.display = 'none';
+            }
+        }, 200);
+    }
+
+    // Delegación de evento de clic para abrir el modal cuando se presiona #btn-empty-cart
+    document.addEventListener('click', (e) => {
+        const emptyBtn = e.target.closest('#btn-empty-cart');
+        if (emptyBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            abrirModal();
+        }
+    });
+
+    // Detener propagación de clics dentro del modal-card
+    if (modalCard) {
+        modalCard.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    }
+
+    // Clic en el fondo oscuro cierra el modal
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            e.preventDefault();
+            cerrarModal();
+        }
+    });
+
+    // Botón Cancelar cierra el modal
+    if (btnCancelar) {
+        btnCancelar.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            cerrarModal();
+        });
+    }
+
+    // Botón Confirmar vacía el carrito y cierra el modal
+    if (btnConfirmar) {
+        btnConfirmar.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            cerrarModal();
+            if (window.carritoModulo && typeof window.carritoModulo.vaciarCarrito === 'function') {
                 window.carritoModulo.vaciarCarrito();
             }
-        };
-
-        const cerrarModalVaciar = () => {
-            if (modal) {
-                modal.classList.remove('active');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                    modal.setAttribute('aria-hidden', 'true');
-                }, 200);
-            }
-        };
-
-        newEmptyBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            abrirModalVaciar();
         });
-
-        if (btnCancelar && !btnCancelar.dataset.bound) {
-            btnCancelar.dataset.bound = 'true';
-            btnCancelar.addEventListener('click', (e) => {
-                e.preventDefault();
-                cerrarModalVaciar();
-            });
-        }
-
-        if (btnConfirmar && !btnConfirmar.dataset.bound) {
-            btnConfirmar.dataset.bound = 'true';
-            btnConfirmar.addEventListener('click', (e) => {
-                e.preventDefault();
-                cerrarModalVaciar();
-                if (window.carritoModulo && window.carritoModulo.vaciarCarrito) {
-                    window.carritoModulo.vaciarCarrito();
-                }
-            });
-        }
-
-        if (modal && !modal.dataset.bound) {
-            modal.dataset.bound = 'true';
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    cerrarModalVaciar();
-                }
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    cerrarModalVaciar();
-                }
-            });
-        }
     }
+
+    // Tecla Escape cierra el modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            cerrarModal();
+        }
+    });
 }
 
 const CONFIG_DELIVERY_LOCAL = {
