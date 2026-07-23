@@ -883,7 +883,7 @@ async function renderizarCarritoDOM() {
                 </td>
                 <td class="cart-td-subtotal">${formatearMoneda(subtotal)}</td>
                 <td class="cart-td-remove">
-                    <button class="btn-remove-item" data-id="${item.id}" aria-label="Eliminar del carrito" title="Eliminar del carrito"><i data-lucide="x" class="icon-xs" aria-hidden="true"></i></button>
+                    <button class="btn-remove-item" data-id="${item.id}" aria-label="Eliminar de carrito">×</button>
                 </td>
             </tr>
         `;
@@ -908,8 +908,6 @@ async function renderizarCarritoDOM() {
 
     // Asignar eventos de botones del carrito
     vincularEventosCarritoDOM(container);
-    if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-}
 }
 
 /**

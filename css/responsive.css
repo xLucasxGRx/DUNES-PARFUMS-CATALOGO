@@ -410,7 +410,7 @@
     gap: 2px !important;
     min-width: 0 !important;
     width: 100% !important;
-    padding-right: 42px !important;
+    padding-right: 36px !important;
     box-sizing: border-box !important;
   }
 
@@ -456,69 +456,36 @@
     display: none !important;
   }
 
-  #page-carrito #cart-table-container .cart-td-remove,
-  #page-carrito .cart-td-remove,
   #cart-table-container .cart-td-remove,
   .cart-td-remove {
     position: absolute !important;
-    top: 12px !important;
-    right: 12px !important;
-    left: auto !important;
-    bottom: auto !important;
-    z-index: 10 !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 5 !important;
     width: auto !important;
     height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    display: block !important;
   }
   
-  #page-carrito #cart-table-container .btn-remove-item,
-  #page-carrito .btn-remove-item,
   #cart-table-container .btn-remove-item,
   .btn-remove-item {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-    min-height: 32px !important;
-    max-width: 32px !important;
-    max-height: 32px !important;
-    border-radius: 50% !important;
-    background-color: rgba(201, 59, 59, 0.08) !important;
-    border: 1px solid rgba(201, 59, 59, 0.22) !important;
-    color: #C93B3B !important;
+    font-size: 1.1rem !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    border-radius: 50% !important;
+    background-color: rgba(220, 53, 69, 0.08) !important;
+    color: #DC3545 !important;
+    border: 1px solid rgba(220, 53, 69, 0.2) !important;
     cursor: pointer !important;
-    transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease !important;
+    transition: var(--transition-base) !important;
     margin: 0 !important;
     padding: 0 !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    line-height: 1 !important;
-  }
-
-  #page-carrito .btn-remove-item:hover,
-  #page-carrito .btn-remove-item:active,
-  .btn-remove-item:hover,
-  .btn-remove-item:active {
-    background-color: rgba(201, 59, 59, 0.18) !important;
-    border-color: rgba(201, 59, 59, 0.40) !important;
-    color: #A82828 !important;
-    transform: scale(1.05) !important;
-  }
-
-  #page-carrito .btn-remove-item [data-lucide],
-  #page-carrito .btn-remove-item i,
-  #page-carrito .btn-remove-item svg,
-  .btn-remove-item [data-lucide],
-  .btn-remove-item i,
-  .btn-remove-item svg {
-    width: 14px !important;
-    height: 14px !important;
-    color: #C93B3B !important;
   }
 
   /* Fila inferior: Cantidad (abajo izquierda) y Subtotal (abajo derecha) */
