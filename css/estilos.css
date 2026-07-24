@@ -1721,25 +1721,46 @@ button:disabled,
 .social-links {
     display: flex;
     gap: 12px;
+    align-items: center;
 }
 
-.social-btn {
-    width: 36px;
-    height: 36px;
+.social-btn,
+.social-link {
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-light);
-    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--color-text-light, #FFFFFF);
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: var(--transition-smooth);
+    text-decoration: none;
+    flex-shrink: 0;
 }
 
-.social-btn:hover {
-    background-color: var(--color-primary);
-    color: var(--color-bg-dark);
+.social-btn:hover,
+.social-link:hover {
+    background: var(--color-gold-gradient);
+    color: #171717;
     border-color: var(--color-primary);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+}
+
+.social-btn:focus-visible,
+.social-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .social-btn:hover,
+    .social-link:hover {
+        transform: none;
+        transition: none;
+    }
 }
 
 /* Nota de confirmación WhatsApp */
