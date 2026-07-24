@@ -164,11 +164,12 @@
     transition: transform 300ms ease;
 }
 
-/* Adaptabilidad según tipo */
+/* Adaptabilidad de proporciones de imágenes para evitar deformación */
+.reference-card[data-tipo="envio"] .reference-img,
 .reference-card[data-tipo="conversacion"] .reference-img {
     object-fit: contain;
-    background: #FFFFFF;
-    padding: 6px;
+    background: #F4F1EA;
+    padding: 4px;
 }
 
 .reference-card:hover .reference-img {

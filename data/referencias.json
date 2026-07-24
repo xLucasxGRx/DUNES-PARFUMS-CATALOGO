@@ -1,1 +1,555 @@
-[]
+[
+  {
+    "id": "entrega-001",
+    "imagen": "assets/referencias/entregas/referenciaentrega1.jpeg",
+    "alt": "Entrega realizada a un cliente de Dunes Parfums",
+    "tipo": "entrega",
+    "descripcion": "Pedido entregado correctamente en Tarapoto",
+    "visible": true,
+    "destacada": true,
+    "orden": 1
+  },
+  {
+    "id": "decant-001",
+    "imagen": "assets/referencias/decants/decants1.jpeg",
+    "alt": "Preparación y entrega de decants originales de Dunes Parfums",
+    "tipo": "decant",
+    "descripcion": "Decants preparados para nuestros clientes",
+    "visible": true,
+    "destacada": true,
+    "orden": 2
+  },
+  {
+    "id": "envio-001",
+    "imagen": "assets/referencias/envios/envios1.jpeg",
+    "alt": "Envío por agencia realizado por Dunes Parfums",
+    "tipo": "envio",
+    "descripcion": "Pedido preparado y enviado por agencia a provincia",
+    "visible": true,
+    "destacada": true,
+    "orden": 3
+  },
+  {
+    "id": "entrega-002",
+    "imagen": "assets/referencias/entregas/referenciaentrega2.jpeg",
+    "alt": "Entrega de perfume sellado a cliente",
+    "tipo": "entrega",
+    "descripcion": "Entrega confirmada y cliente conforme",
+    "visible": true,
+    "destacada": true,
+    "orden": 4
+  },
+  {
+    "id": "decant-002",
+    "imagen": "assets/referencias/decants/decants2.jpeg",
+    "alt": "Muestras y decants de perfume fino",
+    "tipo": "decant",
+    "descripcion": "Muestras de 5ml y 10ml en frascos atomizadores",
+    "visible": true,
+    "destacada": true,
+    "orden": 5
+  },
+  {
+    "id": "entrega-003",
+    "imagen": "assets/referencias/entregas/referenciaentrega3.jpeg",
+    "alt": "Entrega directa de pedido local",
+    "tipo": "entrega",
+    "descripcion": "Delivery local entregado con éxito",
+    "visible": true,
+    "destacada": true,
+    "orden": 6
+  },
+  {
+    "id": "envio-002",
+    "imagen": "assets/referencias/envios/envios2.jpeg",
+    "alt": "Comprobante y paquete de envío nacional",
+    "tipo": "envio",
+    "descripcion": "Envío seguro a todo el Perú",
+    "visible": true,
+    "destacada": true,
+    "orden": 7
+  },
+  {
+    "id": "entrega-004",
+    "imagen": "assets/referencias/entregas/referenciaentrega4.jpeg",
+    "alt": "Entrega de pedido en Morales",
+    "tipo": "entrega",
+    "descripcion": "Pedido recibido por nuestro cliente",
+    "visible": true,
+    "destacada": true,
+    "orden": 8
+  },
+  {
+    "id": "decant-003",
+    "imagen": "assets/referencias/decants/decants3.jpeg",
+    "alt": "Decants listos para entrega",
+    "tipo": "decant",
+    "descripcion": "Fragancias exclusivas en formato de prueba",
+    "visible": true,
+    "destacada": true,
+    "orden": 9
+  },
+  {
+    "id": "envio-003",
+    "imagen": "assets/referencias/envios/envios3.jpeg",
+    "alt": "Despacho de paquete en agencia de envíos",
+    "tipo": "envio",
+    "descripcion": "Paquete embalado con clave de seguimiento",
+    "visible": true,
+    "destacada": true,
+    "orden": 10
+  },
+  {
+    "id": "entrega-005",
+    "imagen": "assets/referencias/entregas/referenciaentrega5.jpeg",
+    "alt": "Cliente recibiendo su fragancia favorita",
+    "tipo": "entrega",
+    "descripcion": "Entrega conforme de perfume 100% original",
+    "visible": true,
+    "destacada": true,
+    "orden": 11
+  },
+  {
+    "id": "decant-004",
+    "imagen": "assets/referencias/decants/decants4.jpeg",
+    "alt": "Colección de decants de perfumería fina",
+    "tipo": "decant",
+    "descripcion": "Variedad de perfumería de nicho y diseñador",
+    "visible": true,
+    "destacada": true,
+    "orden": 12
+  },
+  {
+    "id": "entrega-006",
+    "imagen": "assets/referencias/entregas/referenciaentrega6.jpeg",
+    "alt": "Entrega en La Banda de Shilcayo",
+    "tipo": "entrega",
+    "descripcion": "Entrega realizada en la zona local",
+    "visible": true,
+    "destacada": true,
+    "orden": 13
+  },
+  {
+    "id": "envio-004",
+    "imagen": "assets/referencias/envios/envios4.jpeg",
+    "alt": "Envío de perfume sellado por agencia",
+    "tipo": "envio",
+    "descripcion": "Protección hermética antishock para envíos",
+    "visible": true,
+    "destacada": true,
+    "orden": 14
+  },
+  {
+    "id": "entrega-007",
+    "imagen": "assets/referencias/entregas/referenciaentrega7.jpeg",
+    "alt": "Entrega de perfume sellado más decants",
+    "tipo": "entrega",
+    "descripcion": "Pedido combinado entregado al cliente",
+    "visible": true,
+    "destacada": true,
+    "orden": 15
+  },
+  {
+    "id": "decant-005",
+    "imagen": "assets/referencias/decants/decants5.jpeg",
+    "alt": "Decants preparados a pedido",
+    "tipo": "decant",
+    "descripcion": "Decants de perfume 100% original",
+    "visible": true,
+    "destacada": true,
+    "orden": 16
+  },
+  {
+    "id": "envio-005",
+    "imagen": "assets/referencias/envios/envios5.jpeg",
+    "alt": "Guía de envío de pedido nacional",
+    "tipo": "envio",
+    "descripcion": "Código de seguimiento enviado al cliente",
+    "visible": true,
+    "destacada": true,
+    "orden": 17
+  },
+  {
+    "id": "entrega-008",
+    "imagen": "assets/referencias/entregas/referenciaentrega8.jpeg",
+    "alt": "Entrega local en Tarapoto",
+    "tipo": "entrega",
+    "descripcion": "Cliente satisfecho con su compra",
+    "visible": true,
+    "destacada": true,
+    "orden": 18
+  },
+  {
+    "id": "decant-006",
+    "imagen": "assets/referencias/decants/decants6.jpeg",
+    "alt": "Presentación de decants Dunes Parfums",
+    "tipo": "decant",
+    "descripcion": "Decants empaquetados para cliente",
+    "visible": true,
+    "destacada": true,
+    "orden": 19
+  },
+  {
+    "id": "entrega-009",
+    "imagen": "assets/referencias/entregas/referenciaentrega9.jpeg",
+    "alt": "Entrega presencial de pedido",
+    "tipo": "entrega",
+    "descripcion": "Entrega personal coordinada por WhatsApp",
+    "visible": true,
+    "destacada": true,
+    "orden": 20
+  },
+  {
+    "id": "envio-006",
+    "imagen": "assets/referencias/envios/envios6.jpeg",
+    "alt": "Paquete listo para agencia de transporte",
+    "tipo": "envio",
+    "descripcion": "Envío interprovincial en camino",
+    "visible": true,
+    "destacada": true,
+    "orden": 21
+  },
+  {
+    "id": "entrega-010",
+    "imagen": "assets/referencias/entregas/referenciaentrega10.jpeg",
+    "alt": "Pedido recibido en Cacatachi",
+    "tipo": "entrega",
+    "descripcion": "Recojo en local / delivery Cacatachi",
+    "visible": true,
+    "destacada": true,
+    "orden": 22
+  },
+  {
+    "id": "decant-007",
+    "imagen": "assets/referencias/decants/decants7.jpeg",
+    "alt": "Formatos de muestra y decants",
+    "tipo": "decant",
+    "descripcion": "Presentaciones atomizadoras de 3ml, 5ml y 10ml",
+    "visible": true,
+    "destacada": true,
+    "orden": 23
+  },
+  {
+    "id": "envio-007",
+    "imagen": "assets/referencias/envios/envios7.jpeg",
+    "alt": "Despacho de pedidos varios a provincia",
+    "tipo": "envio",
+    "descripcion": "Despacho grupal por agencia",
+    "visible": true,
+    "destacada": true,
+    "orden": 24
+  },
+  {
+    "id": "entrega-011",
+    "imagen": "assets/referencias/entregas/referenciaentrega11.jpeg",
+    "alt": "Entrega de fragancia árabe sellada",
+    "tipo": "entrega",
+    "descripcion": "Perfume sellado entregado intacto",
+    "visible": true,
+    "destacada": true,
+    "orden": 25
+  },
+  {
+    "id": "decant-008",
+    "imagen": "assets/referencias/decants/decants8.jpeg",
+    "alt": "Perfumes listos para fraccionar en decants",
+    "tipo": "decant",
+    "descripcion": "Preparación higiénica y directa del frasco original",
+    "visible": true,
+    "destacada": true,
+    "orden": 26
+  },
+  {
+    "id": "entrega-012",
+    "imagen": "assets/referencias/entregas/referenciaentrega12.jpeg",
+    "alt": "Entrega realizada con éxito",
+    "tipo": "entrega",
+    "descripcion": "Entrega rápida y puntual",
+    "visible": true,
+    "destacada": true,
+    "orden": 27
+  },
+  {
+    "id": "envio-008",
+    "imagen": "assets/referencias/envios/envios8.jpeg",
+    "alt": "Envío a cliente en el interior del Perú",
+    "tipo": "envio",
+    "descripcion": "Entrega nacional coordinada por agencia",
+    "visible": true,
+    "destacada": true,
+    "orden": 28
+  },
+  {
+    "id": "entrega-013",
+    "imagen": "assets/referencias/entregas/referenciaentrega13.jpeg",
+    "alt": "Foto de pedido recibido por cliente",
+    "tipo": "entrega",
+    "descripcion": "Foto compartida por nuestro cliente",
+    "visible": true,
+    "destacada": true,
+    "orden": 29
+  },
+  {
+    "id": "entrega-014",
+    "imagen": "assets/referencias/entregas/referenciaentrega14.jpeg",
+    "alt": "Entrega conforme de perfume de nicho",
+    "tipo": "entrega",
+    "descripcion": "Entrega especial de fragancia fina",
+    "visible": true,
+    "destacada": true,
+    "orden": 30
+  },
+
+  {
+    "id": "decant-009",
+    "imagen": "assets/referencias/decants/decants9.jpeg",
+    "alt": "Set de decants seleccionados",
+    "tipo": "decant",
+    "descripcion": "Set de decants para probar distintas notas",
+    "visible": true,
+    "destacada": false,
+    "orden": 31
+  },
+  {
+    "id": "decant-010",
+    "imagen": "assets/referencias/decants/decants10.jpeg",
+    "alt": "Decants listos para despacho",
+    "tipo": "decant",
+    "descripcion": "Muestras de fragancias árabes y de nicho",
+    "visible": true,
+    "destacada": false,
+    "orden": 32
+  },
+  {
+    "id": "decant-011",
+    "imagen": "assets/referencias/decants/decants11.jpeg",
+    "alt": "Entrega de decants a clientes",
+    "tipo": "decant",
+    "descripcion": "Decants con etiquetado claro de la fragancia",
+    "visible": true,
+    "destacada": false,
+    "orden": 33
+  },
+
+  {
+    "id": "entrega-015",
+    "imagen": "assets/referencias/entregas/referenciaentrega15.jpeg",
+    "alt": "Entrega de decants a cliente recurrente",
+    "tipo": "entrega",
+    "descripcion": "Cliente frecuente satisfecho",
+    "visible": true,
+    "destacada": false,
+    "orden": 34
+  },
+  {
+    "id": "entrega-016",
+    "imagen": "assets/referencias/entregas/referenciaentrega16.jpeg",
+    "alt": "Entrega realizada en Tarapoto",
+    "tipo": "entrega",
+    "descripcion": "Pedido entregado con boleta y empaque",
+    "visible": true,
+    "destacada": false,
+    "orden": 35
+  },
+  {
+    "id": "entrega-017",
+    "imagen": "assets/referencias/entregas/referenciaentrega17.jpeg",
+    "alt": "Entrega de varios perfumes en combo",
+    "tipo": "entrega",
+    "descripcion": "Combo de fragancias entregado",
+    "visible": true,
+    "destacada": false,
+    "orden": 36
+  },
+  {
+    "id": "entrega-018",
+    "imagen": "assets/referencias/entregas/referenciaentrega18.jpeg",
+    "alt": "Entrega local en Morales",
+    "tipo": "entrega",
+    "descripcion": "Delivery recibido sin inconvenientes",
+    "visible": true,
+    "destacada": false,
+    "orden": 37
+  },
+  {
+    "id": "entrega-019",
+    "imagen": "assets/referencias/entregas/referenciaentrega19.jpeg",
+    "alt": "Entrega de regalo especial de perfume",
+    "tipo": "entrega",
+    "descripcion": "Pedido empaquetado para regalo entregado",
+    "visible": true,
+    "destacada": false,
+    "orden": 38
+  },
+  {
+    "id": "entrega-020",
+    "imagen": "assets/referencias/entregas/referenciaentrega20.jpeg",
+    "alt": "Entrega de pedido por delivery",
+    "tipo": "entrega",
+    "descripcion": "Delivery express entregado a tiempo",
+    "visible": true,
+    "destacada": false,
+    "orden": 39
+  },
+  {
+    "id": "entrega-021",
+    "imagen": "assets/referencias/entregas/referenciaentrega21.jpeg",
+    "alt": "Cliente con su perfume Dunes Parfums",
+    "tipo": "entrega",
+    "descripcion": "Cliente listo para disfrutar su aroma",
+    "visible": true,
+    "destacada": false,
+    "orden": 40
+  },
+  {
+    "id": "entrega-022",
+    "imagen": "assets/referencias/entregas/referenciaentrega22.jpeg",
+    "alt": "Entrega realizada en San Martín",
+    "tipo": "entrega",
+    "descripcion": "Entrega local realizada con seguridad",
+    "visible": true,
+    "destacada": false,
+    "orden": 41
+  },
+  {
+    "id": "entrega-023",
+    "imagen": "assets/referencias/entregas/referenciaentrega23.jpeg",
+    "alt": "Entrega de fragancias selladas",
+    "tipo": "entrega",
+    "descripcion": "Productos en caja sellada de fábrica",
+    "visible": true,
+    "destacada": false,
+    "orden": 42
+  },
+  {
+    "id": "entrega-024",
+    "imagen": "assets/referencias/entregas/referenciaentrega24.jpeg",
+    "alt": "Entrega directa de pedido",
+    "tipo": "entrega",
+    "descripcion": "Atención rápida y entregada en mano",
+    "visible": true,
+    "destacada": false,
+    "orden": 43
+  },
+  {
+    "id": "entrega-025",
+    "imagen": "assets/referencias/entregas/referenciaentrega25.jpeg",
+    "alt": "Pedido entregado a cliente satisfecho",
+    "tipo": "entrega",
+    "descripcion": "Excelente experiencia de compra",
+    "visible": true,
+    "destacada": false,
+    "orden": 44
+  },
+  {
+    "id": "entrega-026",
+    "imagen": "assets/referencias/entregas/referenciaentrega26.jpeg",
+    "alt": "Entrega de perfume importado",
+    "tipo": "entrega",
+    "descripcion": "Producto 100% original recibido",
+    "visible": true,
+    "destacada": false,
+    "orden": 45
+  },
+  {
+    "id": "entrega-027",
+    "imagen": "assets/referencias/entregas/referenciaentrega27.jpeg",
+    "alt": "Entrega realizada en punto de encuentro",
+    "tipo": "entrega",
+    "descripcion": "Coordinación exacta vía WhatsApp",
+    "visible": true,
+    "destacada": false,
+    "orden": 46
+  },
+  {
+    "id": "entrega-028",
+    "imagen": "assets/referencias/entregas/referenciaentrega28.jpeg",
+    "alt": "Entrega de fragancia de diseñador",
+    "tipo": "entrega",
+    "descripcion": "Perfume de diseñador entregado",
+    "visible": true,
+    "destacada": false,
+    "orden": 47
+  },
+  {
+    "id": "entrega-029",
+    "imagen": "assets/referencias/entregas/referenciaentrega29.jpeg",
+    "alt": "Entrega de paquete sellado",
+    "tipo": "entrega",
+    "descripcion": "Empaque protegido y listo para regalo",
+    "visible": true,
+    "destacada": false,
+    "orden": 48
+  },
+  {
+    "id": "entrega-030",
+    "imagen": "assets/referencias/entregas/referenciaentrega30.jpeg",
+    "alt": "Entrega en Cacatachi",
+    "tipo": "entrega",
+    "descripcion": "Recojo en punto oficial Dunes Parfums",
+    "visible": true,
+    "destacada": false,
+    "orden": 49
+  },
+  {
+    "id": "entrega-031",
+    "imagen": "assets/referencias/entregas/referenciaentrega31.jpeg",
+    "alt": "Entrega de set de decants",
+    "tipo": "entrega",
+    "descripcion": "Set de muestrario entregado",
+    "visible": true,
+    "destacada": false,
+    "orden": 50
+  },
+  {
+    "id": "entrega-032",
+    "imagen": "assets/referencias/entregas/referenciaentrega32.jpeg",
+    "alt": "Entrega de perfume exclusivo",
+    "tipo": "entrega",
+    "descripcion": "Edición especial entregada a cliente",
+    "visible": true,
+    "destacada": false,
+    "orden": 51
+  },
+  {
+    "id": "entrega-033",
+    "imagen": "assets/referencias/entregas/referenciaentrega33.jpeg",
+    "alt": "Entrega completada de pedido",
+    "tipo": "entrega",
+    "descripcion": "Entrega realizada satisfactoriamente",
+    "visible": true,
+    "destacada": false,
+    "orden": 52
+  },
+
+  {
+    "id": "envio-009",
+    "imagen": "assets/referencias/envios/envios9.jpeg",
+    "alt": "Confirmación de despacho por agencia",
+    "tipo": "envio",
+    "descripcion": "Cliente notificado con su clave de rastreo",
+    "visible": true,
+    "destacada": false,
+    "orden": 53
+  },
+  {
+    "id": "envio-010",
+    "imagen": "assets/referencias/envios/envios10.jpeg",
+    "alt": "Paquetes etiquetados para envío interprovincial",
+    "tipo": "envio",
+    "descripcion": "Envíos diarios a diferentes agencias",
+    "visible": true,
+    "destacada": false,
+    "orden": 54
+  },
+  {
+    "id": "envio-011",
+    "imagen": "assets/referencias/envios/envios11.jpeg",
+    "alt": "Llegada de paquete enviado por agencia",
+    "tipo": "envio",
+    "descripcion": "Pedido recibido en provincia en perfecto estado",
+    "visible": true,
+    "destacada": false,
+    "orden": 55
+  }
+]

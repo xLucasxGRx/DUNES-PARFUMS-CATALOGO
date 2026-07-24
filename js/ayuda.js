@@ -47,8 +47,8 @@ async function cargarYRenderizarReferencias() {
 
         inicializarModalTodasReferencias();
     } catch (err) {
-        console.warn('[Ayuda] No se pudieron cargar las referencias desde JSON, mostrando estado inicial:', err.message);
-        renderizarEstadoVacioCarrusel();
+        console.warn('[Ayuda] No se pudieron cargar las referencias desde JSON, mostrando estado de error:', err.message);
+        renderizarEstadoVacioCarrusel("No pudimos cargar la galería en este momento.");
         inicializarModalTodasReferencias();
     }
 }
@@ -65,10 +65,10 @@ function renderizarCarruselReferencias() {
         return;
     }
 
-    track.innerHTML = estadoReferencias.destacadas.map(ref => `
+    track.innerHTML = estadoReferencias.destacadas.map((ref, index) => `
         <div class="reference-card" data-id="${ref.id}" data-tipo="${ref.tipo || 'entrega'}">
             <div class="reference-img-wrapper">
-                <img src="${ref.imagen}" alt="${ref.alt || 'Producto o entrega de Dunes Parfums'}" class="reference-img" loading="lazy" decoding="async" onerror="this.closest('.reference-card').style.display='none';">
+                <img src="${ref.imagen}" alt="${ref.alt || 'Producto o entrega de Dunes Parfums'}" class="reference-img" loading="${index < 3 ? 'eager' : 'lazy'}" decoding="async" onerror="this.closest('.reference-card').style.display='none';">
                 <div class="reference-zoom-overlay">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
                     <span>Ver ampliada</span>
@@ -93,12 +93,14 @@ function renderizarCarruselReferencias() {
 }
 
 /**
- * Renderiza un estado vacío sin imágenes rotas si no hay referencias registradas
+ * Renderiza un estado vacío o de error si no hay referencias registradas
  */
-function renderizarEstadoVacioCarrusel() {
+function renderizarEstadoVacioCarrusel(mensajeError) {
     const wrapper = document.getElementById('carousel-wrapper');
     const footerBar = document.querySelector('.carousel-footer-bar');
     if (!wrapper) return;
+
+    const texto = mensajeError || "Estamos preparando nuestra galería de entregas, envíos y productos reales.";
 
     wrapper.innerHTML = `
         <div class="references-empty-state">
@@ -107,8 +109,8 @@ function renderizarEstadoVacioCarrusel() {
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
-            <h3 class="references-empty-title">Galería de confianza en proceso</h3>
-            <p class="references-empty-text">Estamos preparando nuestra galería de entregas, envíos y productos reales.</p>
+            <h3 class="references-empty-title">Galería de confianza</h3>
+            <p class="references-empty-text">${texto}</p>
         </div>
     `;
     if (footerBar) footerBar.style.display = 'none';

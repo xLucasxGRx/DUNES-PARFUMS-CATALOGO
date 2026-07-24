@@ -125,12 +125,11 @@ function inicializarMenuMovil() {
         }
     });
 
-    // Cerrar menú al presionar cualquier enlace de navegación (simple o sub-link)
-    const navLinks = navMenu.querySelectorAll('a.nav-link, a.submenu-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
+    // Autocierre y limpieza al redimensionar la ventana a pantallas de escritorio (> 991px)
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 991 && navMenu.classList.contains('active')) {
             cerrarMenu();
-        });
+        }
     });
 
     // Sincronizar submenú si la URL actual corresponde a una categoría
