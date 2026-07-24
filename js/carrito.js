@@ -36,14 +36,31 @@ function actualizarContadorCarrito() {
             contador.textContent = cantidadTotal;
             if (cantidadTotal > 0) {
                 contador.style.display = 'flex';
-                contador.classList.add('pulse-anim');
-                setTimeout(() => {
-                    contador.classList.remove('pulse-anim');
-                }, 400);
             } else {
                 contador.style.display = 'none';
             }
         }
+    });
+}
+
+/**
+ * Aplica una micro-animación elegante al botón del carrito en la cabecera cuando un producto se agrega exitosamente
+ */
+function animarBotonCarritoHeader() {
+    const cartBtns = document.querySelectorAll('.cart-icon-btn');
+    cartBtns.forEach(btn => {
+        if (!btn) return;
+
+        btn.classList.remove('is-cart-animated');
+        // Forzar reflow para reiniciar la animación si se agregan múltiples ítems rápidamente
+        void btn.offsetWidth;
+        btn.classList.add('is-cart-animated');
+
+        const onAnimationEnd = () => {
+            btn.classList.remove('is-cart-animated');
+            btn.removeEventListener('animationend', onAnimationEnd);
+        };
+        btn.addEventListener('animationend', onAnimationEnd, { once: true });
     });
 }
 
@@ -154,6 +171,7 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
 
         guardarCarrito(carrito);
         actualizarContadorCarrito();
+        animarBotonCarritoHeader();
 
         if (!limiteAlcanzado) {
             mostrarToastPremium(`S/ ${precioUnitario.toFixed(2)} - ${product.nombre} (${mlItem}ml) agregado.`);
@@ -364,5 +382,6 @@ window.carritoModulo = {
     eliminarItem,
     vaciarCarrito,
     obtenerItemsCarritoDetallados,
-    mostrarToastPremium
+    mostrarToastPremium,
+    animarBotonCarritoHeader
 };

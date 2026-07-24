@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas Frecuentes y Referencias | Dunes Parfums</title>
+    <meta name="description" content="Resolvemos tus dudas sobre perfumes originales, decants, envíos a todo el Perú y entregas locales en Tarapoto. Conoce experiencias reales de nuestros clientes.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Estilos Base, Responsive y Específicos -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animaciones.css">
+    <link rel="stylesheet" href="css/ayuda.css">
+</head>
+<body id="page-ayuda" class="page-ayuda">
+
+    <!-- 1. ENCABEZADO PRINCIPAL (HEADER) -->
+    <header class="header-main" id="header-main">
+        <div class="container header-container">
+            <!-- Logotipo y Nombre -->
+            <a href="index.html" class="logo-container" aria-label="Volver al inicio de Dunes Parfums">
+                <img src="img/logo/logohorizontaldunesparfums.png?v=20260721-logo-transparente-1" alt="Dunes Parfums" class="logo-img">
+            </a>
+
+            <!-- Navegación Mobile & Desktop -->
+            <nav class="nav-menu" id="nav-menu">
+                <div class="mobile-drawer-header">
+                    <div class="mobile-drawer-brand">
+                        <span class="mobile-drawer-brand-title">Dunes Parfums</span>
+                        <span class="mobile-drawer-brand-sub">Navegación</span>
+                    </div>
+                    <button type="button" class="mobile-drawer-close" id="mobile-menu-close" aria-label="Cerrar menú">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <ul class="nav-list" role="list">
+                    <!-- 1. INICIO -->
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            <span class="nav-link-text">Inicio</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+
+                    <!-- 2. CATÁLOGO DESPLEGABLE (ACORDEÓN) -->
+                    <li class="nav-item nav-item-has-submenu">
+                        <button type="button" class="nav-link nav-link-accordion" id="btn-toggle-catalogo-submenu" aria-expanded="false" aria-controls="mobile-catalogo-submenu">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+                            <span class="nav-link-text">Catálogo</span>
+                            <svg class="nav-link-chevron accordion-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="nav-submenu" id="mobile-catalogo-submenu" aria-hidden="true">
+                            <div class="submenu-inner">
+                                <!-- SECCIÓN 1: PERFUMES SELLADOS -->
+                                <div class="submenu-group">
+                                    <span class="submenu-group-title">Perfumes Sellados</span>
+                                    <a href="catalogo.html?categoria=arabe" class="submenu-link" data-categoria="arabe">
+                                        <span class="submenu-link-dot"></span>
+                                        <span class="submenu-link-text">Árabes</span>
+                                    </a>
+                                    <a href="catalogo.html?categoria=disenador" class="submenu-link" data-categoria="disenador">
+                                        <span class="submenu-link-dot"></span>
+                                        <span class="submenu-link-text">Diseñador</span>
+                                    </a>
+                                    <a href="catalogo.html?categoria=nicho" class="submenu-link" data-categoria="nicho">
+                                        <span class="submenu-link-dot"></span>
+                                        <span class="submenu-link-text">Nicho</span>
+                                    </a>
+                                </div>
+
+                                <!-- SECCIÓN 2: MUESTRAS -->
+                                <div class="submenu-group">
+                                    <span class="submenu-group-title">Muestras</span>
+                                    <a href="catalogo.html?categoria=decants" class="submenu-link" data-categoria="decants">
+                                        <span class="submenu-link-dot"></span>
+                                        <span class="submenu-link-text">Decants</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- 3. OFERTAS -->
+                    <li class="nav-item">
+                        <a href="index.html#ofertas" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3.85 8.62 4.77 4.76a2 2 0 0 0 2.83 0l6.7-6.7a2 2 0 0 0 0-2.83l-4.77-4.76a2 2 0 0 0-2.83 0l-6.7 6.7a2 2 0 0 0 0 2.83z"></path><path d="M16 8h.01"></path></svg>
+                            <span class="nav-link-text">Ofertas</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+
+                    <!-- 4. CONTACTO -->
+                    <li class="nav-item">
+                        <a href="index.html#ubicacion" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                            <span class="nav-link-text">Contacto</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+
+                    <!-- 5. AYUDA / FAQ -->
+                    <li class="nav-item">
+                        <a href="ayuda.html" class="nav-link active">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            <span class="nav-link-text">Ayuda / FAQ</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Acciones de Cabecera -->
+            <div class="header-actions">
+                <a href="carrito.html" class="cart-icon-btn" aria-label="Ver mi pedido en el carrito">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="cart-btn-icon" aria-hidden="true" focusable="false">
+                        <circle cx="8" cy="21" r="1"></circle>
+                        <circle cx="19" cy="21" r="1"></circle>
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+
+                <!-- Botón Menú Hamburguesa para Móviles -->
+                <button class="burger-menu-btn" id="mobile-menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. CABECERA COMPACTA DE AYUDA -->
+    <section class="ayuda-hero-section">
+        <div class="container">
+            <span class="ayuda-badge">Confianza y Ayuda</span>
+            <h1 class="ayuda-title">Preguntas frecuentes</h1>
+            <p class="ayuda-subtitle">Resolvemos tus dudas y te mostramos experiencias reales de nuestros clientes.</p>
+        </div>
+    </section>
+
+    <!-- 3. GALERÍA DE CONFIANZA (CARRUSEL) -->
+    <section class="references-section" id="referencias-clientes">
+        <div class="container">
+            <div class="section-header-compact">
+                <span class="section-tag">Testimonios y Envíos</span>
+                <h2 class="section-title-compact">Galería de confianza</h2>
+                <p class="section-desc-compact">Entregas, envíos y productos reales de Dunes Parfums.</p>
+            </div>
+
+            <!-- Carrusel de Referencias -->
+            <div class="carousel-wrapper" id="carousel-wrapper">
+                <button type="button" class="carousel-nav-btn carousel-prev" id="carousel-prev-btn" aria-label="Referencia anterior" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"></path></svg>
+                </button>
+
+                <div class="carousel-track-container" id="carousel-track-container">
+                    <div class="carousel-track" id="carousel-track">
+                        <!-- Carga dinámica de tarjetas desde data/referencias.json -->
+                    </div>
+                </div>
+
+                <button type="button" class="carousel-nav-btn carousel-next" id="carousel-next-btn" aria-label="Referencia siguiente">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                </button>
+            </div>
+
+            <!-- Barra Inferior (Contador + Botón Ver Todas) -->
+            <div class="carousel-footer-bar">
+                <div class="carousel-counter" id="carousel-counter">
+                    <span id="carousel-counter-text">1 de 1</span>
+                </div>
+                <button type="button" class="btn-ver-todas" id="btn-open-all-references">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+                    Ver todas las referencias
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. INDICADORES DE CONFIANZA COMPACTOS -->
+    <section class="trust-strip-section">
+        <div class="container">
+            <div class="trust-strip-grid">
+                <div class="trust-item">
+                    <svg class="trust-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    <div class="trust-text-wrapper">
+                        <span class="trust-title">Perfumes 100% Originales</span>
+                        <span class="trust-desc">Importados directamente sin imitaciones</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <svg class="trust-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    <div class="trust-text-wrapper">
+                        <span class="trust-title">Atención Directa por WhatsApp</span>
+                        <span class="trust-desc">Asesoría personalizada e inmediata</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <svg class="trust-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="16" height="13" x="1" y="6" rx="2"></rect><polygon points="17 8 23 12 23 19 17 19 17 8"></polygon><circle cx="6" cy="19" r="2"></circle><circle cx="18" cy="19" r="2"></circle></svg>
+                    <div class="trust-text-wrapper">
+                        <span class="trust-title">Envíos a todo el Perú</span>
+                        <span class="trust-desc">Coordinación directa por agencia</span>
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <svg class="trust-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <div class="trust-text-wrapper">
+                        <span class="trust-title">Recojo y Delivery Local</span>
+                        <span class="trust-desc">Cacatachi, Morales, Tarapoto y La Banda</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. PREGUNTAS FRECUENTES (FAQ ACORDEONES) -->
+    <section class="faq-section" id="preguntas-frecuentes">
+        <div class="container">
+            <div class="section-header-compact">
+                <span class="section-tag">Dudas Frecuentes</span>
+                <h2 class="section-title-compact">Preguntas Frecuentes</h2>
+                <p class="section-desc-compact">Selecciona una pregunta para ver la respuesta.</p>
+            </div>
+
+            <!-- Buscador de Preguntas -->
+            <div class="faq-search-wrapper">
+                <svg class="faq-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="faq-search-input" class="faq-search-input" placeholder="Buscar una pregunta..." aria-label="Buscar una pregunta frecuente">
+            </div>
+
+            <div id="faq-no-results" class="faq-no-results">
+                No encontramos una respuesta para tu búsqueda. Escríbenos por WhatsApp y te ayudaremos.
+            </div>
+
+            <!-- BLOQUE A: PRODUCTOS Y ORIGINALIDAD -->
+            <div class="faq-category-block">
+                <h3 class="faq-category-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    A. Productos y Originalidad
+                </h3>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-1">
+                            <span class="faq-question-text">1. ¿Los perfumes son originales?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-1" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Sí. En Dunes Parfums trabajamos con perfumes 100% originales, adquiridos mediante proveedores e importaciones, principalmente desde Estados Unidos. No comercializamos imitaciones ni perfumes rellenados como productos sellados.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-2">
+                            <span class="faq-question-text">2. ¿De cuántos mililitros son los perfumes sellados?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-2" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Las presentaciones dependen de cada perfume. Existen perfumes sellados desde aproximadamente 50 ml y también versiones especiales de mayor tamaño, como presentaciones de hasta 1 litro. Sin embargo, la presentación más común y comercial es la de 100 ml, que es la que normalmente encontrarás en nuestro catálogo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-3">
+                            <span class="faq-question-text">3. ¿Todos los perfumes incluyen caja?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-3" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Los productos sellados se entregan con su presentación original según corresponda al fabricante. Si un producto tiene alguna condición especial, se indicará claramente antes de confirmar el pedido.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-4">
+                            <span class="faq-question-text">4. ¿Puedo solicitar un perfume que no aparece en el catálogo?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-4" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Sí. Si no encuentras el perfume que buscas, puedes solicitar una cotización por WhatsApp. Revisaremos disponibilidad y precio con nuestros proveedores.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE B: DECANTS Y MUESTRAS -->
+            <div class="faq-category-block">
+                <h3 class="faq-category-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"></path><path d="M8.5 2h7"></path><path d="M14 6.5v.5l3.5 5.5A4 4 0 0 1 14 19H10a4 4 0 0 1-3.5-6.5L10 7v-.5"></path></svg>
+                    B. Decants y Muestras
+                </h3>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-5">
+                            <span class="faq-question-text">5. ¿Qué son los decants?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-5" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Los decants son pequeñas cantidades de perfume original transferidas a frascos atomizadores más pequeños. Permiten probar una fragancia antes de comprar el frasco completo o llevarla cómodamente a cualquier lugar.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-6">
+                            <span class="faq-question-text">6. ¿Los decants contienen perfume original?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-6" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Sí. Los decants se preparan directamente con el contenido del perfume original. No se diluyen ni se mezclan con otros productos.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-7">
+                            <span class="faq-question-text">7. ¿Qué tamaños de decants tienen disponibles?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-7" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Actualmente trabajamos con presentaciones de 3 ml, 5 ml y 10 ml. La disponibilidad depende de los mililitros restantes de cada perfume.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-8">
+                            <span class="faq-question-text">8. ¿Cuánto dura un decant?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-8" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Depende de la cantidad de aplicaciones que utilices diariamente. Un decant de 3 ml sirve principalmente para probar la fragancia; los de 5 ml y 10 ml ofrecen más usos y son adecuados para llevar, viajar o utilizar la fragancia durante más tiempo.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE C: COMPRA Y ELECCIÓN -->
+            <div class="faq-category-block">
+                <h3 class="faq-category-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    C. Compra y Elección
+                </h3>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-9">
+                            <span class="faq-question-text">9. ¿Cómo puedo elegir un perfume si no conozco su aroma?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-9" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Puedes revisar la descripción y notas de cada perfume o escribirnos por WhatsApp. Te ayudaremos según los aromas que prefieres, la ocasión, el clima y el estilo de fragancia que buscas.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-10">
+                            <span class="faq-question-text">10. ¿Puedo comprar varios productos en un mismo pedido?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-10" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Sí. Puedes agregar perfumes sellados y decants al mismo carrito y confirmar todo en un solo pedido por WhatsApp.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-11">
+                            <span class="faq-question-text">11. ¿Cómo funcionan los cupones de descuento?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-11" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Ingresa el código en el carrito y presiona Aplicar. Cada cupón puede tener una fecha de vigencia, compra mínima o productos permitidos. El descuento aparecerá antes de confirmar el pedido.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE D: ENTREGA Y ENVÍOS -->
+            <div class="faq-category-block">
+                <h3 class="faq-category-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="16" height="13" x="1" y="6" rx="2"></rect><polygon points="17 8 23 12 23 19 17 19 17 8"></polygon><circle cx="6" cy="19" r="2"></circle><circle cx="18" cy="19" r="2"></circle></svg>
+                    D. Entrega y Envíos
+                </h3>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-12">
+                            <span class="faq-question-text">12. ¿Realizan envíos a todo el Perú?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-12" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Sí. Realizamos envíos por agencia a diferentes ciudades del Perú. Los datos y la agencia se coordinan al confirmar el pedido por WhatsApp.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-13">
+                            <span class="faq-question-text">13. ¿Cuánto demora un envío?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-13" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                El tiempo depende de la ciudad, la agencia y la disponibilidad del producto. Después de confirmar el pedido te informaremos el tiempo estimado correspondiente.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-14">
+                            <span class="faq-question-text">14. ¿En qué zonas realizan delivery local?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-14" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Realizamos delivery local en Cacatachi, Morales, Tarapoto y La Banda de Shilcayo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-15">
+                            <span class="faq-question-text">15. ¿Cuándo el delivery es gratis?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-15" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                El delivery local es gratis cuando la compra supera el monto mínimo indicado en el carrito. Cacatachi puede contar con entrega gratuita según las condiciones vigentes. El costo exacto siempre se muestra antes de confirmar el pedido.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-16">
+                            <span class="faq-question-text">16. ¿Puedo recoger mi pedido?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-16" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Sí. Puedes seleccionar Recojo en local y coordinar por WhatsApp. Estamos ubicados en Cacatachi, Tarapoto.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOQUE E: PAGO Y ATENCIÓN -->
+            <div class="faq-category-block">
+                <h3 class="faq-category-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    E. Pago y Atención
+                </h3>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-17">
+                            <span class="faq-question-text">17. ¿Cómo se confirma el pedido?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-17" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Después de preparar el carrito, seleccionas la forma de entrega, completas tus datos y presionas Confirmar pedido por WhatsApp. Revisaremos contigo el stock, el total y la entrega.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-18">
+                            <span class="faq-question-text">18. ¿Qué métodos de pago aceptan?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-18" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Los medios de pago disponibles se coordinan al confirmar el pedido por WhatsApp.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button type="button" class="faq-button" aria-expanded="false" aria-controls="faq-ans-19">
+                            <span class="faq-question-text">19. ¿Cómo puedo comunicarme con Dunes Parfums?</span>
+                            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"></path></svg>
+                        </button>
+                        <div class="faq-answer-wrapper" id="faq-ans-19" aria-hidden="true">
+                            <div class="faq-answer-content">
+                                Puedes utilizar el botón de WhatsApp disponible en la página. Te atenderemos directamente para resolver dudas, cotizar productos o confirmar pedidos.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. BLOQUE FINAL DE CONTACTO POR WHATSAPP -->
+    <section class="ayuda-cta-section">
+        <div class="container">
+            <div class="ayuda-cta-card">
+                <h2 class="ayuda-cta-title">¿Todavía tienes alguna duda?</h2>
+                <p class="ayuda-cta-text">Escríbenos directamente y te ayudaremos a elegir o confirmar tu pedido.</p>
+                <a href="https://wa.me/51986510573?text=Hola%20Dunes%20Parfums%2C%20tengo%20una%20consulta" class="ayuda-cta-btn" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                    Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL DE GALERÍA COMPLETA (VER TODAS LAS REFERENCIAS) -->
+    <div class="all-references-modal" id="all-references-modal" aria-hidden="true" role="dialog">
+        <div class="all-references-container">
+            <div class="all-references-header">
+                <div>
+                    <h3 class="all-references-title">Galería completa</h3>
+                    <p class="all-references-subtitle">Explora nuestras entregas, envíos, decants y perfumes disponibles.</p>
+                </div>
+                <button type="button" class="all-references-close" id="all-references-close" aria-label="Cerrar catálogo de referencias">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Filtros Compactos -->
+            <div class="all-references-filters" id="all-references-filters">
+                <button type="button" class="filter-chip active" data-filter="todos">Todas</button>
+                <button type="button" class="filter-chip" data-filter="entrega">Entregas</button>
+                <button type="button" class="filter-chip" data-filter="envio">Envíos</button>
+                <button type="button" class="filter-chip" data-filter="decant">Decants</button>
+                <button type="button" class="filter-chip" data-filter="perfume">Nuestros perfumes</button>
+            </div>
+
+            <!-- Cuadrícula Scrollable -->
+            <div class="all-references-grid" id="all-references-grid">
+                <!-- Se renderizan dinámicamente las referencias -->
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX MODAL PARA IMÁGENES DE REFERENCIA CON NAVEGACIÓN -->
+    <div class="lightbox-modal" id="lightbox-modal" aria-hidden="true" role="dialog">
+        <div class="lightbox-container">
+            <button type="button" class="lightbox-close-btn" id="lightbox-close-btn" aria-label="Cerrar vista ampliada">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Flechas de navegación dentro del lightbox -->
+            <button type="button" class="lightbox-nav-btn lightbox-nav-prev" id="lightbox-prev-btn" aria-label="Imagen anterior">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+
+            <img src="" alt="Referencia ampliada" class="lightbox-img" id="lightbox-img">
+
+            <button type="button" class="lightbox-nav-btn lightbox-nav-next" id="lightbox-next-btn" aria-label="Imagen siguiente">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+
+            <div class="lightbox-caption-bar">
+                <span id="lightbox-caption">Experiencia real de cliente - Dunes Parfums</span>
+                <span id="lightbox-counter" style="font-weight: 700; color: #D4AF37;">1 de 1</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. PIE DE PÁGINA (FOOTER) -->
+    <footer class="footer-main">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <img src="img/logo/logohorizontaldunesparfums.png?v=20260721-logo-transparente-1" alt="Dunes Parfums" class="footer-logo">
+                <p class="footer-desc">Catálogo exclusivo de perfumería fina y decants en Tarapoto, Perú.</p>
+            </div>
+            <div class="footer-links">
+                <h4 class="footer-title">Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalogo.html">Catálogo</a></li>
+                    <li><a href="index.html#ofertas">Ofertas</a></li>
+                    <li><a href="catalogo.html?categoria=decants">Decants</a></li>
+                    <li><a href="ayuda.html">Ayuda / FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4 class="footer-title">Contacto</h4>
+                <p>Cacatachi, San Martín, Perú</p>
+                <p>Atención directa por WhatsApp</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Dunes Parfums. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón Flotante de WhatsApp -->
+    <a href="https://wa.me/51986510573?text=Hola%20Dunes%20Parfums%2C%20deseo%20hacer%20una%20consulta" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+        <svg class="whatsapp-float-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    </a>
+
+    <!-- Scripts Javascript en orden estricto de dependencias -->
+    <script src="js/config.js"></script>
+    <script src="js/productos-service.js"></script>
+    <script src="js/cupones-service.js"></script>
+    <script src="js/cupones.js"></script>
+    <script src="js/cupones-ui.js"></script>
+    <script src="js/productos.js"></script>
+    <script src="js/whatsapp.js"></script>
+    <script src="js/carrito.js"></script>
+    <script src="js/interfaz.js"></script>
+    <script src="js/ayuda.js"></script>
+</body>
+</html>

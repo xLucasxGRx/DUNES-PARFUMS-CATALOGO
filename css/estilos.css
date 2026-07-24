@@ -250,6 +250,40 @@ a.btn:focus-visible,
     color: #FFFFFF;
     border: 1px solid transparent;
     font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Ícono de WhatsApp Unificado */
+.icon-whatsapp,
+.whatsapp-icon-svg {
+    display: block !important;
+    flex-shrink: 0 !important;
+    fill: currentColor !important;
+    stroke: none !important;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+.btn .icon-whatsapp,
+.btn .whatsapp-icon-svg,
+.btn-whatsapp .icon-whatsapp,
+.btn-whatsapp .whatsapp-icon-svg,
+.btn-query-detail .icon-whatsapp,
+.btn-query-detail .whatsapp-icon-svg {
+    width: 18px !important;
+    height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+}
+
+.btn-query-detail {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -451,42 +485,157 @@ button:disabled,
 
 .cart-icon-btn {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    color: var(--color-text-light);
-    border-radius: var(--border-radius-md);
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: var(--transition-base);
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    color: #F4F0EA;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
     text-decoration: none;
+    user-select: none;
+    box-sizing: border-box;
 }
 
-.cart-icon-btn:hover {
-    color: var(--color-primary);
-    background-color: rgba(212, 175, 55, 0.1);
-    border-color: var(--color-primary);
-    transform: translateY(-1px);
+.cart-icon-btn svg,
+.cart-icon-btn .cart-btn-icon,
+.cart-icon-btn [data-lucide] {
+    width: 22px !important;
+    height: 22px !important;
+    max-width: 22px !important;
+    max-height: 22px !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    stroke-width: 2px;
+    stroke: currentColor;
+    fill: none;
+    margin: 0 !important;
+    transform: none;
+    transition: transform 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .cart-icon-btn:hover {
+        color: #FFFFFF;
+        background-color: rgba(255, 255, 255, 0.14);
+        border-color: rgba(212, 175, 55, 0.45);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 8px rgba(212, 175, 55, 0.2);
+    }
+}
+
+.cart-icon-btn:active {
+    transform: scale(0.96);
 }
 
 .cart-count {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    background: var(--color-gold-gradient);
-    color: var(--color-text-dark);
-    font-size: 0.7rem;
+    top: -5px;
+    right: -5px;
+    background: linear-gradient(135deg, #D4AF37 0%, #B18225 100%);
+    color: #111111;
+    font-size: 11px;
     font-weight: 800;
-    width: 20px;
+    min-width: 20px;
     height: 20px;
-    border-radius: 50%;
+    padding-inline: 4px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-xs);
-    border: 2px solid var(--color-bg-dark);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid #141414;
+    line-height: 1;
+    pointer-events: none;
+    transition: transform 200ms ease;
+}
+
+/* Microanimación al agregar un producto al carrito */
+@keyframes cart-bump {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.14) translateY(-2px); }
+    70%  { transform: scale(0.96); }
+    100% { transform: scale(1); }
+}
+
+@keyframes cart-badge-pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.cart-icon-btn.is-cart-animated {
+    animation: cart-bump 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-color: var(--color-primary, #D4AF37) !important;
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.45) !important;
+}
+
+.cart-icon-btn.is-cart-animated .cart-count {
+    animation: cart-badge-pulse 450ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cart-icon-btn.is-cart-animated,
+    .cart-icon-btn.is-cart-animated .cart-count {
+        animation: none !important;
+    }
+}
+
+/* Centrado Absoluto del Botón "Agregar al Carrito" y Fondo Dorado Uniforme */
+#btn-add-cart-detail,
+.btn-add-cart-detail,
+.btn-add-cart {
+    display: grid !important;
+    place-items: center !important;
+    place-content: center !important;
+    width: 100% !important;
+    min-height: 46px !important;
+    padding: 12px 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+    background: #B18225 !important;
+    background-image: none !important;
+    color: #FFFFFF !important;
+    border: 1px solid #9E721D !important;
+    border-radius: 8px !important;
+    font-family: var(--font-body);
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transform: none !important;
+    text-indent: 0 !important;
+    letter-spacing: 0.3px !important;
+    position: relative !important;
+}
+
+#btn-add-cart-detail::before,
+#btn-add-cart-detail::after,
+.btn-add-cart-detail::before,
+.btn-add-cart-detail::after,
+.btn-add-cart::before,
+.btn-add-cart::after {
+    content: none !important;
+    display: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #btn-add-cart-detail:hover:not(:disabled),
+    .btn-add-cart-detail:hover:not(:disabled),
+    .btn-add-cart:hover:not(:disabled) {
+        background: #8E671D !important;
+        background-image: none !important;
+        color: #FFFFFF !important;
+        border-color: #7A5817 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(142, 103, 29, 0.3) !important;
+    }
 }
 
 /* Botón menú hamburguesa */
@@ -1452,17 +1601,33 @@ button:disabled,
     right: 30px;
     width: 60px;
     height: 60px;
-    background-color: var(--color-whatsapp);
-    color: white;
+    background-color: var(--color-whatsapp, #25D366);
+    color: #FFFFFF !important;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     z-index: 999;
     cursor: pointer;
     transition: var(--transition-smooth);
+    padding: 0 !important;
+    border: none !important;
+    text-decoration: none !important;
+}
+
+.wa-float-btn .icon-whatsapp,
+.wa-float-btn .whatsapp-icon-svg,
+.wa-float-btn svg {
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    fill: #FFFFFF !important;
+    margin: 0 !important;
+    transform: none !important;
 }
 
 .wa-float-btn:hover {

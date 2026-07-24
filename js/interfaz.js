@@ -32,37 +32,141 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Controla la apertura y cierre del menú hamburguesa en dispositivos móviles
+ * Controla la apertura, animación y acordeón del panel de navegación móvil (slide-over drawer)
  */
 function inicializarMenuMovil() {
     const burgerBtn = document.getElementById('mobile-menu-toggle');
     const navMenu = document.getElementById('nav-menu');
-    const navLinks = document.querySelectorAll('.nav-link');
+    if (!burgerBtn || !navMenu) return;
 
-    if (burgerBtn && navMenu) {
-        burgerBtn.addEventListener('click', (e) => {
+    // Asegurar la existencia del overlay en el DOM
+    let overlay = document.getElementById('nav-menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'nav-menu-overlay';
+        overlay.className = 'nav-menu-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(overlay);
+    }
+
+    const closeBtn = document.getElementById('mobile-menu-close');
+    const accordionBtn = document.getElementById('btn-toggle-catalogo-submenu');
+    const submenu = document.getElementById('mobile-catalogo-submenu');
+
+    const abrirMenu = () => {
+        navMenu.classList.add('active');
+        overlay.classList.add('active');
+        burgerBtn.classList.add('active');
+        burgerBtn.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('no-scroll');
+        document.body.classList.add('menu-open');
+    };
+
+    const cerrarMenu = () => {
+        navMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        burgerBtn.classList.remove('active');
+        burgerBtn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('no-scroll');
+        document.body.classList.remove('menu-open');
+    };
+
+    // Evento Abrir / Alternar con el botón hamburguesa
+    burgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (navMenu.classList.contains('active')) {
+            cerrarMenu();
+        } else {
+            abrirMenu();
+        }
+    });
+
+    // Evento Cerrar con el botón X del panel
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            burgerBtn.classList.toggle('active');
-            navMenu.classList.toggle('active');
-            // Evitar scroll en el body cuando el menú está abierto
-            document.body.classList.toggle('no-scroll');
+            cerrarMenu();
         });
+    }
 
-        // Cerrar menú al presionar cualquier enlace
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                burgerBtn.classList.remove('active');
-                navMenu.classList.remove('active');
-                document.body.classList.remove('no-scroll');
-            });
+    // Evento Acordeón para la opción CATÁLOGO
+    if (accordionBtn && submenu) {
+        accordionBtn.addEventListener('click', (e) => {
+            if (window.innerWidth <= 992) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = submenu.classList.contains('is-open');
+                if (isOpen) {
+                    submenu.classList.remove('is-open');
+                    accordionBtn.classList.remove('is-open');
+                    accordionBtn.setAttribute('aria-expanded', 'false');
+                    submenu.setAttribute('aria-hidden', 'true');
+                } else {
+                    submenu.classList.add('is-open');
+                    accordionBtn.classList.add('is-open');
+                    accordionBtn.setAttribute('aria-expanded', 'true');
+                    submenu.setAttribute('aria-hidden', 'false');
+                }
+            } else {
+                window.location.href = 'catalogo.html';
+            }
         });
+    }
 
-        // Cerrar menú al hacer clic fuera de él
-        document.addEventListener('click', (e) => {
-            if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && e.target !== burgerBtn) {
-                burgerBtn.classList.remove('active');
-                navMenu.classList.remove('active');
-                document.body.classList.remove('no-scroll');
+    // Evento Cerrar al hacer clic en el overlay semitransparente
+    overlay.addEventListener('click', () => {
+        cerrarMenu();
+    });
+
+    // Evento Cerrar al presionar la tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+            cerrarMenu();
+        }
+    });
+
+    // Cerrar menú al presionar cualquier enlace de navegación (simple o sub-link)
+    const navLinks = navMenu.querySelectorAll('a.nav-link, a.submenu-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            cerrarMenu();
+        });
+    });
+
+    // Sincronizar submenú si la URL actual corresponde a una categoría
+    sincronizarSubmenuMenuMovil();
+}
+
+/**
+ * Sincroniza la categoría activa en el submenú del menú móvil según los parámetros de la URL
+ */
+function sincronizarSubmenuMenuMovil() {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('categoria');
+    const isCatalogoPage = window.location.pathname.includes('catalogo.html');
+
+    const accordionBtn = document.getElementById('btn-toggle-catalogo-submenu');
+    const submenu = document.getElementById('mobile-catalogo-submenu');
+    const subLinks = document.querySelectorAll('.submenu-link');
+
+    if (!isCatalogoPage) return;
+
+    if (accordionBtn) {
+        accordionBtn.classList.add('active');
+    }
+
+    if (cat && submenu && accordionBtn) {
+        submenu.classList.add('is-open');
+        accordionBtn.classList.add('is-open');
+        accordionBtn.setAttribute('aria-expanded', 'true');
+        submenu.setAttribute('aria-hidden', 'false');
+
+        subLinks.forEach(link => {
+            const linkCat = link.dataset.categoria;
+            if (linkCat === cat) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
             }
         });
     }
@@ -201,7 +305,7 @@ async function cargarProductosDestacadosHome() {
             } else {
                 actionBtnHtml = `
                     <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
-                        <svg class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Consultar
+                        <svg class="icon-whatsapp whatsapp-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg> Consultar
                     </button>
                 `;
             }
@@ -214,7 +318,7 @@ async function cargarProductosDestacadosHome() {
         } else {
             actionBtnHtml = `
                 <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
-                    <svg class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Consultar
+                    <svg class="icon-whatsapp whatsapp-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg> Consultar
                 </button>
             `;
         }
@@ -500,11 +604,9 @@ function renderizarDetalleSellado(container, prod) {
                 </div>
             </div>
             <div class="detail-btn-row">
-                <button class="btn btn-primary btn-add-cart-detail" id="btn-add-cart-detail" data-id="${prod.id}">
-                    <i data-lucide="shopping-bag" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Agregar al Carrito
-                </button>
+                <button class="btn btn-primary btn-add-cart-detail" id="btn-add-cart-detail" data-id="${prod.id}">Agregar al Carrito</button>
                 <button class="btn btn-secondary btn-query-detail" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar por WhatsApp
+                    <svg class="icon-whatsapp whatsapp-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>Consultar por WhatsApp
                 </button>
             </div>
         `;
@@ -512,7 +614,7 @@ function renderizarDetalleSellado(container, prod) {
         pickerAndActionsHtml = `
             <div class="detail-btn-row">
                 <button class="btn btn-secondary btn-query-detail" style="width: 100%;" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar reingreso por WhatsApp
+                    <svg class="icon-whatsapp whatsapp-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>Consultar reingreso por WhatsApp
                 </button>
             </div>
         `;
@@ -664,11 +766,9 @@ function renderizarDetalleDecant(container, prod) {
                 </div>
             </div>
             <div class="detail-btn-row">
-                <button class="btn btn-primary btn-add-cart-detail" id="btn-add-cart-detail" data-id="${prod.id}">
-                    <i data-lucide="shopping-bag" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Agregar al Carrito
-                </button>
+                <button class="btn btn-primary btn-add-cart-detail" id="btn-add-cart-detail" data-id="${prod.id}">Agregar al Carrito</button>
                 <button class="btn btn-secondary btn-query-detail" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar por WhatsApp
+                    <svg class="icon-whatsapp whatsapp-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>Consultar por WhatsApp
                 </button>
             </div>
         `;
@@ -676,7 +776,7 @@ function renderizarDetalleDecant(container, prod) {
         pickerAndActionsHtml = `
             <div class="detail-btn-row">
                 <button class="btn btn-secondary btn-query-detail" style="width: 100%;" id="btn-query-detail" data-nombre="${prod.nombre}">
-                    <i data-lucide="message-square" class="icon-sm" aria-hidden="true" style="margin-right: 6px;"></i>Consultar reingreso por WhatsApp
+                    <svg class="icon-whatsapp whatsapp-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>Consultar reingreso por WhatsApp
                 </button>
             </div>
         `;
