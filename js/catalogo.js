@@ -1,5 +1,5 @@
 /**
- * Dunes Parfums - módulo de catálogo (Lógica Avanzada)
+ * Dunes Parfums - módulo de catálogo (Diseño Completo Aprobado & Filtro por Género)
  * Maneja los filtros, búsquedas, ordenación y renderizado de la página catalogo.html.
  */
 
@@ -92,16 +92,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     let filtroEstado = {
         busqueda: '',
         categoria: 'todos',
+        genero: 'todos',
         orden: 'default',
         soloDisponibles: false
     };
 
-    // Comprobar parámetros de la URL (?categoria=arabe)
+    // Comprobar parámetros de la URL (?categoria=arabe&genero=hombre)
     const initialCat = obtenerCategoriaDesdeURL();
+    const initialGen = obtenerGeneroDesdeURL();
     filtroEstado.categoria = initialCat;
+    filtroEstado.genero = initialGen;
 
-    // Actualizar visualmente los botones de categoría e iniciar aria-pressed
+    // Actualizar visualmente los botones e iniciar aria-pressed
     sincronizarBotonesCategoria(initialCat);
+    sincronizarBotonesGenero(initialGen);
 
     // Actualizar cabecera con el título dinámico
     actualizarCabeceraCategoria(initialCat);
@@ -110,15 +114,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     inicializarFiltrosInterfaz(productos, filtroEstado, grid);
 
     // Escuchar el evento popstate para la navegación atrás/adelante
-    window.addEventListener('popstate', (e) => {
+    window.addEventListener('popstate', () => {
         const cat = obtenerCategoriaDesdeURL();
+        const gen = obtenerGeneroDesdeURL();
         filtroEstado.categoria = cat;
-        
-        // Sincronizar UI de filtros de categoría
+        filtroEstado.genero = gen;
+
+        // Sincronizar UI de filtros
         sincronizarBotonesCategoria(cat);
+        sincronizarBotonesGenero(gen);
         actualizarCabeceraCategoria(cat);
 
-        // Sincronizar controles (buscador y disponibles checkbox si cambiaron)
+        // Sincronizar controles (buscador y checkbox)
         const searchInput = document.getElementById('search-perfume');
         if (searchInput) searchInput.value = filtroEstado.busqueda;
         const availableCheckbox = document.getElementById('filter-available');
@@ -132,13 +139,46 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
- * Obtiene el valor de la categoría desde los parámetros de búsqueda de la URL
+ * Obtiene el valor de la categoría desde los parámetros de la URL
  */
 function obtenerCategoriaDesdeURL() {
     const params = new URLSearchParams(window.location.search);
     const cat = params.get('categoria');
     const validas = ['arabe', 'disenador', 'nicho', 'decants'];
     return validas.includes(cat) ? cat : 'todos';
+}
+
+/**
+ * Obtiene el valor del género desde los parámetros de la URL
+ */
+function obtenerGeneroDesdeURL() {
+    const params = new URLSearchParams(window.location.search);
+    const gen = params.get('genero');
+    const validos = ['hombre', 'mujer', 'unisex'];
+    return validos.includes(gen) ? gen : 'todos';
+}
+
+/**
+ * Comprueba si el género de un producto coincide con el género seleccionado
+ * Regla:
+ * - Hombre: productos 'hombre' y productos 'unisex'
+ * - Mujer: productos 'mujer' y productos 'unisex'
+ * - Unisex: únicamente productos 'unisex'
+ * - Todos: todos los productos
+ */
+function coincideGenero(generoProducto, generoFiltro) {
+    if (!generoFiltro || generoFiltro === 'todos') return true;
+    const gProd = (generoProducto || 'sin_clasificar').toLowerCase();
+    if (generoFiltro === 'hombre') {
+        return gProd === 'hombre' || gProd === 'unisex';
+    }
+    if (generoFiltro === 'mujer') {
+        return gProd === 'mujer' || gProd === 'unisex';
+    }
+    if (generoFiltro === 'unisex') {
+        return gProd === 'unisex';
+    }
+    return false;
 }
 
 /**
@@ -151,17 +191,25 @@ function obtenerConfiguracionCotizacion(categoria) {
 /**
  * Actualiza la URL del navegador usando la History API sin recargar
  */
-function actualizarURL(categoria) {
+function actualizarURL(categoria, genero) {
     const url = new URL(window.location.href);
-    if (categoria === 'todos') {
+
+    if (!categoria || categoria === 'todos') {
         url.searchParams.delete('categoria');
     } else {
         url.searchParams.set('categoria', categoria);
     }
-    const currentParams = window.location.search;
-    const newParams = url.search;
-    if (currentParams !== newParams) {
-        history.pushState({ categoria }, '', url.pathname + url.search);
+
+    if (!genero || genero === 'todos') {
+        url.searchParams.delete('genero');
+    } else {
+        url.searchParams.set('genero', genero);
+    }
+
+    const currentSearch = window.location.search;
+    const newSearch = url.search;
+    if (currentSearch !== newSearch) {
+        history.pushState({ categoria, genero }, '', url.pathname + (url.search || ''));
     }
 }
 
@@ -172,6 +220,18 @@ function sincronizarBotonesCategoria(categoriaActiva) {
     const categoryFilters = document.querySelectorAll('.filter-category-btn');
     categoryFilters.forEach(btn => {
         const isCurrent = btn.dataset.categoria === categoriaActiva;
+        btn.classList.toggle('active', isCurrent);
+        btn.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
+    });
+}
+
+/**
+ * Sincroniza visualmente los botones de género y actualiza aria-pressed
+ */
+function sincronizarBotonesGenero(generoActivo) {
+    const genderFilters = document.querySelectorAll('.filter-gender-btn');
+    genderFilters.forEach(btn => {
+        const isCurrent = btn.dataset.genero === generoActivo;
         btn.classList.toggle('active', isCurrent);
         btn.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
     });
@@ -214,6 +274,7 @@ function actualizarContador(cantidad, categoria) {
 function inicializarFiltrosInterfaz(productos, estado, grid) {
     const searchInput = document.getElementById('search-perfume');
     const categoryFilters = document.querySelectorAll('.filter-category-btn');
+    const genderFilters = document.querySelectorAll('.filter-gender-btn');
     const sortSelect = document.getElementById('sort-price');
     const availableCheckbox = document.getElementById('filter-available');
 
@@ -230,12 +291,21 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
     categoryFilters.forEach(btn => {
         btn.addEventListener('click', (e) => {
             const selectedCat = e.currentTarget.dataset.categoria;
-            
             estado.categoria = selectedCat;
             sincronizarBotonesCategoria(selectedCat);
             actualizarCabeceraCategoria(selectedCat);
-            actualizarURL(selectedCat);
-            
+            actualizarURL(selectedCat, estado.genero);
+            filtrarYRenderizar(productos, estado, grid);
+        });
+    });
+
+    // Filtros de Género (Todos, Hombre, Mujer, Unisex)
+    genderFilters.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const selectedGen = e.currentTarget.dataset.genero;
+            estado.genero = selectedGen;
+            sincronizarBotonesGenero(selectedGen);
+            actualizarURL(estado.categoria, selectedGen);
             filtrarYRenderizar(productos, estado, grid);
         });
     });
@@ -265,9 +335,12 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
 function filtrarYRenderizar(productos, estado, grid) {
     grid.innerHTML = '<div class="loading-spinner">Filtrando fragancias...</div>';
 
-    // 1. Filtrar visible y categoría comercial
-    const productosEnCategoria = productos.filter(prod => {
-        return prod.visible !== false && (estado.categoria === 'todos' || prod.categoria === estado.categoria);
+    // 1. Filtrar visible, categoría comercial y género
+    const productosFiltradosBase = productos.filter(prod => {
+        if (prod.visible === false) return false;
+        if (estado.categoria !== 'todos' && prod.categoria !== estado.categoria) return false;
+        if (!coincideGenero(prod.genero, estado.genero)) return false;
+        return true;
     });
 
     const estadoEl = document.getElementById('estado-catalogo');
@@ -278,8 +351,8 @@ function filtrarYRenderizar(productos, estado, grid) {
     const config = obtenerConfiguracionCotizacion(estado.categoria);
     const waUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(config.whatsappTexto)}`;
 
-    // CASO A — No existen productos en la categoría
-    if (productosEnCategoria.length === 0) {
+    // CASO A — No existen productos con los filtros principales activos
+    if (productosFiltradosBase.length === 0) {
         grid.style.display = 'none';
         if (secContainer) {
             secContainer.style.display = 'none';
@@ -289,9 +362,10 @@ function filtrarYRenderizar(productos, estado, grid) {
         if (estadoEl && mensajeEl) {
             const iconContainer = document.getElementById('estado-catalogo-icon');
             if (iconContainer) iconContainer.innerHTML = '<i data-lucide="shopping-bag" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
-            document.getElementById('estado-catalogo-titulo').textContent = 'Sin stock disponible';
-            mensajeEl.textContent = config.sinStockMensaje;
             
+            document.getElementById('estado-catalogo-titulo').textContent = 'No encontramos perfumes con estos filtros';
+            mensajeEl.textContent = 'No encontramos perfumes con estos filtros. Prueba seleccionando otra categoría o género.';
+
             // Sección de Cotizar
             document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'block';
             document.getElementById('estado-catalogo-cotizar-titulo').textContent = config.cotizarTitulo;
@@ -305,9 +379,17 @@ function filtrarYRenderizar(productos, estado, grid) {
                 document.getElementById('estado-catalogo-btn-wa-texto').textContent = config.botonTexto;
             }
             
-            // Ocultar botón secundario
+            // Botón secundario para Limpiar Filtros
             const secBtn = document.getElementById('estado-catalogo-btn-secundario');
-            if (secBtn) secBtn.style.display = 'none';
+            if (secBtn) {
+                const newSecBtn = secBtn.cloneNode(true);
+                secBtn.parentNode.replaceChild(newSecBtn, secBtn);
+                newSecBtn.textContent = 'Limpiar filtros';
+                newSecBtn.style.display = 'inline-block';
+                newSecBtn.addEventListener('click', () => {
+                    limpiarTodosLosFiltros(productos, estado, grid);
+                });
+            }
 
             estadoEl.style.display = 'block';
             if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
@@ -316,8 +398,8 @@ function filtrarYRenderizar(productos, estado, grid) {
         return;
     }
 
-    // 2. Aplicar el resto de los filtros (búsqueda y disponibilidad)
-    let filtrados = productosEnCategoria.filter(prod => {
+    // 2. Aplicar el resto de los filtros (búsqueda por texto y disponibilidad de stock)
+    let filtrados = productosFiltradosBase.filter(prod => {
         if (estado.busqueda) {
             const nombreMatches = prod.nombre.toLowerCase().includes(estado.busqueda);
             const marcaMatches = prod.marca.toLowerCase().includes(estado.busqueda);
@@ -339,7 +421,7 @@ function filtrarYRenderizar(productos, estado, grid) {
         return true;
     });
 
-    // MANEJO DE CASOS DE FILTROS VACÍOS (B y C)
+    // MANEJO DE CASOS DE FILTROS VACÍOS (Búsqueda o Solo Disponibles)
     if (filtrados.length === 0) {
         grid.style.display = 'none';
         if (secContainer) {
@@ -348,7 +430,6 @@ function filtrarYRenderizar(productos, estado, grid) {
         }
 
         if (estadoEl && mensajeEl) {
-            // Configurar bloque de cotización base
             document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'block';
             document.getElementById('estado-catalogo-cotizar-titulo').textContent = config.cotizarTitulo;
             document.getElementById('estado-catalogo-cotizar-texto').textContent = config.cotizarDescripcion;
@@ -366,26 +447,20 @@ function filtrarYRenderizar(productos, estado, grid) {
 
             const iconContainer = document.getElementById('estado-catalogo-icon');
 
-            // CASO C — La búsqueda no encuentra coincidencias
             if (estado.busqueda) {
                 if (iconContainer) iconContainer.innerHTML = '<i data-lucide="search" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
                 document.getElementById('estado-catalogo-titulo').textContent = 'No encontramos resultados';
-                mensajeEl.textContent = 'No encontramos productos que coincidan con tu búsqueda.';
+                mensajeEl.textContent = 'No encontramos perfumes con estos filtros.';
                 
-                newSecBtn.textContent = 'Limpiar búsqueda';
+                newSecBtn.textContent = 'Limpiar filtros';
                 newSecBtn.style.display = 'inline-block';
                 newSecBtn.addEventListener('click', () => {
-                    const searchInput = document.getElementById('search-perfume');
-                    if (searchInput) searchInput.value = '';
-                    estado.busqueda = '';
-                    filtrarYRenderizar(productos, estado, grid);
+                    limpiarTodosLosFiltros(productos, estado, grid);
                 });
-            }
-            // CASO B — Filtro “Solo disponibles” excluyó todos
-            else if (estado.soloDisponibles) {
+            } else if (estado.soloDisponibles) {
                 if (iconContainer) iconContainer.innerHTML = '<i data-lucide="package-x" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
                 document.getElementById('estado-catalogo-titulo').textContent = 'Sin stock disponible';
-                mensajeEl.textContent = 'No hay productos disponibles con los filtros seleccionados.';
+                mensajeEl.textContent = 'No encontramos perfumes con estos filtros.';
                 
                 newSecBtn.textContent = 'Ver también productos agotados';
                 newSecBtn.style.display = 'inline-block';
@@ -429,7 +504,7 @@ function filtrarYRenderizar(productos, estado, grid) {
         filtrados.sort((a, b) => getPrecioParaOrdenar(b) - getPrecioParaOrdenar(a));
     }
 
-    // 4. Renderizar
+    // 4. Renderizar tarjetas con el diseño completo aprobado
     if (estadoEl) estadoEl.style.display = 'none';
     grid.style.display = 'grid';
     grid.innerHTML = '';
@@ -474,7 +549,7 @@ function filtrarYRenderizar(productos, estado, grid) {
             ? prod.presentaciones[0].precio 
             : 15;
 
-        const precioActual = esDecant ? `Desde S/ ${precioMinDecant.toFixed(2)}` : 'S/ ' + prod.precio.toFixed(2);
+        const precioActual = esDecant ? `Desde S/ ${precioMinDecant.toFixed(2)}` : 'S/ ' + (prod.precio || 0).toFixed(2);
         const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
             ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>`
             : '';
@@ -487,7 +562,7 @@ function filtrarYRenderizar(productos, estado, grid) {
             }
         }
 
-        const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion}`;
+        const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion || '100 ml'}`;
 
         const stockHtml = esDecant
             ? (prod.disponible && prod.mililitrosDisponibles >= 3
@@ -499,7 +574,7 @@ function filtrarYRenderizar(productos, estado, grid) {
 
         let actionBtnHtml = '';
         const detailsBtnHtml = `
-            <a href="producto.html?id=${prod.id}" class="btn btn-outline btn-details-compact" aria-label="Ver detalles de ${prod.nombre}">
+            <a href="producto.html?id=${encodeURIComponent(prod.id)}" class="btn btn-outline btn-details-compact" aria-label="Ver detalles de ${prod.nombre}">
                 <svg class="btn-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Detalles
             </a>
         `;
@@ -509,7 +584,7 @@ function filtrarYRenderizar(productos, estado, grid) {
                 actionBtnHtml = `
                     <div class="card-buttons-flex">
                         ${detailsBtnHtml}
-                        <a href="producto.html?id=${prod.id}" class="btn btn-primary btn-select-option">
+                        <a href="producto.html?id=${encodeURIComponent(prod.id)}" class="btn btn-primary btn-select-option">
                             Opciones
                         </a>
                     </div>
@@ -605,7 +680,6 @@ function filtrarYRenderizar(productos, estado, grid) {
         let descTexto = "Tenemos más opciones disponibles por pedido.";
         let subtituloTexto = "¿No encuentras lo que buscas?";
 
-        // Ajustes para "Ver Todos"
         if (estado.categoria === 'todos') {
             subtituloTexto = "¿No encuentras el perfume que buscas?";
             descTexto = "Cotízalo con nosotros y te ayudamos a conseguirlo.";
@@ -651,4 +725,27 @@ function vincularEventosGridCatalogo(grid) {
             window.whatsappConfig.consultarDisponibilidad(nombre, marca, 'Presentación estándar');
         });
     });
+}
+
+/**
+ * Restablece todos los filtros del catálogo al estado inicial
+ */
+function limpiarTodosLosFiltros(productos, estado, grid) {
+    estado.busqueda = '';
+    estado.categoria = 'todos';
+    estado.genero = 'todos';
+    estado.soloDisponibles = false;
+
+    const searchInput = document.getElementById('search-perfume');
+    if (searchInput) searchInput.value = '';
+
+    const availableCheckbox = document.getElementById('filter-available');
+    if (availableCheckbox) availableCheckbox.checked = false;
+
+    sincronizarBotonesCategoria('todos');
+    sincronizarBotonesGenero('todos');
+    actualizarCabeceraCategoria('todos');
+    actualizarURL('todos', 'todos');
+
+    filtrarYRenderizar(productos, estado, grid);
 }

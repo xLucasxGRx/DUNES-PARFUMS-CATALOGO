@@ -88,6 +88,19 @@ const ProductosService = (function() {
         return normalizarBooleano(val);
     }
 
+    function normalizarGenero(valor) {
+        if (valor === undefined || valor === null) return 'sin_clasificar';
+        const str = limpiarValorImportado(valor)
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+        if (['hombre', 'masculino', 'varon', 'man', 'men'].includes(str)) return 'hombre';
+        if (['mujer', 'femenino', 'dama', 'woman', 'women'].includes(str)) return 'mujer';
+        if (['unisex', 'ambos', 'universal'].includes(str)) return 'unisex';
+        return 'sin_clasificar';
+    }
+
     function getTipoFromCategoria(cat) {
         const c = limpiarValorImportado(cat).toLowerCase();
         if (c === 'arabe') return 'ARABE';
@@ -107,7 +120,7 @@ const ProductosService = (function() {
         }
         const data = await response.json();
         
-        // Normalizar categorías y booleanos del respaldo
+        // Normalizar categorías, booleanos y género del respaldo
         const dataNormalizada = data.map(p => {
             if (p.categoria === 'sellados' || p.categoria !== 'decants') {
                 let cat = 'arabe';
@@ -123,6 +136,7 @@ const ProductosService = (function() {
             p.disponible = parseBoolean(p.disponible);
             p.destacado = parseBoolean(p.destacado);
             p.oferta = parseBoolean(p.oferta);
+            p.genero = normalizarGenero(p.genero);
             return p;
         });
 
@@ -221,6 +235,7 @@ const ProductosService = (function() {
                     marca: marca,
                     tipo: getTipoFromCategoria(categoriaOriginal),
                     categoria: categoriaOriginal,
+                    genero: normalizarGenero(rawObj.genero),
                     disponible: parseBoolean(rawObj.disponible),
                     visible: visible,
                     imagen: imagen,

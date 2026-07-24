@@ -1630,6 +1630,63 @@
     border-color: #8E671D !important;
   }
 
+  /* Filtro de Género Móvil (¿Para quién?) */
+  #page-catalogo .filter-gender-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  #page-catalogo .filter-gender-label {
+    font-size: 0.72rem !important;
+    color: var(--color-primary-dark, #9E721D) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+  }
+
+  #page-catalogo .filter-gender-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    padding-bottom: 2px !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-gender-group::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  #page-catalogo .filter-gender-btn {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    padding: 6px 12px !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    box-sizing: border-box !important;
+    line-height: 1.2 !important;
+    background-color: var(--color-bg-light, #FFFDF8) !important;
+  }
+
+  #page-catalogo .filter-gender-btn.active {
+    background: var(--color-gold-gradient, linear-gradient(135deg, #C49A3E 0%, #8E671D 100%)) !important;
+    color: #FFFFFF !important;
+    border-color: #8E671D !important;
+  }
+
   /* Ordenación y Disponibilidad en 1 Sola Fila */
   #page-catalogo .filter-controls-right {
     display: grid !important;
@@ -1709,6 +1766,7 @@
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     box-shadow: 0 4px 12px rgba(31, 24, 12, 0.06) !important;
     transition: var(--transition-base) !important;
+    position: relative !important;
   }
 
   #catalogo-productos-grid .product-card.out-of-stock,
@@ -1723,8 +1781,7 @@
 
   #catalogo-productos-grid .product-card.out-of-stock .product-image-container,
   .products-grid .product-card.out-of-stock .product-image-container,
-  #catalogo-productos-grid .product-card.is-soldout .product-image-container,
-  .products-grid .product-card.is-soldout .product-image-container {
+  #catalogo-productos-grid .product-card.is-soldout .product-image-container {
     background: radial-gradient(circle at center, rgba(190, 70, 70, 0.10), transparent 65%), #fff8f8 !important;
   }
 
@@ -1747,6 +1804,8 @@
     box-sizing: border-box !important;
   }
 
+  #catalogo-productos-grid .product-image,
+  .products-grid .product-image,
   #catalogo-productos-grid .product-img,
   .products-grid .product-img {
     height: 100% !important;
@@ -1758,7 +1817,7 @@
     padding: 0 !important;
   }
 
-  /* Ocultar insignia de categoría sobre imagen en celular */
+  /* Ocultar insignia sobre imagen en celular */
   #catalogo-productos-grid .product-category-badge,
   .products-grid .product-category-badge {
     display: none !important;
