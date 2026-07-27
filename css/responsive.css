@@ -668,6 +668,17 @@
 
   .hero-btn-row {
     justify-content: center;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .btn-hero-cta {
+    width: 100%;
+    max-width: 320px;
+    min-height: 52px;
+    padding: 16px 24px;
+    font-size: 0.98rem;
+    justify-content: center;
   }
 
   .hero-image-wrapper {
@@ -703,10 +714,10 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  /* Footer */
+  /* Footer Base Mobile Grid */
   .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
@@ -717,6 +728,218 @@
   .logo-img {
     height: 38px;
     max-width: 170px;
+  }
+
+  /* Beneficios en Carrusel Horizontal Móvil (Nuestra Garantía Dunes) */
+  .benefits-section {
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .benefits-section .section-header {
+    margin-bottom: 18px !important;
+  }
+
+  .benefits-carousel-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  #benefits-carousel.benefits-grid,
+  #page-index .benefits-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 14px !important;
+    padding: 4px 2px 10px 2px !important;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #benefits-carousel.benefits-grid::-webkit-scrollbar,
+  #page-index .benefits-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  #benefits-carousel .benefit-card,
+  #page-index .benefits-section .benefit-card {
+    flex: 0 0 84% !important;
+    max-width: 310px !important;
+    scroll-snap-align: start !important;
+    padding: 16px 14px !important;
+    gap: 8px !important;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    border-radius: 12px;
+    height: auto !important;
+    min-height: 160px;
+    justify-content: center;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .benefit-icon-wrapper {
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 2px;
+  }
+
+  .benefit-icon-wrapper svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .benefit-title {
+    font-size: 0.98rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .benefit-desc {
+    font-size: 0.82rem !important;
+    line-height: 1.38 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .benefits-mobile-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 0 6px;
+  }
+
+  .benefits-counter {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-primary, #D4AF37);
+    letter-spacing: 0.5px;
+  }
+
+  .benefits-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .benefits-dots .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: all 0.25s ease;
+  }
+
+  .benefits-dots .dot.active {
+    width: 20px;
+    border-radius: 4px;
+    background-color: var(--color-primary, #D4AF37);
+  }
+
+  /* Footer Móvil en Acordeones Compactos */
+  .footer-main {
+    padding-top: 32px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .footer-col--brand {
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-about-text {
+    font-size: 0.84rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .footer-col--accordion {
+    gap: 0 !important;
+  }
+
+  .footer-accordion-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 12px 4px !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.18) !important;
+    color: var(--color-text-light, #FFFFFF) !important;
+    font-family: var(--font-heading, 'Montserrat', sans-serif) !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    cursor: pointer !important;
+    text-align: left !important;
+  }
+
+  .footer-accordion-btn:focus-visible {
+    outline: 2px solid var(--color-primary, #D4AF37);
+    outline-offset: 2px;
+  }
+
+  .footer-accordion-icon {
+    display: block !important;
+    transition: transform 0.25s ease, color 0.25s ease;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .footer-accordion-btn[aria-expanded="true"] {
+    color: var(--color-primary, #D4AF37) !important;
+    border-bottom-color: rgba(212, 175, 55, 0.4) !important;
+  }
+
+  .footer-accordion-btn[aria-expanded="true"] .footer-accordion-icon {
+    transform: rotate(180deg);
+    color: var(--color-primary, #D4AF37);
+  }
+
+  .footer-accordion-content {
+    display: none;
+    padding: 12px 6px 14px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .footer-accordion-content.active {
+    display: block !important;
+    animation: fadeInAccordion 0.22s ease forwards;
+  }
+
+  @keyframes fadeInAccordion {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .footer-disclaimer {
+    padding: 10px 14px !important;
+    font-size: 0.78rem !important;
+    line-height: 1.38 !important;
+    margin-top: 14px !important;
+  }
+
+  .footer-bottom {
+    padding-top: 14px !important;
+    gap: 6px !important;
+    text-align: center;
+    justify-content: center !important;
   }
 
   .container {
@@ -2647,6 +2870,58 @@
   .products-grid {
     grid-template-columns: repeat(5, 1fr) !important;
     gap: 28px !important;
+  }
+}
+
+/* Reglas de Escritorio (≥ 769px) - Garantiza layout intacto en desktop */
+@media screen and (min-width: 769px) {
+  .benefits-mobile-controls {
+    display: none !important;
+  }
+
+  .footer-accordion-btn {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: none !important;
+    cursor: default !important;
+    color: inherit !important;
+    font: inherit !important;
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .footer-accordion-btn span {
+    color: var(--color-text-light, #FFFFFF);
+    font-size: 1.1rem;
+    position: relative;
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: block;
+  }
+
+  .footer-accordion-btn span::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 1.5px;
+    background-color: var(--color-primary);
+  }
+
+  .footer-accordion-icon {
+    display: none !important;
+  }
+
+  .footer-accordion-content {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 }
 

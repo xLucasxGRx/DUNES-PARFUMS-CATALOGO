@@ -98,12 +98,20 @@ function generarMensajeWhatsApp(pedido) {
 
     if (datosEntrega.tipoEntrega === 'delivery-local') {
         let nombreZona = datosEntrega.nombreZona;
-        if (!nombreZona && datosEntrega.zona) {
-            const zonaFormateada = datosEntrega.zona.charAt(0).toUpperCase() + datosEntrega.zona.slice(1).replace('-', ' ');
-            nombreZona = datosEntrega.zona === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
+        let referenciaZona = datosEntrega.referenciaZona;
+        const zonasRef = (typeof window !== 'undefined' && window.ZONAS_DELIVERY_LOCAL) ? window.ZONAS_DELIVERY_LOCAL : null;
+        if (zonasRef && datosEntrega.zona && zonasRef[datosEntrega.zona]) {
+            nombreZona = zonasRef[datosEntrega.zona].nombre;
+            referenciaZona = zonasRef[datosEntrega.zona].referencia;
         }
-        mensaje += `Tipo de entrega: Delivery local (${nombreZona || 'Local'})\n`;
-        mensaje += `Costo de entrega: ${costoTexto}\n`;
+        mensaje += `Tipo de entrega: Delivery local\n`;
+        if (nombreZona) {
+            mensaje += `Zona: ${nombreZona}\n`;
+        }
+        if (referenciaZona) {
+            mensaje += `Referencia del sector: ${referenciaZona}\n`;
+        }
+        mensaje += `Costo de delivery: ${costoTexto}\n`;
     } else if (datosEntrega.tipoEntrega === 'agencia') {
         mensaje += `Tipo de entrega: Envío por agencia\n`;
         mensaje += `Embalaje y llevada: ${costoTexto}\n`;
@@ -118,7 +126,6 @@ function generarMensajeWhatsApp(pedido) {
     mensaje += `*DATOS DEL CLIENTE*\n\n`;
     if (datosEntrega.tipoEntrega === 'delivery-local') {
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
-        mensaje += `Celular: ${datosEntrega.celular}\n`;
         mensaje += `Dirección: ${datosEntrega.direccion}\n`;
         if (datosEntrega.referencia && datosEntrega.referencia.trim()) {
             mensaje += `Referencia: ${datosEntrega.referencia.trim()}\n`;
@@ -127,7 +134,6 @@ function generarMensajeWhatsApp(pedido) {
         mensaje += `_Coordinaremos los datos del envío por agencia por WhatsApp._\n`;
     } else if (datosEntrega.tipoEntrega === 'recojo-local') {
         mensaje += `Nombre: ${datosEntrega.nombre}\n`;
-        mensaje += `Celular: ${datosEntrega.celular}\n`;
         mensaje += `_Coordinaremos el horario de recojo por WhatsApp._\n`;
     }
 

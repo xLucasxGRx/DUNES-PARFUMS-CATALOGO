@@ -263,10 +263,12 @@
                         <div id="block-delivery-local" style="display: none; margin-bottom: 20px;">
                             <h5 style="font-size: 0.9rem; font-weight: 700; color: var(--color-text-dark); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Selecciona tu zona <span class="required-star">*</span></h5>
                             <div class="zone-selector-group" role="radiogroup" aria-label="Zonas de delivery local">
-                                <button type="button" class="zone-option-btn" data-zona="cacatachi">Cacatachi</button>
-                                <button type="button" class="zone-option-btn" data-zona="morales">Morales</button>
-                                <button type="button" class="zone-option-btn" data-zona="tarapoto">Tarapoto</button>
-                                <button type="button" class="zone-option-btn" data-zona="banda-shilcayo">La Banda de Shilcayo</button>
+                                <button type="button" class="zone-option-btn" data-zona="cacatachi" role="radio" aria-checked="false"></button>
+                                <button type="button" class="zone-option-btn" data-zona="morales" role="radio" aria-checked="false"></button>
+                                <button type="button" class="zone-option-btn" data-zona="tarapoto_central" role="radio" aria-checked="false"></button>
+                                <button type="button" class="zone-option-btn" data-zona="tarapoto_aeropuerto" role="radio" aria-checked="false"></button>
+                                <button type="button" class="zone-option-btn" data-zona="banda_entrada" role="radio" aria-checked="false"></button>
+                                <button type="button" class="zone-option-btn" data-zona="banda_alta" role="radio" aria-checked="false"></button>
                             </div>
                             
                             <!-- Info de Delivery Gratis / Costo -->
@@ -281,15 +283,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="delivery-phone">Número de Celular <span class="required-star">*</span></label>
-                                <input type="tel" id="delivery-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
-                                <span class="validation-error-msg" id="delivery-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="delivery-address">Dirección de Entrega <span class="required-star">*</span></label>
-                                <input type="text" id="delivery-address" placeholder="Ej. Jr. Independencia 434" autocomplete="street-address">
-                                <span class="validation-error-msg" id="delivery-address-error">Ingresa la dirección donde deseas recibir tu pedido.</span>
+                                <label for="delivery-address">Dirección <span class="required-star">*</span></label>
+                                <input type="text" id="delivery-address" name="direccion" placeholder="Ej. Jr. Lima 250, referencia frente al parque" autocomplete="street-address">
+                                <span class="validation-error-msg" id="delivery-address-error">Ingresa la dirección donde se realizará la entrega.</span>
                             </div>
 
                             <div class="form-group">
@@ -349,12 +345,6 @@
                                 <label for="recojo-name">Nombre Completo <span class="required-star">*</span></label>
                                 <input type="text" id="recojo-name" placeholder="Ej. Juan Pérez" autocomplete="name">
                                 <span class="validation-error-msg" id="recojo-name-error">Ingresa tu nombre para coordinar el recojo.</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="recojo-phone">Número de Celular <span class="required-star">*</span></label>
-                                <input type="tel" id="recojo-phone" placeholder="Ej. 987654321" autocomplete="tel" inputmode="numeric">
-                                <span class="validation-error-msg" id="recojo-phone-error">Ingresa un número de celular válido de 9 dígitos.</span>
                             </div>
                         </div>
 

@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizarCarritoDOM();
         inicializarCheckoutForm();
     }
+
+    // 8. Inicializar carrusel móvil de beneficios y acordeón del footer
+    inicializarCarruselBeneficios();
+    inicializarAcordeonFooter();
 });
 
 /**
@@ -1130,15 +1134,46 @@ function inicializarModalVaciarCarrito() {
     });
 }
 
-const CONFIG_DELIVERY_LOCAL = {
-    montoMinimoGratis: 30,
-    zonas: {
-        cacatachi: { nombre: "Cacatachi", costo: 0 },
-        morales: { nombre: "Morales", costo: 3 },
-        tarapoto: { nombre: "Tarapoto", costo: 4 },
-        "banda-shilcayo": { nombre: "La Banda de Shilcayo", costo: 5 }
+const ZONAS_DELIVERY_LOCAL = {
+    cacatachi: {
+        nombre: "Cacatachi",
+        referencia: "Cacatachi",
+        costo: 0
+    },
+    morales: {
+        nombre: "Morales",
+        referencia: "La Planicie, Oasis, Las Brisas y Plaza",
+        costo: 3
+    },
+    tarapoto_central: {
+        nombre: "Tarapoto – Sector Central",
+        referencia: "Plaza Mayor, Partido Alto, Circunvalación, Suchiche, 9 de Abril y Atumpampa",
+        costo: 4
+    },
+    tarapoto_aeropuerto: {
+        nombre: "Tarapoto – Sector Aeropuerto",
+        referencia: "Barrio Huayco, Av. Cáceres y zona del Aeropuerto",
+        costo: 4.5
+    },
+    banda_entrada: {
+        nombre: "La Banda de Shilcayo",
+        referencia: "Plaza y entrada de La Banda",
+        costo: 5
+    },
+    banda_alta: {
+        nombre: "La Banda Alta",
+        referencia: "Satélite, La Victoria, Nadine Heredia, AA. VV. Venecia y La Molina",
+        costo: 6
     }
 };
+
+const CONFIG_DELIVERY_LOCAL = {
+    montoMinimoGratis: 30,
+    zonas: ZONAS_DELIVERY_LOCAL
+};
+
+window.ZONAS_DELIVERY_LOCAL = ZONAS_DELIVERY_LOCAL;
+window.CONFIG_DELIVERY_LOCAL = CONFIG_DELIVERY_LOCAL;
 
 const CONFIG_ENVIO_AGENCIA = {
     montoMinimoGratis: 30,
@@ -1196,26 +1231,29 @@ function actualizarBotonesZona(subtotal) {
     const subtotalNumerico = Number(subtotal) || 0;
     const isFree = subtotalNumerico >= CONFIG_DELIVERY_LOCAL.montoMinimoGratis;
     
-    const zonas = [
-        { key: 'cacatachi', name: 'Cacatachi', freeAlways: true, cost: 0 },
-        { key: 'morales', name: 'Morales', cost: CONFIG_DELIVERY_LOCAL.zonas.morales.costo },
-        { key: 'tarapoto', name: 'Tarapoto', cost: CONFIG_DELIVERY_LOCAL.zonas.tarapoto.costo },
-        { key: 'banda-shilcayo', name: 'La Banda de Shilcayo', cost: CONFIG_DELIVERY_LOCAL.zonas['banda-shilcayo'].costo }
-    ];
-
-    zonas.forEach(z => {
-        const btn = document.querySelector(`.zone-option-btn[data-zona="${z.key}"]`);
+    Object.keys(ZONAS_DELIVERY_LOCAL).forEach(key => {
+        const z = ZONAS_DELIVERY_LOCAL[key];
+        const btn = document.querySelector(`.zone-option-btn[data-zona="${key}"]`);
         if (!btn) return;
 
-        const esGratis = z.freeAlways || isFree;
+        const esGratis = key === 'cacatachi' || isFree;
         const priceBadgeHtml = esGratis
             ? `<span class="delivery-zone-price gratis">GRATIS</span>`
-            : `<span class="delivery-zone-price">S/ ${z.cost.toFixed(2)}</span>`;
+            : `<span class="delivery-zone-price">S/ ${z.costo.toFixed(2)}</span>`;
+
+        const isSelected = selectedDeliveryZone === key;
+        btn.classList.toggle('selected', isSelected);
+        btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
 
         btn.innerHTML = `
-            <span class="delivery-zone-name">${z.name}</span>
-            <span class="delivery-zone-separator"></span>
-            ${priceBadgeHtml}
+            <div class="zone-radio-indicator" aria-hidden="true"></div>
+            <div class="zone-info">
+                <span class="delivery-zone-name">${z.nombre}</span>
+                <span class="delivery-zone-ref">${z.referencia}</span>
+            </div>
+            <div class="zone-price-container">
+                ${priceBadgeHtml}
+            </div>
         `;
     });
 }
@@ -1312,36 +1350,28 @@ function actualizarInterfazEntrega() {
         if (selectedDeliveryType === 'delivery-local') {
             blockDelivery.style.display = 'block';
             document.getElementById('delivery-name').required = true;
-            document.getElementById('delivery-phone').required = true;
             document.getElementById('delivery-address').required = true;
-            document.getElementById('delivery-reference').required = true;
+            document.getElementById('delivery-reference').required = false;
             document.getElementById('recojo-name').required = false;
-            document.getElementById('recojo-phone').required = false;
         } else if (selectedDeliveryType === 'agencia') {
             blockAgencia.style.display = 'block';
             document.getElementById('delivery-name').required = false;
-            document.getElementById('delivery-phone').required = false;
             document.getElementById('delivery-address').required = false;
             document.getElementById('delivery-reference').required = false;
             document.getElementById('recojo-name').required = false;
-            document.getElementById('recojo-phone').required = false;
         } else if (selectedDeliveryType === 'recojo-local') {
             blockRecojo.style.display = 'block';
             document.getElementById('recojo-name').required = true;
-            document.getElementById('recojo-phone').required = true;
             document.getElementById('delivery-name').required = false;
-            document.getElementById('delivery-phone').required = false;
             document.getElementById('delivery-address').required = false;
             document.getElementById('delivery-reference').required = false;
         }
     } else {
         warningBox.style.display = 'block';
         document.getElementById('delivery-name').required = false;
-        document.getElementById('delivery-phone').required = false;
         document.getElementById('delivery-address').required = false;
         document.getElementById('delivery-reference').required = false;
         document.getElementById('recojo-name').required = false;
-        document.getElementById('recojo-phone').required = false;
     }
     
     const items = window.carritoModulo.obtenerCarrito();
@@ -1728,10 +1758,10 @@ function actualizarResumenEntrega() {
         summaryType.textContent = 'Delivery local';
         if (summaryZoneRow) summaryZoneRow.style.display = 'flex';
         
-        if (selectedDeliveryZone) {
-            const zonaFormateada = selectedDeliveryZone.charAt(0).toUpperCase() + selectedDeliveryZone.slice(1).replace('-', ' ');
+        if (selectedDeliveryZone && ZONAS_DELIVERY_LOCAL[selectedDeliveryZone]) {
+            const zInfo = ZONAS_DELIVERY_LOCAL[selectedDeliveryZone];
             if (summaryZone) {
-                summaryZone.textContent = selectedDeliveryZone === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
+                summaryZone.textContent = zInfo.nombre;
             }
             if (summaryCost) {
                 summaryCost.textContent = costoEntrega === 0 ? 'GRATIS' : formatearMoneda(costoEntrega);
@@ -1771,7 +1801,7 @@ function actualizarResumenEntrega() {
             totalMontoInfo.textContent = 'Selecciona el tipo de entrega para confirmar el total.';
             totalMontoInfo.style.display = 'block';
         } else if (selectedDeliveryType === 'delivery-local' && !selectedDeliveryZone) {
-            totalMontoInfo.textContent = 'Selecciona una zona para confirmar el total.';
+            totalMontoInfo.textContent = 'Selecciona la zona de delivery correspondiente a tu dirección.';
             totalMontoInfo.style.display = 'block';
         } else {
             totalMontoInfo.textContent = '';
@@ -1799,8 +1829,8 @@ function validarFormularioEntrega(forceShowErrors = false) {
     
     // Reset all aria-invalid attributes first
     const allInputs = [
-        'delivery-name', 'delivery-phone', 'delivery-address', 'delivery-reference',
-        'recojo-name', 'recojo-phone'
+        'delivery-name', 'delivery-address', 'delivery-reference',
+        'recojo-name'
     ];
     allInputs.forEach(id => {
         const el = document.getElementById(id);
@@ -1809,12 +1839,10 @@ function validarFormularioEntrega(forceShowErrors = false) {
     
     if (selectedDeliveryType === 'delivery-local') {
         const nameInput = document.getElementById('delivery-name');
-        const phoneInput = document.getElementById('delivery-phone');
         const addressInput = document.getElementById('delivery-address');
         const referenceInput = document.getElementById('delivery-reference');
         
         const name = nameInput ? nameInput.value.trim() : '';
-        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
         const address = addressInput ? addressInput.value.trim() : '';
         const reference = referenceInput ? referenceInput.value.trim() : '';
         
@@ -1832,26 +1860,12 @@ function validarFormularioEntrega(forceShowErrors = false) {
             if (nameInput) nameInput.setAttribute('aria-invalid', 'true');
         }
         
-        // Phone validation
-        const phoneRegex = /^[0-9]{9}$/;
-        const isPhoneValid = phoneRegex.test(phone);
-        const phoneError = document.getElementById('delivery-phone-error');
-        if (phoneError) {
-            const show = (forceShowErrors && !isPhoneValid) || (phone.length > 0 && !isPhoneValid);
-            phoneError.style.display = show ? 'block' : 'none';
-        }
-        if (!isPhoneValid) {
-            result.valido = false;
-            result.errores['delivery-phone'] = 'Ingresa un número de celular válido de 9 dígitos.';
-            if (phoneInput) phoneInput.setAttribute('aria-invalid', 'true');
-        }
-        
         // Zone validation
-        const validZones = ['cacatachi', 'morales', 'tarapoto', 'banda-shilcayo'];
+        const validZones = Object.keys(ZONAS_DELIVERY_LOCAL);
         const isZoneValid = validZones.includes(selectedDeliveryZone);
         if (!isZoneValid) {
             result.valido = false;
-            result.errores['zone-selector'] = 'Selecciona la zona donde deseas recibir tu pedido.';
+            result.errores['zone-selector'] = 'Selecciona la zona de delivery correspondiente a tu dirección.';
         }
         
         // Address validation
@@ -1863,7 +1877,7 @@ function validarFormularioEntrega(forceShowErrors = false) {
         }
         if (!isAddressValid) {
             result.valido = false;
-            result.errores['delivery-address'] = 'Ingresa la dirección donde deseas recibir tu pedido.';
+            result.errores['delivery-address'] = 'Ingresa la dirección donde se realizará la entrega.';
             if (addressInput) addressInput.setAttribute('aria-invalid', 'true');
         }
         
@@ -1875,10 +1889,7 @@ function validarFormularioEntrega(forceShowErrors = false) {
         
     } else if (selectedDeliveryType === 'recojo-local') {
         const nameInput = document.getElementById('recojo-name');
-        const phoneInput = document.getElementById('recojo-phone');
-        
         const name = nameInput ? nameInput.value.trim() : '';
-        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
         
         // Name validation
         const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\'\.]+$/;
@@ -1892,20 +1903,6 @@ function validarFormularioEntrega(forceShowErrors = false) {
             result.valido = false;
             result.errores['recojo-name'] = 'Ingresa tu nombre para coordinar el recojo.';
             if (nameInput) nameInput.setAttribute('aria-invalid', 'true');
-        }
-        
-        // Phone validation
-        const phoneRegex = /^[0-9]{9}$/;
-        const isPhoneValid = phoneRegex.test(phone);
-        const phoneError = document.getElementById('recojo-phone-error');
-        if (phoneError) {
-            const show = (forceShowErrors && !isPhoneValid) || (phone.length > 0 && !isPhoneValid);
-            phoneError.style.display = show ? 'block' : 'none';
-        }
-        if (!isPhoneValid) {
-            result.valido = false;
-            result.errores['recojo-phone'] = 'Ingresa un número de celular válido de 9 dígitos.';
-            if (phoneInput) phoneInput.setAttribute('aria-invalid', 'true');
         }
     } else if (selectedDeliveryType === 'agencia') {
         // Agencia is always valid as no fields are required
@@ -1925,27 +1922,26 @@ function validarDatosEntrega() {
 function obtenerDatosEntrega() {
     if (selectedDeliveryType === 'delivery-local') {
         const nameInput = document.getElementById('delivery-name');
-        const phoneInput = document.getElementById('delivery-phone');
         const addressInput = document.getElementById('delivery-address');
         const referenceInput = document.getElementById('delivery-reference');
         
         const name = nameInput ? nameInput.value.trim() : '';
-        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
         const address = addressInput ? addressInput.value.trim() : '';
         const reference = referenceInput ? referenceInput.value.trim() : '';
         
         let nombreZona = '';
-        if (selectedDeliveryZone) {
-            const zonaFormateada = selectedDeliveryZone.charAt(0).toUpperCase() + selectedDeliveryZone.slice(1).replace('-', ' ');
-            nombreZona = selectedDeliveryZone === 'banda-shilcayo' ? 'La Banda de Shilcayo' : zonaFormateada;
+        let referenciaZona = '';
+        if (selectedDeliveryZone && ZONAS_DELIVERY_LOCAL[selectedDeliveryZone]) {
+            nombreZona = ZONAS_DELIVERY_LOCAL[selectedDeliveryZone].nombre;
+            referenciaZona = ZONAS_DELIVERY_LOCAL[selectedDeliveryZone].referencia;
         }
         
         return {
             tipoEntrega: 'delivery-local',
             nombre: name,
-            celular: phone,
             zona: selectedDeliveryZone,
             nombreZona: nombreZona,
+            referenciaZona: referenciaZona,
             direccion: address,
             referencia: reference
         };
@@ -1955,15 +1951,11 @@ function obtenerDatosEntrega() {
         };
     } else if (selectedDeliveryType === 'recojo-local') {
         const nameInput = document.getElementById('recojo-name');
-        const phoneInput = document.getElementById('recojo-phone');
-        
         const name = nameInput ? nameInput.value.trim() : '';
-        const phone = phoneInput ? phoneInput.value.trim().replace(/\s+/g, '') : '';
         
         return {
             tipoEntrega: 'recojo-local',
-            nombre: name,
-            celular: phone
+            nombre: name
         };
     }
     return null;
@@ -2007,7 +1999,8 @@ function cargarPreferenciaEntrega() {
             selectedDeliveryType = pref.tipoEntrega;
             
             // Validate zone value
-            if (pref.tipoEntrega === 'delivery-local' && ['cacatachi', 'morales', 'tarapoto', 'banda-shilcayo'].includes(pref.zona)) {
+            const validZones = Object.keys(ZONAS_DELIVERY_LOCAL);
+            if (pref.tipoEntrega === 'delivery-local' && validZones.includes(pref.zona)) {
                 selectedDeliveryZone = pref.zona;
             } else {
                 selectedDeliveryZone = null;
@@ -2061,18 +2054,15 @@ function inicializarCheckoutForm() {
         });
     });
     
-    // Listeners for text/tel inputs
+    // Listeners for text inputs
     const inputs = [
-        'delivery-name', 'delivery-phone', 'delivery-address', 'delivery-reference',
-        'recojo-name', 'recojo-phone'
+        'delivery-name', 'delivery-address', 'delivery-reference',
+        'recojo-name'
     ];
     inputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
             input.addEventListener('input', () => {
-                if (id.includes('phone')) {
-                    input.value = input.value.replace(/[^0-9]/g, '');
-                }
                 validarDatosEntrega();
             });
             input.addEventListener('blur', () => {
@@ -2196,6 +2186,74 @@ window.actualizarResumenEntrega = actualizarResumenEntrega;
 window.guardarPreferenciaEntrega = guardarPreferenciaEntrega;
 window.cargarPreferenciaEntrega = cargarPreferenciaEntrega;
 window.inicializarCheckoutForm = inicializarCheckoutForm;
+
+/**
+ * Inicializa el carrusel horizontal de beneficios en versión móvil
+ */
+function inicializarCarruselBeneficios() {
+    const carousel = document.getElementById('benefits-carousel');
+    const counterEl = document.getElementById('benefits-counter');
+    const dotsContainer = document.getElementById('benefits-dots');
+    if (!carousel) return;
+
+    const cards = carousel.querySelectorAll('.benefit-card');
+    const totalCards = cards.length;
+    if (totalCards === 0) return;
+
+    const updateCarouselState = () => {
+        const scrollLeft = carousel.scrollLeft;
+        const cardWidth = cards[0].offsetWidth + 14;
+        let currentIndex = Math.round(scrollLeft / cardWidth);
+        if (currentIndex < 0) currentIndex = 0;
+        if (currentIndex >= totalCards) currentIndex = totalCards - 1;
+
+        if (counterEl) {
+            counterEl.textContent = `${currentIndex + 1} de ${totalCards}`;
+        }
+
+        if (dotsContainer) {
+            const dots = dotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentIndex);
+            });
+        }
+    };
+
+    let scrollTimeout;
+    carousel.addEventListener('scroll', () => {
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(updateCarouselState, 40);
+    }, { passive: true });
+
+    updateCarouselState();
+}
+
+/**
+ * Inicializa el acordeón interactivo en el footer para pantallas móviles
+ */
+function inicializarAcordeonFooter() {
+    const buttons = document.querySelectorAll('.footer-accordion-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.innerWidth >= 769) return;
+
+            const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+            const contentId = btn.getAttribute('aria-controls');
+            const contentEl = contentId ? document.getElementById(contentId) : null;
+
+            if (contentEl) {
+                if (isExpanded) {
+                    btn.setAttribute('aria-expanded', 'false');
+                    contentEl.classList.remove('active');
+                } else {
+                    btn.setAttribute('aria-expanded', 'true');
+                    contentEl.classList.add('active');
+                }
+            }
+        });
+    });
+}
 
 
 

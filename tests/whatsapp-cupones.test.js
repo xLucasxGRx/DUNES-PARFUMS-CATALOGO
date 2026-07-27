@@ -32,9 +32,9 @@ test('WhatsApp - Mensaje SIN cupón aplicado (Limpio sin campos de cupón)', () 
         datosEntrega: {
             tipoEntrega: 'delivery-local',
             nombre: 'Juan Pérez',
-            celular: '987654321',
             zona: 'cacatachi',
             nombreZona: 'Cacatachi',
+            referenciaZona: 'Cacatachi',
             direccion: 'Jr. Lima 123'
         }
     };
@@ -42,10 +42,11 @@ test('WhatsApp - Mensaje SIN cupón aplicado (Limpio sin campos de cupón)', () 
     const msg = window.whatsappConfig.generarMensajeWhatsApp(pedido);
 
     assert.equal(msg.includes('Subtotal de productos: S/160.00'), true);
-    assert.equal(msg.includes('Costo de entrega: GRATIS'), true);
+    assert.equal(msg.includes('Costo de delivery: GRATIS'), true);
     assert.equal(msg.includes('*TOTAL DEL PEDIDO: S/160.00*'), true);
     assert.equal(msg.includes('Cupón aplicado'), false);
     assert.equal(msg.includes('Descuento:'), false);
+    assert.equal(msg.includes('Celular:'), false);
     assert.equal(msg.includes('NaN'), false);
     assert.equal(msg.includes('undefined'), false);
 });
@@ -67,9 +68,9 @@ test('WhatsApp - Mensaje CON cupón fijo TIODUNES (-S/10.00)', () => {
         datosEntrega: {
             tipoEntrega: 'delivery-local',
             nombre: 'Juan Pérez',
-            celular: '987654321',
             zona: 'cacatachi',
             nombreZona: 'Cacatachi',
+            referenciaZona: 'Cacatachi',
             direccion: 'Jr. Lima 123'
         }
     };
@@ -80,8 +81,9 @@ test('WhatsApp - Mensaje CON cupón fijo TIODUNES (-S/10.00)', () => {
     assert.equal(msg.includes('Cupón aplicado: TIODUNES'), true);
     assert.equal(msg.includes('Descuento: -S/10.00'), true);
     assert.equal(msg.includes('Subtotal con descuento: S/150.00'), true);
-    assert.equal(msg.includes('Costo de entrega: GRATIS'), true);
+    assert.equal(msg.includes('Costo de delivery: GRATIS'), true);
     assert.equal(msg.includes('*TOTAL DEL PEDIDO: S/150.00*'), true);
+    assert.equal(msg.includes('Celular:'), false);
 });
 
 test('WhatsApp - Mensaje CON cupón porcentual DUNES10 (5% en S/155.00)', () => {
@@ -105,9 +107,9 @@ test('WhatsApp - Mensaje CON cupón porcentual DUNES10 (5% en S/155.00)', () => 
         datosEntrega: {
             tipoEntrega: 'delivery-local',
             nombre: 'Juan Pérez',
-            celular: '987654321',
-            zona: 'tarapoto',
-            nombreZona: 'Tarapoto',
+            zona: 'tarapoto_central',
+            nombreZona: 'Tarapoto – Sector Central',
+            referenciaZona: 'Plaza Mayor, Partido Alto, Circunvalación, Suchiche, 9 de Abril y Atumpampa',
             direccion: 'Jr. San Martín 456'
         }
     };
@@ -119,6 +121,7 @@ test('WhatsApp - Mensaje CON cupón porcentual DUNES10 (5% en S/155.00)', () => 
     assert.equal(msg.includes('Descuento: -S/7.75'), true);
     assert.equal(msg.includes('Subtotal con descuento: S/147.25'), true);
     assert.equal(msg.includes('*TOTAL DEL PEDIDO: S/147.25*'), true);
+    assert.equal(msg.includes('Celular:'), false);
 });
 
 test('WhatsApp - Modalidades de entrega (Agencia y Recojo local)', () => {
@@ -139,12 +142,13 @@ test('WhatsApp - Modalidades de entrega (Agencia y Recojo local)', () => {
         subtotalBruto: 160,
         costoEntrega: 0,
         totalFinal: 160,
-        datosEntrega: { tipoEntrega: 'recojo-local', nombre: 'Carlos', celular: '912345678' }
+        datosEntrega: { tipoEntrega: 'recojo-local', nombre: 'Carlos' }
     };
     const msgRecojo = window.whatsappConfig.generarMensajeWhatsApp(pRecojo);
     assert.equal(msgRecojo.includes('Tipo de entrega: Recojo en local'), true);
     assert.equal(msgRecojo.includes('Costo de entrega: GRATIS'), true);
     assert.equal(msgRecojo.includes('*TOTAL DEL PEDIDO: S/160.00*'), true);
+    assert.equal(msgRecojo.includes('Celular:'), false);
 });
 
 test('WhatsApp - Enlace oficial y teléfono 51986510573', () => {
