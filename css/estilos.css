@@ -3538,6 +3538,80 @@ button:disabled,
     flex-direction: column;
     gap: 12px;
     margin-top: auto;
+    width: 100%;
+}
+
+.btn-location-maps,
+.btn-location-wa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 52px;
+    min-height: 52px;
+    padding: 0 20px;
+    border-radius: var(--border-radius-sm, 8px);
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    width: 100%;
+}
+
+/* 1) Botón Google Maps */
+.btn-location-maps {
+    background: linear-gradient(135deg, #ECC86A 0%, #D4AF37 45%, #AA7C11 100%);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 235, 175, 0.5);
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.28), 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-location-maps:hover {
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #F5D67B 0%, #E2BD44 45%, #B8891B 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(212, 175, 55, 0.45), 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 245, 210, 0.8);
+}
+
+.btn-location-maps:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+/* 2) Botón WhatsApp Ubicación */
+.btn-location-wa {
+    background: linear-gradient(135deg, #1A1A1A 0%, #0E0E0E 100%);
+    color: #FFFFFF;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.btn-location-wa:hover {
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #262626 0%, #141414 100%);
+    border-color: var(--color-primary, #D4AF37);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4), 0 0 12px rgba(212, 175, 55, 0.2);
+}
+
+.btn-location-wa:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Iconos de Botones de Ubicación */
+.location-btn-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .ubicacion-mapa {

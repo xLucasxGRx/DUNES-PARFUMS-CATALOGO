@@ -1992,6 +1992,16 @@
     position: relative !important;
   }
 
+  /* Botones de Ubicación Móviles */
+  .btn-location-maps,
+  .btn-location-wa {
+    height: 50px !important;
+    min-height: 50px !important;
+    padding: 0 12px !important;
+    font-size: 0.85rem !important;
+    gap: 8px !important;
+  }
+
   #catalogo-productos-grid .product-card.out-of-stock,
   .products-grid .product-card.out-of-stock,
   #catalogo-productos-grid .product-card.is-soldout,
