@@ -2288,6 +2288,47 @@ button:disabled,
     font-weight: 300;
 }
 
+/* Acordeón de Descripción de Fragancia */
+.detail-description-accordion {
+    width: 100%;
+}
+
+.description-accordion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--color-text-dark, #171717);
+    font-family: var(--font-heading, 'Montserrat', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: default;
+    text-align: left;
+}
+
+.description-accordion-btn .accordion-chevron-icon {
+    display: none;
+    transition: transform 0.25s ease;
+    color: var(--color-primary-dark, #8E671D);
+}
+
+.description-accordion-content {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--color-text-secondary, #6F6F6F);
+}
+
+.description-accordion-content p {
+    margin: 0;
+}
+
 .detail-qty-picker-row {
     display: flex;
     align-items: center;

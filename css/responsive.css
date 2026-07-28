@@ -2410,10 +2410,11 @@
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    height: auto !important;
-    min-height: 0 !important; /* Elimina min-height heredada de escritorio */
+    height: 220px !important;
+    max-height: 220px !important;
+    min-height: 0 !important;
     box-sizing: border-box !important;
-    padding: 12px !important;
+    padding: 8px !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -2424,87 +2425,130 @@
 
   #page-producto .detail-product-img,
   .detail-product-img {
-    width: 100% !important;
+    width: auto !important;
     max-width: 100% !important;
     height: auto !important;
-    max-height: 300px !important; /* Compacta y proporcionada */
+    max-height: 200px !important;
     object-fit: contain !important;
-    padding: 4px !important;
+    padding: 2px !important;
     min-height: 0 !important;
     filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.08)) !important;
     transform: none !important;
     transition: none !important;
   }
 
-  /* 4. Bloque de información */
+  /* 4. Bloque de información compacta */
   #page-producto .detail-info-side,
   .detail-info-side {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    padding: 4px 0 0 0 !important;
+    padding: 2px 0 0 0 !important;
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
   }
 
   .detail-brand {
-    font-size: 0.8rem !important;
-    letter-spacing: 1.5px !important;
-    margin-bottom: 4px !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 1.2px !important;
+    margin-bottom: 2px !important;
     word-break: break-word !important;
   }
 
   .detail-title {
-    font-size: 1.65rem !important;
+    font-size: 1.45rem !important;
     line-height: 1.2 !important;
-    margin-bottom: 6px !important;
+    margin-bottom: 4px !important;
     white-space: normal !important;
     word-break: break-word !important;
     overflow-wrap: break-word !important;
   }
 
   .detail-volume {
-    font-size: 0.9rem !important;
-    margin-bottom: 12px !important;
-  }
-
-  .detail-price-box {
-    margin-bottom: 8px !important;
-  }
-
-  .detail-price {
-    font-size: 1.75rem !important;
-    font-weight: 700 !important;
-  }
-
-  .detail-stock-badge {
-    margin-bottom: 12px !important;
-    padding: 5px 10px !important;
-    font-size: 0.8rem !important;
-  }
-
-  .detail-divider {
-    height: 1px !important;
-    margin: 12px 0 !important;
-    background-color: var(--color-border, #E5E5E5) !important;
-  }
-
-  .detail-description {
-    margin-bottom: 4px !important;
-  }
-
-  .detail-description h3 {
     font-size: 0.85rem !important;
     margin-bottom: 6px !important;
   }
 
-  .detail-description p {
-    font-size: 0.9rem !important;
-    line-height: 1.55 !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
+  .detail-price-box {
+    margin-bottom: 4px !important;
+  }
+
+  .detail-price {
+    font-size: 1.65rem !important;
+    font-weight: 700 !important;
+  }
+
+  .detail-stock-badge {
+    margin-bottom: 6px !important;
+    padding: 4px 8px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .detail-divider {
+    height: 1px !important;
+    margin: 8px 0 !important;
+    background-color: var(--color-border, #E5E5E5) !important;
+  }
+
+  /* Acordeón Móvil de Descripción de Fragancia */
+  #page-producto .detail-description-accordion,
+  .detail-description-accordion {
+    width: 100% !important;
+    margin-top: 2px !important;
+  }
+
+  #page-producto .description-accordion-btn,
+  .description-accordion-btn {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 8px 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.22) !important;
+    color: var(--color-text-dark, #171717) !important;
+    font-family: var(--font-heading, 'Montserrat', sans-serif) !important;
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    text-align: left !important;
+  }
+
+  #page-producto .description-accordion-btn .accordion-chevron-icon,
+  .description-accordion-btn .accordion-chevron-icon {
+    display: block !important;
+    transition: transform 0.25s ease !important;
+    color: var(--color-primary-dark, #8E671D) !important;
+  }
+
+  #page-producto .description-accordion-btn[aria-expanded="true"] .accordion-chevron-icon,
+  .description-accordion-btn[aria-expanded="true"] .accordion-chevron-icon {
+    transform: rotate(180deg) !important;
+  }
+
+  #page-producto .description-accordion-content,
+  .description-accordion-content {
+    display: none !important;
+    padding: 8px 0 4px 0 !important;
+    font-size: 0.86rem !important;
+    line-height: 1.5 !important;
+    color: var(--color-text-secondary, #6F6F6F) !important;
+  }
+
+  #page-producto .description-accordion-content.active,
+  .description-accordion-content.active {
+    display: block !important;
+    animation: fadeInDesc 0.2s ease forwards !important;
+  }
+
+  @keyframes fadeInDesc {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* 5. Selector de Presentaciones (Decants: 3ml, 5ml, 10ml) */
@@ -2514,24 +2558,24 @@
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
   }
 
   .variant-selector-title {
-    font-size: 0.85rem !important;
-    margin-bottom: 10px !important;
+    font-size: 0.82rem !important;
+    margin-bottom: 6px !important;
   }
 
   .variant-options-row,
   .presentation-options {
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 8px !important;
+    gap: 6px !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 6px !important;
   }
 
   .variant-option-btn,
@@ -2544,21 +2588,21 @@
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    padding: 12px 16px !important;
+    padding: 10px 14px !important;
     height: auto !important;
-    min-height: 46px !important;
+    min-height: 42px !important;
     margin: 0 !important;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
     position: relative !important;
   }
 
   .variant-ml {
-    font-size: 0.95rem !important;
+    font-size: 0.9rem !important;
     font-weight: 700 !important;
   }
 
   .variant-price {
-    font-size: 0.88rem !important;
+    font-size: 0.85rem !important;
   }
 
   /* 6. Control de Cantidad compacto y centrado */
@@ -2568,36 +2612,36 @@
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 12px !important;
+    gap: 10px !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 10px !important;
   }
 
   .qty-label {
-    font-size: 0.9rem !important;
+    font-size: 0.85rem !important;
   }
 
   .qty-picker {
-    height: 40px !important;
-    min-height: 40px !important;
+    height: 38px !important;
+    min-height: 38px !important;
     box-sizing: border-box !important;
   }
 
   .qty-btn {
-    width: 40px !important;
-    height: 40px !important;
-    min-height: 40px !important;
-    font-size: 1.1rem !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    font-size: 1rem !important;
   }
 
   .qty-picker input {
-    width: 48px !important;
-    height: 40px !important;
-    min-height: 40px !important;
-    font-size: 0.95rem !important;
+    width: 44px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    font-size: 0.9rem !important;
   }
 
   /* 7. Botones de acción inferiores */
@@ -2605,12 +2649,13 @@
   .detail-btn-row {
     display: flex !important;
     flex-direction: column !important;
-    gap: 10px !important;
+    gap: 8px !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    margin-top: 4px !important;
+    margin-top: 2px !important;
+    margin-bottom: 4px !important;
   }
 
   #page-producto .detail-btn-row .btn,
@@ -2625,7 +2670,7 @@
     box-sizing: border-box !important;
     padding: 12px 16px !important;
     font-size: 0.88rem !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -2667,29 +2712,36 @@
 @media screen and (max-width: 390px) {
   #page-producto main.container,
   #page-producto #product-detail-container {
-    padding-inline: 10px !important;
+    padding-inline: 8px !important;
   }
 
   #page-producto .product-detail-layout,
   .product-detail-layout {
-    padding: 14px !important;
-    gap: 14px !important;
+    padding: 12px !important;
+    gap: 10px !important;
   }
 
+  #page-producto .detail-image-side,
+  .detail-image-side {
+    max-height: 190px !important;
+    height: 190px !important;
+  }
+
+  #page-producto .detail-product-img,
   .detail-product-img {
-    max-height: 250px !important;
+    max-height: 175px !important;
   }
 
   .detail-title {
-    font-size: 1.45rem !important;
+    font-size: 1.35rem !important;
   }
 
   .detail-price {
-    font-size: 1.6rem !important;
+    font-size: 1.5rem !important;
   }
 
   .detail-btn-row {
-    gap: 10px !important;
+    gap: 8px !important;
   }
 
   .detail-btn-row .btn,

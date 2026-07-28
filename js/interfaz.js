@@ -643,17 +643,38 @@ function renderizarDetalleSellado(container, prod) {
 
                 <div class="detail-divider"></div>
 
-                <div class="detail-description">
-                    <h3>Descripción de la fragancia:</h3>
-                    <p>${prod.descripcion || 'Una fina fragancia de nuestra selección exclusiva.'}</p>
-                </div>
+                ${pickerAndActionsHtml}
 
                 <div class="detail-divider"></div>
 
-                ${pickerAndActionsHtml}
+                <div class="detail-description-accordion">
+                    <button type="button" class="description-accordion-btn" id="btn-toggle-description" aria-expanded="false" aria-controls="detail-description-content">
+                        <span>Descripción de la fragancia</span>
+                        <svg class="accordion-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </button>
+                    <div class="description-accordion-content" id="detail-description-content" aria-hidden="true">
+                        <p>${prod.descripcion || 'Una fina fragancia de nuestra selección exclusiva.'}</p>
+                    </div>
+                </div>
             </div>
         </div>
     `;
+
+    // Vincular acordeón de descripción
+    const descBtnSellado = container.querySelector('#btn-toggle-description');
+    const descContentSellado = container.querySelector('#detail-description-content');
+    if (descBtnSellado && descContentSellado) {
+        descBtnSellado.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.innerWidth >= 769) return;
+            const isExpanded = descBtnSellado.getAttribute('aria-expanded') === 'true';
+            descBtnSellado.setAttribute('aria-expanded', !isExpanded);
+            descContentSellado.setAttribute('aria-hidden', isExpanded);
+            descContentSellado.classList.toggle('active', !isExpanded);
+        });
+    }
 
     // Vincular eventos de detalle sellado
     if (prod.disponible && prod.stock > 0) {
@@ -805,17 +826,38 @@ function renderizarDetalleDecant(container, prod) {
 
                 <div class="detail-divider"></div>
 
-                <div class="detail-description">
-                    <h3>Descripción de la fragancia:</h3>
-                    <p>${prod.descripcion || 'Una fina fragancia de nuestra selección exclusiva.'}</p>
-                </div>
+                ${pickerAndActionsHtml}
 
                 <div class="detail-divider"></div>
 
-                ${pickerAndActionsHtml}
+                <div class="detail-description-accordion">
+                    <button type="button" class="description-accordion-btn" id="btn-toggle-description-decant" aria-expanded="false" aria-controls="detail-description-content-decant">
+                        <span>Descripción de la fragancia</span>
+                        <svg class="accordion-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </button>
+                    <div class="description-accordion-content" id="detail-description-content-decant" aria-hidden="true">
+                        <p>${prod.descripcion || 'Una fina fragancia de nuestra selección exclusiva.'}</p>
+                    </div>
+                </div>
             </div>
         </div>
     `;
+
+    // Vincular acordeón de descripción en Decants
+    const descBtnDecant = container.querySelector('#btn-toggle-description-decant');
+    const descContentDecant = container.querySelector('#detail-description-content-decant');
+    if (descBtnDecant && descContentDecant) {
+        descBtnDecant.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.innerWidth >= 769) return;
+            const isExpanded = descBtnDecant.getAttribute('aria-expanded') === 'true';
+            descBtnDecant.setAttribute('aria-expanded', !isExpanded);
+            descContentDecant.setAttribute('aria-hidden', isExpanded);
+            descContentDecant.classList.toggle('active', !isExpanded);
+        });
+    }
 
     // ---- Vincular eventos del selector de presentación ----
     if (mlDisponibles >= 3) {
