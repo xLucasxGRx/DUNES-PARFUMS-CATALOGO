@@ -361,22 +361,20 @@ function filtrarYRenderizar(productos, estado, grid) {
 
         if (estadoEl && mensajeEl) {
             const iconContainer = document.getElementById('estado-catalogo-icon');
-            if (iconContainer) iconContainer.innerHTML = '<i data-lucide="shopping-bag" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
+            if (iconContainer) iconContainer.innerHTML = '<i data-lucide="shopping-bag" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
             
-            document.getElementById('estado-catalogo-titulo').textContent = 'No encontramos perfumes con estos filtros';
-            mensajeEl.textContent = 'No encontramos perfumes con estos filtros. Prueba seleccionando otra categoría o género.';
+            document.getElementById('estado-catalogo-titulo').textContent = '¿NO VES TU PERFUME AQUÍ?';
+            mensajeEl.textContent = 'Cotiza tu perfume con nosotros y te ayudamos a conseguirlo.';
 
             // Sección de Cotizar
-            document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'block';
-            document.getElementById('estado-catalogo-cotizar-titulo').textContent = config.cotizarTitulo;
-            document.getElementById('estado-catalogo-cotizar-texto').textContent = config.cotizarDescripcion;
+            document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'none';
             
             // Configurar botón principal de WhatsApp
             const waBtn = document.getElementById('estado-catalogo-btn-wa');
             if (waBtn) {
                 waBtn.href = waUrl;
                 waBtn.setAttribute('aria-label', config.ariaLabel);
-                document.getElementById('estado-catalogo-btn-wa-texto').textContent = config.botonTexto;
+                document.getElementById('estado-catalogo-btn-wa-texto').textContent = 'COTIZA TU PERFUME';
             }
             
             // Botón secundario para Limpiar Filtros
@@ -430,15 +428,13 @@ function filtrarYRenderizar(productos, estado, grid) {
         }
 
         if (estadoEl && mensajeEl) {
-            document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'block';
-            document.getElementById('estado-catalogo-cotizar-titulo').textContent = config.cotizarTitulo;
-            document.getElementById('estado-catalogo-cotizar-texto').textContent = config.cotizarDescripcion;
+            document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'none';
             
             const waBtn = document.getElementById('estado-catalogo-btn-wa');
             if (waBtn) {
                 waBtn.href = waUrl;
                 waBtn.setAttribute('aria-label', config.ariaLabel);
-                document.getElementById('estado-catalogo-btn-wa-texto').textContent = config.botonTexto;
+                document.getElementById('estado-catalogo-btn-wa-texto').textContent = 'COTIZA TU PERFUME';
             }
 
             const secBtn = document.getElementById('estado-catalogo-btn-secundario');
@@ -448,9 +444,9 @@ function filtrarYRenderizar(productos, estado, grid) {
             const iconContainer = document.getElementById('estado-catalogo-icon');
 
             if (estado.busqueda) {
-                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="search" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
-                document.getElementById('estado-catalogo-titulo').textContent = 'No encontramos resultados';
-                mensajeEl.textContent = 'No encontramos perfumes con estos filtros.';
+                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="search" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
+                document.getElementById('estado-catalogo-titulo').textContent = '¿NO VES TU PERFUME AQUÍ?';
+                mensajeEl.textContent = 'Cotiza tu perfume con nosotros y te ayudamos a conseguirlo.';
                 
                 newSecBtn.textContent = 'Limpiar filtros';
                 newSecBtn.style.display = 'inline-block';
@@ -458,11 +454,11 @@ function filtrarYRenderizar(productos, estado, grid) {
                     limpiarTodosLosFiltros(productos, estado, grid);
                 });
             } else if (estado.soloDisponibles) {
-                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="package-x" class="icon-xl" style="color: var(--catalog-gold, #B18225);"></i>';
-                document.getElementById('estado-catalogo-titulo').textContent = 'Sin stock disponible';
-                mensajeEl.textContent = 'No encontramos perfumes con estos filtros.';
+                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="package-x" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
+                document.getElementById('estado-catalogo-titulo').textContent = '¿NO VES TU PERFUME AQUÍ?';
+                mensajeEl.textContent = 'Cotiza tu perfume con nosotros y te ayudamos a conseguirlo.';
                 
-                newSecBtn.textContent = 'Ver también productos agotados';
+                newSecBtn.textContent = 'Ver productos agotados';
                 newSecBtn.style.display = 'inline-block';
                 newSecBtn.addEventListener('click', () => {
                     const availableCheckbox = document.getElementById('filter-available');

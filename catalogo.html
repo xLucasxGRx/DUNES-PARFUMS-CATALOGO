@@ -206,40 +206,37 @@
         </div>
 
         <!-- Contenedor para estados especiales del catálogo (vacío, error, etc.) -->
-        <div id="estado-catalogo" style="display: none; text-align: center; padding: 50px 30px; background-color: var(--color-bg-light); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); max-width: 650px; margin: 40px auto; box-shadow: var(--box-shadow-sm);" class="reveal">
+        <div id="estado-catalogo" class="reveal catalog-empty-state">
             <!-- Icono decorativo -->
-            <div id="estado-catalogo-icon" class="empty-state-icon" style="margin-bottom: 20px; color: var(--color-primary-dark); line-height: 1;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <div id="estado-catalogo-icon" class="empty-state-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
             
             <!-- Título del Estado -->
-            <h2 id="estado-catalogo-titulo" style="font-family: var(--font-title); font-size: 1.6rem; color: var(--color-text); margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">Sin stock disponible</h2>
+            <h2 id="estado-catalogo-titulo" class="empty-state-title">¿NO VES TU PERFUME AQUÍ?</h2>
             
             <!-- Descripción Principal -->
-            <p id="estado-catalogo-mensaje" style="color: var(--color-text-muted); font-size: 1rem; line-height: 1.6; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">Actualmente no tenemos perfumes disponibles en esta categoría.</p>
+            <p id="estado-catalogo-mensaje" class="empty-state-text">Cotiza tu perfume con nosotros y te ayudamos a conseguirlo.</p>
             
-            <!-- Divisor decorativo dorado -->
-            <div style="width: 50px; height: 2px; background: var(--color-gold-gradient); margin: 0 auto 30px;"></div>
-            
-            <!-- Bloque de Cotización -->
-            <div id="estado-catalogo-cotizar-bloque" style="margin-bottom: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <h3 id="estado-catalogo-cotizar-titulo" style="font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: #171717; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;">¿No encuentras lo que buscas?</h3>
-                <p id="estado-catalogo-cotizar-texto" style="font-family: 'Montserrat', sans-serif; color: #6F6F6F; font-size: 0.92rem; line-height: 1.5; margin-bottom: 18px; text-align: center; max-width: 480px;">Cotiza el perfume que buscas y te ayudamos a conseguirlo.</p>
+            <!-- Bloque de Cotización (compatibilidad JS) -->
+            <div id="estado-catalogo-cotizar-bloque" style="display: none;">
+                <h3 id="estado-catalogo-cotizar-titulo" style="display: none;"></h3>
+                <p id="estado-catalogo-cotizar-texto" style="display: none;"></p>
             </div>
             
             <!-- Contenedor de Acciones -->
-            <div id="estado-catalogo-acciones" style="display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center;">
+            <div id="estado-catalogo-acciones" class="empty-state-actions">
                 <!-- Botón de WhatsApp -->
-                <a id="estado-catalogo-btn-wa" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 28px; text-transform: uppercase; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px;">
+                <a id="estado-catalogo-btn-wa" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-empty-wa">
                     <svg class="icon-whatsapp whatsapp-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" style="flex-shrink: 0;">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
                     </svg>
-                    <span id="estado-catalogo-btn-wa-texto">Cotizar aquí tu perfume</span>
+                    <span id="estado-catalogo-btn-wa-texto">COTIZA TU PERFUME</span>
                 </a>
                 
                 <!-- Acción secundaria (ej. limpiar búsqueda o ver agotados) -->
-                <button id="estado-catalogo-btn-secundario" class="btn btn-secondary" style="display: none; font-size: 0.85rem; font-weight: 600; padding: 10px 20px;">
-                    Ver también productos agotados
+                <button id="estado-catalogo-btn-secundario" class="btn btn-secondary btn-empty-sec" style="display: none;">
+                    Limpiar filtros
                 </button>
             </div>
         </div>

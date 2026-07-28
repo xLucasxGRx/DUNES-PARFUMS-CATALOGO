@@ -647,37 +647,48 @@
 
   /* Reorganización de Cuadrícula en Hero */
   .hero-section {
-    padding-top: 100px;
+    padding-top: 84px;
     min-height: auto;
-    padding-bottom: 72px;
+    padding-bottom: 32px;
   }
 
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 18px;
     text-align: center;
   }
 
   .hero-content {
     align-items: center;
+    gap: 12px;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+    line-height: 1.15;
+    margin: 0;
   }
 
   .hero-description {
+    font-size: 0.92rem;
+    line-height: 1.45;
     margin: 0 auto;
+    max-width: 360px;
   }
 
   .hero-btn-row {
     justify-content: center;
     width: 100%;
-    margin-top: 16px;
+    margin-top: 8px; /* 12px gap + 8px margin-top = 20px espacio entre descripción y VER CATÁLOGO */
   }
 
   .btn-hero-cta {
     width: 100%;
-    max-width: 320px;
-    min-height: 52px;
-    padding: 16px 24px;
-    font-size: 0.98rem;
+    max-width: 280px;
+    min-height: 48px;
+    padding: 14px 24px;
+    font-size: 0.92rem;
+    font-weight: 700;
     justify-content: center;
   }
 
@@ -687,7 +698,8 @@
   }
 
   .hero-perfume-img {
-    max-height: 360px;
+    max-height: 240px;
+    object-fit: contain;
   }
 
   /* Transformación del Icono de Hamburguesa a X */
@@ -963,22 +975,42 @@
     margin-bottom: 20px !important;
   }
 
-  /* Cuadrícula de Categorías a 2 columnas */
+  /* Cuadrícula de Categorías a 2 columnas compacta */
   .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
 
   .category-card {
-    height: 280px;
+    height: 160px !important;
+    border-radius: 12px !important;
   }
 
   .category-overlay {
-    padding: 20px;
+    padding: 12px !important;
   }
 
   .category-name {
-    font-size: 1.2rem;
+    font-size: 1.05rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .category-desc {
+    font-size: 0.74rem !important;
+    line-height: 1.25 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    margin-bottom: 6px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .category-btn {
+    padding: 4px 10px !important;
+    font-size: 0.64rem !important;
+    gap: 4px !important;
   }
 
   /* Cuadrícula de Productos a 2 columnas */
@@ -1410,20 +1442,23 @@
   }
 
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 1.7rem;
+    line-height: 1.15;
   }
 
   .hero-description {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
+    line-height: 1.42;
   }
 
   .hero-perfume-img {
-    max-height: 280px;
+    max-height: 210px;
   }
 
-  /* Categorías a 1 columna */
+  /* Categorías en 2 columnas compactas */
   .categories-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
 
   /* ==========================================================================
@@ -1811,6 +1846,48 @@
 
   #page-catalogo .filter-search-box .search-icon {
     left: 12px !important;
+  }
+
+  /* Estado Vacío Compacto del Catálogo en Móvil */
+  .catalog-empty-state {
+    padding: 16px 12px !important;
+    margin: 16px auto !important;
+    border-radius: 12px !important;
+    max-width: 100% !important;
+  }
+
+  .empty-state-icon {
+    margin-bottom: 4px !important;
+  }
+
+  .empty-state-title {
+    font-size: 1.05rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .empty-state-text {
+    font-size: 0.88rem !important;
+    color: #4A4A4A !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .empty-state-actions {
+    gap: 6px !important;
+    max-width: 270px !important;
+  }
+
+  .btn-empty-wa {
+    height: 42px !important;
+    min-height: 42px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .btn-empty-sec {
+    height: 36px !important;
+    min-height: 36px !important;
+    font-size: 0.75rem !important;
   }
 
   /* Categorías en Fila Única con Desplazamiento Horizontal Habilitado */
