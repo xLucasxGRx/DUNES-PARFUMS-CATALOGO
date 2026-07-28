@@ -62,7 +62,10 @@ const ProductosService = (function() {
     }
 
     function normalizarCabecera(cabecera) {
-        return limpiarValorImportado(cabecera).toLowerCase();
+        return limpiarValorImportado(cabecera)
+            .toLowerCase()
+            .replace(/[\r\n]+/g, "")
+            .replace(/\s+/g, "_");
     }
 
     function normalizarNumero(valor, respaldo = null) {
@@ -81,7 +84,9 @@ const ProductosService = (function() {
         if (valor === true) return true;
         if (valor === false) return false;
         const limpio = limpiarValorImportado(valor).toLowerCase();
-        return ["true", "1", "si", "sí", "yes", "verdadero"].includes(limpio);
+        if (["true", "1", "si", "sí", "yes", "verdadero"].includes(limpio)) return true;
+        if (["false", "0", "no", "falso"].includes(limpio)) return false;
+        return false;
     }
 
     function parseBoolean(val) {
@@ -109,47 +114,67 @@ const ProductosService = (function() {
         return 'ARABE'; // Default fallback
     }
 
-    async function cargarDesdeRespaldo() {
+    async function cargarDesdeRespaldo(errorGoogleSheets = null) {
         const fallbackUrl = (typeof CONFIG !== 'undefined' && CONFIG.PRODUCTOS_RESPALDO_URL)
             ? CONFIG.PRODUCTOS_RESPALDO_URL
             : "data/productos.json";
         
-        const response = await fetch(fallbackUrl);
-        if (!response.ok) {
-            throw new Error(`Error HTTP al cargar el respaldo! status: ${response.status}`);
-        }
-        const data = await response.json();
-        
-        // Normalizar categorías, booleanos y género del respaldo
-        const dataNormalizada = data.map(p => {
-            if (p.categoria === 'sellados' || p.categoria !== 'decants') {
-                let cat = 'arabe';
-                if (p.tipo) {
-                    const t = String(p.tipo).trim().toLowerCase();
-                    if (t === 'arabe') cat = 'arabe';
-                    else if (t === 'disenador' || t === 'diseñador') cat = 'disenador';
-                    else if (t === 'nicho') cat = 'nicho';
+        try {
+            let data;
+            if (typeof window === 'undefined' && typeof process !== 'undefined' && process.versions && process.versions.node) {
+                const fs = require('fs');
+                const path = require('path');
+                const filePath = path.resolve(process.cwd(), fallbackUrl);
+                const content = fs.readFileSync(filePath, 'utf8');
+                data = JSON.parse(content);
+            } else {
+                const response = await fetch(fallbackUrl);
+                if (!response.ok) {
+                    throw new Error(`Error HTTP al cargar el respaldo! status: ${response.status}`);
                 }
-                p.categoria = cat;
+                data = await response.json();
             }
-            p.visible = parseBoolean(p.visible);
-            p.disponible = parseBoolean(p.disponible);
-            p.destacado = parseBoolean(p.destacado);
-            p.oferta = parseBoolean(p.oferta);
-            p.genero = normalizarGenero(p.genero);
-            return p;
-        });
 
-        console.log("Google Sheets no disponible. Productos cargados desde respaldo local.");
-        return {
-            productos: dataNormalizada,
-            origen: "json-respaldo"
-        };
+            // Normalizar categorías, booleanos y género del respaldo
+            const dataNormalizada = data.map(p => {
+                if (p.categoria === 'sellados' || p.categoria !== 'decants') {
+                    let cat = 'arabe';
+                    if (p.tipo) {
+                        const t = String(p.tipo).trim().toLowerCase();
+                        if (t === 'arabe') cat = 'arabe';
+                        else if (t === 'disenador' || t === 'diseñador') cat = 'disenador';
+                        else if (t === 'nicho') cat = 'nicho';
+                    }
+                    p.categoria = cat;
+                }
+                p.visible = parseBoolean(p.visible);
+                p.disponible = parseBoolean(p.disponible);
+                p.destacado = parseBoolean(p.destacado);
+                p.oferta = parseBoolean(p.oferta);
+                p.genero = normalizarGenero(p.genero);
+                return p;
+            });
+
+            if (errorGoogleSheets) {
+                console.warn(`[ProductosService] Falló Google Sheets (${errorGoogleSheets.message}). Usando respaldo local: ${fallbackUrl}`);
+            } else {
+                console.log(`[ProductosService] Productos cargados desde respaldo local: ${fallbackUrl}`);
+            }
+
+            return {
+                productos: dataNormalizada,
+                origen: "json-respaldo"
+            };
+        } catch (errorFallback) {
+            console.error("[ProductosService] Error al cargar desde Google Sheets:", errorGoogleSheets ? errorGoogleSheets.message : 'N/A');
+            console.error("[ProductosService] Error crítico: Falló también el respaldo local:", errorFallback.message);
+            throw new Error(`Error fatal en ProductosService: GS (${errorGoogleSheets ? errorGoogleSheets.message : 'N/A'}), JSON (${errorFallback.message})`);
+        }
     }
 
     async function cargarProductos() {
         if (typeof CONFIG === 'undefined' || !CONFIG.GOOGLE_SHEETS_CSV_URL) {
-            return await cargarDesdeRespaldo();
+            return await cargarDesdeRespaldo(new Error("CONFIG.GOOGLE_SHEETS_CSV_URL no está configurado"));
         }
 
         try {
@@ -158,7 +183,7 @@ const ProductosService = (function() {
             const response = await fetch(urlConTimestamp, { cache: "no-store" });
             
             if (!response.ok) {
-                throw new Error(`Error HTTP en Google Sheets! status: ${response.status}`);
+                throw new Error(`Respuesta HTTP con error: ${response.status} ${response.statusText}`);
             }
 
             const text = await response.text();
@@ -168,137 +193,151 @@ const ProductosService = (function() {
 
             const rows = parseCSV(text);
             if (rows.length < 2) {
-                throw new Error("El CSV no contiene datos suficientes.");
+                throw new Error("El CSV de Google Sheets no contiene datos suficientes.");
             }
 
             const headers = rows[0].map(normalizarCabecera);
             const requiredHeaders = ['id', 'nombre', 'marca', 'categoria', 'formato', 'imagen', 'visible'];
             const hasRequiredHeaders = requiredHeaders.every(req => headers.includes(req));
             if (!hasRequiredHeaders) {
-                throw new Error("El CSV no contiene los encabezados mínimos requeridos.");
+                throw new Error(`El CSV no contiene los encabezados mínimos requeridos (${requiredHeaders.join(', ')}).`);
             }
 
             const listado = [];
             const idsVistos = new Set();
+            const filasTotales = rows.length - 1;
+            let filasDescartadas = 0;
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 if (row.length === 0 || (row.length === 1 && row[0] === '')) {
+                    filasDescartadas++;
                     continue; // Ignorar filas vacías al final o intermedias
                 }
 
-                const rawObj = {};
-                headers.forEach((header, index) => {
-                    rawObj[header] = row[index] !== undefined ? row[index] : "";
-                });
+                try {
+                    const rawObj = {};
+                    headers.forEach((header, index) => {
+                        rawObj[header] = row[index] !== undefined ? row[index] : "";
+                    });
 
-                // Validaciones básicas de campos mínimos
-                const idStr = rawObj.id ? String(rawObj.id).trim() : "";
-                if (!idStr) {
-                    console.warn(`Producto ignorado por ID vacío en la fila ${i + 1}.`);
-                    continue;
-                }
-
-                if (idsVistos.has(idStr)) {
-                    console.warn(`Producto ignorado por ID duplicado: ${idStr}.`);
-                    continue;
-                }
-
-                const nombre = rawObj.nombre ? rawObj.nombre.trim() : "";
-                const marca = rawObj.marca ? rawObj.marca.trim() : "";
-                const imagen = rawObj.imagen ? rawObj.imagen.trim() : "";
-                const visible = parseBoolean(rawObj.visible);
-
-                if (!nombre || !marca || !imagen || visible === false) {
-                    console.warn(`Producto ignorado por datos no visibles o inválidos en la fila ${i + 1}.`);
-                    continue;
-                }
-
-                // Validar categoría y formato
-                const categoriaOriginal = rawObj.categoria ? rawObj.categoria.trim().toLowerCase() : "";
-                const formatoOriginal = rawObj.formato ? rawObj.formato.trim().toLowerCase() : "";
-
-                const categoriasPermitidas = ['arabe', 'disenador', 'nicho', 'decants'];
-                const formatosPermitidos = ['sellado', 'decant'];
-
-                if (!categoriasPermitidas.includes(categoriaOriginal) || !formatosPermitidos.includes(formatoOriginal)) {
-                    console.warn(`Producto ignorado por categoría/formato inválido en la fila ${i + 1}.`);
-                    continue;
-                }
-
-                const esDecant = formatoOriginal === 'decant';
-
-                // Normalización de objeto producto
-                const prod = {
-                    id: idStr,
-                    nombre: nombre,
-                    marca: marca,
-                    tipo: getTipoFromCategoria(categoriaOriginal),
-                    categoria: categoriaOriginal,
-                    genero: normalizarGenero(rawObj.genero),
-                    disponible: parseBoolean(rawObj.disponible),
-                    visible: visible,
-                    imagen: imagen,
-                    descripcion: rawObj.descripcion ? limpiarValorImportado(rawObj.descripcion) : '',
-                    destacado: parseBoolean(rawObj.destacado),
-                    oferta: parseBoolean(rawObj.oferta),
-                    precioAnterior: parseNumber(rawObj.precio_anterior),
-                    orden: parseNumber(rawObj.orden),
-                    ofertaTitulo: rawObj.oferta_titulo ? limpiarValorImportado(rawObj.oferta_titulo) : '',
-                    ofertaSubtitulo: rawObj.oferta_subtitulo ? limpiarValorImportado(rawObj.oferta_subtitulo) : '',
-                    ofertaTextoStock: rawObj.oferta_texto_stock ? limpiarValorImportado(rawObj.oferta_texto_stock) : '',
-                    ofertaVigencia: rawObj.oferta_vigencia ? limpiarValorImportado(rawObj.oferta_vigencia) : '',
-                    ofertaTextoBoton: rawObj.oferta_texto_boton ? limpiarValorImportado(rawObj.oferta_texto_boton) : ''
-                };
-
-                if (esDecant) {
-                    // Cargar presentaciones
-                    const presentaciones = [];
-                    const p3 = parseNumber(rawObj.precio_3ml);
-                    if (p3 !== null && p3 > 0) {
-                        presentaciones.push({ ml: 3, nombre: "Decant 3 ml", precio: p3, disponible: true });
-                    }
-                    const p5 = parseNumber(rawObj.precio_5ml);
-                    if (p5 !== null && p5 > 0) {
-                        presentaciones.push({ ml: 5, nombre: "Decant 5 ml", precio: p5, disponible: true });
-                    }
-                    const p10 = parseNumber(rawObj.precio_10ml);
-                    if (p10 !== null && p10 > 0) {
-                        presentaciones.push({ ml: 10, nombre: "Decant 10 ml", precio: p10, disponible: true });
-                    }
-
-                    if (presentaciones.length === 0) {
-                        console.warn(`Producto ignorado por presentaciones vacías en la fila ${i + 1}.`);
+                    // Validaciones básicas de campos mínimos
+                    const idStr = rawObj.id ? String(rawObj.id).trim() : "";
+                    if (!idStr) {
+                        console.warn(`[ProductosService] Fila ${i + 1} descartada: ID de producto vacío.`);
+                        filasDescartadas++;
                         continue;
                     }
 
-                    prod.presentacion = rawObj.presentacion ? rawObj.presentacion.trim() : "Decants de 3, 5 y 10 ml";
-                    prod.formato = "Decants de 3, 5 y 10 ml";
-                    prod.presentaciones = presentaciones;
-                    prod.mililitrosDisponibles = parseNumber(rawObj.mililitros_disponibles) ?? 0;
-                } else {
-                    // Validar sellado
-                    const precio = parseNumber(rawObj.precio);
-                    const stock = parseNumber(rawObj.stock);
-                    const presentacion = rawObj.presentacion ? rawObj.presentacion.trim() : "";
-
-                    if (precio === null || precio <= 0 || stock === null || stock < 0 || !presentacion) {
-                        console.warn(`Producto ignorado por datos inválidos de sellado en la fila ${i + 1}.`);
+                    if (idsVistos.has(idStr)) {
+                        console.warn(`[ProductosService] Fila ${i + 1} descartada: ID duplicado (${idStr}).`);
+                        filasDescartadas++;
                         continue;
                     }
 
-                    prod.precio = precio;
-                    prod.stock = stock;
-                    prod.presentacion = presentacion;
-                    prod.formato = "Sellado";
-                }
+                    const nombre = rawObj.nombre ? rawObj.nombre.trim() : "";
+                    const marca = rawObj.marca ? rawObj.marca.trim() : "";
+                    const imagen = rawObj.imagen ? rawObj.imagen.trim() : "";
+                    const visible = parseBoolean(rawObj.visible);
 
-                idsVistos.add(idStr);
-                listado.push(prod);
+                    if (!nombre || !marca || !imagen || visible === false) {
+                        console.warn(`[ProductosService] Fila ${i + 1} descartada (ID ${idStr}): Datos requeridos vacíos o visible=false.`);
+                        filasDescartadas++;
+                        continue;
+                    }
+
+                    // Validar categoría y formato
+                    const categoriaOriginal = rawObj.categoria ? rawObj.categoria.trim().toLowerCase() : "";
+                    const formatoOriginal = rawObj.formato ? rawObj.formato.trim().toLowerCase() : "";
+
+                    const categoriasPermitidas = ['arabe', 'disenador', 'nicho', 'decants'];
+                    const formatosPermitidos = ['sellado', 'decant'];
+
+                    if (!categoriasPermitidas.includes(categoriaOriginal) || !formatosPermitidos.includes(formatoOriginal)) {
+                        console.warn(`[ProductosService] Fila ${i + 1} descartada (ID ${idStr}): Categoría '${categoriaOriginal}' o formato '${formatoOriginal}' inválido.`);
+                        filasDescartadas++;
+                        continue;
+                    }
+
+                    const esDecant = formatoOriginal === 'decant';
+
+                    // Normalización de objeto producto
+                    const prod = {
+                        id: idStr,
+                        nombre: nombre,
+                        marca: marca,
+                        tipo: getTipoFromCategoria(categoriaOriginal),
+                        categoria: categoriaOriginal,
+                        genero: normalizarGenero(rawObj.genero),
+                        disponible: parseBoolean(rawObj.disponible),
+                        visible: visible,
+                        imagen: imagen,
+                        descripcion: rawObj.descripcion ? limpiarValorImportado(rawObj.descripcion) : '',
+                        destacado: parseBoolean(rawObj.destacado),
+                        oferta: parseBoolean(rawObj.oferta),
+                        precioAnterior: parseNumber(rawObj.precio_anterior),
+                        orden: parseNumber(rawObj.orden),
+                        ofertaTitulo: rawObj.oferta_titulo ? limpiarValorImportado(rawObj.oferta_titulo) : '',
+                        ofertaSubtitulo: rawObj.oferta_subtitulo ? limpiarValorImportado(rawObj.oferta_subtitulo) : '',
+                        ofertaTextoStock: rawObj.oferta_texto_stock ? limpiarValorImportado(rawObj.oferta_texto_stock) : '',
+                        ofertaVigencia: rawObj.oferta_vigencia ? limpiarValorImportado(rawObj.oferta_vigencia) : '',
+                        ofertaTextoBoton: rawObj.oferta_texto_boton ? limpiarValorImportado(rawObj.oferta_texto_boton) : ''
+                    };
+
+                    if (esDecant) {
+                        // Cargar presentaciones
+                        const presentaciones = [];
+                        const p3 = parseNumber(rawObj.precio_3ml);
+                        if (p3 !== null && p3 > 0) {
+                            presentaciones.push({ ml: 3, nombre: "Decant 3 ml", precio: p3, disponible: true });
+                        }
+                        const p5 = parseNumber(rawObj.precio_5ml);
+                        if (p5 !== null && p5 > 0) {
+                            presentaciones.push({ ml: 5, nombre: "Decant 5 ml", precio: p5, disponible: true });
+                        }
+                        const p10 = parseNumber(rawObj.precio_10ml);
+                        if (p10 !== null && p10 > 0) {
+                            presentaciones.push({ ml: 10, nombre: "Decant 10 ml", precio: p10, disponible: true });
+                        }
+
+                        if (presentaciones.length === 0) {
+                            console.warn(`[ProductosService] Fila ${i + 1} descartada (ID ${idStr}): Decant sin precios válidos.`);
+                            filasDescartadas++;
+                            continue;
+                        }
+
+                        prod.presentacion = rawObj.presentacion ? rawObj.presentacion.trim() : "Decants de 3, 5 y 10 ml";
+                        prod.formato = "Decants de 3, 5 y 10 ml";
+                        prod.presentaciones = presentaciones;
+                        prod.mililitrosDisponibles = parseNumber(rawObj.mililitros_disponibles) ?? 0;
+                    } else {
+                        // Validar sellado
+                        const precio = parseNumber(rawObj.precio);
+                        const stock = parseNumber(rawObj.stock);
+                        const presentacion = rawObj.presentacion ? rawObj.presentacion.trim() : "";
+
+                        if (precio === null || precio <= 0 || stock === null || stock < 0 || !presentacion) {
+                            console.warn(`[ProductosService] Fila ${i + 1} descartada (ID ${idStr}): Datos inválidos de precio (${precio}), stock (${stock}) o presentación (${presentacion}).`);
+                            filasDescartadas++;
+                            continue;
+                        }
+
+                        prod.precio = precio;
+                        prod.stock = stock;
+                        prod.presentacion = presentacion;
+                        prod.formato = "Sellado";
+                    }
+
+                    idsVistos.add(idStr);
+                    listado.push(prod);
+                } catch (errFila) {
+                    console.warn(`[ProductosService] Fila ${i + 1} descartada por excepción inesperada:`, errFila.message);
+                    filasDescartadas++;
+                }
             }
 
             if (listado.length === 0) {
-                throw new Error("No se encontraron productos válidos en el CSV.");
+                throw new Error("No se encontraron productos válidos en el CSV de Google Sheets.");
             }
 
             // Ordenar por el campo "orden" si está definido
@@ -308,15 +347,14 @@ const ProductosService = (function() {
                 return ordenA - ordenB;
             });
 
-            console.log("Productos cargados desde Google Sheets.");
+            console.log(`[ProductosService] Éxito: ${listado.length} productos válidos cargados desde Google Sheets (${filasTotales} recibidas, ${filasDescartadas} descartadas).`);
             return {
                 productos: listado,
                 origen: "google-sheets"
             };
 
         } catch (error) {
-            console.error("Error al cargar desde Google Sheets (usando respaldo):", error.message);
-            return await cargarDesdeRespaldo();
+            return await cargarDesdeRespaldo(error);
         }
     }
 
@@ -325,6 +363,8 @@ const ProductosService = (function() {
         // Exponer parsers para facilitar pruebas unitarias/scripts
         _parseCSV: parseCSV,
         _parseNumber: parseNumber,
-        _parseBoolean: parseBoolean
+        _parseBoolean: parseBoolean,
+        _normalizarGenero: normalizarGenero,
+        _normalizarCabecera: normalizarCabecera
     };
 })();
