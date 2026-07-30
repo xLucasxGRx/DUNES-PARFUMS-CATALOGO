@@ -677,6 +677,7 @@ async function cargarDetalleProducto() {
         const idSolicitado = String(idRaw ?? '').trim();
 
         if (!idSolicitado) {
+            configurarSeoProductoNoEncontrado();
             mostrarMensajeProductoNoEncontrado(container, 'No se ha especificado ningún perfume para visualizar.');
             return;
         }
@@ -690,6 +691,7 @@ async function cargarDetalleProducto() {
         }
 
         if (!productos || productos.length === 0) {
+            configurarSeoProductoNoEncontrado();
             mostrarMensajeErrorProducto(container, () => cargarDetalleProducto());
             return;
         }
@@ -697,9 +699,13 @@ async function cargarDetalleProducto() {
         const prod = productos.find(item => item && String(item.id).trim() === idSolicitado);
 
         if (!prod) {
+            configurarSeoProductoNoEncontrado();
             mostrarMensajeProductoNoEncontrado(container, 'Este producto ya no está disponible o el enlace no es válido.');
             return;
         }
+
+        // Actualizar SEO dinámico del producto válido
+        actualizarSeoProducto(prod);
 
         const esDecant = prod.categoria === 'decants';
         if (esDecant) {
@@ -714,11 +720,124 @@ async function cargarDetalleProducto() {
 
     } catch (err) {
         console.error('[Interfaz] Error al cargar detalles del producto:', err);
+        configurarSeoProductoNoEncontrado();
         mostrarMensajeErrorProducto(container, () => cargarDetalleProducto());
     }
 }
 
+/**
+ * Actualiza dinámicamente los metadatos SEO, título, canonical y Schema JSON-LD de un producto existente
+ * @param {Object} prod
+ */
+function actualizarSeoProducto(prod) {
+    if (!prod) return;
+    const idClean = String(prod.id).trim();
+    const presText = prod.presentacion ? ` ${prod.presentacion}` : '';
+    const titleText = `${prod.nombre}${presText} | Dunes Parfums`;
+    const descText = `Compra ${prod.nombre}${presText}, en Dunes Parfums. Consulta disponibilidad, precio y opciones de entrega en Tarapoto y todo el Perú.`;
+    const canonicalUrl = `https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO/producto.html?id=${encodeURIComponent(idClean)}`;
+
+    document.title = titleText;
+
+    let metaDesc = document.getElementById('meta-description');
+    if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.id = 'meta-description';
+        metaDesc.name = 'description';
+        document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = descText;
+
+    let metaRobots = document.getElementById('meta-robots');
+    if (!metaRobots) {
+        metaRobots = document.createElement('meta');
+        metaRobots.id = 'meta-robots';
+        metaRobots.name = 'robots';
+        document.head.appendChild(metaRobots);
+    }
+    metaRobots.content = 'index, follow';
+
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+        canonicalLink = document.createElement('link');
+        canonicalLink.rel = 'canonical';
+        document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.href = canonicalUrl;
+
+    // Insertar o actualizar Schema Product JSON-LD
+    let jsonLdScript = document.getElementById('schema-product-jsonld');
+    if (!jsonLdScript) {
+        jsonLdScript = document.createElement('script');
+        jsonLdScript.id = 'schema-product-jsonld';
+        jsonLdScript.type = 'application/ld+json';
+        document.head.appendChild(jsonLdScript);
+    }
+
+    const esDecant = prod.categoria === 'decants';
+    const precioNumerico = esDecant
+        ? (prod.presentaciones && prod.presentaciones.length > 0 ? prod.presentaciones[0].precio : 15)
+        : (prod.precio || 0);
+
+    const estaAgotado = esDecant
+        ? (!prod.disponible || prod.mililitrosDisponibles < 3)
+        : (!prod.disponible || prod.stock <= 0);
+
+    const schemaData = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": prod.nombre,
+        "image": prod.imagen ? `https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO/${prod.imagen}` : '',
+        "description": descText,
+        "brand": {
+            "@type": "Brand",
+            "name": prod.marca || "Dunes Parfums"
+        },
+        "sku": idClean,
+        "offers": {
+            "@type": "Offer",
+            "url": canonicalUrl,
+            "priceCurrency": "PEN",
+            "price": precioNumerico,
+            "availability": estaAgotado ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+        }
+    };
+    jsonLdScript.textContent = JSON.stringify(schemaData, null, 2);
+}
+
+/**
+ * Configura metadatos de noindex y título para producto no encontrado o inválido
+ */
+function configurarSeoProductoNoEncontrado() {
+    document.title = 'Producto no encontrado | Dunes Parfums';
+
+    let metaDesc = document.getElementById('meta-description');
+    if (metaDesc) {
+        metaDesc.content = 'El producto solicitado no está disponible en el catálogo de Dunes Parfums.';
+    }
+
+    let metaRobots = document.getElementById('meta-robots');
+    if (!metaRobots) {
+        metaRobots = document.createElement('meta');
+        metaRobots.id = 'meta-robots';
+        metaRobots.name = 'robots';
+        document.head.appendChild(metaRobots);
+    }
+    metaRobots.content = 'noindex, follow';
+
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+        canonicalLink.remove();
+    }
+
+    const jsonLdScript = document.getElementById('schema-product-jsonld');
+    if (jsonLdScript) {
+        jsonLdScript.remove();
+    }
+}
+
 function mostrarMensajeProductoNoEncontrado(container, mensaje) {
+    configurarSeoProductoNoEncontrado();
     container.innerHTML = `
         <div class="placeholder-page-wrapper" style="text-align: center; padding: 48px 20px; max-width: 480px; margin: 0 auto;">
             <div class="benefit-icon-wrapper" style="width: 72px; height: 72px; border-radius: 50%; background: #FFF0ED; color: #C0392B; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px auto;" aria-hidden="true">
