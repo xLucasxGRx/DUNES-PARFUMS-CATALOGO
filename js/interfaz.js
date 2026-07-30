@@ -25,9 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarDetalleProducto();
 
     // 7. Renderizar carrito de compras (si aplica)
-    if (document.getElementById('cart-table-container')) {
+    if (document.getElementById('cart-table-container') && typeof renderizarCarritoDOM === 'function') {
         renderizarCarritoDOM();
-        inicializarCheckoutForm();
+        if (typeof inicializarCheckoutForm === 'function') {
+            inicializarCheckoutForm();
+        }
     }
 
     // 8. Inicializar carrusel móvil de beneficios y acordeón del footer
