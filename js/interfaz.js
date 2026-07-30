@@ -1099,6 +1099,13 @@ async function renderizarCarritoDOM() {
         const emptyBtn = document.getElementById('btn-empty-cart');
         if (emptyBtn) emptyBtn.style.display = 'none';
 
+        const bar = document.getElementById('mobile-checkout-bar');
+        if (bar) {
+            bar.classList.remove('is-visible');
+            bar.setAttribute('aria-hidden', 'true');
+            if (document.body) document.body.classList.remove('has-mobile-checkout-bar-visible');
+        }
+
         return;
     }
 
@@ -1110,6 +1117,11 @@ async function renderizarCarritoDOM() {
     }
     const emptyBtn = document.getElementById('btn-empty-cart');
     if (emptyBtn) emptyBtn.style.display = 'inline-block';
+
+    const btnConfirmar = document.getElementById('btn-confirmar-whatsapp');
+    if (btnConfirmar) {
+        inicializarBarraMovilCarrito(btnConfirmar);
+    }
 
     let html = `
         <table class="cart-table">
@@ -1492,12 +1504,23 @@ function actualizarInterfazEntrega() {
     const blockDelivery = document.getElementById('block-delivery-local');
     const blockAgencia = document.getElementById('block-agencia');
     const blockRecojo = document.getElementById('block-recojo-local');
+    const deliveryFieldsWrapper = document.getElementById('delivery-fields-wrapper');
+    const blockTotalPagar = document.getElementById('block-total-pagar');
+    const btnConfirmar = document.getElementById('btn-confirmar-whatsapp');
     
     if (!warningBox || !blockDelivery || !blockAgencia || !blockRecojo) return;
     
     blockDelivery.style.display = 'none';
     blockAgencia.style.display = 'none';
     blockRecojo.style.display = 'none';
+    if (deliveryFieldsWrapper) deliveryFieldsWrapper.style.display = 'none';
+
+    // CORRECCIÓN M13.2: El bloque de total a pagar y el botón de confirmación permanecen siempre visibles
+    if (blockTotalPagar) blockTotalPagar.style.display = 'block';
+    if (btnConfirmar) {
+        btnConfirmar.style.display = 'inline-flex';
+        btnConfirmar.disabled = false;
+    }
     
     // Hide all validation errors when switching modalities
     document.querySelectorAll('.validation-error-msg').forEach(el => {
@@ -1516,29 +1539,34 @@ function actualizarInterfazEntrega() {
         
         if (selectedDeliveryType === 'delivery-local') {
             blockDelivery.style.display = 'block';
-            document.getElementById('delivery-name').required = true;
-            document.getElementById('delivery-address').required = true;
-            document.getElementById('delivery-reference').required = false;
-            document.getElementById('recojo-name').required = false;
+            if (selectedDeliveryZone) {
+                if (deliveryFieldsWrapper) deliveryFieldsWrapper.style.display = 'block';
+            } else {
+                if (deliveryFieldsWrapper) deliveryFieldsWrapper.style.display = 'none';
+            }
+            if (document.getElementById('delivery-name')) document.getElementById('delivery-name').required = true;
+            if (document.getElementById('delivery-address')) document.getElementById('delivery-address').required = true;
+            if (document.getElementById('delivery-reference')) document.getElementById('delivery-reference').required = false;
+            if (document.getElementById('recojo-name')) document.getElementById('recojo-name').required = false;
         } else if (selectedDeliveryType === 'agencia') {
             blockAgencia.style.display = 'block';
-            document.getElementById('delivery-name').required = false;
-            document.getElementById('delivery-address').required = false;
-            document.getElementById('delivery-reference').required = false;
-            document.getElementById('recojo-name').required = false;
+            if (document.getElementById('delivery-name')) document.getElementById('delivery-name').required = false;
+            if (document.getElementById('delivery-address')) document.getElementById('delivery-address').required = false;
+            if (document.getElementById('delivery-reference')) document.getElementById('delivery-reference').required = false;
+            if (document.getElementById('recojo-name')) document.getElementById('recojo-name').required = false;
         } else if (selectedDeliveryType === 'recojo-local') {
             blockRecojo.style.display = 'block';
-            document.getElementById('recojo-name').required = true;
-            document.getElementById('delivery-name').required = false;
-            document.getElementById('delivery-address').required = false;
-            document.getElementById('delivery-reference').required = false;
+            if (document.getElementById('recojo-name')) document.getElementById('recojo-name').required = true;
+            if (document.getElementById('delivery-name')) document.getElementById('delivery-name').required = false;
+            if (document.getElementById('delivery-address')) document.getElementById('delivery-address').required = false;
+            if (document.getElementById('delivery-reference')) document.getElementById('delivery-reference').required = false;
         }
     } else {
         warningBox.style.display = 'block';
-        document.getElementById('delivery-name').required = false;
-        document.getElementById('delivery-address').required = false;
-        document.getElementById('delivery-reference').required = false;
-        document.getElementById('recojo-name').required = false;
+        if (document.getElementById('delivery-name')) document.getElementById('delivery-name').required = false;
+        if (document.getElementById('delivery-address')) document.getElementById('delivery-address').required = false;
+        if (document.getElementById('delivery-reference')) document.getElementById('delivery-reference').required = false;
+        if (document.getElementById('recojo-name')) document.getElementById('recojo-name').required = false;
     }
     
     const items = window.carritoModulo.obtenerCarrito();
@@ -1959,6 +1987,12 @@ function actualizarResumenEntrega() {
     
     if (totalSpan) totalSpan.textContent = formatearMoneda(totalFinal);
     if (totalMontoPagar) totalMontoPagar.textContent = formatearMoneda(totalFinal);
+
+    const mobileBar = document.getElementById('mobile-checkout-bar');
+    if (mobileBar && typeof actualizarEstadoBarraMovilCarrito === 'function') {
+        const val = typeof validarFormularioEntrega === 'function' ? validarFormularioEntrega(false).valido : false;
+        actualizarEstadoBarraMovilCarrito(mobileBar, val, totalFinal);
+    }
     
     if (totalMontoInfo) {
         if (subtotalProductos === 0) {
@@ -2083,7 +2117,13 @@ function validarDatosEntrega() {
     if (!btnCheckout) return;
     
     const validation = validarFormularioEntrega(false);
-    btnCheckout.disabled = !validation.valido;
+    btnCheckout.disabled = false;
+
+    const mobileBar = document.getElementById('mobile-checkout-bar');
+    if (mobileBar && typeof actualizarEstadoBarraMovilCarrito === 'function') {
+        const totales = typeof obtenerTotalesPedido === 'function' ? obtenerTotalesPedido() : { totalFinal: 0 };
+        actualizarEstadoBarraMovilCarrito(mobileBar, validation.valido, totales.totalFinal);
+    }
 }
 
 function obtenerDatosEntrega() {
@@ -2144,79 +2184,116 @@ function construirPedidoFinal() {
     };
 }
 
-function guardarPreferenciaEntrega() {
+/**
+ * Reinicia completamente el estado del checkout (modalidad y zona en null) al entrar o recargar el carrito
+ */
+function reiniciarEstadoCheckout() {
+    selectedDeliveryType = null;
+    selectedDeliveryZone = null;
+
     try {
-        const pref = {
-            tipoEntrega: selectedDeliveryType,
-            zona: selectedDeliveryZone
-        };
-        localStorage.setItem('dunes_delivery_pref', JSON.stringify(pref));
-    } catch (e) {
-        console.error('Error al guardar preferencia de entrega:', e);
+        localStorage.removeItem('dunes_delivery_pref');
+    } catch (e) {}
+
+    const form = document.getElementById('checkout-form');
+    if (form) {
+        form.querySelectorAll('input[name="tipoEntrega"]').forEach(radio => {
+            radio.checked = false;
+        });
+        form.querySelectorAll('.zone-option-btn').forEach(btn => {
+            btn.classList.remove('selected');
+            btn.setAttribute('aria-checked', 'false');
+        });
+    }
+
+    const warningBox = document.getElementById('checkout-warning');
+    if (warningBox) {
+        warningBox.textContent = 'Selecciona cómo deseas recibir tu pedido.';
+        warningBox.style.display = 'block';
+    }
+
+    actualizarInterfazEntrega();
+    validarDatosEntrega();
+}
+
+function resetearZonaAlCambiarModalidad() {
+    selectedDeliveryZone = null;
+    const form = document.getElementById('checkout-form');
+    if (form) {
+        form.querySelectorAll('.zone-option-btn').forEach(btn => {
+            btn.classList.remove('selected');
+            btn.setAttribute('aria-checked', 'false');
+        });
     }
 }
 
-function cargarPreferenciaEntrega() {
+function guardarPreferenciaEntrega() {
     try {
-        const raw = localStorage.getItem('dunes_delivery_pref');
-        if (!raw) return;
-        
-        const pref = JSON.parse(raw);
-        if (pref && ['delivery-local', 'agencia', 'recojo-local'].includes(pref.tipoEntrega)) {
-            selectedDeliveryType = pref.tipoEntrega;
-            
-            // Validate zone value
-            const validZones = Object.keys(ZONAS_DELIVERY_LOCAL);
-            if (pref.tipoEntrega === 'delivery-local' && validZones.includes(pref.zona)) {
-                selectedDeliveryZone = pref.zona;
-            } else {
-                selectedDeliveryZone = null;
-            }
-            
-            // Check radio button in DOM
-            const radio = document.querySelector(`input[name="tipoEntrega"][value="${selectedDeliveryType}"]`);
-            if (radio) radio.checked = true;
-            
-            // Update selected class for zone buttons in DOM
-            if (selectedDeliveryZone) {
-                const zoneBtn = document.querySelector(`.zone-option-btn[data-zona="${selectedDeliveryZone}"]`);
-                if (zoneBtn) zoneBtn.classList.add('selected');
-            }
-        }
-    } catch (e) {
-        console.error('Error al cargar preferencia de entrega:', e);
-    }
+        localStorage.removeItem('dunes_delivery_pref');
+    } catch (e) {}
+}
+
+function cargarPreferenciaEntrega() {
+    reiniciarEstadoCheckout();
 }
 
 function inicializarCheckoutForm() {
     const form = document.getElementById('checkout-form');
     if (!form) return;
-    
-    // Load preferences
-    cargarPreferenciaEntrega();
-    actualizarInterfazEntrega();
-    
-    // Listeners for radio buttons (modality)
+
+    // Reiniciar modalidades al cargar
+    reiniciarEstadoCheckout();
+
+    // Reiniciar también ante bfcache (botón Atrás / Adelante)
+    window.addEventListener('pageshow', (e) => {
+        reiniciarEstadoCheckout();
+    });
+
+    // Listeners for delivery option cards and radio buttons (modality)
+    form.querySelectorAll('.delivery-option-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            const radio = card.querySelector('input[name="tipoEntrega"]');
+            if (radio && !radio.checked) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+
     form.querySelectorAll('input[name="tipoEntrega"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             selectedDeliveryType = e.target.value;
-            // When switching modality, if it is not delivery-local, clear zone selection
+            // Al cambiar de modalidad, si no es delivery-local, limpiar zona
             if (selectedDeliveryType !== 'delivery-local') {
-                selectedDeliveryZone = null;
-                form.querySelectorAll('.zone-option-btn').forEach(btn => btn.classList.remove('selected'));
+                resetearZonaAlCambiarModalidad();
             }
-            guardarPreferenciaEntrega();
+
+            // Limpiar avisos visuales de error al seleccionar modalidad
+            document.querySelectorAll('.step-alert-banner').forEach(el => el.remove());
+            document.querySelectorAll('.is-step-required').forEach(el => el.classList.remove('is-step-required'));
+
             actualizarInterfazEntrega();
         });
     });
-    
+
     // Listeners for zone buttons (only relevant for delivery-local)
     form.querySelectorAll('.zone-option-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            form.querySelectorAll('.zone-option-btn').forEach(b => b.classList.remove('selected'));
-            e.currentTarget.classList.add('selected');
-            selectedDeliveryZone = e.currentTarget.dataset.zona;
-            guardarPreferenciaEntrega();
+            const targetBtn = e.currentTarget || e.target.closest('.zone-option-btn');
+            if (!targetBtn) return;
+
+            form.querySelectorAll('.zone-option-btn').forEach(b => {
+                b.classList.remove('selected');
+                b.setAttribute('aria-checked', 'false');
+            });
+            targetBtn.classList.add('selected');
+            targetBtn.setAttribute('aria-checked', 'true');
+            selectedDeliveryZone = targetBtn.dataset.zona || targetBtn.getAttribute('data-zona');
+
+            // Limpiar avisos visuales de error al seleccionar zona
+            document.querySelectorAll('.step-alert-banner').forEach(el => el.remove());
+            document.querySelectorAll('.is-step-required').forEach(el => el.classList.remove('is-step-required'));
+
             actualizarInterfazEntrega();
         });
     });
@@ -2241,13 +2318,22 @@ function inicializarCheckoutForm() {
     // Submit form handler
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        const paso = obtenerPrimerPasoIncompleto();
+        if (paso) {
+            scrollToFirstInvalidStep();
+            return;
+        }
         confirmarPedidoWhatsApp(e);
     });
     
     // Direct click handler on the button
     const btnConfirmar = document.getElementById('btn-confirmar-whatsapp');
     if (btnConfirmar) {
-        btnConfirmar.addEventListener('click', confirmarPedidoWhatsApp);
+        const oldHandler = btnConfirmar._m13CheckoutBtnHandler;
+        if (oldHandler) btnConfirmar.removeEventListener('click', oldHandler);
+
+        btnConfirmar._m13CheckoutBtnHandler = handleConfirmarPedido;
+        btnConfirmar.addEventListener('click', handleConfirmarPedido);
     }
 }
 
@@ -2260,16 +2346,9 @@ function confirmarPedidoWhatsApp(e) {
         return;
     }
 
-    const validation = validarFormularioEntrega(true);
-    if (!validation.valido) {
-        window.carritoModulo.mostrarToastPremium('Por favor complete todos los datos requeridos correctamente.', true);
-
-        // Focus the first invalid field
-        const firstErrorFieldId = Object.keys(validation.errores)[0];
-        if (firstErrorFieldId) {
-            const el = document.getElementById(firstErrorFieldId);
-            if (el) el.focus();
-        }
+    const pasoIncompleto = obtenerPrimerPasoIncompleto();
+    if (pasoIncompleto) {
+        scrollToFirstInvalidStep();
         return;
     }
 
@@ -2420,6 +2499,429 @@ function inicializarAcordeonFooter() {
             }
         });
     });
+}
+
+/**
+ * Crea el elemento HTML de la barra móvil de checkout si no existe
+ */
+function crearBarraMovilCarrito() {
+    let bar = document.getElementById('mobile-checkout-bar');
+    if (bar) {
+        bar.hidden = true;
+        return bar;
+    }
+
+    bar = document.createElement('div');
+    bar.id = 'mobile-checkout-bar';
+    bar.className = 'mobile-checkout-bar';
+    bar.hidden = true;
+    bar.setAttribute('aria-hidden', 'true');
+    bar.innerHTML = `
+        <div class="mobile-checkout-bar__total">
+            <span class="mobile-checkout-bar__label">TOTAL</span>
+            <span class="mobile-checkout-bar__amount" id="mobile-checkout-bar-amount">S/ 0.00</span>
+        </div>
+        <button type="button" class="btn mobile-checkout-bar__button" id="mobile-checkout-bar-btn">
+            CONTINUAR PEDIDO
+        </button>
+    `;
+
+    if (document.body) {
+        document.body.appendChild(bar);
+    }
+    return bar;
+}
+
+/**
+ * Actualiza el estado visual (Completo / Incompleto) y el total en la barra móvil del carrito
+ */
+function actualizarEstadoBarraMovilCarrito(bar, esCompleto, totalMonto) {
+    if (!bar) return;
+    const amountEl = bar.querySelector('#mobile-checkout-bar-amount');
+    const btnEl = bar.querySelector('#mobile-checkout-bar-btn');
+
+    if (amountEl) {
+        amountEl.textContent = typeof totalMonto === 'number'
+            ? `S/ ${totalMonto.toFixed(2)}`
+            : (totalMonto || 'S/ 0.00');
+    }
+
+    if (btnEl) {
+        if (esCompleto) {
+            btnEl.classList.remove('is-incomplete');
+            btnEl.classList.add('is-complete');
+            btnEl.textContent = 'CONFIRMAR POR WHATSAPP';
+            btnEl.setAttribute('aria-label', 'Confirmar pedido por WhatsApp');
+        } else {
+            btnEl.classList.remove('is-complete');
+            btnEl.classList.add('is-incomplete');
+            btnEl.textContent = 'CONTINUAR PEDIDO';
+            btnEl.setAttribute('aria-label', 'Continuar pedido e ir al dato faltante');
+        }
+    }
+}
+
+/**
+ * Retorna el primer paso o dato faltante en el proceso de checkout (FASE M13.2)
+ * @returns { { tipo: string, elementoId: string, mensaje: string } | null }
+ */
+function obtenerPrimerPasoIncompleto() {
+    const items = window.carritoModulo ? window.carritoModulo.obtenerCarrito() : [];
+    if (!items || items.length === 0) {
+        return {
+            tipo: 'carrito_vacio',
+            elementoId: 'cart-table-container',
+            mensaje: 'Tu pedido está vacío.'
+        };
+    }
+
+    if (!selectedDeliveryType) {
+        return {
+            tipo: 'modalidad',
+            elementoId: 'container-seccion-entrega',
+            mensaje: 'Selecciona primero cómo deseas recibir tu pedido.'
+        };
+    }
+
+    if (selectedDeliveryType === 'delivery-local') {
+        if (!selectedDeliveryZone) {
+            return {
+                tipo: 'zona',
+                elementoId: 'block-delivery-local',
+                mensaje: 'Selecciona la zona de delivery para continuar.'
+            };
+        }
+
+        const nameInput = document.getElementById('delivery-name');
+        const nameVal = nameInput ? nameInput.value.trim() : '';
+        const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\'\.]+$/;
+        const isNameValid = nameVal.length >= 2 && nameVal.length <= 80 && nameRegex.test(nameVal);
+        if (!isNameValid) {
+            return {
+                tipo: 'nombre',
+                elementoId: 'delivery-name',
+                mensaje: 'Ingresa tu nombre completo para continuar.'
+            };
+        }
+
+        const addressInput = document.getElementById('delivery-address');
+        const addressVal = addressInput ? addressInput.value.trim() : '';
+        const isAddressValid = addressVal.length >= 3;
+        if (!isAddressValid) {
+            return {
+                tipo: 'direccion',
+                elementoId: 'delivery-address',
+                mensaje: 'Ingresa la dirección de entrega para continuar.'
+            };
+        }
+    } else if (selectedDeliveryType === 'recojo-local') {
+        const nameInput = document.getElementById('recojo-name');
+        const nameVal = nameInput ? nameInput.value.trim() : '';
+        const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\'\.]+$/;
+        const isNameValid = nameVal.length >= 2 && nameVal.length <= 80 && nameRegex.test(nameVal);
+        if (!isNameValid) {
+            return {
+                tipo: 'nombre_recojo',
+                elementoId: 'recojo-name',
+                mensaje: 'Ingresa tu nombre completo para continuar.'
+            };
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Controlador unificado para la confirmación de pedido (Botón Verde y Barra Móvil)
+ */
+function handleConfirmarPedido(e) {
+    if (e) e.preventDefault();
+
+    const pasoIncompleto = obtenerPrimerPasoIncompleto();
+    if (pasoIncompleto) {
+        irAlPrimerPasoIncompleto(pasoIncompleto);
+        return false;
+    }
+
+    confirmarPedidoWhatsApp(e);
+}
+
+/**
+ * Revela bloques ocultos, desplaza automáticamente al primer paso incompleto,
+ * aplica focus al campo y resalta el contenedor con role="alert" y aria-live="polite".
+ */
+function irAlPrimerPasoIncompleto(pasoIncompleto) {
+    pasoIncompleto = pasoIncompleto || obtenerPrimerPasoIncompleto();
+    if (!pasoIncompleto) return false;
+
+    // Limpiar alertas e is-step-required previas para evitar duplicados
+    document.querySelectorAll('.step-alert-banner').forEach(el => el.remove());
+    document.querySelectorAll('.is-step-required').forEach(el => el.classList.remove('is-step-required'));
+
+    if (selectedDeliveryType === 'delivery-local') {
+        const block = document.getElementById('block-delivery-local');
+        if (block) {
+            block.style.display = 'block';
+            if (block.removeAttribute) block.removeAttribute('hidden');
+            if (block.setAttribute) block.setAttribute('aria-hidden', 'false');
+        }
+        if (selectedDeliveryZone) {
+            const wrapper = document.getElementById('delivery-fields-wrapper');
+            if (wrapper) {
+                wrapper.style.display = 'block';
+                if (wrapper.removeAttribute) wrapper.removeAttribute('hidden');
+                if (wrapper.setAttribute) wrapper.setAttribute('aria-hidden', 'false');
+            }
+        }
+    } else if (selectedDeliveryType === 'agencia') {
+        const block = document.getElementById('block-agencia');
+        if (block) {
+            block.style.display = 'block';
+            if (block.removeAttribute) block.removeAttribute('hidden');
+            if (block.setAttribute) block.setAttribute('aria-hidden', 'false');
+        }
+    } else if (selectedDeliveryType === 'recojo-local') {
+        const block = document.getElementById('block-recojo-local');
+        if (block) {
+            block.style.display = 'block';
+            if (block.removeAttribute) block.removeAttribute('hidden');
+            if (block.setAttribute) block.setAttribute('aria-hidden', 'false');
+        }
+    }
+
+    validarFormularioEntrega(true);
+
+    const warningBox = document.getElementById('checkout-warning');
+    if (warningBox) {
+        warningBox.style.display = 'none';
+    }
+
+    // Limpiar alertas preexistentes para garantizar UNA SOLA alerta activa en el checkout
+    document.querySelectorAll('.step-alert-banner').forEach(el => el.remove());
+    document.querySelectorAll('.is-step-required').forEach(el => el.classList.remove('is-step-required'));
+
+    const renderBannerYScroll = () => {
+        const targetEl = document.getElementById(pasoIncompleto.elementoId)
+            || document.querySelector(`.${pasoIncompleto.elementoId}`)
+            || document.querySelector('.zone-selector-group')
+            || document.querySelector('.delivery-options-grid');
+
+        if (!targetEl) return;
+
+        let highlightTarget = targetEl;
+        if (targetEl.closest) {
+            if (pasoIncompleto.tipo === 'modalidad') {
+                highlightTarget = targetEl.closest('#container-seccion-entrega') || targetEl.closest('.checkout-delivery-step') || targetEl;
+            } else if (pasoIncompleto.tipo === 'zona') {
+                highlightTarget = targetEl.closest('#block-delivery-local') || targetEl.closest('.zone-selector-group') || targetEl;
+            } else {
+                highlightTarget = targetEl.closest('.form-group') || targetEl;
+            }
+        }
+
+        if (highlightTarget && highlightTarget.classList) {
+            highlightTarget.classList.add('is-step-required');
+
+            let banner = highlightTarget.querySelector('.checkout-validation-alert') || highlightTarget.querySelector('.step-alert-banner');
+            if (!banner && typeof document.createElement === 'function') {
+                banner = document.createElement('div');
+                banner.className = 'checkout-validation-alert step-alert-banner';
+                if (banner.setAttribute) {
+                    banner.setAttribute('role', 'alert');
+                    banner.setAttribute('aria-live', 'polite');
+                }
+                banner.innerHTML = `
+                    <span class="checkout-validation-alert__icon step-alert-banner__icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </span>
+                    <span class="checkout-validation-alert__text step-alert-banner__text">${pasoIncompleto.mensaje}</span>
+                `;
+                if (highlightTarget.firstChild) {
+                    highlightTarget.insertBefore(banner, highlightTarget.firstChild);
+                } else if (highlightTarget.appendChild) {
+                    highlightTarget.appendChild(banner);
+                }
+            }
+        }
+
+        const header = document.querySelector('header.header-main');
+        const headerHeight = header ? header.offsetHeight + 20 : 100;
+
+        let absoluteTop = 0;
+        const scrollToNode = highlightTarget || targetEl;
+        if (scrollToNode.getBoundingClientRect) {
+            const rect = scrollToNode.getBoundingClientRect();
+            const pageY = window.pageYOffset || (document.documentElement ? document.documentElement.scrollTop : 0);
+            absoluteTop = pageY + rect.top - headerHeight;
+        }
+
+        const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (typeof window.scrollTo === 'function') {
+            window.scrollTo({
+                top: Math.max(0, absoluteTop),
+                behavior: prefersReducedMotion ? 'auto' : 'smooth'
+            });
+        } else if (typeof scrollToNode.scrollIntoView === 'function') {
+            scrollToNode.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+        }
+
+        if (targetEl.tagName === 'INPUT' || targetEl.tagName === 'SELECT' || targetEl.tagName === 'TEXTAREA') {
+            setTimeout(() => {
+                if (typeof targetEl.focus === 'function') targetEl.focus();
+            }, 300);
+        }
+    };
+
+    if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(renderBannerYScroll);
+    } else {
+        renderBannerYScroll();
+    }
+
+    return true;
+}
+
+function irAlPasoIncompleto(paso) {
+    irAlPrimerPasoIncompleto(paso);
+}
+
+function scrollToFirstInvalidStep() {
+    const pasoIncompleto = obtenerPrimerPasoIncompleto();
+    if (pasoIncompleto) {
+        irAlPasoIncompleto(pasoIncompleto);
+    }
+}
+
+/**
+ * Enfoca y desplaza al primer campo faltante en el formulario del carrito (Alias)
+ */
+function enfocarPrimerCampoFaltante() {
+    scrollToFirstInvalidStep();
+}
+
+/**
+ * Inicializa la barra móvil del carrito con IntersectionObserver sobre el botón original de confirmación
+ */
+const checkoutMobileQuery = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(max-width: 767px)') : null;
+
+/**
+ * Controla centralizadamente la visibilidad y estado de la barra fija del checkout móvil (FASE M13)
+ */
+function actualizarBarraCheckoutMovil(isOutParam) {
+    const bar = document.getElementById('mobile-checkout-bar');
+    if (!bar) return;
+
+    const esMovil = checkoutMobileQuery
+        ? checkoutMobileQuery.matches
+        : ((window.innerWidth || (document.documentElement ? document.documentElement.clientWidth : 0)) <= 767);
+
+    if (!esMovil) {
+        bar.hidden = true;
+        bar.classList.remove('is-visible');
+        if (bar.style && typeof bar.style.removeProperty === 'function') {
+            bar.style.removeProperty('display');
+        } else if (bar.style) {
+            bar.style.display = '';
+        }
+        bar.setAttribute('aria-hidden', 'true');
+        if (document.body) document.body.classList.remove('has-mobile-checkout-bar-visible');
+        if (window._m13Observer) {
+            window._m13Observer.disconnect();
+            window._m13Observer = null;
+        }
+        return;
+    }
+
+    const items = window.carritoModulo ? window.carritoModulo.obtenerCarrito() : [];
+    const tieneItems = items && items.length > 0;
+    const targetBtn = document.getElementById('btn-confirmar-whatsapp');
+
+    let isOut = isOutParam;
+    if (typeof isOut !== 'boolean' && targetBtn && targetBtn.getBoundingClientRect) {
+        const rect = targetBtn.getBoundingClientRect();
+        isOut = rect.bottom < 0 || rect.top > (window.innerHeight || 800);
+    }
+
+    if (isOut && tieneItems) {
+        const totales = typeof obtenerTotalesPedido === 'function' ? obtenerTotalesPedido() : { totalFinal: 0 };
+        const validation = typeof validarFormularioEntrega === 'function' ? validarFormularioEntrega(false) : { valido: false };
+        if (typeof actualizarEstadoBarraMovilCarrito === 'function') {
+            actualizarEstadoBarraMovilCarrito(bar, validation.valido, totales.totalFinal);
+        }
+        bar.hidden = false;
+        bar.classList.add('is-visible');
+        bar.setAttribute('aria-hidden', 'false');
+        if (document.body) document.body.classList.add('has-mobile-checkout-bar-visible');
+    } else {
+        bar.hidden = true;
+        bar.classList.remove('is-visible');
+        if (bar.style && typeof bar.style.removeProperty === 'function') {
+            bar.style.removeProperty('display');
+        } else if (bar.style) {
+            bar.style.display = '';
+        }
+        bar.setAttribute('aria-hidden', 'true');
+        if (document.body) document.body.classList.remove('has-mobile-checkout-bar-visible');
+    }
+}
+
+if (checkoutMobileQuery && typeof checkoutMobileQuery.addEventListener === 'function') {
+    checkoutMobileQuery.addEventListener('change', () => {
+        actualizarBarraCheckoutMovil();
+        if (checkoutMobileQuery.matches) {
+            const btn = document.getElementById('btn-confirmar-whatsapp');
+            if (btn) inicializarBarraMovilCarrito(btn);
+        }
+    });
+}
+
+/**
+ * Inicializa los eventos e IntersectionObserver para la barra móvil del carrito
+ */
+function inicializarBarraMovilCarrito(targetBtn) {
+    if (!targetBtn) return;
+
+    const bar = crearBarraMovilCarrito();
+    const actionBtn = bar.querySelector('#mobile-checkout-bar-btn');
+
+    if (actionBtn) {
+        const oldHandler = actionBtn._m13Handler;
+        if (oldHandler) actionBtn.removeEventListener('click', oldHandler);
+
+        const newHandler = (e) => {
+            handleConfirmarPedido(e);
+        };
+        actionBtn._m13Handler = newHandler;
+        actionBtn.addEventListener('click', newHandler);
+    }
+
+    const esMovil = checkoutMobileQuery
+        ? checkoutMobileQuery.matches
+        : ((window.innerWidth || (document.documentElement ? document.documentElement.clientWidth : 0)) <= 767);
+
+    if (!esMovil) {
+        actualizarBarraCheckoutMovil();
+        return;
+    }
+
+    if (typeof IntersectionObserver !== 'undefined') {
+        if (window._m13Observer) window._m13Observer.disconnect();
+        window._m13Observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                actualizarBarraCheckoutMovil(!entry.isIntersecting);
+            });
+        }, { threshold: 0.1 });
+        window._m13Observer.observe(targetBtn);
+    } else {
+        const handleScroll = () => {
+            if (!targetBtn.getBoundingClientRect) return;
+            const rect = targetBtn.getBoundingClientRect();
+            const isOut = rect.bottom < 0 || rect.top > (window.innerHeight || 800);
+            actualizarBarraCheckoutMovil(isOut);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    }
 }
 
 

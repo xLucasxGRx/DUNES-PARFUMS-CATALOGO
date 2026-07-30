@@ -175,6 +175,19 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
 
         if (!limiteAlcanzado) {
             mostrarToastPremium(`S/ ${precioUnitario.toFixed(2)} - ${product.nombre} (${mlItem}ml) agregado.`);
+
+            const totalItemsEnCarrito = carrito.reduce((acc, i) => acc + i.cantidad, 0);
+            mostrarModalAgregarCarrito({
+                idProducto: product.id,
+                nombre: product.nombre,
+                marca: product.marca,
+                imagen: product.imagen,
+                presentacion: presentacionTexto,
+                precioUnitario: precioUnitario,
+                cantidadAgregada: cantidadAAgregar,
+                subtotalAccion: precioUnitario * cantidadAAgregar,
+                totalProductosCarrito: totalItemsEnCarrito
+            });
         }
 
         if (window.renderizarCarritoDOM) {
@@ -368,12 +381,142 @@ function mostrarToastPremium(mensaje, esAdvertencia = false) {
     }, 3000);
 }
 
+/**
+ * Crea o recupera el nodo DOM del modal de confirmación al agregar al carrito
+ */
+function obtenerONavegarModalAgregarCarrito() {
+    let modal = document.getElementById('cart-added-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'cart-added-modal';
+        modal.className = 'cart-added-modal-backdrop';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.setAttribute('aria-hidden', 'true');
+        modal.hidden = true;
+        if (document.body) document.body.appendChild(modal);
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                ocultarModalAgregarCarrito();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.hidden) {
+                ocultarModalAgregarCarrito();
+            }
+        });
+    }
+    return modal;
+}
+
+/**
+ * Muestra el modal premium de confirmación visual al agregar un producto
+ */
+function mostrarModalAgregarCarrito(data) {
+    if (!data) return;
+
+    const modal = obtenerONavegarModalAgregarCarrito();
+
+    const cantTotal = data.totalProductosCarrito || 1;
+    const textoCantTotal = `Tienes <strong>${cantTotal} ${cantTotal === 1 ? 'producto' : 'productos'}</strong> en tu carrito`;
+
+    modal.innerHTML = `
+        <div class="cart-added-modal-container">
+            <button type="button" class="cart-added-modal-close" id="cart-modal-close-btn" aria-label="Cerrar confirmación">&times;</button>
+
+            <div class="cart-added-modal-header">
+                <div class="cart-added-modal-icon-badge" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <div class="cart-added-modal-header-text">
+                    <h3 class="cart-added-modal-title">¡Agregado a tu carrito!</h3>
+                    <span class="cart-added-modal-subtitle">Tu pedido se actualizó correctamente.</span>
+                </div>
+            </div>
+
+            <div class="cart-added-modal-product-card">
+                <img src="${data.imagen || 'img/productos/placeholder.webp'}" alt="${data.nombre}" class="cart-added-modal-img" loading="lazy">
+                <div class="cart-added-modal-product-info">
+                    <span class="cart-added-modal-brand">${data.marca || 'DUNES PARFUMS'}</span>
+                    <h4 class="cart-added-modal-name">${data.nombre}</h4>
+                    <div class="cart-added-modal-details">
+                        <span class="cart-added-modal-pres">${data.presentacion}</span>
+                        <span class="cart-added-modal-qty">Cant: ${data.cantidadAgregada}</span>
+                    </div>
+                    <div class="cart-added-modal-price-row">
+                        <span class="cart-added-modal-unit-price">S/ ${(data.precioUnitario || 0).toFixed(2)} c/u</span>
+                        <span class="cart-added-modal-subtotal">Subtotal: S/ ${(data.subtotalAccion || 0).toFixed(2)}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-added-modal-summary-bar">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>${textoCantTotal}</span>
+            </div>
+
+            <div class="cart-added-modal-actions">
+                <button type="button" class="btn btn-secondary cart-added-btn-continue" id="cart-modal-continue-btn">
+                    Seguir comprando
+                </button>
+                <a href="carrito.html" class="btn btn-primary cart-added-btn-cart" id="cart-modal-go-cart-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                    Ir al carrito
+                </a>
+            </div>
+        </div>
+    `;
+
+    const btnClose = modal.querySelector('#cart-modal-close-btn');
+    if (btnClose) btnClose.addEventListener('click', ocultarModalAgregarCarrito);
+
+    const btnContinue = modal.querySelector('#cart-modal-continue-btn');
+    if (btnContinue) btnContinue.addEventListener('click', ocultarModalAgregarCarrito);
+
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+
+    if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(() => {
+            modal.classList.add('is-visible');
+        });
+    } else {
+        modal.classList.add('is-visible');
+    }
+}
+
+/**
+ * Oculta el modal de confirmación
+ */
+function ocultarModalAgregarCarrito() {
+    const modal = document.getElementById('cart-added-modal');
+    if (!modal) return;
+
+    modal.classList.remove('is-visible');
+    setTimeout(() => {
+        modal.hidden = true;
+        modal.setAttribute('aria-hidden', 'true');
+    }, 220);
+}
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
     actualizarContadorCarrito();
 });
 
 // Hacer las funciones globales
+window.mostrarModalAgregarCarrito = mostrarModalAgregarCarrito;
+window.ocultarModalAgregarCarrito = ocultarModalAgregarCarrito;
+
 window.carritoModulo = {
     obtenerCarrito,
     guardarCarrito,
@@ -383,5 +526,7 @@ window.carritoModulo = {
     vaciarCarrito,
     obtenerItemsCarritoDetallados,
     mostrarToastPremium,
-    animarBotonCarritoHeader
+    animarBotonCarritoHeader,
+    mostrarModalAgregarCarrito,
+    ocultarModalAgregarCarrito
 };

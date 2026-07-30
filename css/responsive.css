@@ -962,16 +962,44 @@
     margin-bottom: 40px;
   }
 
-  #page-carrito main.section-padding,
   #page-producto main.section-padding {
     padding-top: 76px !important;
     padding-bottom: 32px !important;
   }
 
+  #page-carrito main.section-padding {
+    padding-top: 58px !important;
+    padding-bottom: 24px !important;
+  }
+
   #page-catalogo .section-header,
-  #page-carrito .section-header,
   #page-producto .section-header {
     margin-bottom: 20px !important;
+  }
+
+  #page-carrito .section-header {
+    margin-bottom: 14px !important;
+    gap: 4px !important;
+  }
+
+  #page-carrito .section-subtitle {
+    font-size: 0.72rem !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #page-carrito .section-title {
+    font-size: 1.35rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 2px !important;
+  }
+
+  #page-carrito .section-header p {
+    font-size: 0.82rem !important;
+    line-height: 1.3 !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+    max-width: 480px !important;
   }
 
   /* Cuadrícula de Categorías a 2 columnas compacta */
@@ -1667,17 +1695,48 @@
   }
 
   #page-carrito .delivery-option-card {
+    display: grid !important;
+    grid-template-columns: auto auto minmax(0, 1fr) auto !important;
+    align-items: center !important;
     padding: 10px 12px !important;
     gap: 8px !important;
     border-radius: 8px !important;
     min-height: 44px !important;
     height: auto !important;
     margin-bottom: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #page-carrito .delivery-option-card input[type="radio"] {
+    grid-column: 1 !important;
+    margin: 0 !important;
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
+  }
+
+  #page-carrito .delivery-option-icon {
+    grid-column: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: static !important;
+    color: var(--catalog-gold, #B18225) !important;
+    flex-shrink: 0 !important;
+  }
+
+  #page-carrito .delivery-option-meta {
+    grid-column: 3 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    min-width: 0 !important;
   }
 
   #page-carrito .delivery-option-title {
-    font-size: 0.86rem !important;
+    font-size: 0.84rem !important;
     line-height: 1.2 !important;
+    white-space: normal !important;
   }
 
   #page-carrito .delivery-option-desc {
@@ -1686,6 +1745,16 @@
   }
 
   #page-carrito .delivery-option-badge {
+    grid-column: 4 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    max-width: max-content !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
+    margin: 0 !important;
     font-size: 0.72rem !important;
     padding: 2px 7px !important;
   }
@@ -2797,6 +2866,226 @@
   }
 }
 
+/* ==========================================================================
+   FASE M13 — BARRA MÓVIL FIJA DE TOTAL Y CONFIRMACIÓN EN CARRITO (AISLADA)
+   ========================================================================== */
+#page-carrito .mobile-checkout-bar,
+.mobile-checkout-bar {
+  display: none !important;
+}
+
+@media screen and (max-width: 767px) {
+  #page-carrito .mobile-checkout-bar,
+  .mobile-checkout-bar {
+    display: none !important;
+  }
+
+  #page-carrito .mobile-checkout-bar:not([hidden]).is-visible,
+  .mobile-checkout-bar:not([hidden]).is-visible {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 74px !important;
+    box-sizing: border-box !important;
+    padding: 10px 16px !important;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    background-color: var(--surface-card, #FFFEFC) !important;
+    border-top: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    box-shadow: 0 -4px 16px rgba(31, 24, 12, 0.12) !important;
+    z-index: 990 !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease, visibility 220ms ease !important;
+  }
+
+  .mobile-checkout-bar__total {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-width: 0 !important;
+  }
+
+  .mobile-checkout-bar__label {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    color: #6F6F6F !important;
+    text-transform: uppercase !important;
+  }
+
+  .mobile-checkout-bar__amount {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    color: var(--color-primary-dark, #171717) !important;
+    line-height: 1.2 !important;
+  }
+
+  .mobile-checkout-bar__button {
+    height: 44px !important;
+    padding: 0 16px !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    flex-shrink: 0 !important;
+    border-radius: var(--radius-button, 10px) !important;
+    transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease !important;
+  }
+
+  /* Estado Incompleto (Continuar Pedido) */
+  .mobile-checkout-bar__button.is-incomplete {
+    background-color: var(--color-primary, #B18225) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+  }
+
+  /* Estado Completo (Confirmar por WhatsApp) */
+  .mobile-checkout-bar__button.is-complete {
+    background-color: #25D366 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25) !important;
+  }
+
+  /* Elevación del WhatsApp flotante cuando la barra del carrito está visible */
+  body.has-mobile-checkout-bar-visible #whatsapp-floating-btn,
+  body.has-mobile-checkout-bar-visible .wa-float-btn {
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px)) !important;
+    transition: bottom 220ms ease !important;
+  }
+
+  /* Espacio inferior adicional en el carrito móvil cuando la barra está activa */
+  body.has-mobile-checkout-bar-visible main.section-padding {
+    padding-bottom: 90px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-checkout-bar {
+    transition: opacity 180ms ease, visibility 180ms ease !important;
+    transform: none !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .mobile-checkout-bar,
+  .mobile-checkout-bar.is-visible {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  body.has-mobile-checkout-bar-visible main.section-padding {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   FASE MEJORA UX — RESALTADO MUCHO MÁS CLARO DEL PASO FALTANTE EN CHECKOUT
+   ========================================================================== */
+@keyframes stepPulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(177, 130, 37, 0.35), 0 4px 16px rgba(177, 130, 37, 0.18);
+    border-color: #B18225;
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(177, 130, 37, 0.16), 0 8px 24px rgba(177, 130, 37, 0.3);
+    border-color: #D4AF37;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(177, 130, 37, 0.35), 0 4px 16px rgba(177, 130, 37, 0.18);
+    border-color: #B18225;
+  }
+}
+
+.checkout-delivery-step {
+  padding: 12px;
+  border-radius: var(--radius-control, 12px);
+  margin-bottom: 20px;
+  transition: border-color 250ms ease, background-color 250ms ease, box-shadow 250ms ease;
+}
+
+.is-step-required {
+  border: 2px solid var(--catalog-gold, #B18225) !important;
+  background-color: #FFFDF9 !important;
+  border-radius: var(--radius-control, 12px) !important;
+  box-shadow: 0 4px 20px rgba(177, 130, 37, 0.2) !important;
+  padding: 14px !important;
+  animation: stepPulseGlow 1.8s ease-in-out 2 !important;
+  transition: border-color 250ms ease, background-color 250ms ease, box-shadow 250ms ease !important;
+}
+
+.checkout-validation-alert,
+.step-alert-banner {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: linear-gradient(135deg, #FFF8F6 0%, #FDEEE9 100%) !important;
+  border: 1px solid #F3C4B6 !important;
+  border-left: 4px solid #C0392B !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.08) !important;
+  animation: fadeInDown 250ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.checkout-validation-alert__icon,
+.step-alert-banner__icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  background-color: rgba(192, 57, 43, 0.14) !important;
+  color: #C0392B !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+  margin-top: 1px !important;
+}
+
+.checkout-validation-alert__text,
+.step-alert-banner__text {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  color: #8A1C14 !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-step-required {
+    animation: none !important;
+  }
+  .step-alert-banner {
+    animation: none !important;
+  }
+}
+
+.checkout-step-transition {
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.recojo-alert-card .btn-recojo-maps:hover {
+  background-color: var(--color-primary-dark, #8E671D) !important;
+  border-color: var(--color-primary-dark, #8E671D) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(142, 103, 29, 0.25);
+}
+
   /* Tarjetas de Beneficios */
   .benefits-grid {
     grid-template-columns: 1fr;
@@ -3338,19 +3627,6 @@
     height: auto !important;
   }
 
-  #page-carrito .delivery-option-card {
-    grid-template-columns: auto 1fr !important;
-    gap: 8px !important;
-    padding: 10px 12px !important;
-  }
-
-  #page-carrito .delivery-option-badge {
-    grid-column: 1 / -1 !important;
-    text-align: left !important;
-    align-self: flex-start !important;
-    margin-top: 2px !important;
-  }
-
   #page-carrito .delivery-zone-name {
     font-size: 0.78rem !important;
   }
@@ -3477,6 +3753,117 @@
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
+  }
+}
+
+/* ==========================================================================
+   REPARACIÓN EXCLUSIVA DE LAPTOP (>= 768px) — ALERTAS DE VALIDACIÓN Y ESPACIADOS
+   ========================================================================== */
+@media (min-width: 768px) {
+  #page-carrito .checkout-validation-alert,
+  #page-carrito .step-alert-banner {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(135deg, #FFF8F6 0%, #FDEEE9 100%) !important;
+    border: 1px solid #F3C4B6 !important;
+    border-left: 4px solid #C0392B !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 4px 12px rgba(192, 57, 43, 0.08) !important;
+  }
+
+  #page-carrito .checkout-validation-alert__icon,
+  #page-carrito .step-alert-banner__icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    background-color: rgba(192, 57, 43, 0.14) !important;
+    color: #C0392B !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+    margin-top: 1px !important;
+  }
+
+  #page-carrito .checkout-validation-alert__text,
+  #page-carrito .step-alert-banner__text {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    color: #8A1C14 !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+  }
+
+  #page-carrito #seccion-entrega {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.25 !important;
+  }
+
+  #page-carrito .seccion-entrega-subtitle {
+    margin-top: 0 !important;
+    margin-bottom: 18px !important;
+    line-height: 1.4 !important;
+    font-size: 0.85rem !important;
+    color: var(--color-text-muted, #666666) !important;
+  }
+
+  /* Compactación de Encabezados Internos (Catálogo, Producto y Ayuda) */
+  #page-catalogo main.section-padding,
+  #page-producto main.section-padding {
+    padding-top: 78px !important;
+    padding-bottom: 32px !important;
+  }
+
+  #page-catalogo .section-header,
+  #page-producto .section-header {
+    margin-bottom: 18px !important;
+    gap: 6px !important;
+  }
+
+  #page-catalogo .section-subtitle {
+    font-size: 0.78rem !important;
+    letter-spacing: 2.5px !important;
+  }
+
+  #page-catalogo .section-title {
+    font-size: 1.8rem !important;
+    line-height: 1.15 !important;
+    margin-bottom: 4px !important;
+  }
+
+  #page-catalogo .section-header p {
+    font-size: 0.88rem !important;
+    line-height: 1.35 !important;
+    margin-top: 4px !important;
+    max-width: 560px !important;
+  }
+
+  .ayuda-hero-section {
+    padding-top: 76px !important;
+    padding-bottom: 16px !important;
+  }
+
+  .ayuda-badge {
+    margin-bottom: 6px !important;
+  }
+
+  .ayuda-title {
+    font-size: 2.1rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .ayuda-subtitle {
+    font-size: 0.88rem !important;
+    line-height: 1.35 !important;
   }
 }
 
