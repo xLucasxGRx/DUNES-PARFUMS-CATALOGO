@@ -962,7 +962,6 @@
     margin-bottom: 40px;
   }
 
-  #page-catalogo main.section-padding,
   #page-carrito main.section-padding,
   #page-producto main.section-padding {
     padding-top: 76px !important;
@@ -1779,51 +1778,66 @@
   }
 
   /* ==========================================================================
-     REDISEÑO DE ENCABEZADO Y FILTROS DEL CATÁLOGO EN MÓVIL (FASE U8.2)
+     REDISEÑO ULTRA COMPACTO DEL CATÁLOGO EN MÓVIL (PRODUCTOS MÁS ARRIBA)
      ========================================================================== */
   #page-catalogo main.section-padding {
-    padding-top: 48px !important;
-    padding-bottom: 24px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
   }
 
+  #page-catalogo .catalog-header,
   #page-catalogo .section-header {
-    margin-bottom: 14px !important;
-    gap: 4px !important;
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 0 !important;
+    gap: 2px !important;
   }
 
-  #page-catalogo .section-subtitle {
-    font-size: 0.72rem !important;
-    letter-spacing: 2px !important;
-    margin-bottom: 2px !important;
+  #page-catalogo .catalog-header .section-subtitle,
+  #page-catalogo .section-subtitle,
+  #page-catalogo #catalogo-subtitulo {
+    display: none !important;
   }
 
-  #page-catalogo .section-title {
-    font-size: 1.55rem !important;
-    line-height: 1.15 !important;
+  #page-catalogo .catalog-header .section-title,
+  #page-catalogo .section-title,
+  #page-catalogo #catalogo-titulo {
+    font-size: 1.35rem !important;
+    line-height: 1.1 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 4px !important;
+  }
+
+  #page-catalogo .section-title::after {
+    width: 32px !important;
+    height: 2px !important;
+    bottom: 0 !important;
+    margin: 0 auto !important;
   }
 
   #page-catalogo #catalogo-descripcion {
-    font-size: 0.82rem !important;
+    font-size: 0.8rem !important;
     margin-top: 4px !important;
-    line-height: 1.35 !important;
-    max-width: 92% !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
+    margin-bottom: 0 !important;
+    line-height: 1.25 !important;
+    max-width: 95% !important;
+    padding: 0 !important;
   }
 
-  /* Tarjeta de Filtros Móvil Compacta */
+  /* Tarjeta de Filtros Móvil Ultra Compacta */
   #page-catalogo .catalog-filters-bar {
     display: flex !important;
     flex-direction: column !important;
-    padding: 12px 14px !important;
-    gap: 10px !important;
-    margin-bottom: 12px !important;
-    border-radius: 12px !important;
+    padding: 8px 8px !important;
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+    border-radius: 10px !important;
     background-color: var(--surface-card, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
-    box-shadow: 0 2px 8px rgba(31, 24, 12, 0.04) !important;
+    box-shadow: 0 2px 6px rgba(31, 24, 12, 0.04) !important;
   }
 
   /* Buscador Full Width y Altura Compacta */
@@ -1835,93 +1849,79 @@
   }
 
   #page-catalogo .filter-search-box input {
-    height: 42px !important;
-    min-height: 42px !important;
-    padding: 10px 14px 10px 38px !important;
-    font-size: 0.84rem !important;
-    border-radius: 8px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 4px 10px 4px 32px !important;
+    font-size: 0.8rem !important;
+    border-radius: 6px !important;
     border-color: var(--catalog-gold-border, #E7D3A5) !important;
     box-sizing: border-box !important;
   }
 
   #page-catalogo .filter-search-box .search-icon {
-    left: 12px !important;
+    left: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
   }
 
-  /* Estado Vacío Compacto del Catálogo en Móvil */
-  .catalog-empty-state {
-    padding: 16px 12px !important;
-    margin: 16px auto !important;
-    border-radius: 12px !important;
-    max-width: 100% !important;
+  #page-catalogo .filter-search-box .search-icon svg {
+    width: 15px !important;
+    height: 15px !important;
   }
 
-  .empty-state-icon {
-    margin-bottom: 4px !important;
-  }
-
-  .empty-state-title {
-    font-size: 1.05rem !important;
-    margin-bottom: 4px !important;
-  }
-
-  .empty-state-text {
-    font-size: 0.88rem !important;
-    color: #4A4A4A !important;
-    font-weight: 500 !important;
-    line-height: 1.4 !important;
-    margin-bottom: 12px !important;
-  }
-
-  .empty-state-actions {
-    gap: 6px !important;
-    max-width: 270px !important;
-  }
-
-  .btn-empty-wa {
-    height: 42px !important;
-    min-height: 42px !important;
-    font-size: 0.8rem !important;
-  }
-
-  .btn-empty-sec {
-    height: 36px !important;
-    min-height: 36px !important;
-    font-size: 0.75rem !important;
-  }
-
-  /* Categorías en Fila Única con Desplazamiento Horizontal Habilitado */
+  /* Categorías en 2 Filas en Móvil sin Desplazamiento Horizontal */
   #page-catalogo .filter-categories-group {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    gap: 8px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    scrollbar-width: none !important; /* Firefox */
-    -ms-overflow-style: none !important; /* IE/Edge */
-    -webkit-overflow-scrolling: touch !important;
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+    overflow: visible !important;
     width: 100% !important;
-    padding-bottom: 2px !important;
+    padding: 0 !important;
     margin: 0 !important;
   }
 
   #page-catalogo .filter-categories-group::-webkit-scrollbar {
-    display: none !important; /* Chrome/Safari/Webkit */
-    width: 0 !important;
-    height: 0 !important;
+    display: none !important;
   }
 
   #page-catalogo .filter-category-btn {
-    flex: 0 0 auto !important;
-    white-space: nowrap !important;
-    padding: 7px 14px !important;
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
+    width: 100% !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    padding: 2px 2px !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
     border-radius: 6px !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     box-sizing: border-box !important;
     line-height: 1.2 !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.2px !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-category-btn[data-categoria="todos"] {
+    grid-column: span 2 !important;
+  }
+
+  #page-catalogo .filter-category-btn[data-categoria="arabe"] {
+    grid-column: span 2 !important;
+  }
+
+  #page-catalogo .filter-category-btn[data-categoria="disenador"] {
+    grid-column: span 2 !important;
+  }
+
+  #page-catalogo .filter-category-btn[data-categoria="nicho"] {
+    grid-column: span 3 !important;
+  }
+
+  #page-catalogo .filter-category-btn[data-categoria="decants"] {
+    grid-column: span 3 !important;
   }
 
   #page-catalogo .filter-category-btn.active {
@@ -1930,54 +1930,55 @@
     border-color: #8E671D !important;
   }
 
-  /* Filtro de Género Móvil (¿Para quién?) */
+  /* Filtro por Género en 1 Fila (4 Botones Distribuidos Uniformemente) */
   #page-catalogo .filter-gender-wrapper {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 4px !important;
+    gap: 2px !important;
     width: 100% !important;
+    margin-top: 2px !important;
   }
 
   #page-catalogo .filter-gender-label {
-    font-size: 0.72rem !important;
+    font-size: 0.68rem !important;
     color: var(--color-primary-dark, #9E721D) !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.8px !important;
+    letter-spacing: 0.6px !important;
+    margin-bottom: 2px !important;
   }
 
   #page-catalogo .filter-gender-group {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    gap: 8px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    -webkit-overflow-scrolling: touch !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+    overflow: visible !important;
     width: 100% !important;
-    padding-bottom: 2px !important;
+    padding: 0 !important;
     margin: 0 !important;
   }
 
   #page-catalogo .filter-gender-group::-webkit-scrollbar {
     display: none !important;
-    width: 0 !important;
-    height: 0 !important;
   }
 
   #page-catalogo .filter-gender-btn {
-    flex: 0 0 auto !important;
-    white-space: nowrap !important;
-    padding: 6px 12px !important;
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
+    width: 100% !important;
+    min-height: 30px !important;
+    height: 30px !important;
+    padding: 2px 2px !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
     border-radius: 6px !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     box-sizing: border-box !important;
     line-height: 1.2 !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
     background-color: var(--color-bg-light, #FFFDF8) !important;
   }
 
@@ -1991,10 +1992,10 @@
   #page-catalogo .filter-controls-right {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) auto !important;
-    gap: 10px !important;
+    gap: 8px !important;
     align-items: center !important;
     width: 100% !important;
-    margin: 0 !important;
+    margin-top: 4px !important;
   }
 
   #page-catalogo .filter-sort-box {
@@ -2004,10 +2005,10 @@
 
   #page-catalogo .filter-sort-box select {
     width: 100% !important;
-    height: 38px !important;
-    min-height: 38px !important;
-    padding: 6px 10px !important;
-    font-size: 0.8rem !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 5px 8px !important;
+    font-size: 0.76rem !important;
     border-radius: 6px !important;
     border-color: var(--catalog-gold-border, #E7D3A5) !important;
     background-color: #FFFFFF !important;
@@ -2022,15 +2023,16 @@
   }
 
   #page-catalogo .checkbox-container {
-    font-size: 0.78rem !important;
+    font-size: 0.76rem !important;
     font-weight: 600 !important;
     color: var(--catalog-text, #171717) !important;
     white-space: nowrap !important;
-    padding-left: 24px !important;
+    padding-left: 22px !important;
     margin: 0 !important;
   }
 
   #page-catalogo .catalog-results-counter {
+    margin-top: 14px !important;
     margin-bottom: 10px !important;
     font-size: 0.8rem !important;
   }
@@ -2380,6 +2382,267 @@
       gap: 4px !important;
     }
   }
+
+/* ==========================================================================
+   RESTAURACIÓN Y AISLAMIENTO DE ESCRITORIO Y LAPTOP (Min-width 769px)
+   Garantiza cuadrícula vertical de 3 y 4 columnas y filtros horizontales
+   ========================================================================== */
+@media screen and (min-width: 769px) {
+  #page-catalogo main.section-padding {
+    padding-top: 104px !important;
+    padding-bottom: 48px !important;
+  }
+
+  #page-catalogo .section-header {
+    margin-bottom: 28px !important;
+  }
+
+  #page-catalogo .section-subtitle,
+  #page-catalogo #catalogo-subtitulo {
+    display: block !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 3px !important;
+    color: var(--color-primary-dark) !important;
+    font-weight: 700 !important;
+  }
+
+  #page-catalogo .section-title,
+  #page-catalogo #catalogo-titulo {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem) !important;
+    color: var(--color-text-dark) !important;
+    padding-bottom: 16px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #page-catalogo .section-title::after {
+    width: 60px !important;
+    height: 2px !important;
+    bottom: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  #page-catalogo #catalogo-descripcion {
+    font-size: 1rem !important;
+    margin-top: 10px !important;
+    line-height: 1.5 !important;
+    max-width: 600px !important;
+    color: var(--color-text-muted) !important;
+    display: block !important;
+    -webkit-line-clamp: none !important;
+  }
+
+  /* Panel de Filtros en Escritorio */
+  #page-catalogo .catalog-filters-bar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 16px 24px !important;
+    gap: 16px !important;
+    border-radius: var(--border-radius-md, 12px) !important;
+    margin-bottom: 30px !important;
+    box-shadow: var(--shadow-sm, 0 4px 12px rgba(0,0,0,0.05)) !important;
+  }
+
+  #page-catalogo .filter-search-box {
+    width: auto !important;
+    flex: 0 0 300px !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-search-box input {
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 10px 16px 10px 42px !important;
+    font-size: 0.9rem !important;
+    border-radius: 8px !important;
+  }
+
+  #page-catalogo .filter-categories-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  #page-catalogo .filter-category-btn {
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 10px 20px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 8px !important;
+    grid-column: auto !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-gender-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-gender-label {
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-gender-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  #page-catalogo .filter-gender-btn {
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 8px 16px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+  }
+
+  #page-catalogo .filter-controls-right {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 16px !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  #page-catalogo .filter-sort-box select {
+    width: 170px !important;
+    height: 40px !important;
+    padding: 8px 12px !important;
+    font-size: 0.85rem !important;
+  }
+
+  #page-catalogo .checkbox-container {
+    font-size: 0.85rem !important;
+    padding-left: 28px !important;
+  }
+
+  #page-catalogo .catalog-results-counter {
+    margin-bottom: 20px !important;
+    margin-top: 0 !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Cuadrícula Vertical de Productos en Escritorio */
+  #catalogo-productos-grid,
+  .products-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-card,
+  .products-grid .product-card {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    grid-template-areas: none !important;
+    gap: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: auto !important;
+    padding: 0 !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 24px rgba(31, 24, 12, 0.08) !important;
+  }
+
+  #catalogo-productos-grid .product-image-container,
+  .products-grid .product-image-container {
+    width: 100% !important;
+    height: 270px !important;
+    min-height: 270px !important;
+    position: relative !important;
+    padding: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  #catalogo-productos-grid .product-category-badge,
+  .products-grid .product-category-badge {
+    display: block !important;
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+  }
+
+  #catalogo-productos-grid .product-category-mobile,
+  .products-grid .product-category-mobile {
+    display: none !important;
+  }
+
+  #catalogo-productos-grid .product-info,
+  .products-grid .product-info {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 18px !important;
+    flex: 1 1 auto !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer,
+  .products-grid .product-card-footer {
+    margin-top: auto !important;
+    padding: 0 18px 18px 18px !important;
+    width: 100% !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer .card-buttons-flex,
+  .products-grid .product-card-footer .card-buttons-flex {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer .btn,
+  .products-grid .product-card-footer .btn {
+    flex: 1 !important;
+    width: auto !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    padding: 10px 14px !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    justify-content: center !important;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  #catalogo-productos-grid,
+  .products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 24px !important;
+  }
+}
 
   /* Tarjetas de Beneficios */
   .benefits-grid {
