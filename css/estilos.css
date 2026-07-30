@@ -1684,6 +1684,15 @@ button:disabled,
     margin-bottom: 32px;
 }
 
+/* Ocultar botón flotante de WhatsApp únicamente en carrito.html */
+#page-carrito .wa-float-btn,
+#page-carrito #whatsapp-floating-btn {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+}
+
 /* Botón flotante de WhatsApp */
 .wa-float-btn {
     position: fixed;
