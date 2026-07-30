@@ -7,7 +7,7 @@
    1. Cabecera Compacta de Ayuda
    ========================================================================== */
 .ayuda-hero-section {
-    padding: 85px 0 20px 0;
+    padding: 24px 0 16px 0;
     background-color: var(--color-bg-dark, #141414);
     background-image: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.07) 0%, rgba(20, 20, 20, 0) 70%);
     border-bottom: 1px solid rgba(212, 175, 55, 0.15);
