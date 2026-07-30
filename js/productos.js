@@ -4,9 +4,11 @@
  */
 
 let cacheProductos = [];
+let promesaCargaEnProgreso = null;
 
 /**
- * Obtiene la lista completa de productos desde el archivo JSON
+ * Obtiene la lista completa de productos desde el servicio centralizado (Google Sheets con fallback a JSON)
+ * Guarantees single-flight request sharing and in-memory caching per page lifecycle.
  * @returns {Promise<Array>} - Promesa con la lista de productos
  */
 async function obtenerProductos() {
@@ -14,14 +16,24 @@ async function obtenerProductos() {
         return cacheProductos;
     }
 
-    try {
-        const resultado = await ProductosService.cargarProductos();
-        cacheProductos = resultado.productos || [];
-        return cacheProductos;
-    } catch (error) {
-        console.error('Error al cargar el catálogo de productos:', error);
-        return [];
+    if (promesaCargaEnProgreso) {
+        return promesaCargaEnProgreso;
     }
+
+    promesaCargaEnProgreso = (async () => {
+        try {
+            const resultado = await ProductosService.cargarProductos();
+            cacheProductos = resultado ? (resultado.productos || []) : [];
+            return cacheProductos;
+        } catch (error) {
+            console.error('Error al cargar el catálogo de productos:', error);
+            return [];
+        } finally {
+            promesaCargaEnProgreso = null;
+        }
+    })();
+
+    return promesaCargaEnProgreso;
 }
 
 /**

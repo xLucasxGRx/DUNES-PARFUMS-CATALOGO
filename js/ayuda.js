@@ -10,6 +10,14 @@ const TIPOS_REFERENCIAS = {
     perfume: 'Nuestros perfumes'
 };
 
+function obtenerRutaMiniatura(rutaOriginal) {
+    if (!rutaOriginal) return '';
+    return rutaOriginal
+        .replace('/entregas/', '/entregas/thumbs/')
+        .replace('/decants/', '/decants/thumbs/')
+        .replace('/envios/', '/envios/thumbs/');
+}
+
 let estadoReferencias = {
     todas: [],
     destacadas: [],
@@ -65,10 +73,12 @@ function renderizarCarruselReferencias() {
         return;
     }
 
-    track.innerHTML = estadoReferencias.destacadas.map((ref, index) => `
+    track.innerHTML = estadoReferencias.destacadas.map((ref, index) => {
+        const rutaMiniatura = obtenerRutaMiniatura(ref.imagen);
+        return `
         <div class="reference-card" data-id="${ref.id}" data-tipo="${ref.tipo || 'entrega'}">
             <div class="reference-img-wrapper">
-                <img src="${ref.imagen}" alt="${ref.alt || 'Producto o entrega de Dunes Parfums'}" class="reference-img" loading="${index < 3 ? 'eager' : 'lazy'}" decoding="async" onerror="this.closest('.reference-card').style.display='none';">
+                <img src="${rutaMiniatura}" data-full="${ref.imagen}" alt="${ref.alt || 'Producto o entrega de Dunes Parfums'}" class="reference-img" loading="${index < 3 ? 'eager' : 'lazy'}" decoding="async" onerror="this.src='${ref.imagen}';">
                 <div class="reference-zoom-overlay">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
                     <span>Ver ampliada</span>
@@ -79,7 +89,8 @@ function renderizarCarruselReferencias() {
                 <span class="reference-type">${TIPOS_REFERENCIAS[ref.tipo] || 'Galeria'}</span>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 
     // Eventos de clic para abrir Lightbox
     const cards = track.querySelectorAll('.reference-card');
@@ -231,10 +242,12 @@ function renderizarGridModal(filtro) {
         return;
     }
 
-    grid.innerHTML = filtradas.map(ref => `
+    grid.innerHTML = filtradas.map(ref => {
+        const rutaMiniatura = obtenerRutaMiniatura(ref.imagen);
+        return `
         <div class="reference-card" data-id="${ref.id}" data-tipo="${ref.tipo || 'entrega'}">
             <div class="reference-img-wrapper">
-                <img src="${ref.imagen}" alt="${ref.alt || 'Referencia'}" class="reference-img" loading="lazy" decoding="async" onerror="this.closest('.reference-card').style.display='none';">
+                <img src="${rutaMiniatura}" data-full="${ref.imagen}" alt="${ref.alt || 'Referencia'}" class="reference-img" loading="lazy" decoding="async" onerror="this.src='${ref.imagen}';">
                 <div class="reference-zoom-overlay">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
                     <span>Ver ampliada</span>
@@ -245,7 +258,8 @@ function renderizarGridModal(filtro) {
                 <span class="reference-type">${TIPOS_REFERENCIAS[ref.tipo] || 'Galeria'}</span>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 
     const cards = grid.querySelectorAll('.reference-card');
     cards.forEach((card, index) => {

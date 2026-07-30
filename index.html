@@ -175,7 +175,10 @@
                 <div class="hero-image-wrapper reveal">
                     <div class="hero-image-glow" aria-hidden="true"></div>
                     <div class="hero-decor-circle hero-decor-c1" aria-hidden="true"></div>
-                    <img src="img/banners/hero_perfume.png" alt="Perfume exclusivo Dunes Parfums en base de mármol negro con detalles dorados" class="hero-perfume-img">
+                    <picture>
+                        <source srcset="img/banners/hero_perfume.webp" type="image/webp">
+                        <img src="img/banners/hero_perfume.png" alt="Perfume exclusivo Dunes Parfums en base de mármol negro con detalles dorados" class="hero-perfume-img" width="480" height="480" fetchpriority="high" decoding="async">
+                    </picture>
                 </div>
             </div>
         </section>
@@ -192,7 +195,10 @@
                     <!-- Tarjeta: Perfumes Árabes -->
                     <article class="category-card reveal" tabindex="0" onclick="window.location.href='catalogo.html?categoria=arabe'" onkeydown="if(event.key === 'Enter' || event.key === ' ') { window.location.href='catalogo.html?categoria=arabe'; event.preventDefault(); }">
                         <div class="category-img-container">
-                            <img src="img/categorias/arabes.png" alt="Categoría Perfumes Árabes - Fragancias intensas y exóticas" class="category-img" loading="lazy">
+                            <picture>
+                                <source srcset="img/categorias/arabes.webp" type="image/webp">
+                                <img src="img/categorias/arabes.png" alt="Categoría Perfumes Árabes - Fragancias intensas y exóticas" class="category-img" width="400" height="300" loading="lazy" decoding="async">
+                            </picture>
                             <div class="category-overlay">
                                 <div class="category-info">
                                     <h3 class="category-name">Perfumes Árabes</h3>
@@ -209,7 +215,10 @@
                     <!-- Tarjeta: Perfumes de Diseñador -->
                     <article class="category-card reveal" tabindex="0" onclick="window.location.href='catalogo.html?categoria=disenador'" onkeydown="if(event.key === 'Enter' || event.key === ' ') { window.location.href='catalogo.html?categoria=disenador'; event.preventDefault(); }">
                         <div class="category-img-container">
-                            <img src="img/categorias/disenador.png" alt="Categoría Perfumes de Diseñador - Grandes marcas de moda" class="category-img" loading="lazy">
+                            <picture>
+                                <source srcset="img/categorias/disenador.webp" type="image/webp">
+                                <img src="img/categorias/disenador.png" alt="Categoría Perfumes de Diseñador - Grandes marcas de moda" class="category-img" width="400" height="300" loading="lazy" decoding="async">
+                            </picture>
                             <div class="category-overlay">
                                 <div class="category-info">
                                     <h3 class="category-name">Diseñador</h3>
@@ -226,7 +235,10 @@
                     <!-- Tarjeta: Perfumes Nicho -->
                     <article class="category-card reveal" tabindex="0" onclick="window.location.href='catalogo.html?categoria=nicho'" onkeydown="if(event.key === 'Enter' || event.key === ' ') { window.location.href='catalogo.html?categoria=nicho'; event.preventDefault(); }">
                         <div class="category-img-container">
-                            <img src="img/categorias/nicho.png" alt="Categoría Perfumes Nicho - Exclusividad artística" class="category-img" loading="lazy">
+                            <picture>
+                                <source srcset="img/categorias/nicho.webp" type="image/webp">
+                                <img src="img/categorias/nicho.png" alt="Categoría Perfumes Nicho - Exclusividad artística" class="category-img" width="400" height="300" loading="lazy" decoding="async">
+                            </picture>
                             <div class="category-overlay">
                                 <div class="category-info">
                                     <h3 class="category-name">Perfumes Nicho</h3>
@@ -243,7 +255,10 @@
                     <!-- Tarjeta: Decants -->
                     <article class="category-card reveal" tabindex="0" onclick="window.location.href='catalogo.html?categoria=decants'" onkeydown="if(event.key === 'Enter' || event.key === ' ') { window.location.href='catalogo.html?categoria=decants'; event.preventDefault(); }">
                         <div class="category-img-container">
-                            <img src="img/categorias/decants.png" alt="Categoría Decants - Muestras fraccionadas exclusivas" class="category-img" loading="lazy">
+                            <picture>
+                                <source srcset="img/categorias/decants.webp" type="image/webp">
+                                <img src="img/categorias/decants.png" alt="Categoría Decants - Muestras fraccionadas exclusivas" class="category-img" width="400" height="300" loading="lazy" decoding="async">
+                            </picture>
                             <div class="category-overlay">
                                 <div class="category-info">
                                     <h3 class="category-name">Decants / Muestras</h3>
@@ -575,6 +590,5 @@
     <script src="js/productos.js?v=20260721-correcion-desktop-logo-1"></script>
     <script src="js/carrito.js?v=20260721-correcion-desktop-logo-1"></script>
     <script src="js/interfaz.js?v=20260721-correcion-desktop-logo-1"></script>
-    <script src="js/catalogo.js?v=20260721-correcion-desktop-logo-1"></script>
 </body>
 </html>
