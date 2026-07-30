@@ -8,15 +8,15 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 155.00,
+    "precio": 155.0,
     "stock": 3,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaKhamrah.png",
+    "imagen": "img/productos/LattafaKhamrah.webp",
     "descripcion": "Fragancia de lujo con notas de dátiles, praliné, canela y vainilla.",
     "destacado": true,
     "oferta": true,
-    "precioAnterior": 180.00
+    "precioAnterior": 180.0
   },
   {
     "id": "p2",
@@ -27,11 +27,11 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 145.00,
+    "precio": 145.0,
     "stock": 1,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaHonorandGlory.png",
+    "imagen": "img/productos/LattafaHonorandGlory.webp",
     "descripcion": "Combinación tropical y cremosa con acordes de piña brulée y especias.",
     "destacado": false,
     "oferta": false
@@ -45,11 +45,11 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 155.00,
+    "precio": 155.0,
     "stock": 2,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaKhamrahQahwa.png",
+    "imagen": "img/productos/LattafaKhamrahQahwa.webp",
     "descripcion": "Fusión del clásico Khamrah con un fondo estimulante de café tostado.",
     "destacado": true,
     "oferta": false
@@ -63,11 +63,11 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 160.00,
+    "precio": 160.0,
     "stock": 2,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/ArmafMandarinSky.png",
+    "imagen": "img/productos/ArmafMandarinSky.webp",
     "descripcion": "Aroma cítrico frutal con notas de mandarina, haba tonka y caramelo.",
     "destacado": true,
     "oferta": false
@@ -81,11 +81,11 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 160.00,
+    "precio": 160.0,
     "stock": 1,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/Afnan9amDive.png",
+    "imagen": "img/productos/Afnan9amDive.webp",
     "descripcion": "Fragancia fresca y enérgica de día con toques cítricos y florales.",
     "destacado": false,
     "oferta": false
@@ -99,11 +99,11 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 155.00,
+    "precio": 155.0,
     "stock": 1,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/Afnan9pm.png",
+    "imagen": "img/productos/Afnan9pm.webp",
     "descripcion": "Perfume oriental-frutal con acordes dulces de vainilla, manzana y canela.",
     "destacado": true,
     "oferta": false
@@ -117,11 +117,11 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 250.00,
+    "precio": 250.0,
     "stock": 1,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/BhararaKing.png",
+    "imagen": "img/productos/BhararaKing.webp",
     "descripcion": "Aroma frutal intenso con una extraordinaria fijación y proyección.",
     "destacado": true,
     "oferta": false
@@ -135,11 +135,11 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 175.00,
+    "precio": 175.0,
     "stock": 1,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/RasasiHawasIce.png",
+    "imagen": "img/productos/RasasiHawasIce.webp",
     "descripcion": "Versión helada, cítrica y aromática del mítico Hawas.",
     "destacado": true,
     "oferta": false
@@ -153,11 +153,11 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 165.00,
+    "precio": 165.0,
     "stock": 1,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/DumontNitroRed.png",
+    "imagen": "img/productos/DumontNitroRed.webp",
     "descripcion": "Combinación fresca de notas acuáticas, sandía y maderas preciosas.",
     "destacado": false,
     "oferta": false
@@ -171,11 +171,11 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 175.00,
+    "precio": 175.0,
     "stock": 1,
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/ArmafUrbanmanelixir.png",
+    "imagen": "img/productos/ArmafUrbanmanelixir.webp",
     "descripcion": "Aroma limpio, moderno y versátil con notas de ámbar y pachuli.",
     "destacado": false,
     "oferta": false
@@ -191,7 +191,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/ArmafMandarinSkyDECANTS.png",
+    "imagen": "img/productos/ArmafMandarinSkyDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Decant extraído del perfume original.",
     "mililitrosDisponibles": 120,
     "sobranteMl": 0,
@@ -201,19 +201,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -229,7 +229,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/BhararaKingDECANTS.png",
+    "imagen": "img/productos/BhararaKingDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Decant del potente Bharara King.",
     "mililitrosDisponibles": 70,
     "sobranteMl": 0,
@@ -239,19 +239,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 45.00,
+        "precio": 45.0,
         "disponible": true
       }
     ]
@@ -267,7 +267,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/Afnan9pmDECANTS.png",
+    "imagen": "img/productos/Afnan9pmDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Ideal para salidas nocturnas.",
     "mililitrosDisponibles": 60,
     "sobranteMl": 0,
@@ -277,19 +277,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -305,7 +305,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/Afnan9amDive DECANTS.png",
+    "imagen": "img/productos/Afnan9amDive DECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Aroma fresco de uso diario.",
     "mililitrosDisponibles": 55,
     "sobranteMl": 5,
@@ -315,19 +315,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -343,7 +343,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaHayaatiDECANTS.png",
+    "imagen": "img/productos/LattafaHayaatiDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Perfume fresco-dulce versátil.",
     "mililitrosDisponibles": 50,
     "sobranteMl": 0,
@@ -353,19 +353,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -381,7 +381,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaAtlasDECANTS.png",
+    "imagen": "img/productos/LattafaAtlasDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Fragancia marina ultra duradera.",
     "mililitrosDisponibles": 40,
     "sobranteMl": 0,
@@ -391,19 +391,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 45.00,
+        "precio": 45.0,
         "disponible": true
       }
     ]
@@ -419,7 +419,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/SceptreMalachiteDECANTS.png",
+    "imagen": "img/productos/SceptreMalachiteDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Acordes de ámbar gris y hierbas finas.",
     "mililitrosDisponibles": 40,
     "sobranteMl": 0,
@@ -429,19 +429,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -457,7 +457,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaYaraCandyDECANTS.png",
+    "imagen": "img/productos/LattafaYaraCandyDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Novedad frutal y dulce.",
     "mililitrosDisponibles": 45,
     "sobranteMl": 5,
@@ -467,19 +467,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -495,7 +495,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/JeanLoweInmortalDECANTS.png",
+    "imagen": "img/productos/JeanLoweInmortalDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Acordes cítricos premium.",
     "mililitrosDisponibles": 35,
     "sobranteMl": 5,
@@ -505,19 +505,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -533,7 +533,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaVintageRadioDECANTS.png",
+    "imagen": "img/productos/LattafaVintageRadioDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Aroma amaderado y afrutado moderno.",
     "mililitrosDisponibles": 34,
     "sobranteMl": 4,
@@ -543,19 +543,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -571,7 +571,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaKhamrahDECANTS.png",
+    "imagen": "img/productos/LattafaKhamrahDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Dulzor gourmand e invernal.",
     "mililitrosDisponibles": 20,
     "sobranteMl": 0,
@@ -581,19 +581,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -609,7 +609,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/ArmafUrbanmanelixirDECANTS.png",
+    "imagen": "img/productos/ArmafUrbanmanelixirDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Aroma limpio e intenso.",
     "mililitrosDisponibles": 20,
     "sobranteMl": 0,
@@ -619,19 +619,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -647,7 +647,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaNadjiaIntenseDECANTS.png",
+    "imagen": "img/productos/LattafaNadjiaIntenseDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Fresco e ideal para el gimnasio.",
     "mililitrosDisponibles": 10,
     "sobranteMl": 0,
@@ -657,19 +657,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -685,7 +685,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaYaraPinkDECANTS.png",
+    "imagen": "img/productos/LattafaYaraPinkDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Dulce, atalcado y cremoso.",
     "mililitrosDisponibles": 10,
     "sobranteMl": 0,
@@ -695,19 +695,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -723,7 +723,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaJasoorDECANTS.png",
+    "imagen": "img/productos/LattafaJasoorDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. Cuero frutal y cardamomo.",
     "mililitrosDisponibles": 7,
     "sobranteMl": 2,
@@ -733,19 +733,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]
@@ -761,7 +761,7 @@
     "formato": "Decants de 3, 5 y 10 ml",
     "disponible": true,
     "visible": true,
-    "imagen": "img/productos/LattafaKhamrahQahwaDECANTS.png",
+    "imagen": "img/productos/LattafaKhamrahQahwaDECANTS.webp",
     "descripcion": "Disponible en presentaciones de 3 ml, 5 ml y 10 ml. El toque especial de café tostado.",
     "mililitrosDisponibles": 3,
     "sobranteMl": 0,
@@ -771,19 +771,19 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.00,
+        "precio": 15.0,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.00,
+        "precio": 20.0,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.00,
+        "precio": 30.0,
         "disponible": true
       }
     ]

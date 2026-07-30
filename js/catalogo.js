@@ -894,16 +894,12 @@ function filtrarYRenderizar(productos, estado, grid) {
 
         const divContainer = document.createElement('div');
         divContainer.className = 'product-image-container';
-        const webpSrc = prod.imagen ? prod.imagen.replace(/\.png$/i, '.webp') : '';
         divContainer.innerHTML = `
             ${tagHtml}
             ${favBtnHtml}
             <span class="product-category-badge">${categoryBadgeText}</span>
             <a href="producto.html?id=${prod.id}" class="product-img-link" aria-label="Ver detalles de ${prod.nombre}">
-                <picture>
-                    <source srcset="${webpSrc}" type="image/webp">
-                    <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="${loadingAttr}" decoding="async" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png'; console.warn('[Catálogo] Imagen no disponible para producto:', '${prod.id}');">
-                </picture>
+                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="${loadingAttr}" decoding="async" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png'; console.warn('[Catálogo] Imagen no disponible para producto:', '${prod.id}');">
             </a>
             <div class="product-actions-overlay">
                 <a href="producto.html?id=${prod.id}" class="btn btn-light-glass btn-view-details">Ver Detalles</a>
