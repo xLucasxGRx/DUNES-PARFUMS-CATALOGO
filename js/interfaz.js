@@ -43,12 +43,13 @@ function inicializarMenuMovil() {
     const navMenu = document.getElementById('nav-menu');
     if (!burgerBtn || !navMenu) return;
 
-    // Asegurar la existencia del overlay en el DOM
+    // Asegurar la existencia del overlay en el DOM con atributo hidden por defecto
     let overlay = document.getElementById('nav-menu-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'nav-menu-overlay';
         overlay.className = 'nav-menu-overlay';
+        overlay.hidden = true;
         overlay.setAttribute('aria-hidden', 'true');
         document.body.appendChild(overlay);
     }
@@ -57,25 +58,118 @@ function inicializarMenuMovil() {
     const accordionBtn = document.getElementById('btn-toggle-catalogo-submenu');
     const submenu = document.getElementById('mobile-catalogo-submenu');
 
+    let isClosing = false;
+    let pendingTimeout = null;
+
+    // Sincronizar atributos de visibilidad y accesibilidad según breakpoint de pantalla
+    const sincronizarEstadoBreakpoint = () => {
+        if (window.innerWidth >= 992) {
+            navMenu.hidden = false;
+            navMenu.removeAttribute('aria-hidden');
+            navMenu.removeAttribute('inert');
+            navMenu.classList.remove('active');
+            if (overlay) {
+                overlay.hidden = true;
+                overlay.setAttribute('aria-hidden', 'true');
+                overlay.classList.remove('active');
+            }
+            document.body.classList.remove('no-scroll', 'menu-open');
+            burgerBtn.classList.remove('active');
+            burgerBtn.setAttribute('aria-expanded', 'false');
+        } else {
+            if (!navMenu.classList.contains('active')) {
+                navMenu.hidden = true;
+                navMenu.setAttribute('aria-hidden', 'true');
+                navMenu.setAttribute('inert', '');
+                if (overlay) {
+                    overlay.hidden = true;
+                    overlay.setAttribute('aria-hidden', 'true');
+                    overlay.classList.remove('active');
+                }
+            }
+        }
+    };
+
+    // Aplicar estado inicial en la carga
+    sincronizarEstadoBreakpoint();
+
     const abrirMenu = () => {
+        if (pendingTimeout) {
+            clearTimeout(pendingTimeout);
+            pendingTimeout = null;
+        }
+        isClosing = false;
+
+        // Revelar en el DOM antes de iniciar la animación de entrada
+        navMenu.hidden = false;
+        navMenu.removeAttribute('aria-hidden');
+        navMenu.removeAttribute('inert');
+        if (overlay) {
+            overlay.hidden = false;
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+
+        // Forzar reflow para asegurar que el navegador procese la eliminación de hidden antes de añadir .active
+        void navMenu.offsetWidth;
+
         navMenu.classList.add('active');
-        overlay.classList.add('active');
+        if (overlay) overlay.classList.add('active');
         burgerBtn.classList.add('active');
         burgerBtn.setAttribute('aria-expanded', 'true');
         document.body.classList.add('no-scroll');
         document.body.classList.add('menu-open');
+
+        if (closeBtn && typeof closeBtn.focus === 'function') {
+            try { closeBtn.focus(); } catch (e) {}
+        }
     };
 
     const cerrarMenu = () => {
+        if (isClosing) return;
+        isClosing = true;
+
         navMenu.classList.remove('active');
-        overlay.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
         burgerBtn.classList.remove('active');
         burgerBtn.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('no-scroll');
         document.body.classList.remove('menu-open');
-        if (typeof burgerBtn.focus === 'function') {
-            try { burgerBtn.focus(); } catch (e) {}
-        }
+
+        let transitionEnded = false;
+        const finalizationClose = () => {
+            if (transitionEnded) return;
+            transitionEnded = true;
+
+            if (window.innerWidth <= 991) {
+                navMenu.hidden = true;
+                navMenu.setAttribute('aria-hidden', 'true');
+                navMenu.setAttribute('inert', '');
+                if (overlay) {
+                    overlay.hidden = true;
+                    overlay.setAttribute('aria-hidden', 'true');
+                }
+            }
+
+            if (typeof burgerBtn.focus === 'function') {
+                try { burgerBtn.focus(); } catch (e) {}
+            }
+
+            isClosing = false;
+        };
+
+        const onTransitionEnd = (e) => {
+            if (e && e.target !== navMenu) return;
+            navMenu.removeEventListener('transitionend', onTransitionEnd);
+            finalizationClose();
+        };
+
+        navMenu.addEventListener('transitionend', onTransitionEnd);
+
+        // Fallback controlado si transitionend no ocurre (ej. prefers-reduced-motion)
+        pendingTimeout = setTimeout(() => {
+            navMenu.removeEventListener('transitionend', onTransitionEnd);
+            finalizationClose();
+        }, 350);
     };
 
     // Evento Abrir / Alternar con el botón hamburguesa
@@ -142,11 +236,16 @@ function inicializarMenuMovil() {
         }
     });
 
-    // Autocierre y limpieza al redimensionar la ventana a pantallas de escritorio (> 991px)
+    // Autocierre y limpieza al redimensionar la ventana o cambiar orientación
     window.addEventListener('resize', () => {
         if (window.innerWidth > 991 && navMenu.classList.contains('active')) {
             cerrarMenu();
         }
+        sincronizarEstadoBreakpoint();
+    });
+
+    window.addEventListener('orientationchange', () => {
+        sincronizarEstadoBreakpoint();
     });
 
     // Sincronizar submenú si la URL actual corresponde a una categoría

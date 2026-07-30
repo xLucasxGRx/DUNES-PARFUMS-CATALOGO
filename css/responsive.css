@@ -53,7 +53,8 @@
   }
 
   /* Restablecer el contenedor de navegación horizontal en escritorio */
-  .nav-menu {
+  .nav-menu,
+  .nav-menu[hidden] {
     position: static !important;
     width: auto !important;
     height: auto !important;
@@ -70,6 +71,7 @@
     z-index: auto !important;
     padding: 0 !important;
     overflow: visible !important;
+    pointer-events: auto !important;
   }
 
   .nav-list {
@@ -282,12 +284,24 @@
     z-index: 1000 !important;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: opacity 250ms ease, visibility 250ms ease;
   }
 
   .nav-menu-overlay.active {
     opacity: 1 !important;
     visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  /* Ocultamiento absoluto cuando se aplica el atributo hidden en pantallas móviles */
+  .nav-menu[hidden],
+  .nav-menu-overlay[hidden],
+  #nav-menu[hidden],
+  #nav-menu-overlay[hidden] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 
   /* ═══ FIX: Ocultar TODO .header-actions (Favoritos, Carrito, Hamburguesa)
@@ -320,6 +334,7 @@
     width: min(86vw, 360px) !important;
     height: 100vh !important;
     height: 100dvh !important;
+    max-width: 100% !important;
     background: #171717 !important;
     background-image: none !important;
     border-left: 1px solid rgba(212, 175, 55, 0.25) !important;
@@ -334,8 +349,9 @@
     flex-direction: column !important;
     padding: 0 !important;
     transform: translateX(100%) !important;
-    visibility: visible !important;
-    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), visibility 280ms cubic-bezier(0.16, 1, 0.3, 1) !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
   }
@@ -344,6 +360,7 @@
     transform: translateX(0) !important;
     opacity: 1 !important;
     visibility: visible !important;
+    pointer-events: auto !important;
   }
 
   .mobile-drawer-header {
