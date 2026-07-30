@@ -21,17 +21,15 @@ const CuponesUI = (function () {
 
         switch (estado) {
             case 'codigo_vacio':
+                return 'INGRESA UN CUPÓN';
             case 'cupon_no_encontrado':
+            case 'cupon_inactivo':
+            case 'cupon_no_iniciado':
+            case 'cupon_vencido':
             case 'tipo_invalido':
             case 'valor_invalido':
             case 'fecha_invalida':
                 return 'CUPÓN NO VÁLIDO';
-            case 'cupon_inactivo':
-                return 'Este cupón no se encuentra disponible.';
-            case 'cupon_no_iniciado':
-                return 'Este cupón todavía no está disponible.';
-            case 'cupon_vencido':
-                return 'Este cupón ya venció.';
             case 'carrito_vacio':
                 return 'Agrega productos antes de aplicar un cupón.';
             case 'sin_productos_elegibles':
@@ -42,7 +40,7 @@ const CuponesUI = (function () {
                 }
                 return 'El pedido no alcanza la compra mínima para este cupón.';
             case 'error_servicio':
-                return 'No pudimos validar el cupón. Inténtalo nuevamente.';
+                return 'NO PUDIMOS VERIFICAR EL CUPÓN. INTÉNTALO NUEVAMENTE.';
             case 'cupon_valido':
                 return 'Cupón aplicado correctamente.';
             default:
@@ -148,43 +146,64 @@ const CuponesUI = (function () {
 
         const codigo = inputCode.value.trim();
         if (!codigo) {
-            sincronizarInterfazCupon({
-                aplicado: false,
-                resultado: { valido: false, estado: 'codigo_vacio', mensaje: 'CUPÓN NO VÁLIDO' }
-            });
+            if (feedbackBox) {
+                feedbackBox.style.display = 'block';
+                feedbackBox.className = 'coupon-feedback feedback-error';
+                feedbackBox.textContent = 'INGRESA UN CUPÓN';
+            }
             return;
         }
 
         esAplicando = true;
         inputCode.disabled = true;
         applyBtn.disabled = true;
-        const textoOriginalBtn = applyBtn.textContent;
-        applyBtn.textContent = 'Validando...';
         applyBtn.setAttribute('aria-busy', 'true');
 
+        // Limpiar mensaje previo antes de validar
         if (feedbackBox) {
             feedbackBox.style.display = 'none';
+            feedbackBox.className = 'coupon-feedback';
+            feedbackBox.textContent = '';
         }
+
+        // Mostrar estado de procesamiento inmediato
+        applyBtn.innerHTML = '<span class="btn-coupon-spinner" aria-hidden="true"></span><span>VERIFICANDO…</span>';
+
+        const tInicio = Date.now();
 
         try {
             if (window.cuponesCheckout && typeof window.cuponesCheckout.aplicarCupon === 'function') {
                 const resultado = await window.cuponesCheckout.aplicarCupon(codigo);
+
+                // Garantizar tiempo mínimo de percepción visual (400ms)
+                const transcurrido = Date.now() - tInicio;
+                if (transcurrido < 400) {
+                    await new Promise(resolve => setTimeout(resolve, 400 - transcurrido));
+                }
+
                 const estadoActual = window.cuponesCheckout.obtenerEstado();
                 sincronizarInterfazCupon(estadoActual);
             }
         } catch (error) {
             console.error('[CuponesUI] Error al aplicar el cupón:', error);
+
+            // Garantizar tiempo mínimo de percepción visual (400ms)
+            const transcurrido = Date.now() - tInicio;
+            if (transcurrido < 400) {
+                await new Promise(resolve => setTimeout(resolve, 400 - transcurrido));
+            }
+
             if (feedbackBox) {
                 feedbackBox.style.display = 'block';
                 feedbackBox.className = 'coupon-feedback feedback-error';
-                feedbackBox.textContent = 'No pudimos validar el cupón. Inténtalo nuevamente.';
+                feedbackBox.textContent = 'NO PUDIMOS VERIFICAR EL CUPÓN. INTÉNTALO NUEVAMENTE.';
             }
         } finally {
             esAplicando = false;
             inputCode.disabled = false;
             applyBtn.disabled = false;
-            applyBtn.textContent = textoOriginalBtn;
             applyBtn.removeAttribute('aria-busy');
+            applyBtn.innerHTML = 'Aplicar';
         }
     }
 

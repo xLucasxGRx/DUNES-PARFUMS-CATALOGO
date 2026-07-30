@@ -2759,6 +2759,7 @@ button:disabled,
     flex: 0 0 auto;
     height: 42px;
     padding: 0 16px;
+    min-width: 124px;
     font-family: var(--font-primary, 'Montserrat', sans-serif);
     font-size: 0.85rem;
     font-weight: 600;
@@ -2772,6 +2773,7 @@ button:disabled,
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 }
 
 .btn-coupon-apply:hover:not(:disabled) {
@@ -2779,8 +2781,36 @@ button:disabled,
 }
 
 .btn-coupon-apply:disabled {
-    opacity: 0.6;
+    opacity: 0.75;
     cursor: not-allowed;
+}
+
+/* Spinner de verificación de cupón */
+.btn-coupon-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: btn-coupon-spin 0.6s linear infinite;
+    vertical-align: middle;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+@keyframes btn-coupon-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-coupon-spinner {
+        animation: none !important;
+        opacity: 0.9;
+    }
 }
 
 .coupon-feedback {
