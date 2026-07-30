@@ -76,66 +76,322 @@ const CATEGORIA_INFO = {
     }
 };
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const grid = document.getElementById('catalogo-productos-grid');
-    if (!grid) return; // No estamos en catalogo.html
+const CATALOG_STORAGE_KEY = 'dunes_catalog_state';
+const CATALOG_STATE_TTL = 2 * 60 * 60 * 1000; // 2 horas
 
-    // Cargar productos
-    const productos = await window.productosModulo.obtenerProductos();
+/**
+ * Guarda el estado actual del catálogo en sessionStorage
+ */
+function guardarEstadoCatalogo(filtroEstado) {
+    if (!filtroEstado) return;
+    try {
+        const payload = {
+            categoria: filtroEstado.categoria || 'todos',
+            genero: filtroEstado.genero || 'todos',
+            busqueda: filtroEstado.busqueda || '',
+            orden: filtroEstado.orden || 'relevancia',
+            soloDisponibles: !!filtroEstado.soloDisponibles,
+            scrollY: Math.round(window.scrollY || window.pageYOffset || 0),
+            timestamp: Date.now()
+        };
+        sessionStorage.setItem(CATALOG_STORAGE_KEY, JSON.stringify(payload));
+    } catch (e) {
+        // Tolerancia si sessionStorage está bloqueado o deshabilitado
+    }
+}
 
+/**
+ * Recupera el estado guardado del catálogo desde sessionStorage si no ha expirado
+ */
+function obtenerEstadoCatalogoGuardado() {
+    try {
+        const raw = sessionStorage.getItem(CATALOG_STORAGE_KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        if (!data || typeof data !== 'object') {
+            limpiarEstadoCatalogoGuardado();
+            return null;
+        }
+        if (Date.now() - (data.timestamp || 0) > CATALOG_STATE_TTL) {
+            limpiarEstadoCatalogoGuardado();
+            return null;
+        }
+        return data;
+    } catch (e) {
+        limpiarEstadoCatalogoGuardado();
+        return null;
+    }
+}
+
+/**
+ * Elimina la clave de estado guardada del catálogo en sessionStorage
+ */
+function limpiarEstadoCatalogoGuardado() {
+    try {
+        sessionStorage.removeItem(CATALOG_STORAGE_KEY);
+    } catch (e) {}
+}
+
+/**
+ * Resuelve el estado inicial combinando la prioridad de la URL y el estado guardado
+ */
+function resolverEstadoInicial() {
+    let hasCatParam = false;
+    let hasGenParam = false;
+    let catParam = null;
+    let genParam = null;
+
+    try {
+        const params = new URLSearchParams(window.location.search);
+        hasCatParam = params.has('categoria');
+        hasGenParam = params.has('genero');
+        catParam = params.get('categoria');
+        genParam = params.get('genero');
+    } catch (e) {}
+
+    const catValidas = ['arabe', 'disenador', 'nicho', 'decants'];
+    const genValidos = ['hombre', 'mujer', 'unisex'];
+
+    const savedState = obtenerEstadoCatalogoGuardado();
+
+    let finalCat = 'todos';
+    if (hasCatParam) {
+        finalCat = catValidas.includes(catParam) ? catParam : 'todos';
+    } else if (savedState && catValidas.includes(savedState.categoria)) {
+        finalCat = savedState.categoria;
+    }
+
+    let finalGen = 'todos';
+    if (hasGenParam) {
+        finalGen = genValidos.includes(genParam) ? genParam : 'todos';
+    } else if (savedState && genValidos.includes(savedState.genero)) {
+        finalGen = savedState.genero;
+    }
+
+    let finalSearch = '';
+    let finalOrden = 'relevancia';
+    let finalSoloDisp = false;
+    let savedScrollY = 0;
+
+    if (savedState) {
+        if (typeof savedState.busqueda === 'string') finalSearch = savedState.busqueda;
+        if (['relevancia', 'price-asc', 'price-desc', 'default'].includes(savedState.orden)) finalOrden = savedState.orden;
+        if (typeof savedState.soloDisponibles === 'boolean') finalSoloDisp = savedState.soloDisponibles;
+        if (typeof savedState.scrollY === 'number' && savedState.scrollY > 0) savedScrollY = savedState.scrollY;
+    }
+
+    return {
+        filtroEstado: {
+            categoria: finalCat,
+            genero: finalGen,
+            busqueda: finalSearch,
+            orden: finalOrden,
+            soloDisponibles: finalSoloDisp
+        },
+        savedScrollY: savedScrollY
+    };
+}
+
+/**
+ * Obtiene la cantidad de skeletons según el breakpoint real
+ */
+function obtenerCantidadSkeletons() {
+    const width = (window.innerWidth || (document.documentElement ? document.documentElement.clientWidth : 0)) || 1024;
+    if (width <= 480) return 3;
+    if (width <= 768) return 6;
+    return 8;
+}
+
+/**
+ * Muestra las tarjetas skeleton en el grid del catálogo durante la carga
+ */
+function mostrarSkeletonsCatalogo(grid) {
+    if (!grid) return;
+    const cantidad = obtenerCantidadSkeletons();
+    grid.style.display = 'grid';
+    grid.classList.add('is-loading');
+
+    const width = (window.innerWidth || (document.documentElement ? document.documentElement.clientWidth : 0)) || 1024;
+    const isMobile = width <= 768;
+
+    let html = '';
+    for (let i = 0; i < cantidad; i++) {
+        if (isMobile) {
+            html += `
+                <div class="product-card-skeleton" aria-hidden="true">
+                    <div class="skeleton-info" style="grid-area: info; display: flex; flex-direction: column; gap: 8px;">
+                        <div class="skeleton-pulse" style="width: 45%; height: 12px;"></div>
+                        <div class="skeleton-pulse" style="width: 85%; height: 18px;"></div>
+                        <div class="skeleton-pulse" style="width: 40%; height: 14px;"></div>
+                        <div class="skeleton-pulse" style="width: 60%; height: 20px; margin-top: 4px;"></div>
+                    </div>
+                    <div class="skeleton-image-wrap" style="grid-area: image; width: 105px; height: 110px;">
+                        <div class="skeleton-pulse" style="width: 100%; height: 100%; border-radius: 8px;"></div>
+                    </div>
+                    <div class="skeleton-actions" style="grid-area: actions; display: flex; gap: 8px; margin-top: 4px;">
+                        <div class="skeleton-pulse" style="flex: 1; height: 36px; border-radius: 6px;"></div>
+                        <div class="skeleton-pulse" style="flex: 1; height: 36px; border-radius: 6px;"></div>
+                    </div>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="product-card-skeleton" aria-hidden="true">
+                    <div class="skeleton-image-wrap" style="width: 100%; height: 270px; padding: 18px; box-sizing: border-box;">
+                        <div class="skeleton-pulse" style="width: 100%; height: 100%; border-radius: 12px;"></div>
+                    </div>
+                    <div class="skeleton-info" style="padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1;">
+                        <div class="skeleton-pulse" style="width: 40%; height: 14px;"></div>
+                        <div class="skeleton-pulse" style="width: 85%; height: 22px;"></div>
+                        <div class="skeleton-pulse" style="width: 50%; height: 16px;"></div>
+                        <div class="skeleton-pulse" style="width: 65%; height: 24px; margin-top: auto;"></div>
+                    </div>
+                    <div class="skeleton-actions" style="padding: 0 18px 18px 18px; display: flex; gap: 10px;">
+                        <div class="skeleton-pulse" style="flex: 1; height: 42px; border-radius: 8px;"></div>
+                        <div class="skeleton-pulse" style="flex: 1; height: 42px; border-radius: 8px;"></div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    grid.innerHTML = html;
+
+    const counterEl = document.getElementById('results-count');
+    if (counterEl) {
+        counterEl.textContent = 'Cargando productos...';
+    }
+
+    const estadoEl = document.getElementById('estado-catalogo');
+    if (estadoEl) {
+        estadoEl.style.display = 'none';
+    }
+}
+
+/**
+ * Muestra el estado de error real si fallan todas las fuentes de datos
+ */
+function mostrarErrorCargaCatalogo(grid, callbackReintentar) {
+    if (!grid) return;
+    grid.classList.remove('is-loading');
+    grid.style.display = 'block';
+    grid.innerHTML = `
+        <div class="catalog-error-state" style="text-align: center; padding: 36px 20px; background-color: var(--surface-card, #FFFEFC); border: 1px solid var(--catalog-gold-border, #E7D3A5); border-radius: 14px; max-width: 480px; margin: 30px auto; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);">
+            <div style="margin-bottom: 12px; color: #A83232; display: flex; justify-content: center;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; color: #171717; margin-bottom: 8px;">
+                No fue posible cargar el catálogo en este momento.
+            </h3>
+            <p style="font-size: 0.88rem; color: #6F6F6F; margin-bottom: 18px;">
+                Revisa tu conexión a internet o intenta nuevamente.
+            </p>
+            <button id="btn-reintentar-catalogo" class="btn btn-primary" style="padding: 10px 24px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin: 0 auto;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> Reintentar
+            </button>
+        </div>
+    `;
+
+    const counterEl = document.getElementById('results-count');
+    if (counterEl) counterEl.textContent = '';
+
+    const btn = document.getElementById('btn-reintentar-catalogo');
+    if (btn && typeof callbackReintentar === 'function') {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            btn.disabled = true;
+            btn.textContent = 'Reintentando...';
+            callbackReintentar();
+        });
+    }
+}
+
+/**
+ * Función principal para iniciar la carga, mostrar skeletons y resolver la vista final del catálogo
+ */
+async function iniciarCargaCatalogo(grid) {
+    if (!grid) return;
+
+    // 1. Mostrar skeletons de inmediato (no 0 productos)
+    mostrarSkeletonsCatalogo(grid);
+
+    // 2. Resolver estado inicial con prioridad de URL sobre sessionStorage
+    const { filtroEstado, savedScrollY } = resolverEstadoInicial();
+
+    // 3. Cargar productos desde productosModulo
+    let productos = null;
+    try {
+        productos = await window.productosModulo.obtenerProductos();
+    } catch (e) {
+        console.error("[Catálogo] Error al consultar ProductosService:", e);
+    }
+
+    // 4. Si fallaron todas las fuentes
     if (!productos || productos.length === 0) {
-        grid.innerHTML = '<p class="no-products-msg">No fue posible cargar el catálogo en este momento.</p>';
+        mostrarErrorCargaCatalogo(grid, () => {
+            iniciarCargaCatalogo(grid);
+        });
         return;
     }
 
-    // Estado de filtros
-    let filtroEstado = {
-        busqueda: '',
-        categoria: 'todos',
-        genero: 'todos',
-        orden: 'default',
-        soloDisponibles: false
-    };
+    grid.classList.remove('is-loading');
 
-    // Comprobar parámetros de la URL (?categoria=arabe&genero=hombre)
-    const initialCat = obtenerCategoriaDesdeURL();
-    const initialGen = obtenerGeneroDesdeURL();
-    filtroEstado.categoria = initialCat;
-    filtroEstado.genero = initialGen;
+    // 5. Actualizar visualmente la interfaz
+    sincronizarBotonesCategoria(filtroEstado.categoria);
+    sincronizarBotonesGenero(filtroEstado.genero);
+    actualizarCabeceraCategoria(filtroEstado.categoria);
 
-    // Actualizar visualmente los botones e iniciar aria-pressed
-    sincronizarBotonesCategoria(initialCat);
-    sincronizarBotonesGenero(initialGen);
-
-    // Actualizar cabecera con el título dinámico
-    actualizarCabeceraCategoria(initialCat);
-
-    // Inicializar controles de la interfaz
     inicializarFiltrosInterfaz(productos, filtroEstado, grid);
 
-    // Escuchar el evento popstate para la navegación atrás/adelante
     window.addEventListener('popstate', () => {
         const cat = obtenerCategoriaDesdeURL();
         const gen = obtenerGeneroDesdeURL();
         filtroEstado.categoria = cat;
         filtroEstado.genero = gen;
 
-        // Sincronizar UI de filtros
         sincronizarBotonesCategoria(cat);
         sincronizarBotonesGenero(gen);
         actualizarCabeceraCategoria(cat);
 
-        // Sincronizar controles (buscador y checkbox)
         const searchInput = document.getElementById('search-perfume');
         if (searchInput) searchInput.value = filtroEstado.busqueda;
         const availableCheckbox = document.getElementById('filter-available');
         if (availableCheckbox) availableCheckbox.checked = filtroEstado.soloDisponibles;
+        const sortSelect = document.getElementById('sort-price');
+        if (sortSelect) sortSelect.value = filtroEstado.orden;
 
         filtrarYRenderizar(productos, filtroEstado, grid);
     });
 
-    // Renderizado inicial
+    window.addEventListener('beforeunload', () => {
+        guardarEstadoCatalogo(filtroEstado);
+    });
+
+    // 6. Renderizar productos reales
     filtrarYRenderizar(productos, filtroEstado, grid);
+
+    // 7. Restaurar scroll
+    if (savedScrollY > 0) {
+        const restaurarScroll = () => {
+            const maxScroll = Math.max(0, (document.documentElement ? document.documentElement.scrollHeight : 0) - window.innerHeight);
+            const targetY = Math.min(savedScrollY, maxScroll);
+            if (typeof window.scrollTo === 'function') {
+                window.scrollTo(0, targetY);
+            }
+        };
+        if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(restaurarScroll);
+            });
+        } else {
+            setTimeout(restaurarScroll, 50);
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('catalogo-productos-grid');
+    if (!grid) return;
+    iniciarCargaCatalogo(grid);
 });
 
 /**
@@ -283,6 +539,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
         searchInput.value = estado.busqueda;
         searchInput.addEventListener('input', (e) => {
             estado.busqueda = e.target.value.toLowerCase().trim();
+            guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
     }
@@ -295,6 +552,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
             sincronizarBotonesCategoria(selectedCat);
             actualizarCabeceraCategoria(selectedCat);
             actualizarURL(selectedCat, estado.genero);
+            guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
     });
@@ -306,6 +564,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
             estado.genero = selectedGen;
             sincronizarBotonesGenero(selectedGen);
             actualizarURL(estado.categoria, selectedGen);
+            guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
     });
@@ -315,6 +574,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
         sortSelect.value = estado.orden;
         sortSelect.addEventListener('change', (e) => {
             estado.orden = e.target.value;
+            guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
     }
@@ -324,6 +584,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
         availableCheckbox.checked = estado.soloDisponibles;
         availableCheckbox.addEventListener('change', (e) => {
             estado.soloDisponibles = e.target.checked;
+            guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
     }
@@ -505,7 +766,7 @@ function filtrarYRenderizar(productos, estado, grid) {
     grid.style.display = 'grid';
     grid.innerHTML = '';
 
-    filtrados.forEach(prod => {
+    filtrados.forEach((prod, index) => {
         const card = document.createElement('div');
         card.className = 'product-card';
 
@@ -615,13 +876,15 @@ function filtrarYRenderizar(productos, estado, grid) {
             `;
         }
 
+        const loadingAttr = index < 4 ? 'eager' : 'lazy';
+
         const divContainer = document.createElement('div');
         divContainer.className = 'product-image-container';
         divContainer.innerHTML = `
             ${tagHtml}
             <span class="product-category-badge">${categoryBadgeText}</span>
             <a href="producto.html?id=${prod.id}" class="product-img-link" aria-label="Ver detalles de ${prod.nombre}">
-                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy">
+                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="${loadingAttr}" decoding="async" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png'; console.warn('[Catálogo] Imagen no disponible para producto:', '${prod.id}');">
             </a>
             <div class="product-actions-overlay">
                 <a href="producto.html?id=${prod.id}" class="btn btn-light-glass btn-view-details">Ver Detalles</a>
@@ -660,7 +923,7 @@ function filtrarYRenderizar(productos, estado, grid) {
     });
 
     // Vincular eventos de adición y WhatsApp en las tarjetas del grid
-    vincularEventosGridCatalogo(grid);
+    vincularEventosGridCatalogo(grid, estado);
 
     // RENDERIZAR BLOQUE SECUNDARIO DE COTIZACIÓN AL FINAL DEL LISTADO EXITOSO
     if (secContainer) {
@@ -704,9 +967,17 @@ function filtrarYRenderizar(productos, estado, grid) {
 }
 
 /**
- * Agrega eventos a los botones de comprar y agregar
+ * Agrega eventos a los botones de comprar, agregar y links a detalles
  */
-function vincularEventosGridCatalogo(grid) {
+function vincularEventosGridCatalogo(grid, estado) {
+    grid.querySelectorAll('a[href*="producto.html"], .btn-details-compact, .btn-select-option, .btn-view-details').forEach(link => {
+        link.addEventListener('click', () => {
+            if (estado) {
+                guardarEstadoCatalogo(estado);
+            }
+        });
+    });
+
     grid.querySelectorAll('.btn-add-cart').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -732,13 +1003,19 @@ function limpiarTodosLosFiltros(productos, estado, grid) {
     estado.busqueda = '';
     estado.categoria = 'todos';
     estado.genero = 'todos';
+    estado.orden = 'relevancia';
     estado.soloDisponibles = false;
+
+    limpiarEstadoCatalogoGuardado();
 
     const searchInput = document.getElementById('search-perfume');
     if (searchInput) searchInput.value = '';
 
     const availableCheckbox = document.getElementById('filter-available');
     if (availableCheckbox) availableCheckbox.checked = false;
+
+    const sortSelect = document.getElementById('sort-price');
+    if (sortSelect) sortSelect.value = 'relevancia';
 
     sincronizarBotonesCategoria('todos');
     sincronizarBotonesGenero('todos');

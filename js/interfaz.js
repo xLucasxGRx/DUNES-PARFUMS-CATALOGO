@@ -702,6 +702,14 @@ function renderizarDetalleSellado(container, prod) {
                 const qty = parseInt(qtyInput.value) || 1;
                 window.carritoModulo.agregarAlCarrito(prod.id, qty, null);
             });
+
+            inicializarBarraMovilDetalle(prod, addCartBtn, () => {
+                return {
+                    nombre: prod.nombre,
+                    variante: `Sellado · ${prod.presentacion || '100 ml'}`,
+                    precio: prod.precio
+                };
+            });
         }
     }
 
@@ -928,6 +936,16 @@ function renderizarDetalleDecant(container, prod) {
                 const qty = parseInt(qtyInput.value) || 1;
                 window.carritoModulo.agregarAlCarrito(prod.id, qty, selectedMl);
             });
+
+            inicializarBarraMovilDetalle(prod, addCartBtn, () => {
+                const activeBtn = container.querySelector('.variant-option-btn.active');
+                const nombrePresentacion = activeBtn ? activeBtn.dataset.nombre : (selectedMl ? `${selectedMl} ml` : prod.presentacion);
+                return {
+                    nombre: prod.nombre,
+                    variante: nombrePresentacion,
+                    precio: selectedPrecio
+                };
+            });
         }
     }
 
@@ -939,6 +957,113 @@ function renderizarDetalleDecant(container, prod) {
             const finalPresentation = activeVariant ? activeVariant.dataset.nombre : prod.presentacion;
             window.whatsappConfig.consultarDisponibilidad(prod.nombre, prod.marca, finalPresentation);
         });
+    }
+}
+
+/**
+ * Crea el elemento HTML de la barra móvil de compra rápida si no existe
+ */
+function crearBarraMovilDetalle() {
+    let bar = document.getElementById('mobile-purchase-bar');
+    if (bar) return bar;
+
+    bar = document.createElement('div');
+    bar.id = 'mobile-purchase-bar';
+    bar.className = 'mobile-purchase-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.innerHTML = `
+        <div class="mobile-purchase-bar__info">
+            <span class="mobile-purchase-bar__variant" id="mobile-bar-variant"></span>
+            <span class="mobile-purchase-bar__price" id="mobile-bar-price"></span>
+        </div>
+        <button type="button" class="btn btn-primary mobile-purchase-bar__action" id="mobile-bar-add-btn">
+            AGREGAR
+        </button>
+    `;
+
+    if (document.body) {
+        document.body.appendChild(bar);
+    }
+    return bar;
+}
+
+/**
+ * Actualiza la información dinámica de la barra móvil de compra rápida
+ */
+function actualizarBarraMovilDetalle(bar, info) {
+    if (!bar || !info) return;
+    const variantEl = bar.querySelector('#mobile-bar-variant');
+    const priceEl = bar.querySelector('#mobile-bar-price');
+    const btnEl = bar.querySelector('#mobile-bar-add-btn');
+
+    if (variantEl) variantEl.textContent = info.variante || info.nombre || '';
+    if (priceEl) {
+        priceEl.textContent = typeof info.precio === 'number'
+            ? `S/ ${info.precio.toFixed(2)}`
+            : (info.precio || '');
+    }
+    if (btnEl) {
+        const labelNombre = info.nombre || 'fragancia';
+        const labelVar = info.variante ? ` (${info.variante})` : '';
+        btnEl.setAttribute('aria-label', `Agregar ${labelNombre}${labelVar} al carrito`);
+    }
+}
+
+/**
+ * Inicializa la barra móvil con IntersectionObserver sobre el botón principal
+ */
+function inicializarBarraMovilDetalle(prod, targetBtn, obtenerEstadoCallback) {
+    if (!targetBtn || !prod || !prod.disponible) return;
+
+    const bar = crearBarraMovilDetalle();
+    const actionBtn = bar.querySelector('#mobile-bar-add-btn');
+
+    // Desvincular listener anterior si existía para evitar eventos duplicados
+    if (actionBtn) {
+        const oldHandler = actionBtn._m12Handler;
+        if (oldHandler) actionBtn.removeEventListener('click', oldHandler);
+
+        const newHandler = (e) => {
+            e.preventDefault();
+            targetBtn.click();
+        };
+        actionBtn._m12Handler = newHandler;
+        actionBtn.addEventListener('click', newHandler);
+    }
+
+    const updateVisibility = (isOut) => {
+        const width = window.innerWidth || (document.documentElement ? document.documentElement.clientWidth : 0);
+        if (isOut && width <= 768 && prod.disponible) {
+            const currentInfo = typeof obtenerEstadoCallback === 'function'
+                ? obtenerEstadoCallback()
+                : { nombre: prod.nombre, precio: prod.precio, variante: prod.presentacion };
+            actualizarBarraMovilDetalle(bar, currentInfo);
+            bar.classList.add('is-visible');
+            bar.setAttribute('aria-hidden', 'false');
+            if (document.body) document.body.classList.add('has-mobile-purchase-bar-visible');
+        } else {
+            bar.classList.remove('is-visible');
+            bar.setAttribute('aria-hidden', 'true');
+            if (document.body) document.body.classList.remove('has-mobile-purchase-bar-visible');
+        }
+    };
+
+    if (typeof IntersectionObserver !== 'undefined') {
+        if (window._m12Observer) window._m12Observer.disconnect();
+        window._m12Observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                updateVisibility(!entry.isIntersecting);
+            });
+        }, { threshold: 0.1 });
+        window._m12Observer.observe(targetBtn);
+    } else {
+        const handleScroll = () => {
+            if (!targetBtn.getBoundingClientRect) return;
+            const rect = targetBtn.getBoundingClientRect();
+            const isOut = rect.bottom < 0 || rect.top > (window.innerHeight || 800);
+            updateVisibility(isOut);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
     }
 }
 
