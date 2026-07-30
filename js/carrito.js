@@ -33,9 +33,15 @@ function actualizarContadorCarrito() {
 
     contadores.forEach(contador => {
         if (contador) {
+            const anterior = parseInt(contador.textContent) || 0;
             contador.textContent = cantidadTotal;
             if (cantidadTotal > 0) {
-                contador.style.display = 'flex';
+                contador.style.display = 'inline-flex';
+                if (cantidadTotal > anterior) {
+                    contador.classList.remove('badge-pop');
+                    void contador.offsetWidth;
+                    contador.classList.add('badge-pop');
+                }
             } else {
                 contador.style.display = 'none';
             }

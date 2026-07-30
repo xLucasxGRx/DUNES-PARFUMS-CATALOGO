@@ -73,6 +73,9 @@ function inicializarMenuMovil() {
         burgerBtn.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('no-scroll');
         document.body.classList.remove('menu-open');
+        if (typeof burgerBtn.focus === 'function') {
+            try { burgerBtn.focus(); } catch (e) {}
+        }
     };
 
     // Evento Abrir / Alternar con el botón hamburguesa
@@ -92,6 +95,16 @@ function inicializarMenuMovil() {
             cerrarMenu();
         });
     }
+
+    // Cerrar al pulsar cualquier opción de navegación del panel
+    const navLinks = navMenu.querySelectorAll('.nav-link:not(#btn-toggle-catalogo-submenu), .mobile-submenu-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 991) {
+                cerrarMenu();
+            }
+        });
+    });
 
     // Evento Acordeón para la opción CATÁLOGO
     if (accordionBtn && submenu) {
@@ -326,9 +339,19 @@ async function cargarProductosDestacadosHome() {
             `;
         }
 
+        const esFav = (typeof window !== 'undefined' && window.FavoritosService) ? window.FavoritosService.esFavorito(prod.id) : false;
+        const favBtnHtml = `
+            <button type="button" class="favorite-toggle-btn ${esFav ? 'is-active' : ''}" data-id="${prod.id}" data-nombre="${prod.nombre}" aria-label="${esFav ? 'Quitar ' + prod.nombre + ' de favoritos' : 'Agregar ' + prod.nombre + ' a favoritos'}" aria-pressed="${esFav ? 'true' : 'false'}">
+                <svg class="favorite-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="${esFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                </svg>
+            </button>
+        `;
+
         card.innerHTML = `
             <div class="product-image-container">
                 ${tagHtml}
+                ${favBtnHtml}
                 <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy">
                 <div class="product-actions-overlay">
                     <a href="producto.html?id=${prod.id}" class="btn btn-light-glass btn-view-details">Ver Detalles</a>
@@ -547,42 +570,92 @@ async function cargarDetalleProducto() {
     const container = document.getElementById('product-detail-container');
     if (!container) return;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idRaw = urlParams.get('id') || urlParams.get('producto') || urlParams.get('productoId');
+        const idSolicitado = String(idRaw ?? '').trim();
 
-    if (!id) {
-        container.innerHTML = `
-            <div class="placeholder-page-wrapper">
-                <div class="benefit-icon-wrapper" style="width: 80px; height: 80px; margin-bottom: 12px;" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lg"></i></div>
-                <h2>Error de Selección</h2>
-                <p>No se ha especificado ningún perfume para visualizar.</p>
-                <a href="catalogo.html" class="btn btn-primary">Ver Catálogo</a>
-            </div>
-        `;
-        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-        return;
+        if (!idSolicitado) {
+            mostrarMensajeProductoNoEncontrado(container, 'No se ha especificado ningún perfume para visualizar.');
+            return;
+        }
+
+        let productos = [];
+        if (window.productosModulo && typeof window.productosModulo.obtenerProductos === 'function') {
+            productos = await window.productosModulo.obtenerProductos();
+        } else if (window.ProductosService && typeof window.ProductosService.cargarProductos === 'function') {
+            const res = await window.ProductosService.cargarProductos();
+            productos = res ? (res.productos || []) : [];
+        }
+
+        if (!productos || productos.length === 0) {
+            mostrarMensajeErrorProducto(container, () => cargarDetalleProducto());
+            return;
+        }
+
+        const prod = productos.find(item => item && String(item.id).trim() === idSolicitado);
+
+        if (!prod) {
+            mostrarMensajeProductoNoEncontrado(container, 'Este producto ya no está disponible o el enlace no es válido.');
+            return;
+        }
+
+        const esDecant = prod.categoria === 'decants';
+        if (esDecant) {
+            renderizarDetalleDecant(container, prod);
+        } else {
+            renderizarDetalleSellado(container, prod);
+        }
+
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+
+    } catch (err) {
+        console.error('[Interfaz] Error al cargar detalles del producto:', err);
+        mostrarMensajeErrorProducto(container, () => cargarDetalleProducto());
     }
+}
 
-    const prod = await window.productosModulo.obtenerProductoPorId(id);
-    if (!prod) {
-        container.innerHTML = `
-            <div class="placeholder-page-wrapper">
-                <div class="benefit-icon-wrapper" style="width: 80px; height: 80px; margin-bottom: 12px;" aria-hidden="true"><i data-lucide="search" class="icon-lg"></i></div>
-                <h2>No Encontrado</h2>
-                <p>La fragancia solicitada no figura en nuestro stock actual.</p>
-                <a href="catalogo.html" class="btn btn-primary">Ver Catálogo</a>
+function mostrarMensajeProductoNoEncontrado(container, mensaje) {
+    container.innerHTML = `
+        <div class="placeholder-page-wrapper" style="text-align: center; padding: 48px 20px; max-width: 480px; margin: 0 auto;">
+            <div class="benefit-icon-wrapper" style="width: 72px; height: 72px; border-radius: 50%; background: #FFF0ED; color: #C0392B; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px auto;" aria-hidden="true">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line></svg>
             </div>
-        `;
-        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-        return;
-    }
+            <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: #171717; margin-bottom: 8px;">PRODUCTO NO ENCONTRADO</h2>
+            <p style="font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: #666666; margin-bottom: 24px; line-height: 1.4;">${mensaje}</p>
+            <a href="catalogo.html" class="btn btn-primary" style="padding: 12px 28px; font-weight: 700;">VOLVER AL CATÁLOGO</a>
+        </div>
+    `;
+}
 
-    const esDecant = prod.categoria === 'decants';
+function mostrarMensajeErrorProducto(container, callbackReintentar) {
+    container.innerHTML = `
+        <div class="catalog-error-state" style="text-align: center; padding: 36px 20px; background-color: var(--surface-card, #FFFEFC); border: 1px solid var(--catalog-gold-border, #E7D3A5); border-radius: 14px; max-width: 480px; margin: 30px auto; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);">
+            <div style="margin-bottom: 12px; color: #A83232; display: flex; justify-content: center;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <h3 style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; color: #171717; margin-bottom: 8px;">
+                NO PUDIMOS CARGAR ESTE PRODUCTO
+            </h3>
+            <p style="font-size: 0.88rem; color: #6F6F6F; margin-bottom: 18px;">
+                Revisa tu conexión a internet o intenta nuevamente.
+            </p>
+            <button id="btn-reintentar-detalle" class="btn btn-primary" style="padding: 10px 24px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin: 0 auto;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg> REINTENTAR
+            </button>
+        </div>
+    `;
 
-    if (esDecant) {
-        renderizarDetalleDecant(container, prod);
-    } else {
-        renderizarDetalleSellado(container, prod);
+    const btnRetry = container.querySelector('#btn-reintentar-detalle');
+    if (btnRetry && typeof callbackReintentar === 'function') {
+        btnRetry.onclick = function(e) {
+            e.preventDefault();
+            btnRetry.disabled = true;
+            btnRetry.textContent = 'Reintentando...';
+            callbackReintentar();
+        };
     }
 }
 
@@ -590,6 +663,7 @@ async function cargarDetalleProducto() {
  * Renderiza la ficha técnica de un perfume SELLADO
  */
 function renderizarDetalleSellado(container, prod) {
+    const esFav = (typeof window !== 'undefined' && window.FavoritosService) ? window.FavoritosService.esFavorito(prod.id) : false;
     const presentacionFormateada = `Sellado / ${prod.presentacion}`;
     const stockHtml = prod.disponible && prod.stock > 0
         ? `<span class="detail-stock-badge in-stock">Disponible (${prod.stock} unidades)</span>`
@@ -639,6 +713,15 @@ function renderizarDetalleSellado(container, prod) {
 
                 <div class="detail-stock-box">
                     ${stockHtml}
+                </div>
+
+                <div class="detail-favorite-row" style="margin-top: 10px; margin-bottom: 12px;">
+                    <button type="button" class="btn-detail-favorite ${esFav ? 'is-active' : ''}" id="btn-detail-favorite" data-id="${prod.id}" data-nombre="${prod.nombre}" aria-pressed="${esFav ? 'true' : 'false'}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="${esFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                        </svg>
+                        <span class="btn-detail-favorite-text">${esFav ? 'Guardado en favoritos' : 'Guardar en favoritos'}</span>
+                    </button>
                 </div>
 
                 <div class="detail-divider"></div>
@@ -725,6 +808,7 @@ function renderizarDetalleSellado(container, prod) {
  * Renderiza la ficha técnica de un perfume DECANT con selector de presentación
  */
 function renderizarDetalleDecant(container, prod) {
+    const esFav = (typeof window !== 'undefined' && window.FavoritosService) ? window.FavoritosService.esFavorito(prod.id) : false;
     const mlDisponibles = prod.mililitrosDisponibles || 0;
 
     // Determinar la primera presentación seleccionable por defecto (empezando por 3ml)
@@ -830,6 +914,15 @@ function renderizarDetalleDecant(container, prod) {
 
                 <div class="detail-stock-box">
                     ${stockHtml}
+                </div>
+
+                <div class="detail-favorite-row" style="margin-top: 10px; margin-bottom: 12px;">
+                    <button type="button" class="btn-detail-favorite ${esFav ? 'is-active' : ''}" id="btn-detail-favorite" data-id="${prod.id}" data-nombre="${prod.nombre}" aria-pressed="${esFav ? 'true' : 'false'}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="${esFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                        </svg>
+                        <span class="btn-detail-favorite-text">${esFav ? 'Guardado en favoritos' : 'Guardar en favoritos'}</span>
+                    </button>
                 </div>
 
                 <div class="detail-divider"></div>
@@ -2922,6 +3015,165 @@ function inicializarBarraMovilCarrito(targetBtn) {
         };
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
+}
+
+/* ==========================================================================
+   FASE M14 — SISTEMA DE FAVORITOS (Global Listener & Toast)
+   ========================================================================== */
+function mostrarToastFavorito(mensaje) {
+    if (typeof document === 'undefined') return;
+    let toast = document.getElementById('favorite-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'favorite-toast';
+        toast.className = 'favorite-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        document.body.appendChild(toast);
+    }
+    toast.innerHTML = `
+        <span class="favorite-toast__icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+            </svg>
+        </span>
+        <span class="favorite-toast__text">${mensaje}</span>
+    `;
+    toast.classList.add('is-visible');
+
+    if (window._favToastTimeout) clearTimeout(window._favToastTimeout);
+    window._favToastTimeout = setTimeout(() => {
+        toast.classList.remove('is-visible');
+    }, 2000);
+}
+
+function actualizarContadoresFavoritos() {
+    if (typeof document === 'undefined') return;
+    const count = window.FavoritosService ? window.FavoritosService.obtenerCantidadFavoritos() : 0;
+
+    const navBadge = document.getElementById('favorites-nav-badge');
+    if (navBadge) {
+        if (count > 0) {
+            navBadge.textContent = count;
+            navBadge.style.display = 'inline-flex';
+        } else {
+            navBadge.style.display = 'none';
+        }
+    }
+
+    const headerCount = document.getElementById('favorites-header-count');
+    if (headerCount) {
+        if (count > 0) {
+            const anterior = parseInt(headerCount.textContent) || 0;
+            headerCount.textContent = count;
+            headerCount.style.display = 'inline-flex';
+            if (count > anterior) {
+                headerCount.classList.remove('badge-pop');
+                void headerCount.offsetWidth;
+                headerCount.classList.add('badge-pop');
+            }
+        } else {
+            headerCount.style.display = 'none';
+        }
+    }
+
+    const headerBtns = document.querySelectorAll('.favorites-header-icon-btn');
+    headerBtns.forEach(btn => {
+        btn.classList.toggle('is-active', count > 0);
+        btn.setAttribute('aria-pressed', count > 0 ? 'true' : 'false');
+    });
+}
+
+if (typeof window !== 'undefined') {
+    if (typeof window.addEventListener === 'function') {
+        window.addEventListener('dunes:favoritos:updated', function() {
+            actualizarContadoresFavoritos();
+        });
+    }
+
+    if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarContadoresFavoritos();
+        });
+
+        document.addEventListener('click', function(e) {
+        // Clic en botón de tarjeta de producto
+        const favBtn = e.target.closest('.favorite-toggle-btn');
+        if (favBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const productId = favBtn.getAttribute('data-id');
+            if (!productId || !window.FavoritosService) return;
+
+            const ahoraEsFav = window.FavoritosService.alternarFavorito(productId);
+
+            document.querySelectorAll(`.favorite-toggle-btn[data-id="${productId}"]`).forEach(el => {
+                el.classList.toggle('is-active', ahoraEsFav);
+                el.setAttribute('aria-pressed', ahoraEsFav ? 'true' : 'false');
+                const nombre = el.getAttribute('data-nombre') || 'Producto';
+                el.setAttribute('aria-label', ahoraEsFav ? `Quitar ${nombre} de favoritos` : `Agregar ${nombre} a favoritos`);
+
+                const svg = el.querySelector('svg');
+                if (svg) {
+                    svg.setAttribute('fill', ahoraEsFav ? 'currentColor' : 'none');
+                }
+            });
+
+            // Si estamos en la página de detalle, actualizar también el botón principal de detalle
+            const detailBtn = document.getElementById('btn-detail-favorite');
+            if (detailBtn && detailBtn.getAttribute('data-id') === String(productId).trim()) {
+                detailBtn.classList.toggle('is-active', ahoraEsFav);
+                detailBtn.setAttribute('aria-pressed', ahoraEsFav ? 'true' : 'false');
+                const textEl = detailBtn.querySelector('.btn-detail-favorite-text');
+                if (textEl) {
+                    textEl.textContent = ahoraEsFav ? 'Guardado en favoritos' : 'Guardar en favoritos';
+                }
+                const svg = detailBtn.querySelector('svg');
+                if (svg) {
+                    svg.setAttribute('fill', ahoraEsFav ? 'currentColor' : 'none');
+                }
+            }
+
+            mostrarToastFavorito(ahoraEsFav ? 'Agregado a favoritos' : 'Eliminado de favoritos');
+            return;
+        }
+
+        // Clic en botón de ficha de producto.html
+        const detailFavBtn = e.target.closest('#btn-detail-favorite');
+        if (detailFavBtn) {
+            e.preventDefault();
+
+            const productId = detailFavBtn.getAttribute('data-id');
+            if (!productId || !window.FavoritosService) return;
+
+            const ahoraEsFav = window.FavoritosService.alternarFavorito(productId);
+
+            detailFavBtn.classList.toggle('is-active', ahoraEsFav);
+            detailFavBtn.setAttribute('aria-pressed', ahoraEsFav ? 'true' : 'false');
+            const textEl = detailFavBtn.querySelector('.btn-detail-favorite-text');
+            if (textEl) {
+                textEl.textContent = ahoraEsFav ? 'Guardado en favoritos' : 'Guardar en favoritos';
+            }
+            const svg = detailFavBtn.querySelector('svg');
+            if (svg) {
+                svg.setAttribute('fill', ahoraEsFav ? 'currentColor' : 'none');
+            }
+
+            // Sincronizar botones de tarjeta si existieran
+            document.querySelectorAll(`.favorite-toggle-btn[data-id="${productId}"]`).forEach(el => {
+                el.classList.toggle('is-active', ahoraEsFav);
+                el.setAttribute('aria-pressed', ahoraEsFav ? 'true' : 'false');
+                const svgCard = el.querySelector('svg');
+                if (svgCard) {
+                    svgCard.setAttribute('fill', ahoraEsFav ? 'currentColor' : 'none');
+                }
+            });
+
+            mostrarToastFavorito(ahoraEsFav ? 'Agregado a favoritos' : 'Eliminado de favoritos');
+        }
+    }, true);
+  }
 }
 
 

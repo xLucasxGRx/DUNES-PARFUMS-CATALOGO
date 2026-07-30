@@ -124,6 +124,13 @@
 
             <!-- Acciones de Cabecera -->
             <div class="header-actions">
+                <a href="favoritos.html" class="favorites-header-icon-btn" aria-label="Ver mis favoritos" title="Mis Favoritos">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                    </svg>
+                    <span class="favorites-header-count" id="favorites-header-count" style="display: none;">0</span>
+                </a>
+
                 <!-- Icono del Carrito con Contador Reactivo -->
                 <a href="carrito.html" class="cart-icon-btn" aria-label="Ver mi pedido en el carrito">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="cart-btn-icon" aria-hidden="true" focusable="false">
@@ -563,6 +570,7 @@
     <!-- Scripts Modulares (Cargados secuencialmente) -->
     <script src="js/config.js"></script>
     <script src="js/productos-service.js?v=20260721-correcion-desktop-logo-1"></script>
+    <script src="js/favoritos-service.js"></script>
     <script src="js/whatsapp.js"></script>
     <script src="js/productos.js?v=20260721-correcion-desktop-logo-1"></script>
     <script src="js/carrito.js?v=20260721-correcion-desktop-logo-1"></script>
