@@ -295,6 +295,40 @@
 
             grid.appendChild(card);
         });
+
+        // Vincular eventos de agregar al carrito y consultar WhatsApp a las tarjetas de favoritos
+        vincularEventosGridFavoritos(grid);
+    }
+
+    /**
+     * Vincula los eventos de clic a los botones de la cuadrícula de favoritos (Agregar al carrito y Consultar WhatsApp)
+     * Reutiliza exactamente el flujo original de window.carritoModulo.agregarAlCarrito
+     */
+    function vincularEventosGridFavoritos(grid) {
+        if (!grid) return;
+
+        // Botones de agregar al carrito (sellados) -> Reutiliza window.carritoModulo.agregarAlCarrito
+        grid.querySelectorAll('.btn-add-cart').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const id = this.dataset.id;
+                if (id && window.carritoModulo && typeof window.carritoModulo.agregarAlCarrito === 'function') {
+                    window.carritoModulo.agregarAlCarrito(id, 1, null);
+                }
+            });
+        });
+
+        // Botones de consulta por agotado o WhatsApp
+        grid.querySelectorAll('.btn-query-wa').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const nombre = this.dataset.nombre;
+                const marca = this.dataset.marca;
+                if (window.whatsappConfig && typeof window.whatsappConfig.consultarDisponibilidad === 'function') {
+                    window.whatsappConfig.consultarDisponibilidad(nombre, marca, 'Presentación estándar');
+                }
+            });
+        });
     }
 
 })(typeof window !== 'undefined' ? window : globalThis, document);

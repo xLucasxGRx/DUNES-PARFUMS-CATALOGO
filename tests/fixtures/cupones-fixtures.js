@@ -9,7 +9,7 @@ const FIXTURE_CUPONES = [
         montoMinimo: 160,
         descuentoMaximo: null,
         fechaInicio: "2026-07-10",
-        fechaVencimiento: "2026-07-30",
+        fechaVencimiento: "2026-12-31",
         activo: true,
         alcance: "todos",
         categoriasPermitidas: [],
@@ -24,7 +24,7 @@ const FIXTURE_CUPONES = [
         montoMinimo: 140,
         descuentoMaximo: null,
         fechaInicio: "2026-07-11",
-        fechaVencimiento: "2026-07-31",
+        fechaVencimiento: "2026-12-31",
         activo: true,
         alcance: "todos",
         categoriasPermitidas: [],
@@ -119,8 +119,8 @@ const FIXTURE_CUPONES = [
 ];
 
 const CSV_SAMPLE_VALID = `codigo,tipo,valor,monto_minimo,descuento_maximo,fecha_inicio,fecha_vencimiento,activo,alcance,categorias_permitidas,productos_permitidos,descripcion,orden
-tiodunes,monto_fijo,10,160,,2026-07-10,2026-07-30,TRUE,todos,,,Descuento por lanzamiento de la web,1
-DUNES10,porcentaje,5,140,,2026-07-11,2026-07-31,1,todos,,,Descuento del 5%,2
+tiodunes,monto_fijo,10,160,,2026-07-10,2026-12-31,TRUE,todos,,,Descuento por lanzamiento de la web,1
+DUNES10,porcentaje,5,140,,2026-07-11,2026-12-31,1,todos,,,Descuento del 5%,2
 SOLOARABE,monto_fijo,15,100,,2026-01-01,2026-12-31,true,categorias,arabe | Árabe,,,3
 SOLOESPECIAL,monto_fijo,20,80,,2026-01-01,2026-12-31,TRUE,productos,,p12 | 12,,4
 INACTIVO,monto_fijo,10,0,,2026-01-01,2026-12-31,FALSE,todos,,,Inactivo,5
