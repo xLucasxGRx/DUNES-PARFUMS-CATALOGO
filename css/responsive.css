@@ -2166,38 +2166,38 @@
     font-size: 0.8rem !important;
   }
 
-  /* Rediseño del Catálogo en Móvil (Formato Horizontal Compacto & Estructura Equilibrada) */
+  /* Rediseño del Catálogo en Móvil (Formato 2 Columnas Vertical Elegante & Estructura Equilibrada) */
   #catalogo-productos-grid,
+  #favorites-products-grid,
   .products-grid {
-    grid-template-columns: 1fr !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     grid-auto-rows: auto !important;
-    gap: 12px !important;
+    gap: 10px !important;
     max-width: 100% !important;
     margin: 0 !important;
-    align-items: start !important;
+    align-items: stretch !important;
   }
 
   #catalogo-productos-grid .product-card,
+  #favorites-products-grid .product-card,
   .products-grid .product-card {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 120px !important;
-    grid-template-areas:
-      "info image"
-      "actions actions" !important;
-    gap: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
     min-height: 0 !important;
     aspect-ratio: auto !important;
-    padding: 12px 14px !important;
-    align-items: start !important;
-    border-radius: 14px !important;
+    padding: 10px 8px !important;
+    border-radius: 12px !important;
     box-sizing: border-box !important;
     background-color: var(--catalog-card-background, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
-    box-shadow: 0 4px 12px rgba(31, 24, 12, 0.06) !important;
+    box-shadow: 0 4px 10px rgba(31, 24, 12, 0.05) !important;
     transition: var(--transition-base) !important;
     position: relative !important;
+    overflow: hidden !important;
   }
 
   /* Botones de Ubicación Móviles */
@@ -2228,21 +2228,21 @@
 
   #catalogo-productos-grid .product-image-container,
   .products-grid .product-image-container {
-    grid-area: image !important;
     position: relative !important;
-    height: 125px !important;
-    width: 120px !important;
+    height: 130px !important;
+    width: 100% !important;
     min-height: 0 !important;
     aspect-ratio: auto !important;
-    border-radius: 10px !important;
+    border-radius: 8px !important;
     overflow: hidden !important;
     background: radial-gradient(circle at center, rgba(196, 154, 62, 0.12), transparent 68%), #fffdf8 !important;
-    margin: 0 !important;
-    padding: 8px !important;
+    margin: 0 0 6px 0 !important;
+    padding: 6px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     box-sizing: border-box !important;
+    flex-shrink: 0 !important;
   }
 
   #catalogo-productos-grid .product-image,
@@ -2258,7 +2258,7 @@
     padding: 0 !important;
   }
 
-  /* Ocultar insignia sobre imagen en celular */
+  /* Ocultar insignia genérica sobre imagen en celular */
   #catalogo-productos-grid .product-category-badge,
   .products-grid .product-category-badge {
     display: none !important;
@@ -2269,22 +2269,22 @@
   .products-grid .product-category-mobile {
     display: inline-block !important;
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 9px !important;
+    font-size: 8.5px !important;
     font-weight: 700 !important;
     color: var(--catalog-gold, #B18225) !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.8px !important;
-    margin-bottom: 2px !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 1px !important;
     line-height: 1 !important;
   }
 
   #catalogo-productos-grid .product-tag.promo-tag,
   .products-grid .product-tag.promo-tag {
     position: absolute !important;
-    top: 6px !important;
-    left: 6px !important;
-    font-size: 9px !important;
-    padding: 3px 6px !important;
+    top: 4px !important;
+    left: 4px !important;
+    font-size: 8.5px !important;
+    padding: 2px 5px !important;
     line-height: 1 !important;
     z-index: 3 !important;
   }
@@ -2292,10 +2292,10 @@
   #catalogo-productos-grid .product-tag.out-tag,
   .products-grid .product-tag.out-tag {
     position: absolute !important;
-    top: 6px !important;
-    left: 6px !important;
-    font-size: 9px !important;
-    padding: 3px 6px !important;
+    top: 4px !important;
+    left: 4px !important;
+    font-size: 8.5px !important;
+    padding: 2px 5px !important;
     line-height: 1 !important;
     z-index: 3 !important;
     background-color: #3A3D42 !important;
@@ -2311,26 +2311,29 @@
 
   #catalogo-productos-grid .product-info,
   .products-grid .product-info {
-    grid-area: info !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 3px !important;
+    gap: 2px !important;
     padding: 0 !important;
     margin: 0 !important;
     justify-content: flex-start !important;
     min-width: 0 !important;
+    flex-grow: 1 !important;
   }
 
   #catalogo-productos-grid .product-brand,
   .products-grid .product-brand {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 10px !important;
+    font-size: 9px !important;
     font-weight: 700 !important;
     color: var(--catalog-gold, #B18225) !important;
     text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
-    line-height: 1.2 !important;
+    line-height: 1.1 !important;
     margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   #catalogo-productos-grid .product-title,
@@ -2338,20 +2341,29 @@
   #catalogo-productos-grid .product-title-link,
   .products-grid .product-title-link {
     font-family: 'Cormorant Garamond', Georgia, serif !important;
-    font-size: 19px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     color: var(--catalog-text, #171717) !important;
-    line-height: 1.12 !important;
-    margin: 0 !important;
+    line-height: 1.18 !important;
+    margin: 1px 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    word-break: break-word !important;
+    min-height: 2.36em !important;
   }
 
   #catalogo-productos-grid .product-volume,
   .products-grid .product-volume {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 12px !important;
+    font-size: 10.5px !important;
     color: var(--catalog-text-secondary, #6F6F6F) !important;
     font-weight: 400 !important;
     margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   #catalogo-productos-grid .product-stock-row,
@@ -2362,16 +2374,16 @@
   #catalogo-productos-grid .product-stock-status,
   .products-grid .product-stock-status {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 12px !important;
+    font-size: 10px !important;
     font-weight: 500 !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 5px !important;
+    gap: 3px !important;
   }
 
   #catalogo-productos-grid .product-price-row,
   .products-grid .product-price-row {
-    margin-top: 4px !important;
+    margin-top: 3px !important;
     width: 100% !important;
     min-width: 0 !important;
   }
@@ -2379,8 +2391,8 @@
   #catalogo-productos-grid .prices,
   .products-grid .prices {
     display: flex !important;
-    align-items: center !important;
-    gap: 6px 8px !important;
+    align-items: baseline !important;
+    gap: 4px !important;
     flex-wrap: wrap !important;
     width: 100% !important;
     min-width: 0 !important;
@@ -2389,7 +2401,7 @@
   #catalogo-productos-grid .price-current,
   .products-grid .price-current {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 20px !important;
+    font-size: 14.5px !important;
     font-weight: 700 !important;
     color: var(--catalog-text, #171717) !important;
     line-height: 1 !important;
@@ -2399,7 +2411,7 @@
   #catalogo-productos-grid .price-old,
   .products-grid .price-old {
     font-family: 'Montserrat', sans-serif !important;
-    font-size: 12px !important;
+    font-size: 10px !important;
     color: #777777 !important;
     text-decoration: line-through !important;
     margin: 0 !important;
@@ -2407,27 +2419,26 @@
 
   #catalogo-productos-grid .discount-badge,
   .products-grid .discount-badge {
-    padding: 3px 6px !important;
-    font-size: 10px !important;
-    border-radius: 12px !important;
+    padding: 2px 4px !important;
+    font-size: 9px !important;
+    border-radius: 10px !important;
   }
 
   #catalogo-productos-grid .product-card-footer,
   .products-grid .product-card-footer {
-    grid-area: actions !important;
-    display: grid !important;
-    margin: 0 !important;
+    margin-top: 6px !important;
     padding: 0 !important;
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
+    flex-shrink: 0 !important;
   }
 
   #catalogo-productos-grid .product-card-footer .card-buttons-flex,
   .products-grid .product-card-footer .card-buttons-flex {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) !important;
-    gap: 10px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 4px !important;
     width: 100% !important;
     min-width: 0 !important;
     margin: 0 !important;
@@ -2440,20 +2451,21 @@
   .products-grid .product-card-footer .btn {
     width: 100% !important;
     min-width: 0 !important;
-    height: 46px !important;
-    min-height: 46px !important;
+    height: 34px !important;
+    min-height: 34px !important;
     box-sizing: border-box !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 7px !important;
+    gap: 3px !important;
     overflow: hidden !important;
     white-space: nowrap !important;
-    padding-inline: 10px !important;
-    font-size: 11.5px !important;
-    letter-spacing: 0.5px !important;
+    padding: 0 4px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.2px !important;
     position: static !important;
     margin: 0 !important;
+    border-radius: 6px !important;
     transform: none !important;
   }
 
@@ -2473,42 +2485,45 @@
     margin: 0 !important;
     transform: none !important;
     flex-shrink: 0 !important;
-    width: 14px !important;
-    height: 14px !important;
+    width: 12px !important;
+    height: 12px !important;
   }
 
   /* Ajustes específicos para 360px y 320px */
   @media screen and (max-width: 360px) {
+    #catalogo-productos-grid,
+    #favorites-products-grid,
+    .products-grid {
+      gap: 6px !important;
+    }
+
     #catalogo-productos-grid .product-card,
     .products-grid .product-card {
-      grid-template-columns: minmax(0, 1fr) 105px !important;
-      padding: 10px 12px !important;
-      gap: 8px 10px !important;
+      padding: 8px 6px !important;
     }
 
     #catalogo-productos-grid .product-image-container,
     .products-grid .product-image-container {
-      height: 110px !important;
-      width: 105px !important;
+      height: 115px !important;
     }
 
     #catalogo-productos-grid .product-title,
     .products-grid .product-title,
     #catalogo-productos-grid .product-title-link,
     .products-grid .product-title-link {
-      font-size: 17px !important;
+      font-size: 13px !important;
     }
 
     #catalogo-productos-grid .price-current,
     .products-grid .price-current {
-      font-size: 18px !important;
+      font-size: 13.5px !important;
     }
 
     #catalogo-productos-grid .product-card-footer .btn,
     .products-grid .product-card-footer .btn {
-      padding-inline: 8px !important;
-      font-size: 10.5px !important;
-      gap: 4px !important;
+      padding: 0 2px !important;
+      font-size: 9.5px !important;
+      gap: 2px !important;
     }
   }
 
