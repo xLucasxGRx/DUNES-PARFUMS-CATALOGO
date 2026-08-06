@@ -2445,6 +2445,14 @@
     box-sizing: border-box !important;
   }
 
+  .card-buttons-flex.out-of-stock-buttons,
+  #catalogo-productos-grid .product-card.out-of-stock .card-buttons-flex,
+  .products-grid .product-card.out-of-stock .card-buttons-flex,
+  #catalogo-productos-grid .product-card.is-soldout .card-buttons-flex,
+  .products-grid .product-card.is-soldout .card-buttons-flex {
+    grid-template-columns: 1fr !important;
+  }
+
   #catalogo-productos-grid .btn-details-compact,
   .products-grid .btn-details-compact,
   #catalogo-productos-grid .product-card-footer .btn,
@@ -3227,7 +3235,7 @@
    Garantiza estructura de 1 sola columna sin desbordamientos ni cortes en <= 767px
    ========================================================================== */
 @media screen and (max-width: 767px) {
-  /* 1. Contenedor principal en móvil */
+  /* 1. Contenedor principal en móvil (optimización de ancho útil) */
   #page-producto main.container,
   #page-producto #product-detail-container {
     width: 100% !important;
@@ -3235,12 +3243,12 @@
     min-width: 0 !important;
     margin-inline: auto !important;
     box-sizing: border-box !important;
-    padding-inline: 14px !important;
+    padding-inline: 4px !important;
     margin-top: 0 !important;
-    padding-bottom: 24px !important;
+    padding-bottom: 20px !important;
   }
 
-  /* 2. Tarjeta de detalle (1 sola columna limpia) */
+  /* 2. Tarjeta de detalle (aprovechamiento máximo de ancho disponible) */
   #page-producto .product-detail-layout,
   .product-detail-layout {
     display: flex !important;
@@ -3252,31 +3260,31 @@
     height: auto !important;
     box-sizing: border-box !important;
     overflow: visible !important;
-    padding: 16px !important;
-    gap: 16px !important;
-    border-radius: 16px !important;
+    padding: 10px 8px !important;
+    gap: 14px !important;
+    border-radius: 14px !important;
     background-color: var(--color-bg-card-light, #FFFEFC) !important;
     border: 1px solid var(--color-border, #E7D3A5) !important;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
     margin: 0 auto !important;
   }
 
-  /* 3. Lado de la imagen compacta */
+  /* 3. Lado de la imagen amplia */
   #page-producto .detail-image-side,
   .detail-image-side {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
-    height: 220px !important;
-    max-height: 220px !important;
+    height: 260px !important;
+    max-height: 270px !important;
     min-height: 0 !important;
     box-sizing: border-box !important;
-    padding: 8px !important;
+    padding: 6px !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     background-color: #f8f6f0 !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
     border: 1px solid rgba(197, 160, 89, 0.15) !important;
   }
 
@@ -3285,7 +3293,7 @@
     width: auto !important;
     max-width: 100% !important;
     height: auto !important;
-    max-height: 200px !important;
+    max-height: 245px !important;
     object-fit: contain !important;
     padding: 2px !important;
     min-height: 0 !important;
@@ -3569,24 +3577,24 @@
 @media screen and (max-width: 390px) {
   #page-producto main.container,
   #page-producto #product-detail-container {
-    padding-inline: 8px !important;
+    padding-inline: 4px !important;
   }
 
   #page-producto .product-detail-layout,
   .product-detail-layout {
-    padding: 12px !important;
+    padding: 8px 6px !important;
     gap: 10px !important;
   }
 
   #page-producto .detail-image-side,
   .detail-image-side {
-    max-height: 190px !important;
-    height: 190px !important;
+    max-height: 240px !important;
+    height: 240px !important;
   }
 
   #page-producto .detail-product-img,
   .detail-product-img {
-    max-height: 175px !important;
+    max-height: 225px !important;
   }
 
   .detail-title {
