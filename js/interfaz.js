@@ -718,6 +718,14 @@ async function cargarDetalleProducto() {
             lucide.createIcons();
         }
 
+        // FASE M21: Calcular y renderizar productos relacionados automáticos
+        try {
+            const relacionados = obtenerProductosRelacionados(prod, productos, 4);
+            renderProductosRelacionados(prod, relacionados);
+        } catch (relErr) {
+            console.error('[Interfaz] Error al renderizar productos relacionados:', relErr);
+        }
+
     } catch (err) {
         console.error('[Interfaz] Error al cargar detalles del producto:', err);
         configurarSeoProductoNoEncontrado();
@@ -3394,6 +3402,340 @@ if (typeof window !== 'undefined') {
         }
     }, true);
   }
+}
+
+/* ==========================================================================
+   FASE M21 — Motor de Productos Relacionados Automáticos ("También te puede interesar")
+   ========================================================================== */
+
+/**
+ * Normaliza una cadena removiendo espacios externos, tildes/diacríticos y convirtiendo a minúsculas
+ * @param {string} val
+ * @returns {string}
+ */
+function normalizarTexto(val) {
+    if (!val || typeof val !== 'string') return '';
+    return val
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+}
+
+/**
+ * Calcula la puntuación de afinidad entre un producto actual y un candidato
+ * Misma Categoría: +100 puntos | Misma Marca: +25 puntos
+ * @param {Object} productoActual
+ * @param {Object} candidato
+ * @returns {number}
+ */
+function calcularPuntuacionRelacion(productoActual, candidato) {
+    if (!productoActual || !candidato) return 0;
+    let score = 0;
+
+    const catActual = normalizarTexto(productoActual.categoria);
+    const catCand = normalizarTexto(candidato.categoria);
+
+    const marcaActual = normalizarTexto(productoActual.marca);
+    const marcaCand = normalizarTexto(candidato.marca);
+
+    if (catActual && catCand && catActual === catCand) {
+        score += 100;
+    }
+
+    if (marcaActual && marcaCand && marcaActual === marcaCand) {
+        score += 25;
+    }
+
+    return score;
+}
+
+/**
+ * Barajado Fisher-Yates sin mutar el arreglo original
+ * @param {Array} arr
+ * @returns {Array}
+ */
+function meclarArrayFisherYates(arr) {
+    if (!Array.isArray(arr)) return [];
+    const copia = [...arr];
+    for (let i = copia.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+    return copia;
+}
+
+/**
+ * Calcula el arreglo de hasta 4 productos relacionados utilizando el algoritmo de puntuación + variabilidad Fisher-Yates
+ * @param {Object} productoActual
+ * @param {Array} todosLosProductos
+ * @param {number} limite
+ * @returns {Array}
+ */
+function obtenerProductosRelacionados(productoActual, todosLosProductos, limite = 4) {
+    if (!productoActual || !productoActual.id || !Array.isArray(todosLosProductos) || todosLosProductos.length === 0) {
+        return [];
+    }
+
+    const idActualClean = String(productoActual.id).trim();
+
+    // 1. Filtrar candidatos válidos y disponibles (excluyendo el producto actual y productos no disponibles/ocultos)
+    const candidatosValidos = todosLosProductos.filter(cand => {
+        if (!cand || !cand.id) return false;
+
+        const idCandClean = String(cand.id).trim();
+        if (idCandClean === idActualClean) return false;
+
+        // Validar visibilidad
+        const visibleStr = String(cand.visible ?? true).toLowerCase();
+        if (cand.visible === false || cand.visible === 0 || visibleStr === 'false' || visibleStr === '0' || visibleStr === 'no') {
+            return false;
+        }
+
+        // Validar disponibilidad y stock
+        const esDecant = cand.categoria === 'decants';
+        if (esDecant) {
+            if (cand.disponible === false || (typeof cand.mililitrosDisponibles === 'number' && cand.mililitrosDisponibles < 3)) {
+                return false;
+            }
+        } else {
+            if (cand.disponible === false || (typeof cand.stock === 'number' && cand.stock <= 0)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    if (candidatosValidos.length === 0) return [];
+
+    // 2. Agrupar por puntuación de afinidad
+    const gruposPorScore = new Map();
+    candidatosValidos.forEach(cand => {
+        const score = calcularPuntuacionRelacion(productoActual, cand);
+        if (!gruposPorScore.has(score)) {
+            gruposPorScore.set(score, []);
+        }
+        gruposPorScore.get(score).push(cand);
+    });
+
+    // 3. Ordenar puntajes en orden descendente y mezclar aleatoriamente dentro de cada grupo con empates
+    const scoresOrdenados = Array.from(gruposPorScore.keys()).sort((a, b) => b - a);
+
+    const recomendados = [];
+    const idsAgregados = new Set();
+
+    for (const score of scoresOrdenados) {
+        const grupo = gruposPorScore.get(score);
+        const grupoMezclado = meclarArrayFisherYates(grupo);
+
+        for (const cand of grupoMezclado) {
+            const idClean = String(cand.id).trim();
+            if (!idsAgregados.has(idClean)) {
+                idsAgregados.add(idClean);
+                recomendados.push(cand);
+                if (recomendados.length >= limite) {
+                    break;
+                }
+            }
+        }
+        if (recomendados.length >= limite) {
+            break;
+        }
+    }
+
+    return recomendados;
+}
+
+/**
+ * Renderiza la sección de productos relacionados automáticos en producto.html
+ * @param {Object} productoActual
+ * @param {Array} productosRelacionados
+ */
+function renderProductosRelacionados(productoActual, productosRelacionados) {
+    const section = document.getElementById('related-products-section');
+    const grid = document.getElementById('related-products-grid');
+    if (!section || !grid) return;
+
+    if (!productosRelacionados || productosRelacionados.length === 0) {
+        section.style.display = 'none';
+        grid.innerHTML = '';
+        return;
+    }
+
+    section.style.display = 'block';
+    grid.innerHTML = '';
+
+    productosRelacionados.forEach((prod) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        const esDecant = prod.categoria === 'decants';
+        const estaAgotado = esDecant
+            ? (!prod.disponible || prod.mililitrosDisponibles < 3)
+            : (!prod.disponible || prod.stock <= 0);
+
+        if (estaAgotado) {
+            card.classList.add('out-of-stock', 'is-soldout');
+        }
+
+        let tagHtml = '';
+        if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
+            tagHtml = `<span class="product-tag promo-tag">OFERTA</span>`;
+        }
+
+        let categoryBadgeText = 'CATÁLOGO';
+        if (prod.categoria === 'arabe') categoryBadgeText = 'PERFUME ÁRABE';
+        else if (prod.categoria === 'disenador') categoryBadgeText = 'DISEÑADOR';
+        else if (prod.categoria === 'nicho') categoryBadgeText = 'NICHO';
+        else if (prod.categoria === 'decants') categoryBadgeText = 'DECANT';
+
+        const precioMinDecant = (esDecant && prod.presentaciones && prod.presentaciones.length > 0)
+            ? prod.presentaciones[0].precio
+            : 15;
+
+        const precioActual = esDecant ? `Desde S/ ${precioMinDecant.toFixed(2)}` : 'S/ ' + (prod.precio || 0).toFixed(2);
+        const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
+            ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>`
+            : '';
+
+        const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion || '100 ml'}`;
+
+        const stockHtml = esDecant
+            ? (prod.disponible && prod.mililitrosDisponibles >= 3
+                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.mililitrosDisponibles} ml)</span>`
+                : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`)
+            : (prod.disponible && prod.stock > 0
+                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.stock} unid.)</span>`
+                : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`);
+
+        let actionBtnHtml = '';
+        const detailsBtnHtml = `
+            <a href="producto.html?id=${encodeURIComponent(prod.id)}" class="btn btn-outline btn-details-compact" aria-label="Ver detalles de ${prod.nombre}">
+                <svg class="btn-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Detalles
+            </a>
+        `;
+
+        if (esDecant) {
+            if (prod.disponible && prod.mililitrosDisponibles >= 3) {
+                actionBtnHtml = `
+                    <div class="card-buttons-flex">
+                        ${detailsBtnHtml}
+                        <a href="producto.html?id=${encodeURIComponent(prod.id)}" class="btn btn-primary btn-select-option">
+                            Opciones
+                        </a>
+                    </div>
+                `;
+            } else {
+                actionBtnHtml = `
+                    <div class="card-buttons-flex out-of-stock-buttons">
+                        <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
+                            <svg class="icon-whatsapp whatsapp-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg> Consultar
+                        </button>
+                    </div>
+                `;
+            }
+        } else if (prod.disponible && prod.stock > 0) {
+            actionBtnHtml = `
+                <div class="card-buttons-flex">
+                    ${detailsBtnHtml}
+                    <button class="btn btn-primary btn-add-cart" data-id="${prod.id}" data-nombre="${prod.nombre}">
+                        <svg class="btn-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> Agregar
+                    </button>
+                </div>
+            `;
+        } else {
+            actionBtnHtml = `
+                <div class="card-buttons-flex out-of-stock-buttons">
+                    <button class="btn btn-secondary btn-query-wa" data-id="${prod.id}" data-nombre="${prod.nombre}" data-marca="${prod.marca}">
+                        <svg class="icon-whatsapp whatsapp-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg> Consultar
+                    </button>
+                </div>
+            `;
+        }
+
+        const esFav = (typeof window !== 'undefined' && window.FavoritosService) ? window.FavoritosService.esFavorito(prod.id) : false;
+        const favBtnHtml = `
+            <button type="button" class="favorite-toggle-btn ${esFav ? 'is-active' : ''}" data-id="${prod.id}" data-nombre="${prod.nombre}" aria-label="${esFav ? 'Quitar ' + prod.nombre + ' de favoritos' : 'Agregar ' + prod.nombre + ' a favoritos'}" aria-pressed="${esFav ? 'true' : 'false'}">
+                <svg class="favorite-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="${esFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                </svg>
+            </button>
+        `;
+
+        const divContainer = document.createElement('div');
+        divContainer.className = 'product-image-container';
+        divContainer.innerHTML = `
+            ${tagHtml}
+            ${favBtnHtml}
+            <span class="product-category-badge">${categoryBadgeText}</span>
+            <a href="producto.html?id=${encodeURIComponent(prod.id)}" class="product-image-link" tabindex="-1">
+                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy" decoding="async">
+            </a>
+        `;
+
+        const divInfo = document.createElement('div');
+        divInfo.className = 'product-info';
+
+        const spanCatMobile = document.createElement('span');
+        spanCatMobile.className = 'product-category-mobile';
+        spanCatMobile.textContent = categoryBadgeText;
+
+        const divBrand = document.createElement('div');
+        divBrand.className = 'product-brand';
+        divBrand.textContent = prod.marca;
+
+        const h3Title = document.createElement('h3');
+        h3Title.className = 'product-title';
+        h3Title.innerHTML = `<a href="producto.html?id=${encodeURIComponent(prod.id)}" class="product-title-link" style="color: inherit; text-decoration: none;">${prod.nombre}</a>`;
+
+        const divVol = document.createElement('div');
+        divVol.className = 'product-volume';
+        divVol.textContent = presentacionFormateada;
+
+        const divStockRow = document.createElement('div');
+        divStockRow.className = 'product-stock-row';
+        divStockRow.innerHTML = stockHtml;
+
+        const divPriceRow = document.createElement('div');
+        divPriceRow.className = 'product-price-row';
+        divPriceRow.innerHTML = `
+            <div class="prices">
+                ${precioAnteriorHtml}
+                <span class="price-current">${precioActual}</span>
+            </div>
+        `;
+
+        const divFooter = document.createElement('div');
+        divFooter.className = 'product-card-footer';
+        divFooter.innerHTML = actionBtnHtml;
+
+        divInfo.appendChild(spanCatMobile);
+        divInfo.appendChild(divBrand);
+        divInfo.appendChild(h3Title);
+        divInfo.appendChild(divVol);
+        divInfo.appendChild(divStockRow);
+        divInfo.appendChild(divPriceRow);
+
+        card.appendChild(divContainer);
+        card.appendChild(divInfo);
+        card.appendChild(divFooter);
+
+        grid.appendChild(card);
+    });
+
+    // Vincular listeners para los botones dentro de la cuadrícula de relacionados
+    if (typeof vincularEventosProductosGrid === 'function') {
+        vincularEventosProductosGrid(grid);
+    }
+}
+
+// Exportar al objeto global para pruebas y reusabilidad modular
+if (typeof window !== 'undefined') {
+    window.normalizarTexto = normalizarTexto;
+    window.calcularPuntuacionRelacion = calcularPuntuacionRelacion;
+    window.obtenerProductosRelacionados = obtenerProductosRelacionados;
+    window.renderProductosRelacionados = renderProductosRelacionados;
 }
 
 

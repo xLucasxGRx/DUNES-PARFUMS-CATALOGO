@@ -1909,51 +1909,41 @@
   /* ==========================================================================
      REDISEÑO ULTRA COMPACTO DEL CATÁLOGO EN MÓVIL (PRODUCTOS MÁS ARRIBA)
      ========================================================================== */
+  /* Ocultar visualmente la cabecera del catálogo en móvil manteniendo H1 semántico para SEO/accesibilidad */
   #page-catalogo main.section-padding {
-    padding-top: 12px !important;
+    padding-top: 8px !important;
     padding-bottom: 12px !important;
   }
 
-  #page-catalogo .catalog-header,
-  #page-catalogo .section-header {
-    margin-top: 0 !important;
-    margin-bottom: 8px !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+  #page-catalogo .catalog-header {
+    margin: 0 !important;
+    padding: 0 !important;
     min-height: 0 !important;
-    gap: 2px !important;
+    height: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+  }
+
+  #page-catalogo .catalog-header #catalogo-titulo,
+  #page-catalogo .catalog-header .page-heading__title {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
   }
 
   #page-catalogo .catalog-header .section-subtitle,
-  #page-catalogo .section-subtitle,
-  #page-catalogo #catalogo-subtitulo {
+  #page-catalogo .catalog-header #catalogo-subtitulo,
+  #page-catalogo .catalog-header .page-heading__divider,
+  #page-catalogo .catalog-header .page-heading__description,
+  #page-catalogo .catalog-header #catalogo-descripcion,
+  #page-catalogo .catalog-header .section-title::after {
     display: none !important;
-  }
-
-  #page-catalogo .catalog-header .section-title,
-  #page-catalogo .section-title,
-  #page-catalogo #catalogo-titulo {
-    font-size: 1.35rem !important;
-    line-height: 1.1 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-bottom: 4px !important;
-  }
-
-  #page-catalogo .section-title::after {
-    width: 32px !important;
-    height: 2px !important;
-    bottom: 0 !important;
-    margin: 0 auto !important;
-  }
-
-  #page-catalogo #catalogo-descripcion {
-    font-size: 0.8rem !important;
-    margin-top: 4px !important;
-    margin-bottom: 0 !important;
-    line-height: 1.25 !important;
-    max-width: 95% !important;
-    padding: 0 !important;
   }
 
   /* Tarjeta de Filtros Móvil Ultra Compacta */
@@ -3942,6 +3932,72 @@
   .ayuda-subtitle {
     font-size: 0.88rem !important;
     line-height: 1.35 !important;
+  }
+}
+
+/* ==========================================================================
+   FASE M21 — Estilos de Productos Relacionados Automáticos ("También te puede interesar")
+   ========================================================================== */
+.related-products-section {
+  width: 100%;
+  margin-top: 32px;
+  margin-bottom: 24px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .related-products-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 10px !important;
+    padding-bottom: 10px !important;
+    padding-top: 4px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary, #B18225) transparent;
+  }
+
+  .related-products-grid::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .related-products-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 2px;
+  }
+
+  .related-products-grid::-webkit-scrollbar-thumb {
+    background: var(--color-primary, #B18225);
+    border-radius: 2px;
+  }
+
+  .related-products-grid .product-card {
+    flex: 0 0 calc(60% - 8px) !important;
+    max-width: 220px !important;
+    min-width: 160px !important;
+    scroll-snap-align: start !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .related-products-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    overflow-x: visible !important;
+    padding-bottom: 0 !important;
+  }
+
+  .related-products-grid .product-card {
+    flex: none !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
   }
 }
 
