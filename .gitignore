@@ -1,9 +1,0 @@
-# Secretos y variables de entorno
-.env
-.env.local
-.env.*.local
-
-# Dependencias y temporales
-node_modules/
-.DS_Store
-*.log
