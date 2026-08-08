@@ -38,6 +38,58 @@ export function normalizarCadena(val) {
 }
 
 /**
+ * Parser CSV robusto que contempla celdas con comillas y saltos de línea internos
+ * @param {string} csvText
+ * @returns {Array<Array<string>>}
+ */
+export function parseCSV(csvText) {
+    const rows = [];
+    let currentRow = [];
+    let currentCell = '';
+    let insideQuote = false;
+
+    for (let i = 0; i < csvText.length; i++) {
+        const char = csvText[i];
+        const nextChar = csvText[i + 1];
+
+        if (insideQuote) {
+            if (char === '"') {
+                if (nextChar === '"') {
+                    currentCell += '"';
+                    i++;
+                } else {
+                    insideQuote = false;
+                }
+            } else {
+                currentCell += char;
+            }
+        } else {
+            if (char === '"') {
+                insideQuote = true;
+            } else if (char === ',') {
+                currentRow.push(currentCell.trim());
+                currentCell = '';
+            } else if (char === '\r' || char === '\n') {
+                if (char === '\r' && nextChar === '\n') {
+                    i++;
+                }
+                currentRow.push(currentCell.trim());
+                rows.push(currentRow);
+                currentRow = [];
+                currentCell = '';
+            } else {
+                currentCell += char;
+            }
+        }
+    }
+    if (currentCell || currentRow.length > 0) {
+        currentRow.push(currentCell.trim());
+        rows.push(currentRow);
+    }
+    return rows;
+}
+
+/**
  * Evalúa la coincidencia entre el producto de Dunes y un candidato retornado por Fragella
  * Previene confusiones entre variantes como (Hawas vs Hawas Ice, Khamrah vs Khamrah Qahwa, 9PM vs 9PM Elixir)
  * 
@@ -189,14 +241,68 @@ export async function ejecutarSincronizacionFragella(options = {}) {
         return { success: false, error: 'MISSING_API_KEY' };
     }
 
-    // 1. Cargar productos Dunes
+    // 1. Cargar productos Dunes (Google Sheets CSV con fallback a data/productos.json)
     let productosDunes = [];
-    if (fs.existsSync(DATA_PRODUCTOS_PATH)) {
-        const rawProductos = fs.readFileSync(DATA_PRODUCTOS_PATH, 'utf8');
-        productosDunes = JSON.parse(rawProductos);
-    } else {
-        console.error(`ERROR: No se encontró el archivo ${DATA_PRODUCTOS_PATH}`);
-        return { success: false, error: 'FILE_NOT_FOUND' };
+    let fuenteProductos = 'data/productos.json (local)';
+
+    try {
+        const sheetsUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=0&single=true&output=csv";
+        const resSheets = await fetch(sheetsUrl);
+        if (resSheets.ok) {
+            const csvText = await resSheets.text();
+            const rows = parseCSV(csvText);
+            if (rows.length > 1) {
+                const rawHeaders = rows[0];
+                const headers = rawHeaders.map(h => h.replace(/^\uFEFF/, '').trim().toLowerCase());
+                const parsedList = [];
+
+                for (let r = 1; r < rows.length; r++) {
+                    const cols = rows[r];
+                    if (!cols || cols.length === 0 || (cols.length === 1 && !cols[0])) continue;
+                    const rowObj = {};
+                    headers.forEach((h, colIdx) => {
+                        rowObj[h] = cols[colIdx] ?? '';
+                    });
+
+                    const idVal = rowObj.id || rowObj.ID;
+                    const nombreVal = rowObj.nombre || rowObj.producto || rowObj.name;
+                    const marcaVal = rowObj.marca || rowObj.brand || rowObj.casa;
+                    const visibleVal = rowObj.visible;
+
+                    const visibleClean = String(visibleVal ?? true).toLowerCase();
+                    const esVisible = !(visibleVal === false || visibleVal === '0' || visibleClean === 'false' || visibleClean === 'no');
+
+                    if (idVal && nombreVal && esVisible) {
+                        parsedList.push({
+                            id: String(idVal).trim(),
+                            nombre: nombreVal,
+                            marca: marcaVal || 'Dunes Parfums',
+                            categoria: rowObj.categoria || rowObj.tipo || 'general',
+                            visible: true,
+                            stock: Number(rowObj.stock) || 0,
+                            disponible: true
+                        });
+                    }
+                }
+                if (parsedList.length > 0) {
+                    productosDunes = parsedList;
+                    fuenteProductos = 'Google Sheets CSV (En vivo)';
+                }
+            }
+        }
+    } catch (errSheets) {
+        // Ignorar error y usar respaldo local
+    }
+
+    if (productosDunes.length === 0) {
+        if (fs.existsSync(DATA_PRODUCTOS_PATH)) {
+            const rawProductos = fs.readFileSync(DATA_PRODUCTOS_PATH, 'utf8');
+            productosDunes = JSON.parse(rawProductos);
+            fuenteProductos = 'data/productos.json (local)';
+        } else {
+            console.error(`ERROR: No se encontró el archivo ${DATA_PRODUCTOS_PATH}`);
+            return { success: false, error: 'FILE_NOT_FOUND' };
+        }
     }
 
     // 2. Cargar cache olfativa local
@@ -215,6 +321,7 @@ export async function ejecutarSincronizacionFragella(options = {}) {
     const totalCacheados = totalProductos - pendientes.length;
 
     console.log(`\nResumen del Catálogo:`);
+    console.log(`- Fuente de productos: ${fuenteProductos}`);
     console.log(`- Total de productos: ${totalProductos}`);
     console.log(`- Cacheados previamente: ${totalCacheados}`);
     console.log(`- Pendientes de sincronización: ${pendientes.length}`);
