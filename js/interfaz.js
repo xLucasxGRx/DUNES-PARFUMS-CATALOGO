@@ -32,8 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 8. Inicializar carrusel móvil de beneficios y acordeón del footer
-    inicializarCarruselBeneficios();
+    // 8. Inicializar acordeón del footer
     inicializarAcordeonFooter();
 });
 
@@ -2754,46 +2753,7 @@ window.guardarPreferenciaEntrega = guardarPreferenciaEntrega;
 window.cargarPreferenciaEntrega = cargarPreferenciaEntrega;
 window.inicializarCheckoutForm = inicializarCheckoutForm;
 
-/**
- * Inicializa el carrusel horizontal de beneficios en versión móvil
- */
-function inicializarCarruselBeneficios() {
-    const carousel = document.getElementById('benefits-carousel');
-    const counterEl = document.getElementById('benefits-counter');
-    const dotsContainer = document.getElementById('benefits-dots');
-    if (!carousel) return;
 
-    const cards = carousel.querySelectorAll('.benefit-card');
-    const totalCards = cards.length;
-    if (totalCards === 0) return;
-
-    const updateCarouselState = () => {
-        const scrollLeft = carousel.scrollLeft;
-        const cardWidth = cards[0].offsetWidth + 14;
-        let currentIndex = Math.round(scrollLeft / cardWidth);
-        if (currentIndex < 0) currentIndex = 0;
-        if (currentIndex >= totalCards) currentIndex = totalCards - 1;
-
-        if (counterEl) {
-            counterEl.textContent = `${currentIndex + 1} de ${totalCards}`;
-        }
-
-        if (dotsContainer) {
-            const dots = dotsContainer.querySelectorAll('.dot');
-            dots.forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === currentIndex);
-            });
-        }
-    };
-
-    let scrollTimeout;
-    carousel.addEventListener('scroll', () => {
-        if (scrollTimeout) clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(updateCarouselState, 40);
-    }, { passive: true });
-
-    updateCarouselState();
-}
 
 /**
  * Inicializa el acordeón interactivo en el footer para pantallas móviles

@@ -1497,56 +1497,7 @@ button:disabled,
     }
 }
 
-/* 5. Sección de Beneficios */
-.benefits-section {
-    background-color: var(--color-bg-dark);
-    color: var(--color-text-light);
-    border-top: 1px solid var(--color-border-gold);
-}
 
-.benefits-section .section-title {
-    color: var(--color-text-light);
-}
-
-.benefits-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 32px;
-}
-
-.benefit-card {
-    text-align: center;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-}
-
-.benefit-icon-wrapper {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    border: 1px solid var(--color-border-gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.7rem;
-    color: var(--color-primary);
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-}
-
-.benefit-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--color-text-light);
-}
-
-.benefit-desc {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.65);
-    font-weight: 300;
-}
 
 /* 6. Oferta Semanal */
 .weekly-offer-section {
