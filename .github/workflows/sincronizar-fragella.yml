@@ -1,0 +1,57 @@
+name: Sincronizar Fragella
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Cantidad de perfumes nuevos a procesar (Default: 1, Máximo inicial: 5)'
+        required: false
+        default: '1'
+      dry_run:
+        description: 'Modo Simulación Dry Run (true: 0 peticiones HTTP reales / false: consulta API real)'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  sync-fragella:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del Repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validar Secret de Fragella API
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          if [ -z "${{ secrets.FRAGELLA_API_KEY }}" ]; then
+            echo "::error::El secret FRAGELLA_API_KEY no está configurado en el repositorio."
+            exit 1
+          fi
+
+      - name: Ejecutar Script de Sincronización
+        env:
+          FRAGELLA_API_KEY: ${{ secrets.FRAGELLA_API_KEY }}
+        run: |
+          EXTRA_ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            EXTRA_ARGS="--dry-run"
+          fi
+          node scripts/sincronizar-fragella.mjs --limit=${{ inputs.limit || '1' }} $EXTRA_ARGS
+
+      - name: Confirmar y Guardar Cambios en JSON (Si no es Dry Run)
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/perfumes-olfativos.json
+          if git diff --cached --quiet; then
+            echo "No hay cambios nuevos en data/perfumes-olfativos.json para commitear."
+          else
+            git commit -m "auto: sincronización de perfiles olfativos desde Fragella API"
+            git push
+          fi

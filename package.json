@@ -7,7 +7,8 @@
     "test": "node --test tests/*.test.js",
     "imagenes:webp": "python tools/convertir-productos-webp.py",
     "seo:generar": "node tools/generar-seo.js",
-    "seo:verificar": "node tools/generar-seo.js --verificar"
+    "seo:verificar": "node tools/generar-seo.js --verificar",
+    "fragella:sync": "node scripts/sincronizar-fragella.mjs"
   },
   "keywords": [
     "perfumes",
