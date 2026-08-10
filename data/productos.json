@@ -8,7 +8,7 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 155.0,
+    "precio": 180.0,
     "stock": 3,
     "disponible": true,
     "visible": true,
@@ -16,7 +16,7 @@
     "descripcion": "Fragancia de lujo con notas de dátiles, praliné, canela y vainilla.",
     "destacado": true,
     "oferta": true,
-    "precioAnterior": 180.0
+    "precio_oferta": 155.0
   },
   {
     "id": "p2",

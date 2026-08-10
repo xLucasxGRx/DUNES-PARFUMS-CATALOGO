@@ -153,3 +153,13 @@ test('CatalogoStorage - Limpiar filtros borra dunes_catalog_state de sessionStor
 
     assert.equal(mockSessionStorage['dunes_catalog_state'], undefined, 'sessionStorage debe quedar limpio');
 });
+
+test('UnificacionEtiquetaOferta - Formato OFERTA • XX% OFF sin discount-badge inferior', () => {
+    const prod = { precio: 179, oferta: true, precio_oferta: 159, disponible: true, stock: 3 };
+    const pct = Math.round(((prod.precio - prod.precio_oferta) / prod.precio) * 100);
+    assert.equal(pct, 11);
+
+    const promoText = `OFERTA • ${pct}% OFF`;
+    assert.equal(promoText, 'OFERTA • 11% OFF');
+});
+

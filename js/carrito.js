@@ -145,6 +145,9 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
 
         // Obtener precio unitario
         let precioUnitario = product.precio;
+        if (!esDecant && product.oferta === true && (typeof product.precio_oferta === 'number' || typeof product.precioOferta === 'number')) {
+            precioUnitario = product.precio_oferta ?? product.precioOferta;
+        }
         let presentacionTexto = `Sellado / ${product.presentacion}`;
         let mlItem = 100;
 

@@ -386,15 +386,27 @@ async function cargarProductosDestacadosHome() {
         // Construir etiquetas
         let tagHtml = '';
         if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
-            tagHtml = `<span class="product-tag promo-tag">Oferta</span>`;
+            let promoText = 'OFERTA';
+            if (typeof prod.precio === 'number' && prod.precio > 0 && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number')) {
+                const precioOfertaVal = prod.precio_oferta ?? prod.precioOferta;
+                if (prod.precio > precioOfertaVal) {
+                    const pct = Math.round(((prod.precio - precioOfertaVal) / prod.precio) * 100);
+                    if (pct > 0) {
+                        promoText = `OFERTA • ${pct}% OFF`;
+                    }
+                }
+            }
+            tagHtml = `<span class="product-tag promo-tag">${promoText}</span>`;
         } else if (estaAgotado) {
             tagHtml = `<span class="product-tag out-tag">Agotado</span>`;
         }
 
         // Precios
-        const precioActual = esDecant ? 'Desde S/ 15.00' : formatearMoneda(prod.precio);
-        const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
-            ? `<span class="price-old">${formatearMoneda(prod.precioAnterior)}</span>`
+        const tieneOferta = !esDecant && prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number');
+        const precioOfertaVal = tieneOferta ? (prod.precio_oferta ?? prod.precioOferta) : null;
+        const precioActual = esDecant ? 'Desde S/ 15.00' : formatearMoneda(tieneOferta ? precioOfertaVal : prod.precio);
+        const precioAnteriorHtml = (tieneOferta && typeof prod.precio === 'number')
+            ? `<span class="price-old">${formatearMoneda(prod.precio)}</span>`
             : '';
 
         // Formatear presentación
@@ -543,23 +555,21 @@ async function cargarOfertaEspecialHome() {
         }
 
         // Precios y Descuento
-        const precioActual = esDecant ? (prod.precio || 15) : prod.precio;
+        const tieneOferta = !esDecant && prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number');
+        const precioOfertaVal = tieneOferta ? (prod.precio_oferta ?? prod.precioOferta) : null;
+        const precioActual = esDecant ? (prod.precio || 15) : (tieneOferta ? precioOfertaVal : prod.precio);
         if (priceNewEl) {
             priceNewEl.textContent = esDecant ? 'Desde S/ 15.00' : formatearMoneda(precioActual);
         }
 
-        const precioAnterior = prod.precioAnterior;
-        const tieneDescuentoValido = !esDecant &&
-            typeof precioAnterior === 'number' &&
-            precioAnterior > precioActual &&
-            precioActual > 0;
+        const tieneDescuentoValido = tieneOferta && typeof prod.precio === 'number' && prod.precio > precioActual && precioActual > 0;
 
         if (tieneDescuentoValido) {
             if (priceOldEl) {
-                priceOldEl.textContent = formatearMoneda(precioAnterior);
+                priceOldEl.textContent = formatearMoneda(prod.precio);
                 priceOldEl.style.display = 'inline-block';
             }
-            const porcentaje = Math.round(((precioAnterior - precioActual) / precioAnterior) * 100);
+            const porcentaje = Math.round(((prod.precio - precioActual) / prod.precio) * 100);
             if (badgeEl && porcentaje > 0) {
                 badgeEl.textContent = `${porcentaje}% OFF`;
                 badgeEl.style.display = 'inline-block';
@@ -600,7 +610,7 @@ async function cargarOfertaEspecialHome() {
                 e.preventDefault();
                 let msg = `Hola, Dunes Parfums.\n\nDeseo consultar la oferta de:\n${prod.nombre}\nPresentación: ${prod.presentacion || (esDecant ? 'Decant' : 'Sellado')}\nPrecio de oferta: S/${precioActual.toFixed(2)}`;
                 if (tieneDescuentoValido) {
-                    msg += `\nPrecio anterior: S/${precioAnterior.toFixed(2)}`;
+                    msg += `\nPrecio regular: S/${prod.precio.toFixed(2)}`;
                 }
                 const url = `https://wa.me/51986510573?text=${encodeURIComponent(msg)}`;
                 window.open(url, '_blank', 'noopener,noreferrer');
@@ -896,6 +906,13 @@ function renderizarDetalleSellado(container, prod) {
         ? `<span class="detail-stock-badge in-stock">Disponible (${prod.stock} unidades)</span>`
         : `<span class="detail-stock-badge out-of-stock">Agotado</span>`;
 
+    const tieneOferta = prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number');
+    const precioOfertaVal = tieneOferta ? (prod.precio_oferta ?? prod.precioOferta) : null;
+    const precioActual = tieneOferta ? precioOfertaVal : prod.precio;
+    const precioAnteriorHtml = (tieneOferta && typeof prod.precio === 'number')
+        ? `<span class="price-old">${formatearMoneda(prod.precio)}</span>`
+        : '';
+
     let pickerAndActionsHtml = '';
     if (prod.disponible && prod.stock > 0) {
         pickerAndActionsHtml = `
@@ -935,7 +952,8 @@ function renderizarDetalleSellado(container, prod) {
                 <span class="detail-volume">${presentacionFormateada}</span>
 
                 <div class="detail-price-box">
-                    <span class="detail-price">${formatearMoneda(prod.precio)}</span>
+                    ${precioAnteriorHtml}
+                    <span class="detail-price">${formatearMoneda(precioActual)}</span>
                 </div>
 
                 <div class="detail-stock-box">
@@ -1017,7 +1035,7 @@ function renderizarDetalleSellado(container, prod) {
                 return {
                     nombre: prod.nombre,
                     variante: `Sellado · ${prod.presentacion || '100 ml'}`,
-                    precio: prod.precio
+                    precio: (prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number')) ? (prod.precio_oferta ?? prod.precioOferta) : prod.precio
                 };
             });
         }
@@ -3541,7 +3559,17 @@ function renderProductosRelacionados(productoActual, productosRelacionados) {
 
         let tagHtml = '';
         if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
-            tagHtml = `<span class="product-tag promo-tag">OFERTA</span>`;
+            let promoText = 'OFERTA';
+            if (typeof prod.precio === 'number' && prod.precio > 0 && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number')) {
+                const precioOfertaVal = prod.precio_oferta ?? prod.precioOferta;
+                if (prod.precio > precioOfertaVal) {
+                    const pct = Math.round(((prod.precio - precioOfertaVal) / prod.precio) * 100);
+                    if (pct > 0) {
+                        promoText = `OFERTA • ${pct}% OFF`;
+                    }
+                }
+            }
+            tagHtml = `<span class="product-tag promo-tag">${promoText}</span>`;
         }
 
         let categoryBadgeText = 'CATÁLOGO';
@@ -3554,9 +3582,13 @@ function renderProductosRelacionados(productoActual, productosRelacionados) {
             ? prod.presentaciones[0].precio
             : 15;
 
-        const precioActual = esDecant ? `Desde S/ ${precioMinDecant.toFixed(2)}` : 'S/ ' + (prod.precio || 0).toFixed(2);
-        const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
-            ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>`
+        const tieneOferta = !esDecant && prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number');
+        const precioOfertaVal = tieneOferta ? (prod.precio_oferta ?? prod.precioOferta) : null;
+        const precioActual = esDecant
+            ? `Desde S/ ${precioMinDecant.toFixed(2)}`
+            : 'S/ ' + (tieneOferta ? precioOfertaVal : (prod.precio || 0)).toFixed(2);
+        const precioAnteriorHtml = (tieneOferta && typeof prod.precio === 'number')
+            ? `<span class="price-old">S/ ${prod.precio.toFixed(2)}</span>`
             : '';
 
         const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion || '100 ml'}`;

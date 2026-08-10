@@ -151,6 +151,9 @@ const ProductosService = (function() {
                 p.disponible = parseBoolean(p.disponible);
                 p.destacado = parseBoolean(p.destacado);
                 p.oferta = parseBoolean(p.oferta);
+                const precioOfertaVal = parseNumber(p.precio_oferta ?? p.precioOferta);
+                p.precio_oferta = precioOfertaVal;
+                p.precioOferta = precioOfertaVal;
                 p.genero = normalizarGenero(p.genero);
                 return p;
             });
@@ -275,7 +278,8 @@ const ProductosService = (function() {
                         descripcion: rawObj.descripcion ? limpiarValorImportado(rawObj.descripcion) : '',
                         destacado: parseBoolean(rawObj.destacado),
                         oferta: parseBoolean(rawObj.oferta),
-                        precioAnterior: parseNumber(rawObj.precio_anterior),
+                        precio_oferta: parseNumber(rawObj.precio_oferta),
+                        precioOferta: parseNumber(rawObj.precio_oferta),
                         orden: parseNumber(rawObj.orden),
                         ofertaTitulo: rawObj.oferta_titulo ? limpiarValorImportado(rawObj.oferta_titulo) : '',
                         ofertaSubtitulo: rawObj.oferta_subtitulo ? limpiarValorImportado(rawObj.oferta_subtitulo) : '',

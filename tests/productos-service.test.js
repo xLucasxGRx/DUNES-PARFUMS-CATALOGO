@@ -56,3 +56,13 @@ test('ProductosService - Fallback transparente a JSON si Google Sheets falla', a
         CONFIG.GOOGLE_SHEETS_CSV_URL = originalUrl;
     }
 });
+
+test('ProductosService - Lectura y normalización de precio_oferta', async () => {
+    const res = await ProductosService.cargarProductos();
+    const prodOferta = res.productos.find(p => p.oferta === true && p.precio_oferta !== null);
+    if (prodOferta) {
+        assert.strictEqual(typeof prodOferta.precio_oferta, 'number');
+        assert.strictEqual(prodOferta.precio_oferta, prodOferta.precioOferta);
+    }
+});
+

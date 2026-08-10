@@ -751,6 +751,9 @@ function filtrarYRenderizar(productos, estado, grid) {
                     ? prod.presentaciones[0].precio 
                     : 15;
             }
+            if (prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number')) {
+                return prod.precio_oferta ?? prod.precioOferta;
+            }
             return prod.precio || 0;
         };
         filtrados.sort((a, b) => getPrecioParaOrdenar(a) - getPrecioParaOrdenar(b));
@@ -760,6 +763,9 @@ function filtrarYRenderizar(productos, estado, grid) {
                 return prod.presentaciones && prod.presentaciones.length > 0 
                     ? prod.presentaciones[0].precio 
                     : 15;
+            }
+            if (prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number')) {
+                return prod.precio_oferta ?? prod.precioOferta;
             }
             return prod.precio || 0;
         };
@@ -784,9 +790,19 @@ function filtrarYRenderizar(productos, estado, grid) {
             card.classList.add('out-of-stock', 'is-soldout');
         }
 
+        const tieneOferta = !esDecant && prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number');
+        const precioOfertaVal = tieneOferta ? (prod.precio_oferta ?? prod.precioOferta) : null;
+
         let tagHtml = '';
         if (!esDecant && prod.oferta && prod.disponible && prod.stock > 0) {
-            tagHtml = `<span class="product-tag promo-tag">OFERTA</span>`;
+            let promoText = 'OFERTA';
+            if (tieneOferta && typeof prod.precio === 'number' && prod.precio > precioOfertaVal) {
+                const pct = Math.round(((prod.precio - precioOfertaVal) / prod.precio) * 100);
+                if (pct > 0) {
+                    promoText = `OFERTA • ${pct}% OFF`;
+                }
+            }
+            tagHtml = `<span class="product-tag promo-tag">${promoText}</span>`;
         } else if (estaAgotado) {
             tagHtml = `<span class="product-tag out-tag">AGOTADO</span>`;
         }
@@ -811,18 +827,10 @@ function filtrarYRenderizar(productos, estado, grid) {
             ? prod.presentaciones[0].precio 
             : 15;
 
-        const precioActual = esDecant ? `Desde S/ ${precioMinDecant.toFixed(2)}` : 'S/ ' + (prod.precio || 0).toFixed(2);
-        const precioAnteriorHtml = (!esDecant && prod.precioAnterior)
-            ? `<span class="price-old">S/ ${prod.precioAnterior.toFixed(2)}</span>`
+        const precioActual = esDecant ? `Desde S/ ${precioMinDecant.toFixed(2)}` : 'S/ ' + (tieneOferta ? precioOfertaVal : (prod.precio || 0)).toFixed(2);
+        const precioAnteriorHtml = (tieneOferta && typeof prod.precio === 'number')
+            ? `<span class="price-old">S/ ${prod.precio.toFixed(2)}</span>`
             : '';
-
-        let discountBadgeHtml = '';
-        if (!esDecant && prod.precioAnterior && prod.precioAnterior > prod.precio) {
-            const pct = Math.round(((prod.precioAnterior - prod.precio) / prod.precioAnterior) * 100);
-            if (pct > 0) {
-                discountBadgeHtml = `<span class="discount-badge">${pct}% OFF</span>`;
-            }
-        }
 
         const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion || '100 ml'}`;
 
@@ -918,7 +926,6 @@ function filtrarYRenderizar(productos, estado, grid) {
                 <div class="prices">
                     ${precioAnteriorHtml}
                     <span class="price-current">${precioActual}</span>
-                    ${discountBadgeHtml}
                 </div>
             </div>
         `;
