@@ -8,7 +8,7 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 180.0,
+    "precio": 180,
     "stock": 3,
     "disponible": true,
     "visible": true,
@@ -16,7 +16,8 @@
     "descripcion": "Fragancia de lujo con notas de dátiles, praliné, canela y vainilla.",
     "destacado": true,
     "oferta": true,
-    "precio_oferta": 155.0
+    "precio_oferta": 155,
+    "imagen_notas": ""
   },
   {
     "id": "p2",
@@ -27,14 +28,15 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 145.0,
+    "precio": 145,
     "stock": 1,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaHonorandGlory.webp",
     "descripcion": "Combinación tropical y cremosa con acordes de piña brulée y especias.",
     "destacado": false,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p3",
@@ -45,14 +47,15 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 155.0,
+    "precio": 155,
     "stock": 2,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/LattafaKhamrahQahwa.webp",
     "descripcion": "Fusión del clásico Khamrah con un fondo estimulante de café tostado.",
     "destacado": true,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p4",
@@ -63,14 +66,15 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 160.0,
+    "precio": 160,
     "stock": 2,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/ArmafMandarinSky.webp",
     "descripcion": "Aroma cítrico frutal con notas de mandarina, haba tonka y caramelo.",
     "destacado": true,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p5",
@@ -81,14 +85,15 @@
     "genero": "unisex",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 160.0,
+    "precio": 160,
     "stock": 1,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/Afnan9amDive.webp",
     "descripcion": "Fragancia fresca y enérgica de día con toques cítricos y florales.",
     "destacado": false,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p6",
@@ -99,14 +104,15 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 155.0,
+    "precio": 155,
     "stock": 1,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/Afnan9pm.webp",
     "descripcion": "Perfume oriental-frutal con acordes dulces de vainilla, manzana y canela.",
     "destacado": true,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p7",
@@ -117,14 +123,15 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 250.0,
+    "precio": 250,
     "stock": 1,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/BhararaKing.webp",
     "descripcion": "Aroma frutal intenso con una extraordinaria fijación y proyección.",
     "destacado": true,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p8",
@@ -135,14 +142,15 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 175.0,
+    "precio": 175,
     "stock": 1,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/RasasiHawasIce.webp",
     "descripcion": "Versión helada, cítrica y aromática del mítico Hawas.",
     "destacado": true,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p9",
@@ -153,14 +161,15 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 165.0,
+    "precio": 165,
     "stock": 1,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/DumontNitroRed.webp",
     "descripcion": "Combinación fresca de notas acuáticas, sandía y maderas preciosas.",
     "destacado": false,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "p10",
@@ -171,14 +180,15 @@
     "genero": "hombre",
     "presentacion": "100 ml",
     "formato": "Sellado",
-    "precio": 175.0,
+    "precio": 175,
     "stock": 1,
     "disponible": true,
     "visible": true,
     "imagen": "img/productos/ArmafUrbanmanelixir.webp",
     "descripcion": "Aroma limpio, moderno y versátil con notas de ámbar y pachuli.",
     "destacado": false,
-    "oferta": false
+    "oferta": false,
+    "imagen_notas": ""
   },
   {
     "id": "d1",
@@ -201,22 +211,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d2",
@@ -239,22 +250,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 45.0,
+        "precio": 45,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d3",
@@ -277,22 +289,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d4",
@@ -315,22 +328,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d5",
@@ -353,22 +367,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d6",
@@ -391,22 +406,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 45.0,
+        "precio": 45,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d7",
@@ -429,22 +445,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d8",
@@ -467,22 +484,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d9",
@@ -505,22 +523,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d10",
@@ -543,22 +562,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d11",
@@ -581,22 +601,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d12",
@@ -619,22 +640,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d13",
@@ -657,22 +679,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d14",
@@ -695,22 +718,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d15",
@@ -733,22 +757,23 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   },
   {
     "id": "d16",
@@ -771,21 +796,22 @@
       {
         "ml": 3,
         "nombre": "Decant 3 ml",
-        "precio": 15.0,
+        "precio": 15,
         "disponible": true
       },
       {
         "ml": 5,
         "nombre": "Decant 5 ml",
-        "precio": 20.0,
+        "precio": 20,
         "disponible": true
       },
       {
         "ml": 10,
         "nombre": "Decant 10 ml",
-        "precio": 30.0,
+        "precio": 30,
         "disponible": true
       }
-    ]
+    ],
+    "imagen_notas": ""
   }
 ]

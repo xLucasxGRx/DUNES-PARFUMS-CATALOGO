@@ -114,6 +114,21 @@ const ProductosService = (function() {
         return 'ARABE'; // Default fallback
     }
 
+    function normalizarImagenNotas(valor) {
+        if (valor === undefined || valor === null) return '';
+        const limpio = limpiarValorImportado(valor);
+        if (!limpio) return '';
+        try {
+            const u = new URL(limpio);
+            if (u.protocol === 'https:') {
+                return limpio;
+            }
+        } catch (e) {
+            return '';
+        }
+        return '';
+    }
+
     async function cargarDesdeRespaldo(errorGoogleSheets = null) {
         const fallbackUrl = (typeof CONFIG !== 'undefined' && CONFIG.PRODUCTOS_RESPALDO_URL)
             ? CONFIG.PRODUCTOS_RESPALDO_URL
@@ -155,6 +170,7 @@ const ProductosService = (function() {
                 p.precio_oferta = precioOfertaVal;
                 p.precioOferta = precioOfertaVal;
                 p.genero = normalizarGenero(p.genero);
+                p.imagen_notas = normalizarImagenNotas(p.imagen_notas ?? p.imagenNotas);
                 return p;
             });
 
@@ -275,6 +291,7 @@ const ProductosService = (function() {
                         disponible: parseBoolean(rawObj.disponible),
                         visible: visible,
                         imagen: imagen,
+                        imagen_notas: normalizarImagenNotas(rawObj.imagen_notas),
                         descripcion: rawObj.descripcion ? limpiarValorImportado(rawObj.descripcion) : '',
                         destacado: parseBoolean(rawObj.destacado),
                         oferta: parseBoolean(rawObj.oferta),
@@ -369,6 +386,7 @@ const ProductosService = (function() {
         _parseNumber: parseNumber,
         _parseBoolean: parseBoolean,
         _normalizarGenero: normalizarGenero,
-        _normalizarCabecera: normalizarCabecera
+        _normalizarCabecera: normalizarCabecera,
+        _normalizarImagenNotas: normalizarImagenNotas
     };
 })();

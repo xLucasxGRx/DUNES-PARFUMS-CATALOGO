@@ -66,3 +66,23 @@ test('ProductosService - Lectura y normalización de precio_oferta', async () =>
     }
 });
 
+test('ProductosService - Lectura y sanitización de imagen_notas (solo URLs HTTPS válidas)', () => {
+    assert.strictEqual(ProductosService._normalizarImagenNotas('https://servidor.com/notas.webp'), 'https://servidor.com/notas.webp');
+    assert.strictEqual(ProductosService._normalizarImagenNotas('   https://servidor.com/notas.webp  '), 'https://servidor.com/notas.webp');
+    assert.strictEqual(ProductosService._normalizarImagenNotas('http://servidor-inseguro.com/notas.jpg'), '');
+    assert.strictEqual(ProductosService._normalizarImagenNotas('javascript:alert(1)'), '');
+    assert.strictEqual(ProductosService._normalizarImagenNotas('data:image/png;base64,123'), '');
+    assert.strictEqual(ProductosService._normalizarImagenNotas('img/local.jpg'), '');
+    assert.strictEqual(ProductosService._normalizarImagenNotas(''), '');
+    assert.strictEqual(ProductosService._normalizarImagenNotas(null), '');
+});
+
+test('ProductosService - Soporte de imagen_notas en productos cargados', async () => {
+    const res = await ProductosService.cargarProductos();
+    for (const p of res.productos) {
+        assert.ok('imagen_notas' in p, 'Cada producto debe poseer la propiedad imagen_notas');
+        if (p.imagen_notas) {
+            assert.ok(p.imagen_notas.startsWith('https://'), 'Si imagen_notas no es vacía, debe ser una URL HTTPS');
+        }
+    }
+});

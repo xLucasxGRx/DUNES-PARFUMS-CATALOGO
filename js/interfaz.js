@@ -897,6 +897,620 @@ function mostrarMensajeErrorProducto(container, callbackReintentar) {
 }
 
 /**
+ * Genera el HTML de la zona de imagen (imagen única o estructura de galería si existe imagen_notas)
+ * @param {Object} prod
+ * @returns {string} HTML
+ */
+function generarHtmlLadoImagen(prod) {
+    const urlNotasClean = (prod && prod.imagen_notas) ? String(prod.imagen_notas).trim() : '';
+    const zoomBadgeSvg = `
+        <span class="gallery-zoom-badge" aria-hidden="true" title="Ampliar imagen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="11" x2="14" y2="11"></line></svg>
+        </span>
+    `;
+
+    if (!urlNotasClean) {
+        return `
+            <div class="detail-image-side">
+                <div class="product-gallery__zoom-trigger" id="gallery-zoom-trigger" role="button" tabindex="0" aria-label="Ampliar imagen de ${prod.nombre}">
+                    <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img detail-product-img--zoomable">
+                    ${zoomBadgeSvg}
+                </div>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="detail-image-side product-gallery-side">
+            <div class="product-gallery product-gallery--layout-side" id="product-gallery" tabindex="0" aria-label="Galería de imágenes de ${prod.nombre}">
+                <div class="product-gallery__main-viewport" id="gallery-main-viewport">
+                    <div class="product-gallery__track" id="gallery-track">
+                        <div class="product-gallery__slide active" data-index="0" role="button" tabindex="0" aria-label="Ampliar imagen del perfume ${prod.nombre}">
+                            <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img gallery-img gallery-img--main">
+                        </div>
+                        <div class="product-gallery__slide" data-index="1" role="button" tabindex="0" aria-label="Ampliar notas del perfume ${prod.nombre}">
+                            <img src="${urlNotasClean}" alt="Notas y perfil olfativo de ${prod.nombre}" class="detail-product-img gallery-img gallery-img--notas" decoding="async" loading="lazy">
+                        </div>
+                    </div>
+                    ${zoomBadgeSvg}
+                </div>
+
+                <div class="product-gallery__thumbs product-gallery__thumbs--vertical" role="tablist" aria-label="Seleccionar imagen">
+                    <button type="button" class="gallery-thumb active" data-index="0" role="tab" aria-selected="true" aria-label="Ver imagen del perfume">
+                        <div class="thumb-img-wrapper">
+                            <img src="${prod.imagen}" alt="" class="thumb-img">
+                        </div>
+                        <span class="thumb-label">PERFUME</span>
+                    </button>
+                    <button type="button" class="gallery-thumb" data-index="1" role="tab" aria-selected="false" aria-label="Ver notas del perfume">
+                        <div class="thumb-img-wrapper">
+                            <img src="${urlNotasClean}" alt="" class="thumb-img" decoding="async" loading="lazy">
+                        </div>
+                        <span class="thumb-label">NOTAS</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Obtiene o crea el elemento modal para el Visor de Imagen Completa (Lightbox)
+ */
+function obtenerOCrearLightboxModal() {
+    let lightbox = document.getElementById('product-lightbox');
+    if (lightbox) return lightbox;
+
+    lightbox = document.createElement('div');
+    lightbox.id = 'product-lightbox';
+    lightbox.className = 'product-lightbox';
+    lightbox.setAttribute('role', 'dialog');
+    lightbox.setAttribute('aria-modal', 'true');
+    lightbox.setAttribute('aria-label', 'Visor de imagen ampliada');
+    lightbox.setAttribute('tabindex', '-1');
+
+    lightbox.innerHTML = `
+        <div class="product-lightbox__backdrop" id="lightbox-backdrop"></div>
+        <div class="product-lightbox__dialog" id="lightbox-dialog">
+            <button type="button" class="lightbox-close-btn" id="lightbox-close-btn" aria-label="Cerrar imagen">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <button type="button" class="lightbox-arrow lightbox-arrow--prev" id="lightbox-arrow-prev" aria-label="Imagen anterior" style="display: none;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <button type="button" class="lightbox-arrow lightbox-arrow--next" id="lightbox-arrow-next" aria-label="Imagen siguiente" style="display: none;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+
+            <div class="product-lightbox__img-wrapper" id="lightbox-img-wrapper">
+                <img src="" alt="" class="lightbox-img" id="lightbox-img" decoding="async">
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(lightbox);
+    return lightbox;
+}
+
+/**
+ * Abre el visor de imagen completa (Lightbox)
+ * @param {Object} prod Objeto producto
+ * @param {number} initialIndex Índice de la imagen activa
+ * @param {Function} [onSlideChange] Callback de sincronización con la galería principal
+ */
+function abrirLightboxVisor(prod, initialIndex = 0, onSlideChange = null) {
+    if (!prod) return;
+
+    const urlNotasClean = prod.imagen_notas ? String(prod.imagen_notas).trim() : '';
+    const imagenes = [
+        { url: prod.imagen, alt: `${prod.nombre} - ${prod.marca}` }
+    ];
+    if (urlNotasClean) {
+        imagenes.push({ url: urlNotasClean, alt: `Notas y perfil olfativo de ${prod.nombre}` });
+    }
+
+    let currentIndex = (initialIndex >= 0 && initialIndex < imagenes.length) ? initialIndex : 0;
+    const tieneMultiple = imagenes.length > 1;
+
+    const modal = obtenerOCrearLightboxModal();
+    const backdrop = modal.querySelector('#lightbox-backdrop');
+    const dialog = modal.querySelector('#lightbox-dialog');
+    const closeBtn = modal.querySelector('#lightbox-close-btn');
+    const prevBtn = modal.querySelector('#lightbox-arrow-prev');
+    const nextBtn = modal.querySelector('#lightbox-arrow-next');
+    const imgWrapper = modal.querySelector('#lightbox-img-wrapper');
+    const imgEl = modal.querySelector('#lightbox-img');
+
+    const triggerElement = document.activeElement;
+
+    if (prevBtn && nextBtn) {
+        if (tieneMultiple) {
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+        } else {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+    }
+
+    function actualizarVisor() {
+        if (currentIndex < 0) currentIndex = imagenes.length - 1;
+        if (currentIndex >= imagenes.length) currentIndex = 0;
+
+        const actual = imagenes[currentIndex];
+        if (actual) {
+            imgEl.src = actual.url;
+            imgEl.alt = actual.alt;
+        }
+
+        if (typeof onSlideChange === 'function') {
+            onSlideChange(currentIndex);
+        }
+    }
+
+    actualizarVisor();
+
+    document.body.classList.add('lightbox-open');
+
+    let isClosed = false;
+    function cerrarVisor() {
+        if (isClosed) return;
+        isClosed = true;
+
+        modal.classList.remove('is-open');
+        document.body.classList.remove('lightbox-open');
+        limpiarEventosVisor();
+
+        if (triggerElement && typeof triggerElement.focus === 'function') {
+            try {
+                triggerElement.focus();
+            } catch (e) {}
+        }
+    }
+
+    function handleCloseClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        cerrarVisor();
+    }
+
+    function handlePrevClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        currentIndex--;
+        actualizarVisor();
+    }
+
+    function handleNextClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        currentIndex++;
+        actualizarVisor();
+    }
+
+    function handleBackdropClick(e) {
+        if (e.target === backdrop || e.target === dialog) {
+            cerrarVisor();
+        }
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            cerrarVisor();
+        } else if (tieneMultiple && e.key === 'ArrowLeft') {
+            e.preventDefault();
+            currentIndex--;
+            actualizarVisor();
+        } else if (tieneMultiple && e.key === 'ArrowRight') {
+            e.preventDefault();
+            currentIndex++;
+            actualizarVisor();
+        } else if (e.key === 'Tab') {
+            const focusables = modal.querySelectorAll('button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+            if (focusables.length > 0) {
+                const first = focusables[0];
+                const last = focusables[focusables.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        }
+    }
+
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isSwiping = false;
+
+    function handleTouchStart(e) {
+        if (!e.touches || e.touches.length === 0) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        currentX = startX;
+        currentY = startY;
+        isSwiping = true;
+    }
+
+    function handleTouchMove(e) {
+        if (!isSwiping || !e.touches || e.touches.length === 0) return;
+        currentX = e.touches[0].clientX;
+        currentY = e.touches[0].clientY;
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        if (Math.abs(deltaX) > Math.abs(deltaY) && tieneMultiple) {
+            if (e.cancelable) e.preventDefault();
+        }
+    }
+
+    function handleTouchEnd() {
+        if (!isSwiping) return;
+        isSwiping = false;
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40 && tieneMultiple) {
+            if (deltaX < 0) {
+                currentIndex++;
+            } else {
+                currentIndex--;
+            }
+            actualizarVisor();
+        }
+    }
+
+    closeBtn.addEventListener('click', handleCloseClick);
+    if (prevBtn) prevBtn.addEventListener('click', handlePrevClick);
+    if (nextBtn) nextBtn.addEventListener('click', handleNextClick);
+    backdrop.addEventListener('click', handleBackdropClick);
+    dialog.addEventListener('click', handleBackdropClick);
+
+    if (imgWrapper) {
+        imgWrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+        imgWrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+        imgWrapper.addEventListener('touchend', handleTouchEnd, { passive: true });
+        imgWrapper.addEventListener('touchcancel', () => { isSwiping = false; }, { passive: true });
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    function limpiarEventosVisor() {
+        closeBtn.removeEventListener('click', handleCloseClick);
+        if (prevBtn) prevBtn.removeEventListener('click', handlePrevClick);
+        if (nextBtn) nextBtn.removeEventListener('click', handleNextClick);
+        backdrop.removeEventListener('click', handleBackdropClick);
+        dialog.removeEventListener('click', handleBackdropClick);
+        document.removeEventListener('keydown', handleKeyDown);
+    }
+
+    requestAnimationFrame(() => {
+        modal.classList.add('is-open');
+        if (closeBtn) closeBtn.focus();
+    });
+}
+
+/**
+ * Inicializa la lógica interactiva de la galería de producto (Autoplay, Swipe, Flechas, Miniaturas, Lightbox, A11y, Manejo de Errores)
+ * @param {HTMLElement} container
+ * @param {Object} prod
+ */
+function inicializarGaleriaDetalle(container, prod) {
+    if (!container || !prod) return;
+
+    const hasNotas = Boolean(prod.imagen_notas && String(prod.imagen_notas).trim());
+
+    // Si NO tiene imagen_notas o es modo de 1 sola imagen:
+    if (!hasNotas) {
+        const zoomTrigger = container.querySelector('#gallery-zoom-trigger') || container.querySelector('.detail-product-img');
+        if (zoomTrigger) {
+            zoomTrigger.style.cursor = 'zoom-in';
+            const handleSingleZoom = (e) => {
+                e.preventDefault();
+                abrirLightboxVisor(prod, 0, null);
+            };
+            zoomTrigger.addEventListener('click', handleSingleZoom);
+            zoomTrigger.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSingleZoom(e);
+                }
+            });
+        }
+        return;
+    }
+
+    // Modo de 2 imágenes:
+    const galleryEl = container.querySelector('#product-gallery');
+    if (!galleryEl) return;
+
+    const slides = galleryEl.querySelectorAll('.product-gallery__slide');
+    const thumbs = galleryEl.querySelectorAll('.gallery-thumb');
+    const prevBtn = galleryEl.querySelector('#gallery-arrow-prev');
+    const nextBtn = galleryEl.querySelector('#gallery-arrow-next');
+    const viewportEl = galleryEl.querySelector('#gallery-main-viewport');
+
+    let currentIndex = 0;
+    let autoplayTimer = null;
+    let userInteracted = false;
+    let isDestroyed = false;
+
+    // Control de errores en imagen de notas externa
+    const imgNotas = galleryEl.querySelector('.gallery-img--notas');
+    const thumbImgNotas = galleryEl.querySelector('.gallery-thumb[data-index="1"] .thumb-img');
+
+    function revertirAImagenUnica() {
+        if (isDestroyed) return;
+        isDestroyed = true;
+        detenerAutoplay();
+        limpiarListeners();
+
+        const sideContainer = container.querySelector('.detail-image-side');
+        if (sideContainer) {
+            sideContainer.className = 'detail-image-side';
+            const zoomBadgeSvg = `
+                <span class="gallery-zoom-badge" aria-hidden="true" title="Ampliar imagen">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="11" x2="14" y2="11"></line></svg>
+                </span>
+            `;
+            sideContainer.innerHTML = `
+                <div class="product-gallery__zoom-trigger" id="gallery-zoom-trigger" role="button" tabindex="0" aria-label="Ampliar imagen de ${prod.nombre}">
+                    <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img detail-product-img--zoomable">
+                    ${zoomBadgeSvg}
+                </div>
+            `;
+            const zoomTrigger = sideContainer.querySelector('#gallery-zoom-trigger');
+            if (zoomTrigger) {
+                zoomTrigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    abrirLightboxVisor(prod, 0, null);
+                });
+            }
+        }
+    }
+
+    if (imgNotas) {
+        if (imgNotas.complete && imgNotas.naturalWidth === 0 && imgNotas.src) {
+            revertirAImagenUnica();
+        } else {
+            imgNotas.addEventListener('error', () => {
+                revertirAImagenUnica();
+            });
+        }
+    }
+    if (thumbImgNotas) {
+        if (thumbImgNotas.complete && thumbImgNotas.naturalWidth === 0 && thumbImgNotas.src) {
+            revertirAImagenUnica();
+        } else {
+            thumbImgNotas.addEventListener('error', () => {
+                revertirAImagenUnica();
+            });
+        }
+    }
+
+    function cambiarSlide(nuevoIndex, esInteraccionManual = false) {
+        if (isDestroyed) return;
+
+        if (esInteraccionManual) {
+            userInteracted = true;
+            detenerAutoplay();
+        }
+
+        if (!esInteraccionManual && nuevoIndex === 1 && imgNotas) {
+            if (!imgNotas.complete || imgNotas.naturalWidth === 0) {
+                return;
+            }
+        }
+
+        currentIndex = (nuevoIndex + 2) % 2;
+
+        slides.forEach((slide, idx) => {
+            if (idx === currentIndex) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+
+        thumbs.forEach((thumb, idx) => {
+            if (idx === currentIndex) {
+                thumb.classList.add('active');
+                thumb.setAttribute('aria-selected', 'true');
+            } else {
+                thumb.classList.remove('active');
+                thumb.setAttribute('aria-selected', 'false');
+            }
+        });
+    }
+
+    function siguienteSlide(esManual = false) {
+        cambiarSlide(currentIndex + 1, esManual);
+    }
+
+    function anteriorSlide(esManual = false) {
+        cambiarSlide(currentIndex - 1, esManual);
+    }
+
+    function iniciarAutoplay() {
+        if (userInteracted || autoplayTimer || isDestroyed) return;
+
+        if (typeof window !== 'undefined' && window.matchMedia) {
+            try {
+                const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (prefersReduced) return;
+            } catch (e) {}
+        }
+
+        if (typeof document !== 'undefined' && document.hidden) return;
+
+        autoplayTimer = setInterval(() => {
+            if (userInteracted || (typeof document !== 'undefined' && document.hidden) || isDestroyed) {
+                detenerAutoplay();
+                return;
+            }
+            siguienteSlide(false);
+        }, 3000);
+    }
+
+    function detenerAutoplay() {
+        if (autoplayTimer) {
+            clearInterval(autoplayTimer);
+            autoplayTimer = null;
+        }
+    }
+
+    // Vincular clic en slides para abrir el visor Lightbox
+    slides.forEach(slide => {
+        slide.addEventListener('click', (e) => {
+            // Ignorar clic si fue sobre las flechas de navegación
+            if (e.target.closest('#gallery-arrow-prev') || e.target.closest('#gallery-arrow-next')) {
+                return;
+            }
+            e.preventDefault();
+            userInteracted = true;
+            detenerAutoplay();
+            abrirLightboxVisor(prod, currentIndex, (nuevoIdx) => {
+                cambiarSlide(nuevoIdx, true);
+            });
+        });
+
+        slide.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                userInteracted = true;
+                detenerAutoplay();
+                abrirLightboxVisor(prod, currentIndex, (nuevoIdx) => {
+                    cambiarSlide(nuevoIdx, true);
+                });
+            }
+        });
+    });
+
+    // Eventos de miniaturas (solo cambian slide sin abrir lightbox)
+    thumbs.forEach(thumb => {
+        thumb.addEventListener('click', (e) => {
+            e.preventDefault();
+            const idx = parseInt(thumb.getAttribute('data-index')) || 0;
+            cambiarSlide(idx, true);
+        });
+    });
+
+    // Eventos de flechas
+    if (prevBtn) {
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            anteriorSlide(true);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            siguienteSlide(true);
+        });
+    }
+
+    // Swipe táctil en viewport principal
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isSwiping = false;
+
+    function handleTouchStart(e) {
+        if (!e.touches || e.touches.length === 0) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        currentX = startX;
+        currentY = startY;
+        isSwiping = true;
+        userInteracted = true;
+        detenerAutoplay();
+    }
+
+    function handleTouchMove(e) {
+        if (!isSwiping || !e.touches || e.touches.length === 0) return;
+        currentX = e.touches[0].clientX;
+        currentY = e.touches[0].clientY;
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+        }
+    }
+
+    function handleTouchEnd() {
+        if (!isSwiping) return;
+        isSwiping = false;
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+            if (deltaX < 0) {
+                siguienteSlide(true);
+            } else {
+                anteriorSlide(true);
+            }
+        }
+    }
+
+    if (viewportEl) {
+        viewportEl.addEventListener('touchstart', handleTouchStart, { passive: false });
+        viewportEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+        viewportEl.addEventListener('touchend', handleTouchEnd, { passive: true });
+        viewportEl.addEventListener('touchcancel', () => { isSwiping = false; }, { passive: true });
+    }
+
+    // Teclado en la galería principal
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            anteriorSlide(true);
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            siguienteSlide(true);
+        }
+    }
+    galleryEl.addEventListener('keydown', handleKeyDown);
+
+    // Visibilidad de pestaña
+    function handleVisibilityChange() {
+        if (typeof document !== 'undefined' && document.hidden) {
+            detenerAutoplay();
+        } else {
+            if (!userInteracted && !isDestroyed) {
+                iniciarAutoplay();
+            }
+        }
+    }
+    if (typeof document !== 'undefined' && document.addEventListener) {
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
+
+    function limpiarListeners() {
+        if (typeof document !== 'undefined' && document.removeEventListener) {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        }
+    }
+
+    iniciarAutoplay();
+}
+
+/**
  * Renderiza la ficha técnica de un perfume SELLADO
  */
 function renderizarDetalleSellado(container, prod) {
@@ -943,9 +1557,7 @@ function renderizarDetalleSellado(container, prod) {
 
     container.innerHTML = `
         <div class="product-detail-layout">
-            <div class="detail-image-side">
-                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img">
-            </div>
+            ${generarHtmlLadoImagen(prod)}
             <div class="detail-info-side">
                 <span class="detail-brand">${prod.marca}</span>
                 <h2 class="detail-title">${prod.nombre}</h2>
@@ -1047,6 +1659,9 @@ function renderizarDetalleSellado(container, prod) {
             window.whatsappConfig.consultarDisponibilidad(prod.nombre, prod.marca, presentacionFormateada);
         });
     }
+
+    // Inicializar galería de 2 imágenes si existe imagen_notas válida
+    inicializarGaleriaDetalle(container, prod);
 }
 
 /**
@@ -1145,9 +1760,7 @@ function renderizarDetalleDecant(container, prod) {
 
     container.innerHTML = `
         <div class="product-detail-layout">
-            <div class="detail-image-side">
-                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img">
-            </div>
+            ${generarHtmlLadoImagen(prod)}
             <div class="detail-info-side">
                 <span class="detail-brand">${prod.marca}</span>
                 <h2 class="detail-title">${prod.nombre}</h2>
@@ -1296,6 +1909,9 @@ function renderizarDetalleDecant(container, prod) {
             window.whatsappConfig.consultarDisponibilidad(prod.nombre, prod.marca, finalPresentation);
         });
     }
+
+    // Inicializar galería de 2 imágenes si existe imagen_notas válida
+    inicializarGaleriaDetalle(container, prod);
 }
 
 /**

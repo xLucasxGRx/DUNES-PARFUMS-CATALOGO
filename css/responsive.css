@@ -3161,6 +3161,79 @@
     border: 1px solid rgba(197, 160, 89, 0.15) !important;
   }
 
+  /* Estilos específicos para la galería en móvil */
+  #page-producto .detail-image-side.product-gallery-side,
+  .detail-image-side.product-gallery-side {
+    height: auto !important;
+    max-height: 240px !important;
+    min-height: 0 !important;
+    padding: 8px 6px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  #page-producto .product-gallery,
+  .product-gallery {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    height: 100% !important;
+  }
+
+  #page-producto .product-gallery__main-viewport,
+  .product-gallery__main-viewport {
+    flex: 1 1 78% !important;
+    width: 78% !important;
+    height: 215px !important;
+    max-height: 220px !important;
+  }
+
+  #page-producto .gallery-img,
+  .gallery-img {
+    max-height: 205px !important;
+  }
+
+  #page-producto .product-gallery__thumbs--vertical,
+  .product-gallery__thumbs--vertical {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    margin-top: 0 !important;
+  }
+
+  #page-producto .thumb-img-wrapper,
+  .thumb-img-wrapper {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Visor Lightbox responsive en móvil */
+  #page-producto .lightbox-arrow,
+  .lightbox-arrow {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+  }
+
+  #page-producto .lightbox-arrow--prev,
+  .lightbox-arrow--prev {
+    left: max(6px, env(safe-area-inset-left)) !important;
+  }
+
+  #page-producto .lightbox-arrow--next,
+  .lightbox-arrow--next {
+    right: max(6px, env(safe-area-inset-right)) !important;
+  }
+
+  #page-producto .lightbox-img,
+  .lightbox-img {
+    max-width: 96vw !important;
+    max-height: 85dvh !important;
+  }
+
   #page-producto .detail-product-img,
   .detail-product-img {
     width: auto !important;
