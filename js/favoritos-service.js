@@ -45,31 +45,66 @@
         obtenerFavoritos: function() {
             try {
                 if (typeof localStorage === 'undefined') return [];
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (!raw) return [];
 
-                const parsed = JSON.parse(raw);
-                if (!Array.isArray(parsed)) {
-                    localStorage.removeItem(STORAGE_KEY);
-                    return [];
+                const keysToCheck = [STORAGE_KEY, 'favoritos', 'favorites', 'wishlist', 'wishlistItems', 'dunes_favorites'];
+                let raw = null;
+                let usedKey = STORAGE_KEY;
+
+                for (let i = 0; i < keysToCheck.length; i++) {
+                    const k = keysToCheck[i];
+                    const item = localStorage.getItem(k);
+                    if (item && item.trim() !== '' && item !== '[]' && item !== '{}') {
+                        raw = item;
+                        usedKey = k;
+                        break;
+                    }
                 }
 
-                // Filtrar nulos/vacíos, normalizar a string y eliminar duplicados
+                if (!raw) return [];
+
+                let parsed;
+                try {
+                    parsed = JSON.parse(raw);
+                } catch (parseErr) {
+                    if (raw.includes('{') || raw.includes('}') || raw.includes('[') || raw.includes(']')) {
+                        try { localStorage.removeItem(usedKey); } catch (e) {}
+                        return [];
+                    }
+                    const tokens = raw.split(',').map(s => s.trim()).filter(s => /^[a-zA-Z0-9_-]+$/.test(s));
+                    if (tokens.length > 0) {
+                        parsed = tokens;
+                    } else {
+                        try { localStorage.removeItem(usedKey); } catch (e) {}
+                        return [];
+                    }
+                }
+
+                let list = [];
+                if (Array.isArray(parsed)) {
+                    list = parsed;
+                } else if (parsed && typeof parsed === 'object') {
+                    list = Object.keys(parsed).filter(k => Boolean(parsed[k]));
+                }
+
                 const unicos = [];
-                for (let i = 0; i < parsed.length; i++) {
-                    const idStr = normalizarId(parsed[i]);
+                for (let i = 0; i < list.length; i++) {
+                    const item = list[i];
+                    const idVal = (item && typeof item === 'object' && item.id) ? item.id : item;
+                    const idStr = normalizarId(idVal);
                     if (idStr && !unicos.includes(idStr)) {
                         unicos.push(idStr);
                     }
                 }
+
+                if (usedKey !== STORAGE_KEY && unicos.length > 0) {
+                    try {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(unicos));
+                    } catch (e) {}
+                }
+
                 return unicos;
             } catch (err) {
                 console.warn('[FavoritosService] Error al leer favoritos de localStorage:', err);
-                try {
-                    if (typeof localStorage !== 'undefined') {
-                        localStorage.removeItem(STORAGE_KEY);
-                    }
-                } catch (e) {}
                 return [];
             }
         },
@@ -83,7 +118,7 @@
             const targetId = normalizarId(id);
             if (!targetId) return false;
             const favs = this.obtenerFavoritos();
-            return favs.includes(targetId);
+            return favs.some(f => f === targetId || f.replace(/^p/, '') === targetId.replace(/^p/, ''));
         },
 
         /**
@@ -129,10 +164,9 @@
             if (!targetId) return false;
 
             const favs = this.obtenerFavoritos();
-            const index = favs.indexOf(targetId);
-            if (index !== -1) {
-                favs.splice(index, 1);
-                this._guardar(favs);
+            const filtered = favs.filter(f => f !== targetId && f.replace(/^p/, '') !== targetId.replace(/^p/, ''));
+            if (filtered.length !== favs.length) {
+                this._guardar(filtered);
             }
             return false;
         },
@@ -175,10 +209,12 @@
          * @param {Array<string|number>} idsValidos
          */
         limpiarFavoritosInexistentes: function(idsValidos) {
-            if (!Array.isArray(idsValidos)) return;
+            if (!Array.isArray(idsValidos) || idsValidos.length === 0) return;
             const validosStr = idsValidos.map(normalizarId);
             const favs = this.obtenerFavoritos();
-            const filtrados = favs.filter(id => validosStr.includes(id));
+            const filtrados = favs.filter(id => {
+                return validosStr.some(v => v === id || v.replace(/^p/, '') === id.replace(/^p/, ''));
+            });
 
             if (filtrados.length !== favs.length) {
                 this._guardar(filtrados);

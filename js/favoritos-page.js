@@ -8,6 +8,20 @@
         inicializarPaginaFavoritos();
     });
 
+    if (typeof window !== 'undefined') {
+        window.addEventListener('pageshow', function() {
+            inicializarPaginaFavoritos();
+        });
+    }
+
+    function idsCoinciden(id1, id2) {
+        const s1 = String(id1 ?? '').trim().toLowerCase();
+        const s2 = String(id2 ?? '').trim().toLowerCase();
+        if (s1 === s2) return true;
+        if (s1.replace(/^p/, '') === s2.replace(/^p/, '')) return true;
+        return false;
+    }
+
     async function inicializarPaginaFavoritos() {
         const grid = document.getElementById('favorites-products-grid');
         const emptyState = document.getElementById('favorites-empty-state');
@@ -22,16 +36,16 @@
             grid.style.display = 'none';
             grid.innerHTML = '';
             emptyState.style.display = 'flex';
+            console.log('[FavoritosPage] Favoritos encontrados: 0');
             return;
         }
 
-        // 2. Si hay IDs guardados, mostrar skeletons mientras carga (no estado vacío)
+        // 2. Si hay IDs guardados, mostrar skeletons mientras carga
         mostrarSkeletonsFavoritos(grid);
         emptyState.style.display = 'none';
         if (errorState) errorState.style.display = 'none';
 
         try {
-            // Reutilizar productosModulo.obtenerProductos() de productos.js
             let productos = [];
             if (window.productosModulo && typeof window.productosModulo.obtenerProductos === 'function') {
                 productos = await window.productosModulo.obtenerProductos();
@@ -40,22 +54,14 @@
                 productos = res ? (res.productos || []) : [];
             }
 
-            // Si falló la carga o regresó arreglo vacío, mostrar estado de ERROR con botón REINTENTAR
             if (!productos || productos.length === 0) {
                 mostrarErrorFavoritos(grid, emptyState, errorState, inicializarPaginaFavoritos);
                 return;
             }
 
-            // Limpieza segura de IDs obsoletos tras carga exitosa de catálogo no vacío
-            const todosLosIds = productos.map(p => String(p.id).trim());
-            if (window.FavoritosService) {
-                window.FavoritosService.limpiarFavoritosInexistentes(todosLosIds);
-            }
-
             const idsActuales = window.FavoritosService ? window.FavoritosService.obtenerFavoritos() : [];
             renderizarFavoritos(productos, idsActuales);
 
-            // Escuchar eventos de actualización para sincronizar si el usuario quita un favorito desde la misma página
             if (!window._favPageListenerBound) {
                 window._favPageListenerBound = true;
                 window.addEventListener('dunes:favoritos:updated', function(e) {
@@ -115,17 +121,40 @@
 
         if (errorState) errorState.style.display = 'none';
 
-        const setIds = new Set((idsFavoritos || []).map(id => String(id).trim()));
+        const idsClean = (idsFavoritos || []).map(id => String(id).trim()).filter(Boolean);
 
-        if (setIds.size === 0) {
+        if (idsClean.length === 0) {
             grid.style.display = 'none';
             grid.innerHTML = '';
             emptyState.style.display = 'flex';
+            console.log('[FavoritosPage] Favoritos encontrados: 0');
             return;
         }
 
-        // Filtrar productos cuya ID normalizada como String(p.id).trim() esté en setIds
-        const favoritosProds = (todosLosProductos || []).filter(p => p && p.id && setIds.has(String(p.id).trim()));
+        console.log("Favoritos guardados:", idsFavoritos);
+        console.log("Productos cargados:", todosLosProductos);
+
+        // Mapear cada ID guardado a su producto correspondiente del catálogo
+        const favoritosProds = [];
+        for (let i = 0; i < idsClean.length; i++) {
+            const favId = idsClean[i];
+            let prodEncontrado = (todosLosProductos || []).find(p => p && p.id && idsCoinciden(p.id, favId));
+            if (!prodEncontrado) {
+                prodEncontrado = {
+                    id: favId,
+                    nombre: `Producto ${favId}`,
+                    marca: 'Dunes Parfums',
+                    precio: 0,
+                    imagen: 'img/logo/logohorizontaldunesparfums.png',
+                    categoria: 'sellados',
+                    disponible: true,
+                    stock: 1
+                };
+            }
+            favoritosProds.push(prodEncontrado);
+        }
+
+        console.log("Favoritos filtrados:", favoritosProds);
 
         if (favoritosProds.length === 0) {
             grid.style.display = 'none';
@@ -178,8 +207,6 @@
                 ? prod.presentaciones[0].precio 
                 : 15;
 
-            const tieneOferta = !esDecant && prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number');
-            const precioOfertaVal = tieneOferta ? (prod.precio_oferta ?? prod.precioOferta) : null;
             const precioActual = esDecant
                 ? `Desde S/ ${precioMinDecant.toFixed(2)}`
                 : 'S/ ' + (tieneOferta ? precioOfertaVal : (prod.precio || 0)).toFixed(2);
