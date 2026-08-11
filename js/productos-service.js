@@ -297,12 +297,7 @@ const ProductosService = (function() {
                         oferta: parseBoolean(rawObj.oferta),
                         precio_oferta: parseNumber(rawObj.precio_oferta),
                         precioOferta: parseNumber(rawObj.precio_oferta),
-                        orden: parseNumber(rawObj.orden),
-                        ofertaTitulo: rawObj.oferta_titulo ? limpiarValorImportado(rawObj.oferta_titulo) : '',
-                        ofertaSubtitulo: rawObj.oferta_subtitulo ? limpiarValorImportado(rawObj.oferta_subtitulo) : '',
-                        ofertaTextoStock: rawObj.oferta_texto_stock ? limpiarValorImportado(rawObj.oferta_texto_stock) : '',
-                        ofertaVigencia: rawObj.oferta_vigencia ? limpiarValorImportado(rawObj.oferta_vigencia) : '',
-                        ofertaTextoBoton: rawObj.oferta_texto_boton ? limpiarValorImportado(rawObj.oferta_texto_boton) : ''
+                        orden: parseNumber(rawObj.orden)
                     };
 
                     if (esDecant) {

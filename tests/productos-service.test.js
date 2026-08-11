@@ -86,3 +86,31 @@ test('ProductosService - Soporte de imagen_notas en productos cargados', async (
         }
     }
 });
+
+test('ProductosService - Simulación de CSV SIN las 4 columnas de oferta eliminadas (oferta_titulo, oferta_subtitulo, oferta_texto_stock, oferta_vigencia)', () => {
+    // CSV de prueba donde las columnas V, W, X, Y fueron eliminadas de la hoja
+    const csvSinColumnasOferta = [
+        'id,nombre,marca,categoria,formato,genero,disponible,visible,imagen,imagen_notas,descripcion,destacado,oferta,precio_oferta,precio,stock',
+        'p100,Khamrah Spec,Lattafa,sellados,Sellado,unisex,true,true,img/p100.webp,https://img.com/notas.webp,Fragancia dulce,true,true,140,165,5'
+    ].join('\n');
+
+    const rows = ProductosService._parseCSV(csvSinColumnasOferta);
+    assert.strictEqual(rows.length, 2);
+
+    const headers = rows[0].map(h => ProductosService._normalizarCabecera(h));
+    assert.ok(!headers.includes('oferta_titulo'), 'No debe contener oferta_titulo');
+    assert.ok(!headers.includes('oferta_subtitulo'), 'No debe contener oferta_subtitulo');
+    assert.ok(!headers.includes('oferta_texto_stock'), 'No debe contener oferta_texto_stock');
+    assert.ok(!headers.includes('oferta_vigencia'), 'No debe contener oferta_vigencia');
+
+    const row = rows[1];
+    const rawObj = {};
+    headers.forEach((h, idx) => { rawObj[h] = row[idx] !== undefined ? row[idx] : ''; });
+
+    assert.strictEqual(rawObj.id, 'p100');
+    assert.strictEqual(rawObj.nombre, 'Khamrah Spec');
+    assert.strictEqual(ProductosService._parseBoolean(rawObj.oferta), true);
+    assert.strictEqual(ProductosService._parseNumber(rawObj.precio_oferta), 140);
+    assert.strictEqual(ProductosService._parseNumber(rawObj.precio), 165);
+    assert.strictEqual(rawObj.imagen_notas, 'https://img.com/notas.webp');
+});

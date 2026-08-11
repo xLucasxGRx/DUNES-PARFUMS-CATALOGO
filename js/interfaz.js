@@ -535,12 +535,12 @@ async function cargarOfertaEspecialHome() {
 
         // Subtítulo
         if (subtitleEl) {
-            subtitleEl.textContent = prod.ofertaSubtitulo || (esDecant ? 'DECANT DESTACADO' : 'PERFUME ÁRABE DESTACADO');
+            subtitleEl.textContent = esDecant ? 'DECANT DESTACADO' : 'PERFUME ÁRABE DESTACADO';
         }
 
         // Título
         if (titleEl) {
-            titleEl.textContent = prod.ofertaTitulo || `${prod.nombre} - ${prod.marca}`;
+            titleEl.textContent = `${prod.nombre} - ${prod.marca}`;
         }
 
         // Descripción
@@ -583,9 +583,7 @@ async function cargarOfertaEspecialHome() {
 
         // Stock
         if (stockEl) {
-            if (prod.ofertaTextoStock) {
-                stockEl.textContent = prod.ofertaTextoStock;
-            } else if (estaAgotado) {
+            if (estaAgotado) {
                 stockEl.textContent = 'Actualmente agotado';
             } else if (esDecant) {
                 stockEl.textContent = `Stock disponible: ${prod.mililitrosDisponibles || 0} ml`;
@@ -598,12 +596,12 @@ async function cargarOfertaEspecialHome() {
 
         // Vigencia
         if (validityEl) {
-            validityEl.textContent = prod.ofertaVigencia || 'Válido hasta agotar stock.';
+            validityEl.textContent = 'Válido hasta agotar stock.';
         }
 
         // Botón y evento WhatsApp sin emojis
         if (btnEl) {
-            const textoBoton = prod.ofertaTextoBoton || (estaAgotado ? 'CONSULTAR DISPONIBILIDAD' : 'CONSULTAR OFERTA POR WHATSAPP');
+            const textoBoton = estaAgotado ? 'CONSULTAR DISPONIBILIDAD' : 'CONSULTAR OFERTA POR WHATSAPP';
             btnEl.textContent = textoBoton;
 
             btnEl.onclick = (e) => {
