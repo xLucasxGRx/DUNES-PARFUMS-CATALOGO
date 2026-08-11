@@ -107,3 +107,12 @@ test('ProductosRelacionados - 7. Retorna array vacío si el catálogo solo conti
     const rel = window.obtenerProductosRelacionados(prodActual, productos, 4);
     assert.equal(rel.length, 0);
 });
+
+test('ProductosRelacionados - 8. CSS contiene grilla de 2 columnas para tablet (769px-1023px) y 4 columnas para desktop (>=1024px)', () => {
+    const responsiveCss = fs.readFileSync('css/responsive.css', 'utf8');
+
+    assert.ok(responsiveCss.includes('.related-products-grid'), 'responsive.css debe definir .related-products-grid');
+    assert.ok(responsiveCss.includes('min-width: 769px') && responsiveCss.includes('max-width: 1023px'), 'responsive.css debe tener media query especifica para tablet (769px-1023px)');
+    assert.ok(responsiveCss.includes('grid-template-columns: repeat(2, minmax(0, 1fr))'), 'responsive.css debe configurar 2 columnas en tablet');
+    assert.ok(responsiveCss.includes('min-width: 1024px') && responsiveCss.includes('grid-template-columns: repeat(4, minmax(0, 1fr))'), 'responsive.css debe configurar 4 columnas en desktop (>=1024px)');
+});
