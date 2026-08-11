@@ -77,28 +77,61 @@ async function obtenerProductoPorId(id) {
 
 /**
  * Obtiene el producto activo para la Oferta Especial (visible = true && oferta = true)
- * Si hay múltiples, selecciona el primero según el campo orden y emite un warning en consola.
+ * Rota automáticamente entre los productos con oferta activa, evitando repetir
+ * inmediatamente el último producto mostrado almacenado en 'dunes_ultima_oferta_inicio'.
  * @returns {Promise<Object|null>}
  */
 async function obtenerProductoOferta() {
     const todos = await obtenerProductos();
-    const ofertas = todos
-        .filter(p => p.visible === true && p.oferta === true)
-        .sort((a, b) => {
-            const ordenA = a.orden !== null && a.orden !== undefined ? Number(a.orden) : 9999;
-            const ordenB = b.orden !== null && b.orden !== undefined ? Number(b.orden) : 9999;
-            return ordenA - ordenB;
-        });
+    const candidatos = (todos || []).filter(p => {
+        if (!p || p.visible !== true || p.oferta !== true) return false;
+        if (!p.id || !p.nombre || !p.imagen) return false;
+        const precioNum = Number(p.precio);
+        if (isNaN(precioNum) || precioNum <= 0) return false;
+        const esDecant = p.categoria === 'decants';
+        const poVal = p.precio_oferta ?? p.precioOferta;
+        const tienePrecioOferta = poVal !== undefined && poVal !== null && !isNaN(Number(poVal)) && Number(poVal) > 0;
+        if (!tienePrecioOferta && !esDecant) return false;
+        return true;
+    });
 
-    if (ofertas.length === 0) {
+    if (candidatos.length === 0) {
         return null;
     }
 
-    if (ofertas.length > 1) {
-        console.warn(`Hay más de una oferta activa (${ofertas.length}). Se mostrará la primera según el campo orden: "${ofertas[0].nombre}".`);
+    const LAST_KEY = 'dunes_ultima_oferta_inicio';
+
+    if (candidatos.length === 1) {
+        try {
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem(LAST_KEY, String(candidatos[0].id).trim());
+            }
+        } catch (e) {}
+        return candidatos[0];
     }
 
-    return ofertas[0];
+    let ultimoId = '';
+    try {
+        if (typeof localStorage !== 'undefined') {
+            ultimoId = String(localStorage.getItem(LAST_KEY) || '').trim();
+        }
+    } catch (e) {}
+
+    let disponibles = candidatos.filter(p => String(p.id).trim() !== ultimoId);
+    if (disponibles.length === 0) {
+        disponibles = candidatos;
+    }
+
+    const randomIndex = Math.floor(Math.random() * disponibles.length);
+    const seleccionado = disponibles[randomIndex];
+
+    try {
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(LAST_KEY, String(seleccionado.id).trim());
+        }
+    } catch (e) {}
+
+    return seleccionado;
 }
 
 // Hacer las funciones disponibles globalmente

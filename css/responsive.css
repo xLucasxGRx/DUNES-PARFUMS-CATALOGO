@@ -3882,4 +3882,99 @@
   }
 }
 
+/* ==========================================================================
+   Sección "Fragancia de la Semana" / Oferta Especial - Optimización Móvil Compacta
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+  .weekly-offer-section {
+    padding: 32px 0 !important;
+  }
+
+  .weekly-offer-section .offer-card {
+    border-radius: 14px !important;
+  }
+
+  .weekly-offer-section .offer-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .weekly-offer-section .offer-img-side {
+    min-height: 180px !important;
+    max-height: 220px !important;
+    padding: 16px 12px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-border, #EBE6DC) !important;
+    background-color: #f7f7f7 !important;
+  }
+
+  .weekly-offer-section .offer-img {
+    max-height: 170px !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12)) !important;
+  }
+
+  .weekly-offer-section .offer-badge {
+    top: 10px !important;
+    left: 10px !important;
+    padding: 4px 10px !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.8px !important;
+  }
+
+  .weekly-offer-section .offer-content-side {
+    padding: 20px 16px !important;
+    gap: 10px !important;
+  }
+
+  .weekly-offer-section .offer-pre {
+    font-size: 0.72rem !important;
+    letter-spacing: 1.8px !important;
+  }
+
+  .weekly-offer-section .offer-title {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+  }
+
+  .weekly-offer-section .offer-desc {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+  }
+
+  .weekly-offer-section .offer-price-box {
+    margin: 2px 0 !important;
+    gap: 12px !important;
+    align-items: baseline !important;
+  }
+
+  .weekly-offer-section .offer-price-new {
+    font-size: 1.65rem !important;
+  }
+
+  .weekly-offer-section .offer-price-old {
+    font-size: 1.05rem !important;
+  }
+
+  .weekly-offer-section .offer-meta {
+    padding-top: 10px !important;
+    gap: 10px !important;
+    margin-top: 2px !important;
+  }
+
+  .weekly-offer-section .offer-meta-item {
+    font-size: 0.78rem !important;
+  }
+
+  .weekly-offer-section #weekly-offer-btn {
+    width: 100% !important;
+    padding: 12px 16px !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    margin-top: 4px !important;
+    box-sizing: border-box !important;
+  }
+}
+
 
