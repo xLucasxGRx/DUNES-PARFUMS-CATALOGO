@@ -401,9 +401,11 @@ const ProductosService = (function() {
     };
 
     if (typeof window !== 'undefined') {
+        window.ProductosService = serviceObj;
         window.resolverImagen = resolverImagen;
     }
     if (typeof global !== 'undefined') {
+        global.ProductosService = serviceObj;
         global.resolverImagen = resolverImagen;
     }
 

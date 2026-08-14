@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparar Perfumes | Dunes Parfums</title>
+    <meta name="description" content="Compara visualmente las fichas olfativas de tus fragancias favoritas en Dunes Parfums. Elige entre perfumes sellados o decants.">
+    
+    <!-- Favicon Oficial Dunes Parfums (Fondo Blanco) -->
+    <link rel="icon" href="assets/favicon/favicon.ico?v=3" sizes="any">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png?v=3">
+    <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon/favicon-48x48.png?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png?v=3">
+    
+    <!-- Fuentes Tipográficas Oficiales (Cormorant Garamond + Montserrat) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Hojas de Estilo -->
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animaciones.css">
+</head>
+<body id="page-comparador" class="page-comparador">
+
+    <!-- 1. ENCABEZADO PRINCIPAL (HEADER) -->
+    <header class="header-main" id="header-main">
+        <div class="container header-container">
+            <a href="index.html" class="logo-container" aria-label="Volver al inicio de Dunes Parfums">
+                <img src="img/logo/logohorizontaldunesparfums.png?v=20260721-logo-transparente-1" alt="Dunes Parfums" class="logo-img">
+            </a>
+
+            <nav class="nav-menu" id="nav-menu" hidden aria-hidden="true" inert>
+                <div class="mobile-drawer-header">
+                    <div class="mobile-drawer-brand">
+                        <span class="mobile-drawer-brand-title">Dunes Parfums</span>
+                        <span class="mobile-drawer-brand-sub">Navegación</span>
+                    </div>
+                    <button type="button" class="mobile-drawer-close" id="mobile-menu-close" aria-label="Cerrar menú">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <ul class="nav-list" role="list">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            <span class="nav-link-text">Inicio</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="catalogo.html" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                            <span class="nav-link-text">Catálogo</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#ofertas" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3.85 8.62 4.77 4.76a2 2 0 0 0 2.83 0l6.7-6.7a2 2 0 0 0 0-2.83l-4.77-4.76a2 2 0 0 0-2.83 0l-6.7 6.7a2 2 0 0 0 0 2.83z"></path><path d="M16 8h.01"></path></svg>
+                            <span class="nav-link-text">Ofertas</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="comparador.html" class="nav-link active">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 3h5v5"></path><path d="M4 20L21 3"></path><path d="M21 16v5h-5"></path><path d="M15 15l6 6"></path><path d="M4 4l5 5"></path></svg>
+                            <span class="nav-link-text">Comparar Perfumes</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html#ubicacion" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                            <span class="nav-link-text">Contacto</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="ayuda.html" class="nav-link">
+                            <svg class="nav-link-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            <span class="nav-link-text">Ayuda / FAQ</span>
+                            <svg class="nav-link-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="favoritos.html" class="favorites-header-icon-btn" aria-label="Ver mis favoritos" title="Mis Favoritos">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                    </svg>
+                    <span class="favorites-header-count" id="favorites-header-count" style="display: none;">0</span>
+                </a>
+
+                <a href="carrito.html" class="cart-icon-btn" aria-label="Ver mi pedido en el carrito">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="cart-btn-icon" aria-hidden="true" focusable="false">
+                        <circle cx="8" cy="21" r="1"></circle>
+                        <circle cx="19" cy="21" r="1"></circle>
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+
+                <button class="burger-menu-btn" id="mobile-menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="nav-menu-overlay" id="nav-menu-overlay"></div>
+
+    <!-- 2. CONTENIDO PRINCIPAL DEL COMPARADOR -->
+    <main class="container section-padding page-comparador" id="main-content">
+        <!-- Encabezado de Página Compacto Aprobado Dunes -->
+        <div class="page-heading page-heading--light section-header reveal">
+            <h1 class="page-heading__title section-title">COMPARAR PERFUMES</h1>
+            <div class="page-heading__divider"></div>
+            <p class="page-heading__description">Compara sus notas y encuentra tu fragancia ideal.</p>
+        </div>
+
+                <!-- Paso 1: Selección de Modo (Sellados vs Decants) -->
+                <div class="mode-selector-wrapper" id="mode-selector-wrapper">
+                    <h2 class="mode-selector-title">¿QUÉ DESEAS COMPARAR?</h2>
+                    <div class="mode-buttons-grid">
+                        <button type="button" class="btn-mode-select" id="btn-mode-sellados" data-modo="sellados">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="8" width="18" height="12" rx="2"></rect><path d="M7 8V5a3 3 0 0 1 6 0v3"></path></svg>
+                            <span>SELLADOS</span>
+                        </button>
+                        <button type="button" class="btn-mode-select" id="btn-mode-decants" data-modo="decants">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12A10 10 0 0 1 12 2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <span>DECANTS</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Paso 2: Grilla del Comparador (Oculta hasta elegir modo) -->
+                <div class="comparador-main-container is-hidden" id="comparador-main-container">
+                    <div class="comparador-grid">
+                        
+                        <!-- LADO IZQUIERDO: PERFUME 1 -->
+                        <div class="comparador-column" id="col-izquierdo">
+                            <!-- Renderizado dinámico desde comparador.js -->
+                        </div>
+
+                        <!-- DIVISOR VS CENTRAL -->
+                        <div class="comparator-vs-divider">
+                            <span class="comparator-vs-badge">VS</span>
+                        </div>
+
+                        <!-- LADO DERECHO: PERFUME 2 -->
+                        <div class="comparador-column" id="col-derecho">
+                            <!-- Renderizado dinámico desde comparador.js -->
+                        </div>
+
+                    </div>
+                </div>
+
+    </main>
+
+    <!-- 3. PIE DE PÁGINA (FOOTER) -->
+    <footer class="footer-main">
+        <div class="container text-center" style="padding: 24px 0; color: #888; font-size: 0.85rem;">
+            <p>&copy; 2026 Dunes Parfums. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts Modulares -->
+    <script src="js/config.js"></script>
+    <script src="js/productos-service.js"></script>
+    <script src="js/anuncios-service.js"></script>
+    <script src="js/anuncios-ui.js"></script>
+    <script src="js/favoritos-service.js"></script>
+    <script src="js/whatsapp.js"></script>
+    <script src="js/productos.js"></script>
+    <script src="js/carrito.js"></script>
+    <script src="js/interfaz.js"></script>
+    <script src="js/comparador.js"></script>
+</body>
+</html>

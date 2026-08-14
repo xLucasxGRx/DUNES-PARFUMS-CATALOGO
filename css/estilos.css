@@ -5180,3 +5180,561 @@ body.no-scroll .header-actions {
         transform: none !important;
     }
 }
+
+/* ==================================================
+   FASE M24.3 — COMPACTAR EL COMPARADOR Y REPARAR DEFINITIVAMENTE LA BÚSQUEDA
+   ================================================== */
+.page-comparador {
+    min-height: 50vh;
+}
+
+.page-comparador.section-padding,
+.page-comparador .comparador-section {
+    padding-top: 8px;
+    padding-bottom: 28px;
+}
+
+#page-comparador .page-heading,
+.page-comparador .page-heading {
+    margin-bottom: 8px !important;
+    gap: 2px !important;
+}
+
+/* Selector de Modo (SELLADOS / DECANTS) */
+.mode-selector-wrapper {
+    max-width: 380px;
+    margin: 6px auto 14px auto;
+    text-align: center;
+    background: #FAF8F5;
+    border: 1px solid rgba(177, 130, 37, 0.28);
+    border-radius: 10px;
+    padding: 10px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.mode-selector-title {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #171717;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.mode-buttons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.btn-mode-select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(177, 130, 37, 0.3);
+    background: #FFFFFF;
+    color: #444444;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-mode-select:hover {
+    border-color: #B18225;
+    color: #171717;
+    background: #FAF5EA;
+}
+
+.btn-mode-select.is-selected {
+    background: #B18225;
+    color: #FFFFFF;
+    border-color: #B18225;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(177, 130, 37, 0.25);
+}
+
+/* Grilla del Comparador */
+.comparador-main-container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.comparador-grid {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    position: relative;
+}
+
+.comparador-column {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+}
+
+/* VS Badge Central */
+.comparator-vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 22px;
+    align-self: flex-start;
+    flex-shrink: 0;
+}
+
+.comparator-vs-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #B18225;
+    color: #FFFFFF;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 2px 6px rgba(177, 130, 37, 0.25);
+    flex-shrink: 0;
+}
+
+/* Mini Buscador Compacto */
+.comparator-search-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    width: 100%;
+}
+
+.comparator-side-label {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #B18225;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+}
+
+.comparator-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.comparator-search-icon {
+    position: absolute;
+    left: 10px;
+    color: #B18225;
+    pointer-events: none;
+}
+
+.comparator-search-input {
+    width: 100%;
+    height: 40px;
+    background: #FFFFFF;
+    border: 1px solid rgba(177, 130, 37, 0.35);
+    border-radius: 8px;
+    padding: 0 10px 0 34px;
+    color: #171717;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.82rem;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comparator-search-input::placeholder {
+    color: #777777;
+}
+
+.comparator-search-input:focus {
+    border-color: #B18225;
+    box-shadow: 0 0 0 3px rgba(177, 130, 37, 0.15);
+    background: #FFFFFF;
+}
+
+/* Dropdown Flotante de Resultados */
+.comparator-dropdown-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #FFFFFF;
+    border: 1px solid rgba(177, 130, 37, 0.35);
+    border-radius: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px;
+}
+
+.comparator-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease;
+    width: 100%;
+}
+
+.comparator-dropdown-item:hover {
+    background: #FAF5EA;
+}
+
+.comparator-thumb {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: #F0F0F0;
+}
+
+.comparator-item-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.comparator-item-brand {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    color: #B18225;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+}
+
+.comparator-item-name {
+    font-size: 0.82rem;
+    color: #171717;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+
+.comparator-empty-msg {
+    padding: 12px 10px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: #666666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Tarjeta Ficha Olfativa Seleccionada */
+/* Tarjeta Ficha Olfativa Seleccionada (FASE M24.5 Rediseño Premium) */
+.comparator-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid rgba(177, 130, 37, 0.25);
+    border-radius: 16px;
+    padding: 14px 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.comparator-card-header {
+    text-align: center;
+    width: 100%;
+}
+
+.comparator-brand {
+    display: block;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #B18225;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+}
+
+.comparator-name {
+    font-family: var(--font-heading, 'Cormorant Garamond', 'Montserrat', serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #171717;
+    margin: 0;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.5em;
+    text-align: center;
+}
+
+.comparator-notes-container {
+    position: relative;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #FAF8F5;
+    border: 1px solid rgba(177, 130, 37, 0.2);
+    cursor: pointer;
+    margin: 4px 0 6px 0;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comparator-notes-container:hover {
+    border-color: #B18225;
+    box-shadow: 0 4px 12px rgba(177, 130, 37, 0.15);
+}
+
+.comparator-notes-img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.25s ease;
+}
+
+.comparator-notes-container:hover .comparator-notes-img {
+    transform: scale(1.02);
+}
+
+.comparator-zoom-badge {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(23, 23, 23, 0.72);
+    color: #FFFFFF;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    letter-spacing: 0.04em;
+}
+
+.btn-change-compact {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 30px;
+    padding: 0 14px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 20px;
+    border: 1px solid rgba(177, 130, 37, 0.35);
+    background: #FFFFFF;
+    color: #B18225;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+}
+
+.btn-change-compact:hover {
+    background: #FAF5EA;
+    border-color: #B18225;
+    color: #171717;
+}
+
+/* Caja de Compra */
+.comparator-buy-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(177, 130, 37, 0.15);
+}
+
+.comparator-sublabel {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #B18225;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.comparator-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.comparator-price-main {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #171717;
+}
+
+.comparator-price-offer {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #B18225;
+}
+
+.comparator-price-old {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.82rem;
+    color: #888888;
+    text-decoration: line-through;
+}
+
+.comparator-stock {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #1E7E34;
+    background: rgba(30, 126, 52, 0.08);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.comparator-decant-pills {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+}
+
+.decant-pill {
+    flex: 1;
+    height: 34px;
+    border-radius: 6px;
+    border: 1px solid rgba(177, 130, 37, 0.35);
+    background: #FFFFFF;
+    color: #444444;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.decant-pill:hover {
+    border-color: #B18225;
+    color: #171717;
+    background: #FAF5EA;
+}
+
+.decant-pill.is-selected {
+    background: #B18225;
+    color: #FFFFFF;
+    border-color: #B18225;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(177, 130, 37, 0.25);
+}
+
+/* Stepper de Cantidad Premium */
+.comparator-qty-selector {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 120px;
+    height: 38px;
+    background: #FFFFFF;
+    border: 1px solid rgba(177, 130, 37, 0.35);
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.qty-btn {
+    width: 36px;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: #171717;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+    user-select: none;
+}
+
+.qty-btn:hover {
+    background: #FAF5EA;
+    color: #B18225;
+}
+
+.qty-val {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #171717;
+    flex: 1;
+    text-align: center;
+}
+
+.btn-add-compact {
+    width: 100%;
+    height: 40px;
+    background: #B18225;
+    color: #FFFFFF;
+    border: 1px solid #B18225;
+    border-radius: 8px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(177, 130, 37, 0.25);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-add-compact:hover {
+    background: #966C1E;
+    border-color: #966C1E;
+    box-shadow: 0 4px 12px rgba(177, 130, 37, 0.35);
+}
+
+.btn-add-compact:active {
+    transform: scale(0.98);
+}

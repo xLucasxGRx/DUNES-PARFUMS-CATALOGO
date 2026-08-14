@@ -1009,17 +1009,35 @@ function obtenerOCrearLightboxModal() {
 function abrirLightboxVisor(prod, initialIndex = 0, onSlideChange = null) {
     if (!prod) return;
 
-    const rawNotas = prod.imagen_notas ? String(prod.imagen_notas).trim() : '';
-    const urlNotasClean = rawNotas ? (typeof resolverImagen === 'function' ? resolverImagen(rawNotas, '') : rawNotas) : '';
-    const urlImagenClean = (typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen);
-    const imagenes = [
-        { url: urlImagenClean, alt: `${prod.nombre} - ${prod.marca}` }
-    ];
-    if (urlNotasClean) {
-        imagenes.push({ url: urlNotasClean, alt: `Notas y perfil olfativo de ${prod.nombre}` });
+    let imagenes = [];
+
+    if (typeof prod === 'string') {
+        const urlClean = typeof resolverImagen === 'function' ? resolverImagen(prod) : prod;
+        const altText = typeof initialIndex === 'string' ? initialIndex : 'Ficha olfativa';
+        imagenes = [{ url: urlClean, alt: altText }];
+        initialIndex = 0;
+    } else if (typeof prod === 'object' && prod.url) {
+        const urlClean = typeof resolverImagen === 'function' ? resolverImagen(prod.url) : prod.url;
+        imagenes = [{ url: urlClean, alt: prod.alt || 'Ficha olfativa' }];
+        initialIndex = 0;
+    } else {
+        const rawNotas = prod.imagen_notas ? String(prod.imagen_notas).trim() : '';
+        const urlNotasClean = rawNotas ? (typeof resolverImagen === 'function' ? resolverImagen(rawNotas, '') : rawNotas) : '';
+        const urlImagenClean = prod.imagen ? (typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen) : '';
+
+        if (urlImagenClean) {
+            imagenes.push({ url: urlImagenClean, alt: `${prod.nombre || ''} - ${prod.marca || ''}` });
+        }
+        if (urlNotasClean) {
+            imagenes.push({ url: urlNotasClean, alt: `Notas y perfil olfativo de ${prod.nombre || ''}` });
+        }
+
+        if (imagenes.length === 0) {
+            imagenes.push({ url: 'img/logo/logohorizontaldunesparfums.png', alt: prod.nombre || 'Dunes Parfums' });
+        }
     }
 
-    let currentIndex = (initialIndex >= 0 && initialIndex < imagenes.length) ? initialIndex : 0;
+    let currentIndex = (typeof initialIndex === 'number' && initialIndex >= 0 && initialIndex < imagenes.length) ? initialIndex : 0;
     const tieneMultiple = imagenes.length > 1;
 
     const modal = obtenerOCrearLightboxModal();
@@ -1048,7 +1066,11 @@ function abrirLightboxVisor(prod, initialIndex = 0, onSlideChange = null) {
         if (currentIndex >= imagenes.length) currentIndex = 0;
 
         const actual = imagenes[currentIndex];
-        if (actual) {
+        if (actual && imgEl) {
+            imgEl.onerror = function() {
+                this.onerror = null;
+                this.src = 'img/logo/logohorizontaldunesparfums.png';
+            };
             imgEl.src = actual.url;
             imgEl.alt = actual.alt;
         }

@@ -17,7 +17,7 @@
     "destacado": true,
     "oferta": true,
     "precio_oferta": 155,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p2",
@@ -36,7 +36,7 @@
     "descripcion": "Combinación tropical y cremosa con acordes de piña brulée y especias.",
     "destacado": false,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p3",
@@ -55,7 +55,7 @@
     "descripcion": "Fusión del clásico Khamrah con un fondo estimulante de café tostado.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p4",
@@ -74,7 +74,7 @@
     "descripcion": "Aroma cítrico frutal con notas de mandarina, haba tonka y caramelo.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/ArmafMandarinSky.webp"
   },
   {
     "id": "p5",
@@ -93,7 +93,7 @@
     "descripcion": "Fragancia fresca y enérgica de día con toques cítricos y florales.",
     "destacado": false,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p6",
@@ -112,7 +112,7 @@
     "descripcion": "Perfume oriental-frutal con acordes dulces de vainilla, manzana y canela.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p7",
@@ -131,7 +131,7 @@
     "descripcion": "Aroma frutal intenso con una extraordinaria fijación y proyección.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p8",
@@ -150,7 +150,7 @@
     "descripcion": "Versión helada, cítrica y aromática del mítico Hawas.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p9",
@@ -169,7 +169,7 @@
     "descripcion": "Combinación fresca de notas acuáticas, sandía y maderas preciosas.",
     "destacado": false,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "p10",
@@ -188,7 +188,7 @@
     "descripcion": "Aroma limpio, moderno y versátil con notas de ámbar y pachuli.",
     "destacado": false,
     "oferta": false,
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d1",
@@ -227,7 +227,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d2",
@@ -266,7 +266,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d3",
@@ -305,7 +305,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d4",
@@ -344,7 +344,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d5",
@@ -383,7 +383,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d6",
@@ -422,7 +422,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d7",
@@ -461,7 +461,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d8",
@@ -500,7 +500,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d9",
@@ -539,7 +539,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d10",
@@ -578,7 +578,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d11",
@@ -617,7 +617,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d12",
@@ -656,7 +656,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d13",
@@ -695,7 +695,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d14",
@@ -734,7 +734,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d15",
@@ -773,7 +773,7 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   },
   {
     "id": "d16",
@@ -812,6 +812,6 @@
         "disponible": true
       }
     ],
-    "imagen_notas": ""
+    "imagen_notas": "img/productos/LattafaKhamrah.webp"
   }
 ]
