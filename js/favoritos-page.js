@@ -171,10 +171,13 @@
             const card = document.createElement('div');
             card.className = 'product-card';
 
-            const esDecant = prod.categoria === 'decants';
+            const formNorm = (prod.formato || '').toLowerCase();
+            const catNorm = (prod.categoria || '').toLowerCase();
+            const esDecant = formNorm.includes('decant') || catNorm.includes('decant');
+            const mlDisp = prod.mililitrosDisponibles ?? prod.mililitros_disponibles ?? 0;
             const estaAgotado = esDecant
-                ? (!prod.disponible || prod.mililitrosDisponibles < 3)
-                : (!prod.disponible || prod.stock <= 0);
+                ? (!prod.disponible || mlDisp <= 0)
+                : (!prod.disponible || (prod.stock ?? 0) <= 0);
 
             if (estaAgotado) {
                 card.classList.add('out-of-stock', 'is-soldout');

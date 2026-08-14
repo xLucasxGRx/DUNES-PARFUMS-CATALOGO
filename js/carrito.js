@@ -90,7 +90,9 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
         }
 
         let carrito = obtenerCarrito();
-        const esDecant = product.categoria === 'decants';
+        const formNorm = (product.formato || '').toLowerCase();
+        const catNorm = (product.categoria || '').toLowerCase();
+        const esDecant = formNorm.includes('decant') || catNorm.includes('decant') || tamanoMl !== null;
 
         // Clave única en carrito
         const key = idProducto + (esDecant ? `-${tamanoMl}` : '');
@@ -101,6 +103,8 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
         let cantidadFinal = nuevaCantidadPropuesta;
         let limiteAlcanzado = false;
         let stockMaximo = 0;
+
+        const mlTotalesDisp = product.mililitrosDisponibles ?? product.mililitros_disponibles ?? 0;
 
         if (esDecant) {
             // Validar presentación
@@ -115,7 +119,7 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
                 .reduce((acc, item) => acc + (item.tamanoMl * item.cantidad), 0);
 
             // Calcular capacidad restante de mililitros para este ítem
-            const mlDisponiblesParaItem = product.mililitrosDisponibles - mlOtros;
+            const mlDisponiblesParaItem = mlTotalesDisp - mlOtros;
             stockMaximo = Math.floor(mlDisponiblesParaItem / tamanoMl);
 
             if (nuevaCantidadPropuesta > stockMaximo) {
@@ -152,9 +156,17 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
         let mlItem = 100;
 
         if (esDecant) {
-            const presInfo = product.presentaciones.find(p => p.ml === tamanoMl);
-            precioUnitario = presInfo ? presInfo.precio : 30.00;
-            presentacionTexto = `Decant ${tamanoMl} ml`;
+            const presInfo = (product.presentaciones || []).find(p => p.ml === tamanoMl);
+            if (presInfo && presInfo.precio) {
+                precioUnitario = presInfo.precio;
+                presentacionTexto = presInfo.nombre;
+            } else {
+                if (tamanoMl === 3 && product.precio_3ml) precioUnitario = product.precio_3ml;
+                else if (tamanoMl === 5 && product.precio_5ml) precioUnitario = product.precio_5ml;
+                else if (tamanoMl === 10 && product.precio_10ml) precioUnitario = product.precio_10ml;
+                else precioUnitario = 15;
+                presentacionTexto = `Decant ${tamanoMl} ml`;
+            }
             mlItem = tamanoMl;
         }
 
@@ -227,9 +239,13 @@ async function actualizarCantidadItem(id, nuevaCantidad) {
         const product = await window.productosModulo.obtenerProductoPorId(item.idProducto);
         if (!product) return;
 
-        const esDecant = item.categoria === 'decants';
+        const formNorm = (product.formato || '').toLowerCase();
+        const catNorm = (product.categoria || '').toLowerCase();
+        const esDecant = formNorm.includes('decant') || catNorm.includes('decant') || !!item.tamanoMl;
         let stockMaximo = 0;
         let limiteAlcanzado = false;
+
+        const mlTotalesDisp = product.mililitrosDisponibles ?? product.mililitros_disponibles ?? 0;
 
         if (esDecant) {
             // Calcular mililitros de otras variantes del mismo perfume
@@ -237,7 +253,7 @@ async function actualizarCantidadItem(id, nuevaCantidad) {
                 .filter(i => i.idProducto === item.idProducto && i.id !== id)
                 .reduce((acc, i) => acc + (i.tamanoMl * i.cantidad), 0);
 
-            const mlDisponiblesParaItem = product.mililitrosDisponibles - mlOtros;
+            const mlDisponiblesParaItem = mlTotalesDisp - mlOtros;
             stockMaximo = Math.floor(mlDisponiblesParaItem / item.tamanoMl);
 
             if (nuevaCantidad > stockMaximo) {

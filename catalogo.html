@@ -180,44 +180,119 @@
 
         <!-- Barra de Filtros y Búsqueda -->
         <div class="catalog-filters-bar reveal">
-            <!-- Caja de Búsqueda -->
+            <!-- 1. Buscador Full Width -->
             <div class="filter-search-box">
-                <input type="text" id="search-perfume" placeholder="Buscar por perfume o marca..." aria-label="Buscar perfume">
+                <input type="text" id="search-perfume" placeholder="Buscar por perfume o marca..." aria-label="Buscar por perfume o marca">
                 <span class="search-icon">
                     <svg class="search-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </span>
             </div>
 
-            <!-- Grupos de Categorías -->
-            <div class="filter-categories-group" role="group" aria-label="Categorías del catálogo">
-                <button class="filter-category-btn active" data-categoria="todos" aria-pressed="true">TODOS</button>
-                <button class="filter-category-btn" data-categoria="arabe" aria-pressed="false">Árabes</button>
-                <button class="filter-category-btn" data-categoria="disenador" aria-pressed="false">Diseñador</button>
-                <button class="filter-category-btn" data-categoria="nicho" aria-pressed="false">Nicho</button>
-                <button class="filter-category-btn" data-categoria="decants" aria-pressed="false">Decants</button>
-            </div>
-
-            <!-- Filtro por Género (¿Para quién?) -->
-            <div class="filter-gender-wrapper">
-                <span class="filter-gender-label">¿Para quién?</span>
-                <div class="filter-gender-group" role="group" aria-label="Filtro por género">
-                    <button class="filter-gender-btn active" data-genero="todos" aria-pressed="true">Todos</button>
-                    <button class="filter-gender-btn" data-genero="hombre" aria-pressed="false">Hombre</button>
-                    <button class="filter-gender-btn" data-genero="mujer" aria-pressed="false">Mujer</button>
-                    <button class="filter-gender-btn" data-genero="unisex" aria-pressed="false">Unisex</button>
+            <!-- 2. Sección FORMATO -->
+            <div class="filter-group filter-group--formato">
+                <span class="filter-group-label">FORMATO</span>
+                <div class="filter-buttons-container" role="group" aria-label="Filtro por formato">
+                    <button class="filter-tab-btn active" data-formato="todos" aria-pressed="true">TODOS</button>
+                    <button class="filter-tab-btn" data-formato="sellado" aria-pressed="false">SELLADOS</button>
+                    <button class="filter-tab-btn" data-formato="decant" aria-pressed="false">DECANTS</button>
                 </div>
             </div>
 
-            <!-- Ordenación y Disponibilidad -->
-            <div class="filter-controls-right">
-                <div class="filter-sort-box">
-                    <select id="sort-price" aria-label="Ordenar por precio">
-                        <option value="default">Relevancia</option>
-                        <option value="price-asc">Menor precio</option>
-                        <option value="price-desc">Mayor precio</option>
+            <!-- 3. Sección TIPO -->
+            <div class="filter-group filter-group--tipo">
+                <span class="filter-group-label">TIPO</span>
+                <div class="filter-buttons-container" role="group" aria-label="Filtro por tipo de fragancia">
+                    <button class="filter-tab-btn active" data-tipo="todos" aria-pressed="true">TODOS</button>
+                    <button class="filter-tab-btn" data-tipo="arabe" aria-pressed="false">ÁRABES</button>
+                    <button class="filter-tab-btn" data-tipo="disenador" aria-pressed="false">DISEÑADOR</button>
+                    <button class="filter-tab-btn" data-tipo="nicho" aria-pressed="false">NICHO</button>
+                </div>
+            </div>
+
+            <!-- 4. Fila Género + Ordenar por (Dropdowns Personalizados Dunes Parfums) -->
+            <div class="filter-selects-row">
+                <!-- Dropdown Género -->
+                <div class="filter-dropdown-wrapper" id="wrapper-gender">
+                    <!-- Native select for compatibility -->
+                    <select id="filter-gender-select" class="visually-hidden" aria-label="Filtrar por género">
+                        <option value="todos">Género: Todos</option>
+                        <option value="hombre">Hombre</option>
+                        <option value="mujer">Mujer</option>
+                        <option value="unisex">Unisex</option>
                     </select>
+
+                    <button type="button" class="dunes-dropdown-trigger" id="gender-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filtrar por género">
+                        <span class="dunes-dropdown-label" id="gender-dropdown-label">Género: Todos</span>
+                        <svg class="dunes-dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                    </button>
+
+                    <div class="dunes-dropdown-menu" id="gender-dropdown-menu" role="listbox" aria-labelledby="gender-dropdown-trigger" hidden>
+                        <div class="dunes-dropdown-option active" role="option" data-value="todos" aria-selected="true">
+                            <span>Todos</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="hombre" aria-selected="false">
+                            <span>Hombre</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="mujer" aria-selected="false">
+                            <span>Mujer</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="unisex" aria-selected="false">
+                            <span>Unisex</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Dropdown Ocasión -->
+                <div class="filter-dropdown-wrapper" id="wrapper-ocasion">
+                    <button type="button" class="dunes-dropdown-trigger" id="ocasion-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filtrar por ocasión">
+                        <span class="dunes-dropdown-label" id="ocasion-dropdown-label">Ocasión: Todas</span>
+                        <svg class="dunes-dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                    </button>
+
+                    <div class="dunes-dropdown-menu" id="ocasion-dropdown-menu" role="listbox" aria-labelledby="ocasion-dropdown-trigger" hidden>
+                        <div class="dunes-dropdown-option disabled" role="option" aria-disabled="true" style="opacity: 0.65; cursor: default; justify-content: center; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.5px;">
+                            <span>PRÓXIMAMENTE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown Ordenar -->
+                <div class="filter-dropdown-wrapper" id="wrapper-sort">
+                    <!-- Native select for compatibility -->
+                    <select id="sort-price" class="visually-hidden" aria-label="Ordenar por">
+                        <option value="relevancia">Ordenar por: Relevancia</option>
+                        <option value="price-asc">Precio: menor a mayor</option>
+                        <option value="price-desc">Precio: mayor a menor</option>
+                    </select>
+
+                    <button type="button" class="dunes-dropdown-trigger" id="sort-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Ordenar fragancias">
+                        <span class="dunes-dropdown-label" id="sort-dropdown-label">Ordenar: Relevancia</span>
+                        <svg class="dunes-dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                    </button>
+
+                    <div class="dunes-dropdown-menu" id="sort-dropdown-menu" role="listbox" aria-labelledby="sort-dropdown-trigger" hidden>
+                        <div class="dunes-dropdown-option active" role="option" data-value="relevancia" aria-selected="true">
+                            <span>Relevancia</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="price-asc" aria-selected="false">
+                            <span>Precio: menor a mayor</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="price-desc" aria-selected="false">
+                            <span>Precio: mayor a menor</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Fila Solo disponibles (Izquierda) + Contador (Derecha) -->
+            <div class="filter-bottom-row">
                 <div class="filter-available-box">
                     <label class="checkbox-container">
                         <input type="checkbox" id="filter-available">
@@ -225,12 +300,10 @@
                         Solo disponibles
                     </label>
                 </div>
+                <div class="catalog-results-counter">
+                    <span id="results-count">0 productos</span>
+                </div>
             </div>
-        </div>
-
-        <!-- Contador de Resultados -->
-        <div class="catalog-results-counter reveal" style="margin-bottom: 20px; font-size: 0.95rem; color: var(--color-text-muted); font-weight: 500;">
-            <span id="results-count">0 productos encontrados</span>
         </div>
 
         <!-- Cuadrícula de Productos del Catálogo -->

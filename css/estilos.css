@@ -1996,77 +1996,345 @@ button:disabled,
 }
 
 /* --- Estilos de Barra de Filtros del Catálogo --- */
+/* --- Estilos de Barra de Filtros del Catálogo (FASE M26) --- */
 .catalog-filters-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--color-bg-card-light);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-md);
-    padding: 20px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-    gap: 20px;
-    box-shadow: var(--shadow-sm);
+    flex-direction: column;
+    background-color: var(--surface-card, #FFFEFC);
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    gap: 16px;
+    box-shadow: 0 4px 16px rgba(31, 24, 12, 0.05);
 }
 
 .filter-search-box {
     position: relative;
-    flex: 1 1 300px;
-    max-width: 400px;
+    width: 100%;
 }
 
 .filter-search-box input {
     width: 100%;
-    padding: 12px 16px 12px 42px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    transition: var(--transition-smooth);
-    background-color: var(--color-bg-light);
+    padding: 10px 16px 10px 42px;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: 8px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.88rem;
+    color: #171717;
+    background-color: #FFFDF8;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .filter-search-box input:focus {
     outline: none;
-    border-color: var(--color-primary-dark);
-    box-shadow: 0 0 5px rgba(197, 160, 89, 0.2);
+    border-color: #C49A3E;
+    box-shadow: 0 0 0 3px rgba(196, 154, 62, 0.15);
 }
 
 .filter-search-box .search-icon {
     position: absolute;
-    left: 15px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 1.1rem;
-    color: var(--color-text-muted);
+    color: #8C7B65;
+    display: flex;
+    align-items: center;
 }
 
-.filter-categories-group {
+/* Grupos FORMATO y TIPO */
+.filter-group {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-group-label {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #7A6953;
+    text-transform: uppercase;
+}
+
+.filter-buttons-container {
+    display: flex;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
-.filter-category-btn {
-    padding: 10px 20px;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
+.filter-tab-btn {
+    padding: 8px 16px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-radius: var(--border-radius-sm);
-    border: 1px solid var(--color-border);
-    background-color: var(--color-bg-light);
+    letter-spacing: 0.4px;
+    border-radius: 6px;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    background-color: #FFFDF8;
+    color: #4A3F31;
     cursor: pointer;
-    transition: var(--transition-smooth);
+    transition: all 0.2s ease;
 }
 
-.filter-category-btn:hover,
-.filter-category-btn.active {
-    background: var(--color-gold-gradient);
-    color: var(--color-text-light);
-    border-color: var(--color-primary-dark);
+.filter-tab-btn:hover {
+    border-color: #C49A3E;
+    color: #171717;
+}
+
+.filter-tab-btn.active {
+    background: linear-gradient(135deg, #C49A3E 0%, #9E792B 100%);
+    color: #FFFFFF;
+    border-color: #9E792B;
+    box-shadow: 0 2px 6px rgba(196, 154, 62, 0.3);
+}
+
+.catalog-filters-bar {
+    position: relative;
+    z-index: 100;
+}
+
+.catalog-filters-bar.has-open-dropdown,
+.catalog-filters-bar:focus-within {
+    z-index: 500;
+}
+
+/* Fila de Selects: Género + Ordenar por (Dropdowns Personalizados Dunes Parfums) */
+.filter-selects-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    position: relative;
+    z-index: 20;
+}
+
+.filter-dropdown-wrapper {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+}
+
+.filter-dropdown-wrapper.is-open,
+.filter-dropdown-wrapper:focus-within {
+    z-index: 500;
+}
+
+.dunes-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    background-color: #FFFDF8;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: 6px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #332B20;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.dunes-dropdown-trigger:hover,
+.dunes-dropdown-trigger[aria-expanded="true"] {
+    border-color: #C49A3E;
+    box-shadow: 0 0 0 3px rgba(196, 154, 62, 0.12);
+}
+
+.dunes-dropdown-trigger[aria-expanded="true"] .dunes-dropdown-chevron {
+    transform: rotate(180deg);
+    color: #9E792B;
+}
+
+.dunes-dropdown-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dunes-dropdown-chevron {
+    flex-shrink: 0;
+    margin-left: 6px;
+    color: #8C7B65;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Panel Flotante del Menú Dropdown */
+.dunes-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    background-color: #FFFDF8;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(31, 24, 12, 0.16);
+    padding: 4px;
+    box-sizing: border-box;
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+
+.dunes-dropdown-menu[hidden] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+.dunes-dropdown-menu:not([hidden]),
+.dunes-dropdown-menu.is-open {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+}
+
+.dunes-dropdown-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 8px;
+    border-radius: 6px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #4A3F31;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dunes-dropdown-option span {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.25;
+}
+
+.dunes-dropdown-option:hover {
+    background-color: #F8F2E4;
+    color: #171717;
+}
+
+.dunes-dropdown-option.active {
+    background-color: #F4EAD4;
+    color: #8E671D;
+    font-weight: 700;
+}
+
+.dunes-option-check {
+    opacity: 0;
+    color: #8E671D;
+    flex-shrink: 0;
+    transition: opacity 0.15s ease;
+}
+
+.dunes-dropdown-option.active .dunes-option-check {
+    opacity: 1;
+}
+
+/* Checkbox Personalizado Dunes Parfums */
+.checkbox-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding-left: 26px;
+    cursor: pointer;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #4A3F31;
+    user-select: none;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkbox-container .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 18px;
+    width: 18px;
+    background-color: #FFFDF8;
+    border: 1.5px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+    border-color: #C49A3E;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background: linear-gradient(135deg, #C49A3E 0%, #9E792B 100%);
+    border-color: #9E792B;
+    box-shadow: 0 2px 5px rgba(196, 154, 62, 0.3);
+}
+
+.checkbox-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 9px;
+    border: solid #FFFFFF;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Fila Inferior: Solo disponibles (Izquierda) + Contador (Derecha) */
+.filter-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid rgba(231, 211, 165, 0.4);
+}
+
+.filter-available-box {
+    display: flex;
+    align-items: center;
+}
+
+.catalog-results-counter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.84rem;
+    color: #6F6253;
+    font-weight: 600;
+    margin: 0;
 }
 
 /* --- Estado Vacío Compacto del Catálogo --- */

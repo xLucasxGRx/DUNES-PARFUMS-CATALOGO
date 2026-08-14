@@ -85,8 +85,14 @@ const CATALOG_STATE_TTL = 2 * 60 * 60 * 1000; // 2 horas
 function guardarEstadoCatalogo(filtroEstado) {
     if (!filtroEstado) return;
     try {
+        const catCompat = filtroEstado.categoria ||
+            (filtroEstado.tipo && filtroEstado.tipo !== 'todos'
+                ? filtroEstado.tipo
+                : (filtroEstado.formato === 'decant' ? 'decants' : 'todos'));
         const payload = {
-            categoria: filtroEstado.categoria || 'todos',
+            categoria: catCompat,
+            formato: filtroEstado.formato || (catCompat === 'decants' ? 'decant' : 'todos'),
+            tipo: filtroEstado.tipo || (['arabe', 'disenador', 'nicho'].includes(catCompat) ? catCompat : 'todos'),
             genero: filtroEstado.genero || 'todos',
             busqueda: filtroEstado.busqueda || '',
             orden: filtroEstado.orden || 'relevancia',
@@ -149,18 +155,28 @@ function resolverEstadoInicial() {
         genParam = params.get('genero');
     } catch (e) {}
 
-    const catValidas = ['arabe', 'disenador', 'nicho', 'decants'];
-    const genValidos = ['hombre', 'mujer', 'unisex'];
-
     const savedState = obtenerEstadoCatalogoGuardado();
 
-    let finalCat = 'todos';
+    let finalFormato = 'todos';
+    let finalTipo = 'todos';
+
     if (hasCatParam) {
-        finalCat = catValidas.includes(catParam) ? catParam : 'todos';
-    } else if (savedState && catValidas.includes(savedState.categoria)) {
-        finalCat = savedState.categoria;
+        if (catParam === 'decants') {
+            finalFormato = 'decant';
+            finalTipo = 'todos';
+        } else if (['arabe', 'disenador', 'nicho'].includes(catParam)) {
+            finalTipo = catParam;
+            finalFormato = 'todos';
+        }
+    } else if (savedState) {
+        if (['sellado', 'decant'].includes(savedState.formato)) finalFormato = savedState.formato;
+        if (['arabe', 'disenador', 'nicho'].includes(savedState.tipo)) finalTipo = savedState.tipo;
+        // Compatibilidad retroactiva
+        if (savedState.categoria === 'decants') finalFormato = 'decant';
+        else if (['arabe', 'disenador', 'nicho'].includes(savedState.categoria)) finalTipo = savedState.categoria;
     }
 
+    const genValidos = ['hombre', 'mujer', 'unisex'];
     let finalGen = 'todos';
     if (hasGenParam) {
         finalGen = genValidos.includes(genParam) ? genParam : 'todos';
@@ -180,9 +196,13 @@ function resolverEstadoInicial() {
         if (typeof savedState.scrollY === 'number' && savedState.scrollY > 0) savedScrollY = savedState.scrollY;
     }
 
+    const finalCat = finalTipo !== 'todos' ? finalTipo : (finalFormato === 'decant' ? 'decants' : 'todos');
+
     return {
         filtroEstado: {
             categoria: finalCat,
+            formato: finalFormato,
+            tipo: finalTipo,
             genero: finalGen,
             busqueda: finalSearch,
             orden: finalOrden,
@@ -310,81 +330,66 @@ function mostrarErrorCargaCatalogo(grid, callbackReintentar) {
  */
 async function iniciarCargaCatalogo(grid) {
     if (!grid) return;
+    console.log("[CATALOGO] Inicializando");
 
-    // 1. Mostrar skeletons de inmediato (no 0 productos)
-    mostrarSkeletonsCatalogo(grid);
-
-    // 2. Resolver estado inicial con prioridad de URL sobre sessionStorage
     const { filtroEstado, savedScrollY } = resolverEstadoInicial();
-
-    // 3. Cargar productos desde productosModulo
     let productos = null;
-    try {
-        productos = await window.productosModulo.obtenerProductos();
-    } catch (e) {
-        console.error("[Catálogo] Error al consultar ProductosService:", e);
-    }
 
-    // 4. Si fallaron todas las fuentes
-    if (!productos || productos.length === 0) {
+    try {
+        mostrarSkeletonsCatalogo(grid);
+        console.log("[CATALOGO] ProductosService iniciado");
+        productos = await window.productosModulo.obtenerProductos();
+        console.log("[CATALOGO] Productos recibidos:", productos ? productos.length : 0);
+
+        if (!productos || productos.length === 0) {
+            mostrarErrorCargaCatalogo(grid, () => {
+                iniciarCargaCatalogo(grid);
+            });
+            return;
+        }
+
+        grid.classList.remove('is-loading');
+        console.log("[CATALOGO] Loader ocultado");
+
+        sincronizarControlesInterfaz(filtroEstado);
+        inicializarFiltrosInterfaz(productos, filtroEstado, grid);
+
+        window.addEventListener('popstate', () => {
+            const { filtroEstado: nuevoEstado } = resolverEstadoInicial();
+            Object.assign(filtroEstado, nuevoEstado);
+            sincronizarControlesInterfaz(filtroEstado);
+            filtrarYRenderizar(productos, filtroEstado, grid);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            guardarEstadoCatalogo(filtroEstado);
+        });
+
+        filtrarYRenderizar(productos, filtroEstado, grid);
+
+        if (savedScrollY > 0) {
+            const restaurarScroll = () => {
+                const maxScroll = Math.max(0, (document.documentElement ? document.documentElement.scrollHeight : 0) - window.innerHeight);
+                const targetY = Math.min(savedScrollY, maxScroll);
+                if (typeof window.scrollTo === 'function') {
+                    window.scrollTo(0, targetY);
+                }
+            };
+            if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(restaurarScroll);
+                });
+            } else {
+                setTimeout(restaurarScroll, 50);
+            }
+        }
+    } catch (error) {
+        console.error("[CATALOGO] Error crítico durante la carga inicial:", error);
         mostrarErrorCargaCatalogo(grid, () => {
             iniciarCargaCatalogo(grid);
         });
-        return;
-    }
-
-    grid.classList.remove('is-loading');
-
-    // 5. Actualizar visualmente la interfaz
-    sincronizarBotonesCategoria(filtroEstado.categoria);
-    sincronizarBotonesGenero(filtroEstado.genero);
-    actualizarCabeceraCategoria(filtroEstado.categoria);
-
-    inicializarFiltrosInterfaz(productos, filtroEstado, grid);
-
-    window.addEventListener('popstate', () => {
-        const cat = obtenerCategoriaDesdeURL();
-        const gen = obtenerGeneroDesdeURL();
-        filtroEstado.categoria = cat;
-        filtroEstado.genero = gen;
-
-        sincronizarBotonesCategoria(cat);
-        sincronizarBotonesGenero(gen);
-        actualizarCabeceraCategoria(cat);
-
-        const searchInput = document.getElementById('search-perfume');
-        if (searchInput) searchInput.value = filtroEstado.busqueda;
-        const availableCheckbox = document.getElementById('filter-available');
-        if (availableCheckbox) availableCheckbox.checked = filtroEstado.soloDisponibles;
-        const sortSelect = document.getElementById('sort-price');
-        if (sortSelect) sortSelect.value = filtroEstado.orden;
-
-        filtrarYRenderizar(productos, filtroEstado, grid);
-    });
-
-    window.addEventListener('beforeunload', () => {
-        guardarEstadoCatalogo(filtroEstado);
-    });
-
-    // 6. Renderizar productos reales
-    filtrarYRenderizar(productos, filtroEstado, grid);
-
-    // 7. Restaurar scroll
-    if (savedScrollY > 0) {
-        const restaurarScroll = () => {
-            const maxScroll = Math.max(0, (document.documentElement ? document.documentElement.scrollHeight : 0) - window.innerHeight);
-            const targetY = Math.min(savedScrollY, maxScroll);
-            if (typeof window.scrollTo === 'function') {
-                window.scrollTo(0, targetY);
-            }
-        };
-        if (typeof requestAnimationFrame === 'function') {
-            requestAnimationFrame(() => {
-                requestAnimationFrame(restaurarScroll);
-            });
-        } else {
-            setTimeout(restaurarScroll, 50);
-        }
+    } finally {
+        grid.classList.remove('is-loading');
     }
 }
 
@@ -395,133 +400,282 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Obtiene el valor de la categoría desde los parámetros de la URL
+ * Normaliza una cadena removiendo acentos y convirtiendo a minúsculas
  */
-function obtenerCategoriaDesdeURL() {
-    const params = new URLSearchParams(window.location.search);
-    const cat = params.get('categoria');
-    const validas = ['arabe', 'disenador', 'nicho', 'decants'];
-    return validas.includes(cat) ? cat : 'todos';
+function normalizarTextoCat(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
 /**
- * Obtiene el valor del género desde los parámetros de la URL
+ * Comprueba si el tipo (categoría) de un producto coincide con el filtro activo
+ * Soporta prod.tipo ("ARABE", "DISEÑADOR", "NICHO") y prod.categoria ("arabe", "disenador", "nicho")
  */
-function obtenerGeneroDesdeURL() {
-    const params = new URLSearchParams(window.location.search);
-    const gen = params.get('genero');
-    const validos = ['hombre', 'mujer', 'unisex'];
-    return validos.includes(gen) ? gen : 'todos';
+function coincideTipo(prod, estadoTipo) {
+    if (!estadoTipo || estadoTipo === 'todos') return true;
+
+    const tipoFiltro = normalizarTextoCat(estadoTipo);
+    const tipoProd = normalizarTextoCat(prod.tipo);
+    const catProd = normalizarTextoCat(prod.categoria);
+
+    if (tipoFiltro === 'arabe' || tipoFiltro === 'arabes') {
+        return tipoProd.includes('arabe') || catProd.includes('arabe');
+    }
+    if (tipoFiltro === 'disenador' || tipoFiltro === 'disenadores') {
+        return tipoProd.includes('disenador') || catProd.includes('disenador');
+    }
+    if (tipoFiltro === 'nicho' || tipoFiltro === 'nichos') {
+        return tipoProd.includes('nicho') || catProd.includes('nicho');
+    }
+
+    return tipoProd === tipoFiltro || catProd === tipoFiltro;
+}
+
+/**
+ * Comprueba si el formato de un producto coincide con el filtro activo (TODOS / SELLADOS / DECANTS)
+ */
+function coincideFormato(prod, estadoFormato) {
+    if (!estadoFormato || estadoFormato === 'todos') return true;
+
+    const catNorm = normalizarTextoCat(prod.categoria);
+    const formNorm = normalizarTextoCat(prod.formato);
+    const esDecant = catNorm.includes('decant') || formNorm.includes('decant');
+
+    if (estadoFormato === 'sellado' || estadoFormato === 'sellados') {
+        return !esDecant;
+    }
+    if (estadoFormato === 'decant' || estadoFormato === 'decants') {
+        return esDecant;
+    }
+    return true;
 }
 
 /**
  * Comprueba si el género de un producto coincide con el género seleccionado
- * Regla:
- * - Hombre: productos 'hombre' y productos 'unisex'
- * - Mujer: productos 'mujer' y productos 'unisex'
- * - Unisex: únicamente productos 'unisex'
- * - Todos: todos los productos
+ * Tolerante a mayúsculas, acentos y espacios (Hombre, HOMBRE, Mujer, Unisex)
  */
 function coincideGenero(generoProducto, generoFiltro) {
     if (!generoFiltro || generoFiltro === 'todos') return true;
-    const gProd = (generoProducto || 'sin_clasificar').toLowerCase();
-    if (generoFiltro === 'hombre') {
+    const gProd = normalizarTextoCat(generoProducto || 'sin_clasificar');
+    const gFiltro = normalizarTextoCat(generoFiltro);
+
+    if (gFiltro === 'hombre') {
         return gProd === 'hombre' || gProd === 'unisex';
     }
-    if (generoFiltro === 'mujer') {
+    if (gFiltro === 'mujer') {
         return gProd === 'mujer' || gProd === 'unisex';
     }
-    if (generoFiltro === 'unisex') {
+    if (gFiltro === 'unisex') {
         return gProd === 'unisex';
     }
     return false;
 }
 
 /**
- * Obtiene la configuración de cotización según la categoría
+ * Obtiene la configuración de cotización según el tipo
  */
-function obtenerConfiguracionCotizacion(categoria) {
-    return COTIZACION_TEXTOS[categoria] || COTIZACION_TEXTOS.todos;
+function obtenerConfiguracionCotizacion(tipo) {
+    return COTIZACION_TEXTOS[tipo] || COTIZACION_TEXTOS.todos;
 }
 
 /**
- * Actualiza la URL del navegador usando la History API sin recargar
+ * Sincroniza visualmente los botones de Formato (TODOS / SELLADOS / DECANTS)
  */
-function actualizarURL(categoria, genero) {
-    const url = new URL(window.location.href);
-
-    if (!categoria || categoria === 'todos') {
-        url.searchParams.delete('categoria');
-    } else {
-        url.searchParams.set('categoria', categoria);
-    }
-
-    if (!genero || genero === 'todos') {
-        url.searchParams.delete('genero');
-    } else {
-        url.searchParams.set('genero', genero);
-    }
-
-    const currentSearch = window.location.search;
-    const newSearch = url.search;
-    if (currentSearch !== newSearch) {
-        history.pushState({ categoria, genero }, '', url.pathname + (url.search || ''));
-    }
-}
-
-/**
- * Sincroniza visualmente los botones de categoría y actualiza aria-pressed
- */
-function sincronizarBotonesCategoria(categoriaActiva) {
-    const categoryFilters = document.querySelectorAll('.filter-category-btn');
-    categoryFilters.forEach(btn => {
-        const isCurrent = btn.dataset.categoria === categoriaActiva;
+function sincronizarBotonesFormato(formatoActivo) {
+    const formatoBtns = document.querySelectorAll('.filter-group--formato .filter-tab-btn');
+    formatoBtns.forEach(btn => {
+        const isCurrent = (btn.dataset.formato || 'todos') === (formatoActivo || 'todos');
         btn.classList.toggle('active', isCurrent);
         btn.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
     });
 }
 
 /**
- * Sincroniza visualmente los botones de género y actualiza aria-pressed
+ * Sincroniza visualmente los botones de Tipo (TODOS / ÁRABES / DISEÑADOR / NICHO)
  */
-function sincronizarBotonesGenero(generoActivo) {
-    const genderFilters = document.querySelectorAll('.filter-gender-btn');
-    genderFilters.forEach(btn => {
-        const isCurrent = btn.dataset.genero === generoActivo;
+function sincronizarBotonesTipo(tipoActivo) {
+    const tipoBtns = document.querySelectorAll('.filter-group--tipo .filter-tab-btn');
+    tipoBtns.forEach(btn => {
+        const isCurrent = (btn.dataset.tipo || 'todos') === (tipoActivo || 'todos');
         btn.classList.toggle('active', isCurrent);
         btn.setAttribute('aria-pressed', isCurrent ? 'true' : 'false');
     });
 }
 
 /**
- * Actualiza el título, subtítulo y descripción del catálogo dinámicamente
+ * Sincroniza visualmente los dropdowns personalizados (Género y Ordenar por)
  */
-function actualizarCabeceraCategoria(categoria) {
-    const info = CATEGORIA_INFO[categoria] || CATEGORIA_INFO.todos;
-    const titleEl = document.getElementById('catalogo-titulo');
-    const descEl = document.getElementById('catalogo-descripcion');
-    const subEl = document.getElementById('catalogo-subtitulo');
-    
-    if (titleEl) titleEl.textContent = info.titulo;
-    if (descEl) descEl.textContent = info.descripcion;
-    if (subEl) subEl.textContent = info.subtitulo;
+function sincronizarDropdownsPersonalizados(estado) {
+    // 1. Género
+    const genderSelect = document.getElementById('filter-gender-select');
+    if (genderSelect) genderSelect.value = estado.genero || 'todos';
+
+    const genderLabel = document.getElementById('gender-dropdown-label');
+    const genderMap = {
+        todos: 'Género: Todos',
+        hombre: 'Género: Hombre',
+        mujer: 'Género: Mujer',
+        unisex: 'Género: Unisex'
+    };
+    if (genderLabel) {
+        genderLabel.textContent = genderMap[estado.genero] || 'Género: Todos';
+    }
+
+    const genderMenu = document.getElementById('gender-dropdown-menu');
+    if (genderMenu) {
+        genderMenu.querySelectorAll('.dunes-dropdown-option').forEach(opt => {
+            const isCurrent = opt.dataset.value === (estado.genero || 'todos');
+            opt.classList.toggle('active', isCurrent);
+            opt.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+        });
+    }
+
+    // 2. Ordenar por
+    const sortSelect = document.getElementById('sort-price');
+    if (sortSelect) sortSelect.value = estado.orden || 'relevancia';
+
+    const sortLabel = document.getElementById('sort-dropdown-label');
+    const sortMap = {
+        relevancia: 'Ordenar: Relevancia',
+        'price-asc': 'Precio: menor a mayor',
+        'price-desc': 'Precio: mayor a menor'
+    };
+    if (sortLabel) {
+        sortLabel.textContent = sortMap[estado.orden] || 'Ordenar: Relevancia';
+    }
+
+    const sortMenu = document.getElementById('sort-dropdown-menu');
+    if (sortMenu) {
+        sortMenu.querySelectorAll('.dunes-dropdown-option').forEach(opt => {
+            const isCurrent = opt.dataset.value === (estado.orden || 'relevancia');
+            opt.classList.toggle('active', isCurrent);
+            opt.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+        });
+    }
 }
 
 /**
- * Actualiza dinámicamente el contador de resultados
+ * Sincroniza todos los controles visuales de la interfaz con el estado actual
  */
-function actualizarContador(cantidad, categoria) {
+function sincronizarControlesInterfaz(estado) {
+    sincronizarBotonesFormato(estado.formato);
+    sincronizarBotonesTipo(estado.tipo);
+    sincronizarDropdownsPersonalizados(estado);
+
+    const availableCheckbox = document.getElementById('filter-available');
+    if (availableCheckbox) availableCheckbox.checked = !!estado.soloDisponibles;
+
+    const searchInput = document.getElementById('search-perfume');
+    if (searchInput) searchInput.value = estado.busqueda || '';
+}
+
+/**
+ * Cierra todos los menús desplegables abiertos y restaura el z-index de sus contenedores
+ */
+function cerrarTodosLosDropdowns() {
+    document.querySelectorAll('.dunes-dropdown-trigger').forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+    });
+    document.querySelectorAll('.dunes-dropdown-menu').forEach(menu => {
+        menu.hidden = true;
+        menu.classList.remove('is-open');
+    });
+    document.querySelectorAll('.filter-dropdown-wrapper').forEach(wrap => {
+        wrap.classList.remove('is-open');
+        wrap.style.zIndex = '';
+    });
+    document.querySelectorAll('.catalog-filters-bar').forEach(bar => {
+        bar.classList.remove('has-open-dropdown');
+        bar.style.zIndex = '';
+    });
+}
+
+/**
+ * Configura un componente de dropdown personalizado Dunes con control de elevación y clicks
+ */
+function configurarDropdownPersonalizado(triggerId, menuId, callbackSeleccion) {
+    const trigger = document.getElementById(triggerId);
+    const menu = document.getElementById(menuId);
+    if (!trigger || !menu) return;
+
+    const wrapper = trigger.closest('.filter-dropdown-wrapper');
+    const filterBar = trigger.closest('.catalog-filters-bar');
+
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        cerrarTodosLosDropdowns();
+        if (!isOpen) {
+            trigger.setAttribute('aria-expanded', 'true');
+            menu.hidden = false;
+            menu.classList.add('is-open');
+            if (wrapper) {
+                wrapper.classList.add('is-open');
+                wrapper.style.zIndex = '500';
+            }
+            if (filterBar) {
+                filterBar.classList.add('has-open-dropdown');
+                filterBar.style.zIndex = '500';
+            }
+        }
+    });
+
+    menu.querySelectorAll('.dunes-dropdown-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (opt.classList.contains('disabled') || opt.getAttribute('aria-disabled') === 'true') {
+                cerrarTodosLosDropdowns();
+                return;
+            }
+            const value = e.currentTarget.dataset.value;
+            cerrarTodosLosDropdowns();
+            if (value !== undefined) {
+                callbackSeleccion(value);
+            }
+        });
+    });
+}
+
+let eventosGlobalesDropdownIniciados = false;
+function inicializarEventosGlobalesDropdowns() {
+    if (eventosGlobalesDropdownIniciados) return;
+    eventosGlobalesDropdownIniciados = true;
+
+    document.addEventListener('click', () => {
+        cerrarTodosLosDropdowns();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            cerrarTodosLosDropdowns();
+        }
+    });
+}
+
+/**
+ * Actualiza dinámicamente el contador de resultados (ej: "56 productos")
+ */
+function actualizarContador(cantidad) {
     const counterEl = document.getElementById('results-count');
     if (!counterEl) return;
-    
-    let tipoTexto = 'productos';
-    if (categoria === 'decants') {
-        tipoTexto = cantidad === 1 ? 'decant' : 'decants';
-    } else {
-        tipoTexto = cantidad === 1 ? 'producto' : 'productos';
-    }
-    
-    counterEl.textContent = `${cantidad} ${tipoTexto} encontrado${cantidad === 1 ? '' : 's'}`;
+    const texto = cantidad === 1 ? 'producto' : 'productos';
+    counterEl.textContent = `${cantidad} ${texto}`;
+}
+
+/**
+ * Reinicia todos los filtros al estado por defecto
+ */
+function limpiarTodosLosFiltros(productos, estado, grid) {
+    estado.formato = 'todos';
+    estado.tipo = 'todos';
+    estado.genero = 'todos';
+    estado.busqueda = '';
+    estado.soloDisponibles = false;
+    estado.orden = 'relevancia';
+
+    sincronizarControlesInterfaz(estado);
+    guardarEstadoCatalogo(estado);
+    filtrarYRenderizar(productos, estado, grid);
 }
 
 /**
@@ -529,15 +683,18 @@ function actualizarContador(cantidad, categoria) {
  */
 function inicializarFiltrosInterfaz(productos, estado, grid) {
     const searchInput = document.getElementById('search-perfume');
-    const categoryFilters = document.querySelectorAll('.filter-category-btn');
-    const genderFilters = document.querySelectorAll('.filter-gender-btn');
+    const formatoBtns = document.querySelectorAll('.filter-group--formato .filter-tab-btn');
+    const tipoBtns = document.querySelectorAll('.filter-group--tipo .filter-tab-btn');
+    const genderSelect = document.getElementById('filter-gender-select');
     const sortSelect = document.getElementById('sort-price');
     const availableCheckbox = document.getElementById('filter-available');
 
-    // Búsqueda por texto (Nombre / Marca) con debounce optimizado (180ms)
+    inicializarEventosGlobalesDropdowns();
+
+    // Búsqueda por texto (Nombre / Marca) con debounce de 180ms
     let searchDebounceTimer = null;
     if (searchInput) {
-        searchInput.value = estado.busqueda;
+        searchInput.value = estado.busqueda || '';
         searchInput.addEventListener('input', (e) => {
             if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
             const val = e.target.value;
@@ -549,36 +706,63 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
         });
     }
 
-    // Filtros de Categoría (Ver Todos, Árabes, Diseñador, Nicho, Decants)
-    categoryFilters.forEach(btn => {
+    // Filtro por Formato (TODOS / SELLADOS / DECANTS)
+    formatoBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const selectedCat = e.currentTarget.dataset.categoria;
-            estado.categoria = selectedCat;
-            sincronizarBotonesCategoria(selectedCat);
-            actualizarCabeceraCategoria(selectedCat);
-            actualizarURL(selectedCat, estado.genero);
+            const selectedFormato = e.currentTarget.dataset.formato;
+            estado.formato = selectedFormato;
+            sincronizarBotonesFormato(selectedFormato);
             guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
     });
 
-    // Filtros de Género (Todos, Hombre, Mujer, Unisex)
-    genderFilters.forEach(btn => {
+    // Filtro por Tipo (TODOS / ÁRABES / DISEÑADOR / NICHO)
+    tipoBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const selectedGen = e.currentTarget.dataset.genero;
-            estado.genero = selectedGen;
-            sincronizarBotonesGenero(selectedGen);
-            actualizarURL(estado.categoria, selectedGen);
+            const selectedTipo = e.currentTarget.dataset.tipo;
+            estado.tipo = selectedTipo;
+            sincronizarBotonesTipo(selectedTipo);
             guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
     });
 
-    // Ordenamiento por precio
+    // Configuración Dropdown Personalizado Género
+    configurarDropdownPersonalizado('gender-dropdown-trigger', 'gender-dropdown-menu', (val) => {
+        estado.genero = val;
+        sincronizarDropdownsPersonalizados(estado);
+        guardarEstadoCatalogo(estado);
+        filtrarYRenderizar(productos, estado, grid);
+    });
+
+    // Configuración Dropdown Personalizado Ocasión (Informativo / Próximamente)
+    configurarDropdownPersonalizado('ocasion-dropdown-trigger', 'ocasion-dropdown-menu', () => {
+        // Informativo: no altera filtros ni productos
+    });
+
+    // Configuración Dropdown Personalizado Ordenar
+    configurarDropdownPersonalizado('sort-dropdown-trigger', 'sort-dropdown-menu', (val) => {
+        estado.orden = val;
+        sincronizarDropdownsPersonalizados(estado);
+        guardarEstadoCatalogo(estado);
+        filtrarYRenderizar(productos, estado, grid);
+    });
+
+    // Mantenimiento de eventos para select nativo si es modificado directamente en pruebas
+    if (genderSelect) {
+        genderSelect.addEventListener('change', (e) => {
+            estado.genero = e.target.value;
+            sincronizarDropdownsPersonalizados(estado);
+            guardarEstadoCatalogo(estado);
+            filtrarYRenderizar(productos, estado, grid);
+        });
+    }
+
     if (sortSelect) {
-        sortSelect.value = estado.orden;
         sortSelect.addEventListener('change', (e) => {
             estado.orden = e.target.value;
+            sincronizarDropdownsPersonalizados(estado);
             guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
         });
@@ -586,7 +770,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
 
     // Checkbox de Disponibles
     if (availableCheckbox) {
-        availableCheckbox.checked = estado.soloDisponibles;
+        availableCheckbox.checked = !!estado.soloDisponibles;
         availableCheckbox.addEventListener('change', (e) => {
             estado.soloDisponibles = e.target.checked;
             guardarEstadoCatalogo(estado);
@@ -596,16 +780,57 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
 }
 
 /**
- * Filtra la lista de productos y la renderiza en el grid del DOM
+ * Filtra la lista de productos mediante el pipeline único centralizado y la renderiza en el grid
  */
 function filtrarYRenderizar(productos, estado, grid) {
-    grid.innerHTML = '<div class="loading-spinner">Filtrando fragancias...</div>';
+    if (!grid) return;
+    console.log("[CATALOGO] Estado filtros:", estado);
 
-    // 1. Filtrar visible, categoría comercial y género
-    const productosFiltradosBase = productos.filter(prod => {
+    // Limpiar SIEMPRE el contenedor antes de procesar o renderizar
+    grid.innerHTML = '';
+
+    // 1. Pipeline Central de Filtrado (en memoria)
+    const filtrados = productos.filter(prod => {
+        // A. Visibilidad global (Obligatorio)
         if (prod.visible === false) return false;
-        if (estado.categoria !== 'todos' && prod.categoria !== estado.categoria) return false;
-        if (!coincideGenero(prod.genero, estado.genero)) return false;
+
+        // B. Búsqueda en tiempo real (Nombre o Marca, acentos y mayúsculas ignorados)
+        if (estado.busqueda) {
+            const queryNorm = normalizarTextoCat(estado.busqueda);
+            const nombreNorm = normalizarTextoCat(prod.nombre);
+            const marcaNorm = normalizarTextoCat(prod.marca);
+            if (!nombreNorm.includes(queryNorm) && !marcaNorm.includes(queryNorm)) {
+                return false;
+            }
+        }
+
+        // C. Filtro por Formato (TODOS / SELLADOS / DECANTS)
+        if (!coincideFormato(prod, estado.formato)) {
+            return false;
+        }
+
+        // D. Filtro por Tipo (TODOS / ÁRABES / DISEÑADOR / NICHO)
+        if (!coincideTipo(prod, estado.tipo)) {
+            return false;
+        }
+
+        // E. Filtro por Género (TODOS / HOMBRE / MUJER / UNISEX)
+        if (!coincideGenero(prod.genero, estado.genero)) {
+            return false;
+        }
+
+        // F. Filtro por Disponibilidad (Solo disponibles)
+        if (estado.soloDisponibles) {
+            const catNorm = normalizarTextoCat(prod.categoria);
+            const formNorm = normalizarTextoCat(prod.formato);
+            const esDecant = catNorm.includes('decant') || formNorm.includes('decant');
+            const mlDisp = prod.mililitrosDisponibles ?? prod.mililitros_disponibles ?? 0;
+            const estaAgotado = esDecant
+                ? (!prod.disponible || mlDisp <= 0)
+                : (!prod.disponible || (prod.stock ?? 0) <= 0);
+            if (estaAgotado) return false;
+        }
+
         return true;
     });
 
@@ -613,13 +838,13 @@ function filtrarYRenderizar(productos, estado, grid) {
     const mensajeEl = document.getElementById('estado-catalogo-mensaje');
     const secContainer = document.getElementById('cotizacion-secundaria-container');
 
-    // CONFIGURACIÓN DE WHATSAPP PARA LA CATEGORÍA ACTIVA
-    const config = obtenerConfiguracionCotizacion(estado.categoria);
+    const config = obtenerConfiguracionCotizacion(estado.tipo);
     const waUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(config.whatsappTexto)}`;
 
-    // CASO A — No existen productos con los filtros principales activos
-    if (productosFiltradosBase.length === 0) {
+    // CASO ESTADO VACÍO (Sin productos coincidentes)
+    if (filtrados.length === 0) {
         grid.style.display = 'none';
+        grid.innerHTML = ''; // Garantizar que el grid no conserve tarjetas anteriores
         if (secContainer) {
             secContainer.style.display = 'none';
             secContainer.innerHTML = '';
@@ -627,23 +852,23 @@ function filtrarYRenderizar(productos, estado, grid) {
 
         if (estadoEl && mensajeEl) {
             const iconContainer = document.getElementById('estado-catalogo-icon');
-            if (iconContainer) iconContainer.innerHTML = '<i data-lucide="shopping-bag" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
-            
+            if (estado.busqueda && iconContainer) {
+                iconContainer.innerHTML = '<i data-lucide="search" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
+            } else if (iconContainer) {
+                iconContainer.innerHTML = '<i data-lucide="shopping-bag" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
+            }
+
             document.getElementById('estado-catalogo-titulo').textContent = '¿NO VES TU PERFUME AQUÍ?';
             mensajeEl.textContent = 'Cotiza tu perfume con nosotros y te ayudamos a conseguirlo.';
-
-            // Sección de Cotizar
             document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'none';
-            
-            // Configurar botón principal de WhatsApp
+
             const waBtn = document.getElementById('estado-catalogo-btn-wa');
             if (waBtn) {
                 waBtn.href = waUrl;
                 waBtn.setAttribute('aria-label', config.ariaLabel);
                 document.getElementById('estado-catalogo-btn-wa-texto').textContent = 'COTIZA TU PERFUME';
             }
-            
-            // Botón secundario para Limpiar Filtros
+
             const secBtn = document.getElementById('estado-catalogo-btn-secundario');
             if (secBtn) {
                 const newSecBtn = secBtn.cloneNode(true);
@@ -658,118 +883,41 @@ function filtrarYRenderizar(productos, estado, grid) {
             estadoEl.style.display = 'block';
             if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
         }
-        actualizarContador(0, estado.categoria);
+        actualizarContador(0);
         return;
     }
 
-    // 2. Aplicar el resto de los filtros (búsqueda por texto y disponibilidad de stock)
-    let filtrados = productosFiltradosBase.filter(prod => {
-        if (estado.busqueda) {
-            const nombreMatches = prod.nombre.toLowerCase().includes(estado.busqueda);
-            const marcaMatches = prod.marca.toLowerCase().includes(estado.busqueda);
-            if (!nombreMatches && !marcaMatches) {
-                return false;
-            }
-        }
+    // 2. Copia inmutable para ordenamiento sin mutar array original
+    let resultadoFinal = [...filtrados];
 
-        if (estado.soloDisponibles) {
-            const esDecant = prod.categoria === 'decants';
-            const estaAgotado = esDecant
-                ? (!prod.disponible || prod.mililitrosDisponibles < 3)
-                : (!prod.disponible || prod.stock <= 0);
-            if (estaAgotado) {
-                return false;
-            }
-        }
-
-        return true;
-    });
-
-    // MANEJO DE CASOS DE FILTROS VACÍOS (Búsqueda o Solo Disponibles)
-    if (filtrados.length === 0) {
-        grid.style.display = 'none';
-        if (secContainer) {
-            secContainer.style.display = 'none';
-            secContainer.innerHTML = '';
-        }
-
-        if (estadoEl && mensajeEl) {
-            document.getElementById('estado-catalogo-cotizar-bloque').style.display = 'none';
-            
-            const waBtn = document.getElementById('estado-catalogo-btn-wa');
-            if (waBtn) {
-                waBtn.href = waUrl;
-                waBtn.setAttribute('aria-label', config.ariaLabel);
-                document.getElementById('estado-catalogo-btn-wa-texto').textContent = 'COTIZA TU PERFUME';
-            }
-
-            const secBtn = document.getElementById('estado-catalogo-btn-secundario');
-            const newSecBtn = secBtn.cloneNode(true);
-            secBtn.parentNode.replaceChild(newSecBtn, secBtn);
-
-            const iconContainer = document.getElementById('estado-catalogo-icon');
-
-            if (estado.busqueda) {
-                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="search" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
-                document.getElementById('estado-catalogo-titulo').textContent = '¿NO VES TU PERFUME AQUÍ?';
-                mensajeEl.textContent = 'Cotiza tu perfume con nosotros y te ayudamos a conseguirlo.';
-                
-                newSecBtn.textContent = 'Limpiar filtros';
-                newSecBtn.style.display = 'inline-block';
-                newSecBtn.addEventListener('click', () => {
-                    limpiarTodosLosFiltros(productos, estado, grid);
-                });
-            } else if (estado.soloDisponibles) {
-                if (iconContainer) iconContainer.innerHTML = '<i data-lucide="package-x" class="icon-lg" style="color: var(--catalog-gold, #B18225);"></i>';
-                document.getElementById('estado-catalogo-titulo').textContent = '¿NO VES TU PERFUME AQUÍ?';
-                mensajeEl.textContent = 'Cotiza tu perfume con nosotros y te ayudamos a conseguirlo.';
-                
-                newSecBtn.textContent = 'Ver productos agotados';
-                newSecBtn.style.display = 'inline-block';
-                newSecBtn.addEventListener('click', () => {
-                    const availableCheckbox = document.getElementById('filter-available');
-                    if (availableCheckbox) availableCheckbox.checked = false;
-                    estado.soloDisponibles = false;
-                    filtrarYRenderizar(productos, estado, grid);
-                });
-            } else {
-                newSecBtn.style.display = 'none';
-            }
-
-            estadoEl.style.display = 'block';
-            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-        }
-        actualizarContador(0, estado.categoria);
-        return;
-    }
-
-    // 3. Ordenar
-    if (estado.orden === 'price-asc') {
-        const getPrecioParaOrdenar = (prod) => {
-            if (prod.categoria === 'decants') {
-                return prod.presentaciones && prod.presentaciones.length > 0 
-                    ? prod.presentaciones[0].precio 
-                    : 15;
+    if (estado.orden === 'price-asc' || estado.orden === 'price-desc') {
+        const getPrecioEfectivo = (prod) => {
+            const catNorm = normalizarTextoCat(prod.categoria);
+            const formNorm = normalizarTextoCat(prod.formato);
+            const esDecant = catNorm.includes('decant') || formNorm.includes('decant');
+            if (esDecant) {
+                if (prod.presentaciones && prod.presentaciones.length > 0) {
+                    const validos = prod.presentaciones.map(p => p.precio).filter(p => typeof p === 'number' && p > 0);
+                    if (validos.length > 0) return Math.min(...validos);
+                }
+                const p3 = typeof prod.precio_3ml === 'number' && prod.precio_3ml > 0 ? prod.precio_3ml : null;
+                const p5 = typeof prod.precio_5ml === 'number' && prod.precio_5ml > 0 ? prod.precio_5ml : null;
+                const p10 = typeof prod.precio_10ml === 'number' && prod.precio_10ml > 0 ? prod.precio_10ml : null;
+                const validos = [p3, p5, p10].filter(p => p !== null);
+                if (validos.length > 0) return Math.min(...validos);
+                return prod.precio || 15;
             }
             if (prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number')) {
                 return prod.precio_oferta ?? prod.precioOferta;
             }
             return prod.precio || 0;
         };
-        filtrados.sort((a, b) => getPrecioParaOrdenar(a) - getPrecioParaOrdenar(b));
-    } else if (estado.orden === 'price-desc') {
-        const getPrecioParaOrdenar = (prod) => {
-            if (prod.categoria === 'decants') {
-                return prod.presentaciones && prod.presentaciones.length > 0 
-                    ? prod.presentaciones[0].precio 
-                    : 15;
-            }
-            if (prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number')) {
-                return prod.precio_oferta ?? prod.precioOferta;
-            }
-            return prod.precio || 0;
-        };
-        filtrados.sort((a, b) => getPrecioParaOrdenar(b) - getPrecioParaOrdenar(a));
+
+        if (estado.orden === 'price-asc') {
+            resultadoFinal.sort((a, b) => getPrecioEfectivo(a) - getPrecioEfectivo(b));
+        } else {
+            resultadoFinal.sort((a, b) => getPrecioEfectivo(b) - getPrecioEfectivo(a));
+        }
     }
 
     // 4. Renderizar tarjetas con el diseño completo aprobado
@@ -777,14 +925,17 @@ function filtrarYRenderizar(productos, estado, grid) {
     grid.style.display = 'grid';
     grid.innerHTML = '';
 
-    filtrados.forEach((prod, index) => {
+    resultadoFinal.forEach((prod, index) => {
         const card = document.createElement('div');
         card.className = 'product-card';
 
-        const esDecant = prod.categoria === 'decants';
+        const catNorm = normalizarTextoCat(prod.categoria);
+        const formNorm = normalizarTextoCat(prod.formato);
+        const esDecant = catNorm.includes('decant') || formNorm.includes('decant');
+        const mlDisp = prod.mililitrosDisponibles ?? prod.mililitros_disponibles ?? 0;
         const estaAgotado = esDecant
-            ? (!prod.disponible || prod.mililitrosDisponibles < 3)
-            : (!prod.disponible || prod.stock <= 0);
+            ? (!prod.disponible || mlDisp <= 0)
+            : (!prod.disponible || (prod.stock ?? 0) <= 0);
 
         if (estaAgotado) {
             card.classList.add('out-of-stock', 'is-soldout');
@@ -809,23 +960,34 @@ function filtrarYRenderizar(productos, estado, grid) {
 
         let categoryBadgeText = 'CATÁLOGO';
         let categoryBadgeShort = 'CATÁLOGO';
-        if (prod.categoria === 'arabe') {
-            categoryBadgeText = 'PERFUME ÁRABE';
-            categoryBadgeShort = 'ÁRABE';
-        } else if (prod.categoria === 'disenador') {
-            categoryBadgeText = 'DISEÑADOR';
-            categoryBadgeShort = 'DISEÑADOR';
-        } else if (prod.categoria === 'nicho') {
-            categoryBadgeText = 'NICHO';
-            categoryBadgeShort = 'NICHO';
-        } else if (prod.categoria === 'decants') {
+        if (catNorm === 'arabe') {
+            categoryBadgeText = esDecant ? 'DECANT ÁRABE' : 'PERFUME ÁRABE';
+            categoryBadgeShort = esDecant ? 'DECANT' : 'ÁRABE';
+        } else if (catNorm === 'disenador') {
+            categoryBadgeText = esDecant ? 'DECANT DISEÑADOR' : 'DISEÑADOR';
+            categoryBadgeShort = esDecant ? 'DECANT' : 'DISEÑADOR';
+        } else if (catNorm === 'nicho') {
+            categoryBadgeText = esDecant ? 'DECANT NICHO' : 'NICHO';
+            categoryBadgeShort = esDecant ? 'DECANT' : 'NICHO';
+        } else if (esDecant) {
             categoryBadgeText = 'DECANT';
             categoryBadgeShort = 'DECANT';
         }
 
-        const precioMinDecant = (esDecant && prod.presentaciones && prod.presentaciones.length > 0)
-            ? prod.presentaciones[0].precio 
-            : 15;
+        let precioMinDecant = 15;
+        if (esDecant) {
+            if (prod.presentaciones && prod.presentaciones.length > 0) {
+                const precios = prod.presentaciones.map(p => p.precio).filter(p => typeof p === 'number' && p > 0);
+                if (precios.length > 0) precioMinDecant = Math.min(...precios);
+            } else {
+                const p3 = typeof prod.precio_3ml === 'number' && prod.precio_3ml > 0 ? prod.precio_3ml : null;
+                const p5 = typeof prod.precio_5ml === 'number' && prod.precio_5ml > 0 ? prod.precio_5ml : null;
+                const p10 = typeof prod.precio_10ml === 'number' && prod.precio_10ml > 0 ? prod.precio_10ml : null;
+                const validos = [p3, p5, p10].filter(p => p !== null);
+                if (validos.length > 0) precioMinDecant = Math.min(...validos);
+                else if (typeof prod.precio === 'number' && prod.precio > 0) precioMinDecant = prod.precio;
+            }
+        }
 
         const precioActual = esDecant ? `Desde S/ ${precioMinDecant.toFixed(2)}` : 'S/ ' + (tieneOferta ? precioOfertaVal : (prod.precio || 0)).toFixed(2);
         const precioAnteriorHtml = (tieneOferta && typeof prod.precio === 'number')
@@ -835,10 +997,10 @@ function filtrarYRenderizar(productos, estado, grid) {
         const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion || '100 ml'}`;
 
         const stockHtml = esDecant
-            ? (prod.disponible && prod.mililitrosDisponibles >= 3
-                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.mililitrosDisponibles} ml)</span>`
+            ? (!estaAgotado
+                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${mlDisp} ml)</span>`
                 : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`)
-            : (prod.disponible && prod.stock > 0
+            : (!estaAgotado
                 ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.stock} unid.)</span>`
                 : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`);
 
@@ -850,7 +1012,7 @@ function filtrarYRenderizar(productos, estado, grid) {
         `;
 
         if (esDecant) {
-            if (prod.disponible && prod.mililitrosDisponibles >= 3) {
+            if (!estaAgotado) {
                 actionBtnHtml = `
                     <div class="card-buttons-flex">
                         ${detailsBtnHtml}
@@ -982,8 +1144,8 @@ function filtrarYRenderizar(productos, estado, grid) {
         secContainer.style.display = 'block';
     }
 
-    // Actualizar contador
-    actualizarContador(filtrados.length, estado.categoria);
+    actualizarContador(resultadoFinal.length);
+    console.log("[CATALOGO] Render finalizado");
 }
 
 /**
@@ -1014,33 +1176,4 @@ function vincularEventosGridCatalogo(grid, estado) {
             window.whatsappConfig.consultarDisponibilidad(nombre, marca, 'Presentación estándar');
         });
     });
-}
-
-/**
- * Restablece todos los filtros del catálogo al estado inicial
- */
-function limpiarTodosLosFiltros(productos, estado, grid) {
-    estado.busqueda = '';
-    estado.categoria = 'todos';
-    estado.genero = 'todos';
-    estado.orden = 'relevancia';
-    estado.soloDisponibles = false;
-
-    limpiarEstadoCatalogoGuardado();
-
-    const searchInput = document.getElementById('search-perfume');
-    if (searchInput) searchInput.value = '';
-
-    const availableCheckbox = document.getElementById('filter-available');
-    if (availableCheckbox) availableCheckbox.checked = false;
-
-    const sortSelect = document.getElementById('sort-price');
-    if (sortSelect) sortSelect.value = 'relevancia';
-
-    sincronizarBotonesCategoria('todos');
-    sincronizarBotonesGenero('todos');
-    actualizarCabeceraCategoria('todos');
-    actualizarURL('todos', 'todos');
-
-    filtrarYRenderizar(productos, estado, grid);
 }

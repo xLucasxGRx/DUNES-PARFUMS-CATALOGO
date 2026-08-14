@@ -1932,6 +1932,23 @@
   /* ==========================================================================
      REDISEÑO ULTRA COMPACTO DEL CATÁLOGO EN MÓVIL (PRODUCTOS MÁS ARRIBA)
      ========================================================================== */
+  :root {
+    --catalog-mobile-gutter: 16px;
+  }
+
+  /* Restitución unificada de margen exterior en móvil (16px de respiración lateral elegante) */
+  #page-catalogo .container,
+  #page-catalogo main.container,
+  #page-catalogo main.section-padding {
+    width: calc(100% - 32px) !important;
+    max-width: 1440px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+  }
+
   /* Ocultar visualmente la cabecera del catálogo en móvil manteniendo H1 semántico para SEO/accesibilidad */
   #page-catalogo main.section-padding {
     padding-top: 8px !important;
@@ -1969,17 +1986,24 @@
     display: none !important;
   }
 
-  /* Tarjeta de Filtros Móvil Ultra Compacta */
+  /* Tarjeta de Filtros Móvil Ultra Compacta (FASE M26) */
   #page-catalogo .catalog-filters-bar {
+    position: relative !important;
+    z-index: 100 !important;
     display: flex !important;
     flex-direction: column !important;
-    padding: 8px 8px !important;
-    gap: 6px !important;
-    margin-bottom: 8px !important;
+    padding: 10px 10px !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
     border-radius: 10px !important;
     background-color: var(--surface-card, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     box-shadow: 0 2px 6px rgba(31, 24, 12, 0.04) !important;
+  }
+
+  #page-catalogo .catalog-filters-bar.has-open-dropdown,
+  #page-catalogo .catalog-filters-bar:focus-within {
+    z-index: 500 !important;
   }
 
   /* Buscador Full Width y Altura Compacta */
@@ -1991,8 +2015,8 @@
   }
 
   #page-catalogo .filter-search-box input {
-    height: 34px !important;
-    min-height: 34px !important;
+    height: 36px !important;
+    min-height: 36px !important;
     padding: 4px 10px 4px 32px !important;
     font-size: 0.8rem !important;
     border-radius: 6px !important;
@@ -2011,155 +2035,126 @@
     height: 15px !important;
   }
 
-  /* Categorías en 2 Filas en Móvil sin Desplazamiento Horizontal */
-  #page-catalogo .filter-categories-group {
-    display: grid !important;
-    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-    gap: 5px !important;
-    overflow: visible !important;
+  #page-catalogo .filter-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
     width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
   }
 
-  #page-catalogo .filter-categories-group::-webkit-scrollbar {
-    display: none !important;
+  #page-catalogo .filter-group-label {
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    color: #7A6953 !important;
+    letter-spacing: 0.6px !important;
   }
 
-  #page-catalogo .filter-category-btn {
+  #page-catalogo .filter-group--formato .filter-buttons-container {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 5px !important;
+    width: 100% !important;
+  }
+
+  #page-catalogo .filter-group--tipo .filter-buttons-container {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 5px !important;
+    width: 100% !important;
+  }
+
+  #page-catalogo .filter-tab-btn {
     width: 100% !important;
     min-height: 32px !important;
     height: 32px !important;
-    padding: 2px 2px !important;
+    padding: 2px 4px !important;
     font-size: 0.7rem !important;
     font-weight: 700 !important;
     border-radius: 6px !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
-    box-sizing: border-box !important;
-    line-height: 1.2 !important;
-    text-align: center !important;
+    background-color: #FFFDF8 !important;
+    color: #4A3F31 !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     white-space: nowrap !important;
-    letter-spacing: 0.2px !important;
     margin: 0 !important;
   }
 
-  #page-catalogo .filter-category-btn[data-categoria="todos"] {
-    grid-column: span 2 !important;
-  }
-
-  #page-catalogo .filter-category-btn[data-categoria="arabe"] {
-    grid-column: span 2 !important;
-  }
-
-  #page-catalogo .filter-category-btn[data-categoria="disenador"] {
-    grid-column: span 2 !important;
-  }
-
-  #page-catalogo .filter-category-btn[data-categoria="nicho"] {
-    grid-column: span 3 !important;
-  }
-
-  #page-catalogo .filter-category-btn[data-categoria="decants"] {
-    grid-column: span 3 !important;
-  }
-
-  #page-catalogo .filter-category-btn.active {
-    background: var(--color-gold-gradient, linear-gradient(135deg, #C49A3E 0%, #8E671D 100%)) !important;
+  #page-catalogo .filter-tab-btn.active {
+    background: linear-gradient(135deg, #C49A3E 0%, #8E671D 100%) !important;
     color: #FFFFFF !important;
     border-color: #8E671D !important;
   }
 
-  /* Filtro por Género en 1 Fila (4 Botones Distribuidos Uniformemente) */
-  #page-catalogo .filter-gender-wrapper {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 2px !important;
+  /* Fila de Selects (Género + Ocasión + Ordenar por) en la MISMA FILA en Móvil */
+  #page-catalogo .filter-selects-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 4px !important;
     width: 100% !important;
     margin-top: 2px !important;
   }
 
-  #page-catalogo .filter-gender-label {
-    font-size: 0.68rem !important;
-    color: var(--color-primary-dark, #9E721D) !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.6px !important;
-    margin-bottom: 2px !important;
+  #page-catalogo .dunes-dropdown-trigger {
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 5px !important;
+    font-size: 0.71rem !important;
   }
 
-  #page-catalogo .filter-gender-group {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 5px !important;
-    overflow: visible !important;
+  #page-catalogo .dunes-dropdown-menu {
     width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  #page-catalogo .filter-gender-group::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  #page-catalogo .filter-gender-btn {
-    width: 100% !important;
-    min-height: 30px !important;
-    height: 30px !important;
-    padding: 2px 2px !important;
-    font-size: 0.7rem !important;
-    font-weight: 700 !important;
-    border-radius: 6px !important;
-    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
     box-sizing: border-box !important;
-    line-height: 1.2 !important;
-    text-align: center !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    white-space: nowrap !important;
-    background-color: var(--color-bg-light, #FFFDF8) !important;
+    padding: 4px !important;
   }
 
-  #page-catalogo .filter-gender-btn.active {
-    background: var(--color-gold-gradient, linear-gradient(135deg, #C49A3E 0%, #8E671D 100%)) !important;
-    color: #FFFFFF !important;
-    border-color: #8E671D !important;
-  }
-
-  /* Ordenación y Disponibilidad en 1 Sola Fila */
-  #page-catalogo .filter-controls-right {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    gap: 8px !important;
-    align-items: center !important;
+  #page-catalogo .dunes-dropdown-option {
+    padding: 6px 6px !important;
+    font-size: 0.72rem !important;
     width: 100% !important;
-    margin-top: 4px !important;
+    box-sizing: border-box !important;
   }
 
-  #page-catalogo .filter-sort-box {
-    width: 100% !important;
-    margin: 0 !important;
+  #page-catalogo .dunes-dropdown-option span {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.25 !important;
   }
 
-  #page-catalogo .filter-sort-box select {
+  #page-catalogo .filter-select-box {
     width: 100% !important;
-    height: 36px !important;
-    min-height: 36px !important;
-    padding: 5px 8px !important;
-    font-size: 0.76rem !important;
+  }
+
+  #page-catalogo .filter-select-box select {
+    width: 100% !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 4px 6px !important;
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
     border-radius: 6px !important;
     border-color: var(--catalog-gold-border, #E7D3A5) !important;
-    background-color: #FFFFFF !important;
-    box-sizing: border-box !important;
+    background-color: #FFFDF8 !important;
+  }
+
+  /* Fila Inferior (Solo disponibles + Contador) en la MISMA FILA en Móvil */
+  #page-catalogo .filter-bottom-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    margin-top: 2px !important;
+    padding-top: 6px !important;
+    border-top: 1px solid rgba(231, 211, 165, 0.4) !important;
   }
 
   #page-catalogo .filter-available-box {
-    margin: 0 !important;
-    flex-shrink: 0 !important;
     display: flex !important;
     align-items: center !important;
   }
@@ -2174,22 +2169,42 @@
   }
 
   #page-catalogo .catalog-results-counter {
-    margin-top: 14px !important;
-    margin-bottom: 10px !important;
-    font-size: 0.8rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+    font-size: 0.76rem !important;
   }
 
-  /* Rediseño del Catálogo en Móvil (Formato 2 Columnas Vertical Elegante & Estructura Equilibrada) */
+  /* Rediseño del Catálogo en Móvil (Formato 2 Columnas con Aire Lateral Dedicado) */
+  #page-catalogo #catalogo-productos-grid,
   #catalogo-productos-grid,
   #favorites-products-grid,
   .products-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     grid-auto-rows: auto !important;
-    gap: 10px !important;
+    column-gap: 10px !important;
+    row-gap: 10px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     max-width: 100% !important;
     margin: 0 !important;
     align-items: stretch !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Alineación lateral dedicada en móvil para la tarjeta CTA / Estado del catálogo */
+  #page-catalogo .catalog-empty-state,
+  #estado-catalogo,
+  #cotizacion-secundaria-container,
+  #cotizacion-secundaria-container .secondary-quote-block,
+  .secondary-quote-block {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   #catalogo-productos-grid .product-card,
@@ -2597,23 +2612,21 @@
     -webkit-line-clamp: none !important;
   }
 
-  /* Panel de Filtros en Escritorio */
+  /* Panel de Filtros en Escritorio (FASE M26) */
   #page-catalogo .catalog-filters-bar {
     display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 16px 24px !important;
+    flex-direction: column !important;
+    padding: 20px 24px !important;
     gap: 16px !important;
-    border-radius: var(--border-radius-md, 12px) !important;
-    margin-bottom: 30px !important;
-    box-shadow: var(--shadow-sm, 0 4px 12px rgba(0,0,0,0.05)) !important;
+    border-radius: 14px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 4px 16px rgba(31, 24, 12, 0.05) !important;
   }
 
   #page-catalogo .filter-search-box {
-    width: auto !important;
-    flex: 0 0 300px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
     margin: 0 !important;
   }
 
@@ -2625,80 +2638,64 @@
     border-radius: 8px !important;
   }
 
-  #page-catalogo .filter-categories-group {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    width: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-  }
-
-  #page-catalogo .filter-category-btn {
-    width: auto !important;
-    height: auto !important;
-    min-height: 0 !important;
-    padding: 10px 20px !important;
-    font-size: 0.85rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.5px !important;
-    border-radius: 8px !important;
-    grid-column: auto !important;
-    margin: 0 !important;
-  }
-
-  #page-catalogo .filter-gender-wrapper {
+  #page-catalogo .filter-group {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 10px !important;
-    width: auto !important;
-    margin: 0 !important;
+    gap: 14px !important;
+    width: 100% !important;
   }
 
-  #page-catalogo .filter-gender-label {
-    font-size: 0.8rem !important;
+  #page-catalogo .filter-group-label {
+    font-size: 0.75rem !important;
     font-weight: 700 !important;
+    color: #7A6953 !important;
+    min-width: 80px !important;
     margin: 0 !important;
   }
 
-  #page-catalogo .filter-gender-group {
+  #page-catalogo .filter-buttons-container {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: wrap !important;
     gap: 8px !important;
     width: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important;
   }
 
-  #page-catalogo .filter-gender-btn {
+  #page-catalogo .filter-tab-btn {
     width: auto !important;
-    height: auto !important;
-    min-height: 0 !important;
-    padding: 8px 16px !important;
-    font-size: 0.8rem !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 6px 18px !important;
+    font-size: 0.82rem !important;
     font-weight: 600 !important;
     border-radius: 6px !important;
-  }
-
-  #page-catalogo .filter-controls-right {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 16px !important;
-    width: auto !important;
     margin: 0 !important;
   }
 
-  #page-catalogo .filter-sort-box select {
-    width: 170px !important;
+  #page-catalogo .filter-selects-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  #page-catalogo .filter-select-box select {
+    width: 100% !important;
     height: 40px !important;
-    padding: 8px 12px !important;
-    font-size: 0.85rem !important;
+    min-height: 40px !important;
+    padding: 6px 14px !important;
+    font-size: 0.84rem !important;
+  }
+
+  #page-catalogo .filter-bottom-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding-top: 10px !important;
+    margin-top: 4px !important;
+    border-top: 1px solid rgba(231, 211, 165, 0.4) !important;
   }
 
   #page-catalogo .checkbox-container {
@@ -2707,9 +2704,29 @@
   }
 
   #page-catalogo .catalog-results-counter {
-    margin-bottom: 20px !important;
-    margin-top: 0 !important;
-    font-size: 0.95rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+    font-size: 0.88rem !important;
+  }
+
+  /* Preservar centrado en escritorio para tarjetas CTA de catálogo */
+  #page-catalogo .catalog-empty-state,
+  #estado-catalogo {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+    max-width: 480px !important;
+  }
+
+  #cotizacion-secundaria-container,
+  #cotizacion-secundaria-container .secondary-quote-block,
+  .secondary-quote-block {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+    max-width: 600px !important;
   }
 
   /* Cuadrícula Vertical de Productos en Tablet (769px - 1023px) */
@@ -2719,6 +2736,8 @@
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 18px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     max-width: 100% !important;
     margin: 0 !important;
     align-items: stretch !important;
@@ -3915,7 +3934,6 @@
   .product-detail-container,
   .faq-container,
   .references-container,
-  #page-catalogo main.section-padding,
   #page-carrito main.section-padding,
   #page-producto main.section-padding,
   #page-producto main.container,
@@ -3977,7 +3995,6 @@
   .product-detail-container,
   .faq-container,
   .references-container,
-  #page-catalogo main.section-padding,
   #page-carrito main.section-padding,
   #page-producto main.section-padding,
   #page-producto main.container,
@@ -4019,7 +4036,6 @@
   .product-detail-container,
   .faq-container,
   .references-container,
-  #page-catalogo main.section-padding,
   #page-carrito main.section-padding,
   #page-producto main.section-padding,
   #page-producto main.container,

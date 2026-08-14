@@ -308,20 +308,23 @@ const ProductosService = (function() {
                         continue;
                     }
 
-                    // Validar categoría y formato
-                    const categoriaOriginal = rawObj.categoria ? rawObj.categoria.trim().toLowerCase() : "";
-                    const formatoOriginal = rawObj.formato ? rawObj.formato.trim().toLowerCase() : "";
+                    // Validar categoría y formato con normalización NFD insensibles a tildes/mayúsculas
+                    const rawCatLimpio = limpiarValorImportado(rawObj.categoria)
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "");
+                    const rawFormLimpio = limpiarValorImportado(rawObj.formato)
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "");
 
-                    const categoriasPermitidas = ['arabe', 'disenador', 'nicho', 'decants'];
-                    const formatosPermitidos = ['sellado', 'decant'];
+                    let categoriaOriginal = 'arabe';
+                    if (rawCatLimpio.includes('arabe')) categoriaOriginal = 'arabe';
+                    else if (rawCatLimpio.includes('disenador') || rawCatLimpio.includes('dise')) categoriaOriginal = 'disenador';
+                    else if (rawCatLimpio.includes('nicho')) categoriaOriginal = 'nicho';
+                    else if (rawCatLimpio === 'decants') categoriaOriginal = 'decants';
 
-                    if (!categoriasPermitidas.includes(categoriaOriginal) || !formatosPermitidos.includes(formatoOriginal)) {
-                        console.warn(`[ProductosService] Fila ${i + 1} descartada (ID ${idStr}): Categoría '${categoriaOriginal}' o formato '${formatoOriginal}' inválido.`);
-                        filasDescartadas++;
-                        continue;
-                    }
-
-                    const esDecant = formatoOriginal === 'decant';
+                    const esDecant = rawFormLimpio.includes('decant') || rawCatLimpio.includes('decant');
 
                     // Normalización de objeto producto
                     const prod = {
@@ -329,7 +332,8 @@ const ProductosService = (function() {
                         nombre: nombre,
                         marca: marca,
                         tipo: getTipoFromCategoria(categoriaOriginal),
-                        categoria: categoriaOriginal,
+                        categoria: categoriaOriginal === 'decants' ? 'arabe' : categoriaOriginal,
+                        formato: esDecant ? 'decant' : 'sellado',
                         genero: normalizarGenero(rawObj.genero),
                         disponible: parseBoolean(rawObj.disponible),
                         visible: visible,
@@ -344,17 +348,17 @@ const ProductosService = (function() {
                     };
 
                     if (esDecant) {
-                        // Cargar presentaciones
+                        // Cargar presentaciones de decant (3ml, 5ml, 10ml)
                         const presentaciones = [];
-                        const p3 = parseNumber(rawObj.precio_3ml);
+                        const p3 = parseNumber(rawObj.precio_3ml ?? rawObj.precio3ml);
                         if (p3 !== null && p3 > 0) {
                             presentaciones.push({ ml: 3, nombre: "Decant 3 ml", precio: p3, disponible: true });
                         }
-                        const p5 = parseNumber(rawObj.precio_5ml);
+                        const p5 = parseNumber(rawObj.precio_5ml ?? rawObj.precio5ml);
                         if (p5 !== null && p5 > 0) {
                             presentaciones.push({ ml: 5, nombre: "Decant 5 ml", precio: p5, disponible: true });
                         }
-                        const p10 = parseNumber(rawObj.precio_10ml);
+                        const p10 = parseNumber(rawObj.precio_10ml ?? rawObj.precio10ml);
                         if (p10 !== null && p10 > 0) {
                             presentaciones.push({ ml: 10, nombre: "Decant 10 ml", precio: p10, disponible: true });
                         }
@@ -366,9 +370,20 @@ const ProductosService = (function() {
                         }
 
                         prod.presentacion = rawObj.presentacion ? rawObj.presentacion.trim() : "Decants de 3, 5 y 10 ml";
-                        prod.formato = "Decants de 3, 5 y 10 ml";
+                        prod.formato = "decant";
                         prod.presentaciones = presentaciones;
-                        prod.mililitrosDisponibles = parseNumber(rawObj.mililitros_disponibles) ?? 0;
+                        prod.mililitrosDisponibles = parseNumber(rawObj.mililitros_disponibles ?? rawObj.mililitrosDisponibles) ?? 0;
+                        prod.precio_3ml = p3;
+                        prod.precio_5ml = p5;
+                        prod.precio_10ml = p10;
+
+                        const basePrecio = parseNumber(rawObj.precio);
+                        if (basePrecio !== null && basePrecio > 0) {
+                            prod.precio = basePrecio;
+                        } else {
+                            const preciosValidos = presentaciones.map(pr => pr.precio).filter(p => typeof p === 'number' && p > 0);
+                            prod.precio = preciosValidos.length > 0 ? Math.min(...preciosValidos) : 15;
+                        }
                     } else {
                         // Validar sellado
                         const precio = parseNumber(rawObj.precio);
@@ -384,7 +399,7 @@ const ProductosService = (function() {
                         prod.precio = precio;
                         prod.stock = stock;
                         prod.presentacion = presentacion;
-                        prod.formato = "Sellado";
+                        prod.formato = "sellado";
                     }
 
                     idsVistos.add(idStr);

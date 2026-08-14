@@ -718,7 +718,7 @@ async function cargarDetalleProducto() {
         // Actualizar SEO dinámico del producto válido
         actualizarSeoProducto(prod);
 
-        const esDecant = prod.categoria === 'decants';
+        const esDecant = (prod.formato && String(prod.formato).toLowerCase().includes('decant')) || prod.categoria === 'decants';
         if (esDecant) {
             renderizarDetalleDecant(container, prod);
         } else {
@@ -793,14 +793,15 @@ function actualizarSeoProducto(prod) {
         document.head.appendChild(jsonLdScript);
     }
 
-    const esDecant = prod.categoria === 'decants';
+    const esDecant = (prod.formato && String(prod.formato).toLowerCase().includes('decant')) || prod.categoria === 'decants';
+    const mlDisp = prod.mililitrosDisponibles ?? prod.mililitros_disponibles ?? 0;
     const precioNumerico = esDecant
-        ? (prod.presentaciones && prod.presentaciones.length > 0 ? prod.presentaciones[0].precio : 15)
+        ? (prod.presentaciones && prod.presentaciones.length > 0 ? prod.presentaciones[0].precio : (prod.precio || 15))
         : (prod.precio || 0);
 
     const estaAgotado = esDecant
-        ? (!prod.disponible || prod.mililitrosDisponibles < 3)
-        : (!prod.disponible || prod.stock <= 0);
+        ? (!prod.disponible || mlDisp <= 0)
+        : (!prod.disponible || (prod.stock ?? 0) <= 0);
 
     const schemaData = {
         "@context": "https://schema.org/",
@@ -4115,9 +4116,10 @@ function obtenerProductosRelacionados(productoActual, todosLosProductos, limite 
         }
 
         // Validar disponibilidad y stock
-        const esDecant = cand.categoria === 'decants';
+        const esDecant = (cand.formato && String(cand.formato).toLowerCase().includes('decant')) || cand.categoria === 'decants';
         if (esDecant) {
-            if (cand.disponible === false || (typeof cand.mililitrosDisponibles === 'number' && cand.mililitrosDisponibles < 3)) {
+            const mlDisp = cand.mililitrosDisponibles ?? cand.mililitros_disponibles ?? 0;
+            if (cand.disponible === false || mlDisp <= 0) {
                 return false;
             }
         } else {
@@ -4192,10 +4194,11 @@ function renderProductosRelacionados(productoActual, productosRelacionados) {
         const card = document.createElement('div');
         card.className = 'product-card';
 
-        const esDecant = prod.categoria === 'decants';
+        const esDecant = (prod.formato && String(prod.formato).toLowerCase().includes('decant')) || prod.categoria === 'decants';
+        const mlDisp = prod.mililitrosDisponibles ?? prod.mililitros_disponibles ?? 0;
         const estaAgotado = esDecant
-            ? (!prod.disponible || prod.mililitrosDisponibles < 3)
-            : (!prod.disponible || prod.stock <= 0);
+            ? (!prod.disponible || mlDisp <= 0)
+            : (!prod.disponible || (prod.stock ?? 0) <= 0);
 
         if (estaAgotado) {
             card.classList.add('out-of-stock', 'is-soldout');
@@ -4217,14 +4220,26 @@ function renderProductosRelacionados(productoActual, productosRelacionados) {
         }
 
         let categoryBadgeText = 'CATÁLOGO';
-        if (prod.categoria === 'arabe') categoryBadgeText = 'PERFUME ÁRABE';
-        else if (prod.categoria === 'disenador') categoryBadgeText = 'DISEÑADOR';
-        else if (prod.categoria === 'nicho') categoryBadgeText = 'NICHO';
-        else if (prod.categoria === 'decants') categoryBadgeText = 'DECANT';
+        const catNorm = (prod.categoria || '').toLowerCase().trim();
+        if (catNorm === 'arabe') categoryBadgeText = esDecant ? 'DECANT ÁRABE' : 'PERFUME ÁRABE';
+        else if (catNorm === 'disenador') categoryBadgeText = esDecant ? 'DECANT DISEÑADOR' : 'DISEÑADOR';
+        else if (catNorm === 'nicho') categoryBadgeText = esDecant ? 'DECANT NICHO' : 'NICHO';
+        else if (esDecant) categoryBadgeText = 'DECANT';
 
-        const precioMinDecant = (esDecant && prod.presentaciones && prod.presentaciones.length > 0)
-            ? prod.presentaciones[0].precio
-            : 15;
+        let precioMinDecant = 15;
+        if (esDecant) {
+            if (prod.presentaciones && prod.presentaciones.length > 0) {
+                const precios = prod.presentaciones.map(p => p.precio).filter(p => typeof p === 'number' && p > 0);
+                if (precios.length > 0) precioMinDecant = Math.min(...precios);
+            } else {
+                const p3 = typeof prod.precio_3ml === 'number' && prod.precio_3ml > 0 ? prod.precio_3ml : null;
+                const p5 = typeof prod.precio_5ml === 'number' && prod.precio_5ml > 0 ? prod.precio_5ml : null;
+                const p10 = typeof prod.precio_10ml === 'number' && prod.precio_10ml > 0 ? prod.precio_10ml : null;
+                const validos = [p3, p5, p10].filter(p => p !== null);
+                if (validos.length > 0) precioMinDecant = Math.min(...validos);
+                else if (typeof prod.precio === 'number' && prod.precio > 0) precioMinDecant = prod.precio;
+            }
+        }
 
         const tieneOferta = !esDecant && prod.oferta === true && (typeof prod.precio_oferta === 'number' || typeof prod.precioOferta === 'number');
         const precioOfertaVal = tieneOferta ? (prod.precio_oferta ?? prod.precioOferta) : null;
@@ -4238,10 +4253,10 @@ function renderProductosRelacionados(productoActual, productosRelacionados) {
         const presentacionFormateada = esDecant ? prod.presentacion : `Sellado · ${prod.presentacion || '100 ml'}`;
 
         const stockHtml = esDecant
-            ? (prod.disponible && prod.mililitrosDisponibles >= 3
-                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.mililitrosDisponibles} ml)</span>`
+            ? (!estaAgotado
+                ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${mlDisp} ml)</span>`
                 : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`)
-            : (prod.disponible && prod.stock > 0
+            : (!estaAgotado
                 ? `<span class="product-stock-status in-stock"><span class="stock-dot"></span>Disponible (${prod.stock} unid.)</span>`
                 : `<span class="product-stock-status out"><span class="stock-dot"></span>Agotado</span>`);
 
