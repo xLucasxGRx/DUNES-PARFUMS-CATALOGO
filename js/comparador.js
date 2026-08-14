@@ -11,6 +11,7 @@
         modo: null, // 'sellados' | 'decants'
         productos: [],
         cargando: false,
+        activeSearchSide: null, // 'izq' | 'der' | null
         izq: {
             producto: null,
             busqueda: '',
@@ -26,6 +27,86 @@
     };
 
     let searchDebounceTimer = null;
+
+    /**
+     * Cierra físicamente todos los desplegables de búsqueda del comparador excepto el indicado
+     * @param {string|null} exceptSlot - 'izq' | 'der' | null
+     */
+    function closeComparatorDropdowns(exceptSlot = null) {
+        if (!exceptSlot) {
+            state.activeSearchSide = null;
+        } else {
+            state.activeSearchSide = exceptSlot;
+        }
+
+        document.querySelectorAll('.comparator-search-box').forEach(box => {
+            const lado = box.dataset.lado;
+            const dropdown = box.querySelector('.comparator-dropdown-results');
+            const input = box.querySelector('.comparator-search-input');
+
+            if (lado !== exceptSlot) {
+                if (dropdown) {
+                    dropdown.hidden = true;
+                    dropdown.setAttribute('hidden', '');
+                    dropdown.classList.add('is-hidden');
+                    dropdown.style.display = 'none';
+                }
+                if (input) {
+                    input.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+
+        verificarSingleDropdownState();
+    }
+
+    /**
+     * Controlador centralizado de apertura de buscadores del comparador
+     * Garantiza que antes de abrir cualquier lado, el lado opuesto sea cerrado físicamente.
+     * @param {string} slot - 'izq' | 'der'
+     */
+    function openComparatorSearch(slot) {
+        // 1. Cerrar físicamente cualquier dropdown opuesto
+        closeComparatorDropdowns(slot);
+
+        // 2. Establecer el slot activo
+        state.activeSearchSide = slot;
+
+        // 3. Abrir y mostrar físicamente el dropdown del lado solicitado
+        const box = document.querySelector(`.comparator-search-box[data-lado="${slot}"]`);
+        if (box) {
+            const dropdown = box.querySelector('.comparator-dropdown-results');
+            const input = box.querySelector('.comparator-search-input');
+
+            if (dropdown) {
+                dropdown.hidden = false;
+                dropdown.removeAttribute('hidden');
+                dropdown.classList.remove('is-hidden');
+                dropdown.style.display = 'flex';
+            }
+            if (input) {
+                input.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        verificarSingleDropdownState();
+    }
+
+    /**
+     * Verificación de desarrollo para asegurar que NUNCA existan 2 dropdowns abiertos simultáneamente en el DOM
+     */
+    function verificarSingleDropdownState() {
+        const abiertos = Array.from(document.querySelectorAll('.comparator-dropdown-results')).filter(el => {
+            const isHiddenAttr = el.hasAttribute('hidden') || el.hidden;
+            const hasHiddenClass = el.classList.contains('is-hidden');
+            const displayStyle = el.style.display;
+            return !isHiddenAttr && !hasHiddenClass && displayStyle !== 'none';
+        });
+
+        if (abiertos.length > 1) {
+            console.error('[Comparador] ERROR CRÍTICO: Dos dropdowns del comparador abiertos simultáneamente:', abiertos);
+        }
+    }
 
     /**
      * Normaliza cadenas para búsqueda insensible a mayúsculas, espacios y acentos
@@ -97,12 +178,34 @@
     }
 
     /**
-     * Cierra desplegables de búsqueda al hacer clic fuera del área activa
+     * Cierra desplegables de búsqueda al hacer clic, tocar fuera o presionar Escape
      */
     function configurarCierreDropdownsExternos() {
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.comparator-search-box')) {
-                document.querySelectorAll('.comparator-dropdown-results').forEach(el => el.classList.add('is-hidden'));
+        const handleOutsideInteraction = (e) => {
+            // Si la interacción ocurre dentro de las sugerencias o dropdown del comparador, ignorar cierre externo
+            if (e.target.closest('.comparator-dropdown-results') || e.target.closest('.comparator-dropdown-item')) {
+                return;
+            }
+
+            const clickedSearchBox = e.target.closest('.comparator-search-box');
+            if (!clickedSearchBox) {
+                closeComparatorDropdowns(null);
+            } else {
+                const clickedLado = clickedSearchBox.dataset.lado;
+                if (state.activeSearchSide && state.activeSearchSide !== clickedLado) {
+                    closeComparatorDropdowns(clickedLado);
+                }
+            }
+        };
+
+        // Escuchar pointerdown para respuesta táctil y de puntero inmediata en móviles y escritorio
+        document.addEventListener('pointerdown', handleOutsideInteraction, { passive: true });
+        document.addEventListener('click', handleOutsideInteraction);
+
+        // Tecla Escape cierra desplegables abiertos en laptop sin borrar textos
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                closeComparatorDropdowns(null);
             }
         });
     }
@@ -127,6 +230,7 @@
     function seleccionarModo(nuevoModo, forceRender = false) {
         if (state.modo === nuevoModo && !forceRender) return;
 
+        closeComparatorDropdowns(null);
         state.modo = nuevoModo;
 
         // Limpiar selecciones de ambos lados
@@ -154,6 +258,7 @@
      * Limpia el estado de un lado del comparador
      */
     function limpiarLado(ladoKey, autoRender = true) {
+        closeComparatorDropdowns(null);
         state[ladoKey] = {
             producto: null,
             busqueda: '',
@@ -237,6 +342,7 @@
     function crearComponenteBuscador(ladoKey, idExcluir) {
         const box = document.createElement('div');
         box.className = 'comparator-search-box';
+        box.dataset.lado = ladoKey;
 
         const labelTitle = document.createElement('h3');
         labelTitle.className = 'comparator-side-label';
@@ -258,7 +364,11 @@
         input.className = 'comparator-search-input';
         input.placeholder = 'Buscar perfume...';
         input.value = state[ladoKey].busqueda;
+        input.dataset.lado = ladoKey;
         input.setAttribute('aria-label', `Buscar ${ladoKey === 'izq' ? 'Perfume 1' : 'Perfume 2'}`);
+        input.setAttribute('aria-expanded', state.activeSearchSide === ladoKey ? 'true' : 'false');
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('autocomplete', 'off');
 
         inputWrapper.innerHTML = searchIconSvg;
         inputWrapper.appendChild(input);
@@ -267,16 +377,48 @@
         // Contenedor Dropdown Flotante
         const dropdown = document.createElement('div');
         dropdown.className = 'comparator-dropdown-results is-hidden';
+        dropdown.hidden = true;
+        dropdown.setAttribute('hidden', '');
+        dropdown.style.display = 'none';
+        dropdown.dataset.lado = ladoKey;
+        dropdown.setAttribute('role', 'listbox');
         box.appendChild(dropdown);
+
+        // Delegación de eventos infalible sobre el contenedor de resultados
+        const manejarSeleccionItem = (e) => {
+            const itemBtn = e.target.closest('.comparator-dropdown-item');
+            if (!itemBtn) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const prodId = itemBtn.dataset.productId;
+            if (!prodId) return;
+
+            const elegibles = obtenerProductosElegibles(idExcluir);
+            const productoSel = elegibles.find(p => String(p.id).trim() === String(prodId).trim());
+
+            if (productoSel) {
+                // ORDEN OBLIGATORIO:
+                // 1. Ejecutar la selección del producto
+                // 2. Cerrar físicamente los desplegables
+                seleccionarProducto(ladoKey, productoSel);
+                closeComparatorDropdowns(null);
+            }
+        };
+
+        dropdown.addEventListener('pointerdown', manejarSeleccionItem);
+        dropdown.addEventListener('click', manejarSeleccionItem);
 
         // Renderizado del desplegable
         const ejecutarBusqueda = () => {
+            openComparatorSearch(ladoKey);
+
             const queryNorm = normalizarTexto(input.value);
             state[ladoKey].busqueda = input.value;
 
             if (state.cargando) {
                 dropdown.innerHTML = '<div class="comparator-empty-msg">CARGANDO FRAGANCIAS...</div>';
-                dropdown.classList.remove('is-hidden');
                 return;
             }
 
@@ -285,7 +427,6 @@
             // ESTADO C — REALMENTE NO EXISTE NINGÚN PRODUCTO ELEGIBLE EN ESTE MODO
             if (elegibles.length === 0) {
                 dropdown.innerHTML = '<div class="comparator-empty-msg">NO HAY PERFUMES DISPONIBLES PARA COMPARAR EN ESTE MOMENTO.</div>';
-                dropdown.classList.remove('is-hidden');
                 return;
             }
 
@@ -304,7 +445,6 @@
             // ESTADO B — EXISTEN PRODUCTOS ELEGIBLES PERO NO HAY COINCIDENCIA CON LA CONSULTA
             if (resultados.length === 0) {
                 dropdown.innerHTML = '<div class="comparator-empty-msg">NO ENCONTRAMOS COINCIDENCIAS</div>';
-                dropdown.classList.remove('is-hidden');
                 return;
             }
 
@@ -313,6 +453,7 @@
                 const itemBtn = document.createElement('button');
                 itemBtn.type = 'button';
                 itemBtn.className = 'comparator-dropdown-item';
+                itemBtn.dataset.productId = String(prod.id).trim();
 
                 const service = window.ProductosService || (typeof ProductosService !== 'undefined' ? ProductosService : null);
                 const thumbUrl = service && typeof service.resolverImagen === 'function' ? service.resolverImagen(prod.imagen) : prod.imagen;
@@ -325,20 +466,21 @@
                     </div>
                 `;
 
-                itemBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dropdown.classList.add('is-hidden');
-                    seleccionarProducto(ladoKey, prod);
-                });
-
                 dropdown.appendChild(itemBtn);
             });
-
-            dropdown.classList.remove('is-hidden');
         };
 
-        input.addEventListener('focus', ejecutarBusqueda);
+        input.addEventListener('focus', () => {
+            openComparatorSearch(ladoKey);
+            ejecutarBusqueda();
+        });
+        input.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openComparatorSearch(ladoKey);
+            ejecutarBusqueda();
+        });
         input.addEventListener('input', () => {
+            openComparatorSearch(ladoKey);
             if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
             searchDebounceTimer = setTimeout(ejecutarBusqueda, 120);
         });
@@ -366,6 +508,8 @@
         if (!state[otroLadoKey].producto) {
             renderizarLado(otroLadoKey);
         }
+
+        closeComparatorDropdowns(null);
     }
 
     /**
@@ -605,7 +749,10 @@
         seleccionarModo,
         obtenerProductosElegibles,
         seleccionarProducto,
-        limpiarLado
+        limpiarLado,
+        closeComparatorDropdowns,
+        openComparatorSearch,
+        verificarSingleDropdownState
     };
 
 })();

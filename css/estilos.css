@@ -5722,6 +5722,14 @@ body.no-scroll .header-actions {
     padding: 4px;
 }
 
+.comparator-dropdown-results[hidden],
+.comparator-dropdown-results.is-hidden {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
 .comparator-dropdown-item {
     display: flex;
     align-items: center;
