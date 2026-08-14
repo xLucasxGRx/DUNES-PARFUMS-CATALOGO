@@ -70,9 +70,39 @@ const ProductosService = (function() {
 
     function normalizarNumero(valor, respaldo = null) {
         if (valor === undefined || valor === null) return respaldo;
-        const limpio = limpiarValorImportado(valor).replace(",", ".");
-        if (limpio === '') return respaldo;
-        const numero = Number(limpio);
+        let str = limpiarValorImportado(valor);
+        if (str === '') return respaldo;
+
+        // Limpiar texto no numérico o símbolos de moneda al inicio/final
+        str = str.replace(/^[^\d\.\,\-]+/, '').replace(/[^\d\.\,\-]+$/, '').trim();
+        if (str === '') return respaldo;
+
+        // Soporte de separadores de miles y decimales
+        if (str.includes(',') && str.includes('.')) {
+            const posComa = str.indexOf(',');
+            const posPunto = str.indexOf('.');
+            if (posComa < posPunto) {
+                // "1,050.00" -> Formato estándar US (quitar comas de miles)
+                str = str.replace(/,/g, '');
+            } else {
+                // "1.050,00" -> Formato ES/EU (quitar puntos de miles y sustituir coma por punto)
+                str = str.replace(/\./g, '').replace(',', '.');
+            }
+        } else if (str.includes(',')) {
+            const partes = str.split(',');
+            if (partes.length > 2) {
+                // "1,000,000" -> Múltiples comas
+                str = str.replace(/,/g, '');
+            } else if (partes[1] && partes[1].length === 3 && partes[0].length <= 3) {
+                // "1,050" -> Coma separadora de miles
+                str = str.replace(/,/g, '');
+            } else {
+                // "1050,50" -> Coma decimal
+                str = str.replace(',', '.');
+            }
+        }
+
+        const numero = Number(str);
         return Number.isFinite(numero) ? numero : respaldo;
     }
 

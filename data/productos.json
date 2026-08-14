@@ -813,5 +813,24 @@
       }
     ],
     "imagen_notas": "img/productos/LattafaKhamrah.webp"
+  },
+  {
+    "id": "35",
+    "nombre": "Erba Pura",
+    "marca": "Xerjoff",
+    "tipo": "NICHO",
+    "categoria": "nicho",
+    "genero": "unisex",
+    "presentacion": "100 ml",
+    "formato": "Sellado",
+    "precio": 1050,
+    "stock": 1,
+    "disponible": true,
+    "visible": true,
+    "imagen": "img/productos/logohorizontaldunesparfums.png",
+    "descripcion": "Fragancia nicho de lujo de Xerjoff con acordes cítricos, de frutas y almizcle blanco.",
+    "destacado": false,
+    "oferta": false,
+    "imagen_notas": "img/productos/logohorizontaldunesparfums.png"
   }
 ]

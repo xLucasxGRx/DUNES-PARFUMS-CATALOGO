@@ -2712,20 +2712,24 @@
     font-size: 0.95rem !important;
   }
 
-  /* Cuadrícula Vertical de Productos en Escritorio */
+  /* Cuadrícula Vertical de Productos en Tablet (769px - 1023px) */
   #catalogo-productos-grid,
+  #favorites-products-grid,
   .products-grid {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 22px !important;
+    gap: 18px !important;
     max-width: 100% !important;
     margin: 0 !important;
+    align-items: stretch !important;
   }
 
   #catalogo-productos-grid .product-card,
+  #favorites-products-grid .product-card,
   .products-grid .product-card {
     display: flex !important;
     flex-direction: column !important;
+    justify-content: space-between !important;
     grid-template-columns: none !important;
     grid-template-areas: none !important;
     gap: 0 !important;
@@ -2734,78 +2738,278 @@
     min-height: 0 !important;
     aspect-ratio: auto !important;
     padding: 0 !important;
-    border-radius: 18px !important;
+    border-radius: 14px !important;
     overflow: hidden !important;
-    box-shadow: 0 8px 24px rgba(31, 24, 12, 0.08) !important;
+    box-shadow: 0 4px 16px rgba(31, 24, 12, 0.06) !important;
   }
 
   #catalogo-productos-grid .product-image-container,
+  #favorites-products-grid .product-image-container,
   .products-grid .product-image-container {
     width: 100% !important;
-    height: 270px !important;
-    min-height: 270px !important;
+    height: 200px !important;
+    min-height: 200px !important;
     position: relative !important;
-    padding: 18px !important;
+    padding: 14px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 18px 18px 0 0 !important;
+    border-radius: 14px 14px 0 0 !important;
   }
 
   #catalogo-productos-grid .product-category-badge,
+  #favorites-products-grid .product-category-badge,
   .products-grid .product-category-badge {
     display: block !important;
     position: absolute !important;
-    top: 12px !important;
-    right: 12px !important;
+    top: 10px !important;
+    right: 10px !important;
   }
 
   #catalogo-productos-grid .product-category-mobile,
+  #favorites-products-grid .product-category-mobile,
   .products-grid .product-category-mobile {
     display: none !important;
   }
 
   #catalogo-productos-grid .product-info,
+  #favorites-products-grid .product-info,
   .products-grid .product-info {
     display: flex !important;
     flex-direction: column !important;
-    padding: 18px !important;
+    padding: 14px !important;
     flex: 1 1 auto !important;
   }
 
   #catalogo-productos-grid .product-card-footer,
+  #favorites-products-grid .product-card-footer,
   .products-grid .product-card-footer {
     margin-top: auto !important;
-    padding: 0 18px 18px 18px !important;
+    padding: 0 14px 14px 14px !important;
     width: 100% !important;
   }
 
   #catalogo-productos-grid .product-card-footer .card-buttons-flex,
+  #favorites-products-grid .product-card-footer .card-buttons-flex,
   .products-grid .product-card-footer .card-buttons-flex {
     display: flex !important;
     flex-direction: row !important;
-    gap: 10px !important;
+    gap: 8px !important;
     width: 100% !important;
   }
 
   #catalogo-productos-grid .product-card-footer .btn,
+  #favorites-products-grid .product-card-footer .btn,
   .products-grid .product-card-footer .btn {
     flex: 1 !important;
     width: auto !important;
-    height: 42px !important;
-    min-height: 42px !important;
-    padding: 10px 14px !important;
-    font-size: 0.82rem !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
     font-weight: 700 !important;
     justify-content: center !important;
   }
 }
 
-@media screen and (min-width: 1400px) {
+/* ==========================================================================
+   FASE M25 — OPTIMIZACIÓN EXCLUSIVA DEL CATÁLOGO EN LAPTOP / ESCRITORIO (Min 1024px)
+   ========================================================================== */
+@media screen and (min-width: 1024px) {
+  /* Grilla de 4 Columnas Compacta y Equilibrada */
   #catalogo-productos-grid,
+  #favorites-products-grid,
   .products-grid {
+    display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 24px !important;
+    gap: 18px !important;
+    max-width: 1340px !important;
+    margin: 0 auto !important;
+    align-items: stretch !important;
+  }
+
+  /* Tarjeta de Producto Desktop Compacta (~20-25% menor altura visual) */
+  #catalogo-productos-grid .product-card,
+  #favorites-products-grid .product-card,
+  .products-grid .product-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    background-color: var(--catalog-card-background, #FFFEFC) !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    box-shadow: 0 4px 14px rgba(31, 24, 12, 0.05) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  }
+
+  #catalogo-productos-grid .product-card:hover,
+  #favorites-products-grid .product-card:hover,
+  .products-grid .product-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 22px rgba(31, 24, 12, 0.12) !important;
+  }
+
+  /* Contenedor de Imagen Compacto (185px, sin recortes) */
+  #catalogo-productos-grid .product-image-container,
+  #favorites-products-grid .product-image-container,
+  .products-grid .product-image-container {
+    width: 100% !important;
+    height: 185px !important;
+    min-height: 185px !important;
+    padding: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 14px 14px 0 0 !important;
+    background: radial-gradient(circle at center, rgba(196, 154, 62, 0.1), transparent 70%), #fffdf8 !important;
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Imagen en Desktop con object-fit contain (FRASCOS INTEGROS SIN RECORTAR) */
+  #catalogo-productos-grid .product-image,
+  #favorites-products-grid .product-image,
+  .products-grid .product-image,
+  #catalogo-productos-grid .product-img,
+  #favorites-products-grid .product-img,
+  .products-grid .product-img {
+    height: 100% !important;
+    width: 100% !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+
+  /* Bloque de Información Optimizado */
+  #catalogo-productos-grid .product-info,
+  #favorites-products-grid .product-info,
+  .products-grid .product-info {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 12px 14px 6px 14px !important;
+    flex: 1 1 auto !important;
+    justify-content: flex-start !important;
+    gap: 2px !important;
+  }
+
+  #catalogo-productos-grid .product-brand,
+  #favorites-products-grid .product-brand,
+  .products-grid .product-brand {
+    margin-bottom: 2px !important;
+  }
+
+  #catalogo-productos-grid .product-title,
+  #favorites-products-grid .product-title,
+  .products-grid .product-title,
+  #catalogo-productos-grid .product-title-link,
+  #favorites-products-grid .product-title-link,
+  .products-grid .product-title-link {
+    min-height: 2.4em !important;
+    line-height: 1.22 !important;
+    margin: 1px 0 3px 0 !important;
+  }
+
+  #catalogo-productos-grid .product-stock-row,
+  #favorites-products-grid .product-stock-row,
+  .products-grid .product-stock-row {
+    margin: 2px 0 4px 0 !important;
+  }
+
+  #catalogo-productos-grid .product-price-row,
+  #favorites-products-grid .product-price-row,
+  .products-grid .product-price-row {
+    margin-top: auto !important;
+    padding-top: 4px !important;
+  }
+
+  /* Pie de Tarjeta y Alineación Inferior Obligatoria */
+  #catalogo-productos-grid .product-card-footer,
+  #favorites-products-grid .product-card-footer,
+  .products-grid .product-card-footer {
+    margin-top: auto !important;
+    padding: 0 14px 14px 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer .card-buttons-flex,
+  #favorites-products-grid .product-card-footer .card-buttons-flex,
+  .products-grid .product-card-footer .card-buttons-flex {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    width: 100% !important;
+    align-items: center !important;
+  }
+
+  /* Alineación de Productos Agotados (CONSULTAR Ocupa la Misma Zona Inferior) */
+  #catalogo-productos-grid .product-card-footer .card-buttons-flex.out-of-stock-buttons,
+  #favorites-products-grid .product-card-footer .card-buttons-flex.out-of-stock-buttons,
+  .products-grid .product-card-footer .card-buttons-flex.out-of-stock-buttons,
+  #catalogo-productos-grid .product-card.out-of-stock .card-buttons-flex,
+  #favorites-products-grid .product-card.out-of-stock .card-buttons-flex,
+  .products-grid .product-card.out-of-stock .card-buttons-flex,
+  #catalogo-productos-grid .product-card.is-soldout .card-buttons-flex,
+  #favorites-products-grid .product-card.is-soldout .card-buttons-flex,
+  .products-grid .product-card.is-soldout .card-buttons-flex {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  /* Botones Desktop en UNA SOLA FILA HORIZONTAL (Ícono + Texto Centrados) */
+  #catalogo-productos-grid .product-card-footer .btn,
+  #favorites-products-grid .product-card-footer .btn,
+  .products-grid .product-card-footer .btn {
+    flex: 1 !important;
+    width: auto !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 6px 10px !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    border-radius: 6px !important;
+  }
+
+  #catalogo-productos-grid .product-card-footer .btn .btn-icon-svg,
+  #favorites-products-grid .product-card-footer .btn .btn-icon-svg,
+  .products-grid .product-card-footer .btn .btn-icon-svg,
+  #catalogo-productos-grid .product-card-footer .btn .whatsapp-icon-svg,
+  #favorites-products-grid .product-card-footer .btn .whatsapp-icon-svg,
+  .products-grid .product-card-footer .btn .whatsapp-icon-svg {
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0 !important;
+  }
+
+  /* Botón CONSULTAR Desktop: Ocupa todo el ancho del bloque inferior en 1 sola fila */
+  #catalogo-productos-grid .product-card-footer .btn-query-wa,
+  #favorites-products-grid .product-card-footer .btn-query-wa,
+  .products-grid .product-card-footer .btn-query-wa {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    gap: 6px !important;
   }
 }
 
