@@ -114,19 +114,32 @@ const ProductosService = (function() {
         return 'ARABE'; // Default fallback
     }
 
+    const PLACEHOLDER_IMAGEN_DEFECTO = 'img/logo/logohorizontaldunesparfums.png';
+
+    function resolverImagen(rutaOUrl, fallback = PLACEHOLDER_IMAGEN_DEFECTO) {
+        if (!rutaOUrl || typeof rutaOUrl !== 'string') {
+            return fallback;
+        }
+        const limpio = rutaOUrl.trim();
+        if (!limpio) {
+            return fallback;
+        }
+        if (/^(javascript|vbscript|data):/i.test(limpio)) {
+            return fallback;
+        }
+        if (/^https?:\/\//i.test(limpio)) {
+            return limpio;
+        }
+        return limpio;
+    }
+
     function normalizarImagenNotas(valor) {
         if (valor === undefined || valor === null) return '';
         const limpio = limpiarValorImportado(valor);
         if (!limpio) return '';
-        try {
-            const u = new URL(limpio);
-            if (u.protocol === 'https:') {
-                return limpio;
-            }
-        } catch (e) {
-            return '';
-        }
-        return '';
+        if (/^(javascript|vbscript|data):/i.test(limpio)) return '';
+        if (/^https?:\/\//i.test(limpio)) return limpio;
+        return limpio;
     }
 
     async function cargarDesdeRespaldo(errorGoogleSheets = null) {
@@ -374,14 +387,25 @@ const ProductosService = (function() {
         }
     }
 
-    return {
+    const serviceObj = {
         cargarProductos: cargarProductos,
+        resolverImagen: resolverImagen,
         // Exponer parsers para facilitar pruebas unitarias/scripts
         _parseCSV: parseCSV,
         _parseNumber: parseNumber,
         _parseBoolean: parseBoolean,
         _normalizarGenero: normalizarGenero,
         _normalizarCabecera: normalizarCabecera,
-        _normalizarImagenNotas: normalizarImagenNotas
+        _normalizarImagenNotas: normalizarImagenNotas,
+        _resolverImagen: resolverImagen
     };
+
+    if (typeof window !== 'undefined') {
+        window.resolverImagen = resolverImagen;
+    }
+    if (typeof global !== 'undefined') {
+        global.resolverImagen = resolverImagen;
+    }
+
+    return serviceObj;
 })();

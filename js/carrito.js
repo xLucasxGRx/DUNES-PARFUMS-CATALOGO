@@ -448,7 +448,7 @@ function mostrarModalAgregarCarrito(data) {
             </div>
 
             <div class="cart-added-modal-product-card">
-                <img src="${data.imagen || 'img/productos/placeholder.webp'}" alt="${data.nombre}" class="cart-added-modal-img" loading="lazy">
+                <img src="${typeof resolverImagen === 'function' ? resolverImagen(data.imagen) : (data.imagen || 'img/logo/logohorizontaldunesparfums.png')}" alt="${data.nombre}" class="cart-added-modal-img" loading="lazy" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                 <div class="cart-added-modal-product-info">
                     <span class="cart-added-modal-brand">${data.marca || 'DUNES PARFUMS'}</span>
                     <h4 class="cart-added-modal-name">${data.nombre}</h4>

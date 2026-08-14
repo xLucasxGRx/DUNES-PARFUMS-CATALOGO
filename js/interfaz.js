@@ -464,7 +464,7 @@ async function cargarProductosDestacadosHome() {
             <div class="product-image-container">
                 ${tagHtml}
                 ${favBtnHtml}
-                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy">
+                <img src="${typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                 <div class="product-actions-overlay">
                     <a href="producto.html?id=${prod.id}" class="btn btn-light-glass btn-view-details">Ver Detalles</a>
                 </div>
@@ -550,7 +550,11 @@ async function cargarOfertaEspecialHome() {
 
         // Imagen
         if (imgEl) {
-            imgEl.src = prod.imagen;
+            imgEl.src = typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen;
+            imgEl.onerror = function() {
+                this.onerror = null;
+                this.src = 'img/logo/logohorizontaldunesparfums.png';
+            };
             imgEl.alt = `${prod.nombre} - ${prod.marca} en oferta especial`;
         }
 
@@ -802,7 +806,7 @@ function actualizarSeoProducto(prod) {
         "@context": "https://schema.org/",
         "@type": "Product",
         "name": prod.nombre,
-        "image": prod.imagen ? `https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO/${prod.imagen}` : '',
+        "image": prod.imagen ? (/^https?:\/\//i.test(String(prod.imagen).trim()) ? String(prod.imagen).trim() : `https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO/${String(prod.imagen).trim()}`) : '',
         "description": descText,
         "brand": {
             "@type": "Brand",
@@ -900,7 +904,9 @@ function mostrarMensajeErrorProducto(container, callbackReintentar) {
  * @returns {string} HTML
  */
 function generarHtmlLadoImagen(prod) {
-    const urlNotasClean = (prod && prod.imagen_notas) ? String(prod.imagen_notas).trim() : '';
+    const rawNotas = (prod && prod.imagen_notas) ? String(prod.imagen_notas).trim() : '';
+    const urlNotasClean = rawNotas ? (typeof resolverImagen === 'function' ? resolverImagen(rawNotas, '') : rawNotas) : '';
+    const urlImagenClean = (prod && prod.imagen) ? (typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen) : '';
     const zoomBadgeSvg = `
         <span class="gallery-zoom-badge" aria-hidden="true" title="Ampliar imagen">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="11" x2="14" y2="11"></line></svg>
@@ -911,7 +917,7 @@ function generarHtmlLadoImagen(prod) {
         return `
             <div class="detail-image-side">
                 <div class="product-gallery__zoom-trigger" id="gallery-zoom-trigger" role="button" tabindex="0" aria-label="Ampliar imagen de ${prod.nombre}">
-                    <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img detail-product-img--zoomable">
+                    <img src="${urlImagenClean}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img detail-product-img--zoomable" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                     ${zoomBadgeSvg}
                 </div>
             </div>
@@ -924,10 +930,10 @@ function generarHtmlLadoImagen(prod) {
                 <div class="product-gallery__main-viewport" id="gallery-main-viewport">
                     <div class="product-gallery__track" id="gallery-track">
                         <div class="product-gallery__slide active" data-index="0" role="button" tabindex="0" aria-label="Ampliar imagen del perfume ${prod.nombre}">
-                            <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img gallery-img gallery-img--main">
+                            <img src="${urlImagenClean}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img gallery-img gallery-img--main" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                         </div>
                         <div class="product-gallery__slide" data-index="1" role="button" tabindex="0" aria-label="Ampliar notas del perfume ${prod.nombre}">
-                            <img src="${urlNotasClean}" alt="Notas y perfil olfativo de ${prod.nombre}" class="detail-product-img gallery-img gallery-img--notas" decoding="async" loading="lazy">
+                            <img src="${urlNotasClean}" alt="Notas y perfil olfativo de ${prod.nombre}" class="detail-product-img gallery-img gallery-img--notas" decoding="async" loading="lazy" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                         </div>
                     </div>
                     ${zoomBadgeSvg}
@@ -936,13 +942,13 @@ function generarHtmlLadoImagen(prod) {
                 <div class="product-gallery__thumbs product-gallery__thumbs--vertical" role="tablist" aria-label="Seleccionar imagen">
                     <button type="button" class="gallery-thumb active" data-index="0" role="tab" aria-selected="true" aria-label="Ver imagen del perfume">
                         <div class="thumb-img-wrapper">
-                            <img src="${prod.imagen}" alt="" class="thumb-img">
+                            <img src="${urlImagenClean}" alt="" class="thumb-img" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                         </div>
                         <span class="thumb-label">PERFUME</span>
                     </button>
                     <button type="button" class="gallery-thumb" data-index="1" role="tab" aria-selected="false" aria-label="Ver notas del perfume">
                         <div class="thumb-img-wrapper">
-                            <img src="${urlNotasClean}" alt="" class="thumb-img" decoding="async" loading="lazy">
+                            <img src="${urlNotasClean}" alt="" class="thumb-img" decoding="async" loading="lazy" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                         </div>
                         <span class="thumb-label">NOTAS</span>
                     </button>
@@ -1003,9 +1009,11 @@ function obtenerOCrearLightboxModal() {
 function abrirLightboxVisor(prod, initialIndex = 0, onSlideChange = null) {
     if (!prod) return;
 
-    const urlNotasClean = prod.imagen_notas ? String(prod.imagen_notas).trim() : '';
+    const rawNotas = prod.imagen_notas ? String(prod.imagen_notas).trim() : '';
+    const urlNotasClean = rawNotas ? (typeof resolverImagen === 'function' ? resolverImagen(rawNotas, '') : rawNotas) : '';
+    const urlImagenClean = (typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen);
     const imagenes = [
-        { url: prod.imagen, alt: `${prod.nombre} - ${prod.marca}` }
+        { url: urlImagenClean, alt: `${prod.nombre} - ${prod.marca}` }
     ];
     if (urlNotasClean) {
         imagenes.push({ url: urlNotasClean, alt: `Notas y perfil olfativo de ${prod.nombre}` });
@@ -1260,7 +1268,7 @@ function inicializarGaleriaDetalle(container, prod) {
             `;
             sideContainer.innerHTML = `
                 <div class="product-gallery__zoom-trigger" id="gallery-zoom-trigger" role="button" tabindex="0" aria-label="Ampliar imagen de ${prod.nombre}">
-                    <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img detail-product-img--zoomable">
+                    <img src="${typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="detail-product-img detail-product-img--zoomable" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                     ${zoomBadgeSvg}
                 </div>
             `;
@@ -2100,7 +2108,7 @@ async function renderizarCarritoDOM() {
         html += `
             <tr data-id="${item.id}">
                 <td class="cart-td-product">
-                    <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-img">
+                    <img src="${typeof resolverImagen === 'function' ? resolverImagen(item.imagen) : item.imagen}" alt="${item.nombre}" class="cart-item-img" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
                     <div class="cart-item-meta">
                         <span class="cart-item-brand">${item.marca}</span>
                         <span class="cart-item-title">${item.nombre}</span>
@@ -4276,7 +4284,7 @@ function renderProductosRelacionados(productoActual, productosRelacionados) {
             ${favBtnHtml}
             <span class="product-category-badge">${categoryBadgeText}</span>
             <a href="producto.html?id=${encodeURIComponent(prod.id)}" class="product-image-link" tabindex="-1">
-                <img src="${prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy" decoding="async">
+                <img src="${typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
             </a>
         `;
 

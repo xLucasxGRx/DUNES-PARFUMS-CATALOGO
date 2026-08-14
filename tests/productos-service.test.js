@@ -66,15 +66,25 @@ test('ProductosService - Lectura y normalización de precio_oferta', async () =>
     }
 });
 
-test('ProductosService - Lectura y sanitización de imagen_notas (solo URLs HTTPS válidas)', () => {
+test('ProductosService - Lectura y sanitización de imagen_notas (URLs externas HTTPS/HTTP y rutas locales)', () => {
     assert.strictEqual(ProductosService._normalizarImagenNotas('https://servidor.com/notas.webp'), 'https://servidor.com/notas.webp');
     assert.strictEqual(ProductosService._normalizarImagenNotas('   https://servidor.com/notas.webp  '), 'https://servidor.com/notas.webp');
-    assert.strictEqual(ProductosService._normalizarImagenNotas('http://servidor-inseguro.com/notas.jpg'), '');
+    assert.strictEqual(ProductosService._normalizarImagenNotas('http://servidor.com/notas.jpg'), 'http://servidor.com/notas.jpg');
+    assert.strictEqual(ProductosService._normalizarImagenNotas('img/notas/khamrah.webp'), 'img/notas/khamrah.webp');
     assert.strictEqual(ProductosService._normalizarImagenNotas('javascript:alert(1)'), '');
     assert.strictEqual(ProductosService._normalizarImagenNotas('data:image/png;base64,123'), '');
-    assert.strictEqual(ProductosService._normalizarImagenNotas('img/local.jpg'), '');
     assert.strictEqual(ProductosService._normalizarImagenNotas(''), '');
     assert.strictEqual(ProductosService._normalizarImagenNotas(null), '');
+});
+
+test('ProductosService - resolverImagen soporta URLs externas, rutas locales y fallbacks', () => {
+    const resolver = ProductosService.resolverImagen || ProductosService._resolverImagen;
+    assert.strictEqual(resolver('https://i.imgur.com/xxxxx.webp'), 'https://i.imgur.com/xxxxx.webp');
+    assert.strictEqual(resolver('http://servidor.com/imagenes/khamrah.jpg'), 'http://servidor.com/imagenes/khamrah.jpg');
+    assert.strictEqual(resolver('img/productos/khamrah.webp'), 'img/productos/khamrah.webp');
+    assert.strictEqual(resolver(''), 'img/logo/logohorizontaldunesparfums.png');
+    assert.strictEqual(resolver(null), 'img/logo/logohorizontaldunesparfums.png');
+    assert.strictEqual(resolver('javascript:alert(1)'), 'img/logo/logohorizontaldunesparfums.png');
 });
 
 test('ProductosService - Soporte de imagen_notas en productos cargados', async () => {
@@ -82,7 +92,7 @@ test('ProductosService - Soporte de imagen_notas en productos cargados', async (
     for (const p of res.productos) {
         assert.ok('imagen_notas' in p, 'Cada producto debe poseer la propiedad imagen_notas');
         if (p.imagen_notas) {
-            assert.ok(p.imagen_notas.startsWith('https://'), 'Si imagen_notas no es vacía, debe ser una URL HTTPS');
+            assert.ok(p.imagen_notas.startsWith('https://') || p.imagen_notas.startsWith('http://') || p.imagen_notas.startsWith('img/'), 'Si imagen_notas no es vacía, debe ser una URL válida o ruta local');
         }
     }
 });
