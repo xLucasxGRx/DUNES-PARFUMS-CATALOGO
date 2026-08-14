@@ -209,7 +209,7 @@
                 </div>
             </div>
 
-            <!-- 4. Fila Género + Ordenar por (Dropdowns Personalizados Dunes Parfums) -->
+            <!-- 4. Fila Género + Ocasión + Ordenar por (Dropdowns Personalizados Dunes Parfums) -->
             <div class="filter-selects-row">
                 <!-- Dropdown Género -->
                 <div class="filter-dropdown-wrapper" id="wrapper-gender">
@@ -248,14 +248,45 @@
 
                 <!-- Dropdown Ocasión -->
                 <div class="filter-dropdown-wrapper" id="wrapper-ocasion">
+                    <!-- Native select for compatibility -->
+                    <select id="filter-ocasion-select" class="visually-hidden" aria-label="Filtrar por ocasión">
+                        <option value="todas">Ocasión: Todos</option>
+                        <option value="versatil">Versátil</option>
+                        <option value="diario">Diario / Oficina</option>
+                        <option value="citas">Citas</option>
+                        <option value="noche">Noche / Fiesta</option>
+                        <option value="formal">Formal</option>
+                    </select>
+
                     <button type="button" class="dunes-dropdown-trigger" id="ocasion-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filtrar por ocasión">
-                        <span class="dunes-dropdown-label" id="ocasion-dropdown-label">Ocasión: Todas</span>
+                        <span class="dunes-dropdown-label" id="ocasion-dropdown-label">Ocasión: Todos</span>
                         <svg class="dunes-dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
                     </button>
 
                     <div class="dunes-dropdown-menu" id="ocasion-dropdown-menu" role="listbox" aria-labelledby="ocasion-dropdown-trigger" hidden>
-                        <div class="dunes-dropdown-option disabled" role="option" aria-disabled="true" style="opacity: 0.65; cursor: default; justify-content: center; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.5px;">
-                            <span>PRÓXIMAMENTE</span>
+                        <div class="dunes-dropdown-option active" role="option" data-value="todas" aria-selected="true">
+                            <span>Todos</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="versatil" aria-selected="false">
+                            <span>Versátil</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="diario" aria-selected="false">
+                            <span>Diario / Oficina</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="citas" aria-selected="false">
+                            <span>Citas</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="noche" aria-selected="false">
+                            <span>Noche / Fiesta</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="dunes-dropdown-option" role="option" data-value="formal" aria-selected="false">
+                            <span>Formal</span>
+                            <svg class="dunes-option-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         </div>
                     </div>
                 </div>
@@ -291,7 +322,7 @@
                 </div>
             </div>
 
-            <!-- 5. Fila Solo disponibles (Izquierda) + Contador (Derecha) -->
+            <!-- 5. Fila Solo disponibles (Izquierda) + Limpiar Filtros y Contador (Derecha) -->
             <div class="filter-bottom-row">
                 <div class="filter-available-box">
                     <label class="checkbox-container">
@@ -300,8 +331,14 @@
                         Solo disponibles
                     </label>
                 </div>
-                <div class="catalog-results-counter">
-                    <span id="results-count">0 productos</span>
+                <div class="filter-actions-right">
+                    <button type="button" id="btn-clear-filters" class="btn-clear-filters" hidden aria-label="Limpiar todos los filtros">
+                        <svg class="btn-clear-filters-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                        <span>Limpiar filtros</span>
+                    </button>
+                    <div class="catalog-results-counter">
+                        <span id="results-count">0 productos</span>
+                    </div>
                 </div>
             </div>
         </div>

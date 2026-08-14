@@ -2127,6 +2127,27 @@
     line-height: 1.25 !important;
   }
 
+  /* Excepción exclusiva para que Ocasión ("Diario / Oficina" y "Noche / Fiesta") se mantenga en 1 sola línea */
+  #page-catalogo #ocasion-dropdown-menu {
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: calc(100vw - 32px) !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+  }
+
+  #page-catalogo #ocasion-dropdown-menu:not([hidden]),
+  #page-catalogo #ocasion-dropdown-menu.is-open {
+    transform: translateX(-50%) translateY(0) !important;
+  }
+
+  #page-catalogo #ocasion-dropdown-menu .dunes-dropdown-option span {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+
   #page-catalogo .filter-select-box {
     width: 100% !important;
   }
@@ -2143,15 +2164,27 @@
     background-color: #FFFDF8 !important;
   }
 
-  /* Fila Inferior (Solo disponibles + Contador) en la MISMA FILA en Móvil */
   #page-catalogo .filter-bottom-row {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 4px 8px !important;
     width: 100% !important;
     margin-top: 2px !important;
     padding-top: 6px !important;
     border-top: 1px solid rgba(231, 211, 165, 0.4) !important;
+  }
+
+  #page-catalogo .filter-actions-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  #page-catalogo .btn-clear-filters {
+    padding: 3px 7px !important;
+    font-size: 0.71rem !important;
   }
 
   #page-catalogo .filter-available-box {

@@ -214,6 +214,7 @@ const ProductosService = (function() {
                 p.precioOferta = precioOfertaVal;
                 p.genero = normalizarGenero(p.genero);
                 p.imagen_notas = normalizarImagenNotas(p.imagen_notas ?? p.imagenNotas);
+                p.ocasion = p.ocasion ? limpiarValorImportado(p.ocasion) : '';
                 return p;
             });
 
@@ -344,6 +345,7 @@ const ProductosService = (function() {
                         oferta: parseBoolean(rawObj.oferta),
                         precio_oferta: parseNumber(rawObj.precio_oferta),
                         precioOferta: parseNumber(rawObj.precio_oferta),
+                        ocasion: rawObj.ocasion ? limpiarValorImportado(rawObj.ocasion) : '',
                         orden: parseNumber(rawObj.orden)
                     };
 

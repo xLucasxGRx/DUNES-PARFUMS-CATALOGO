@@ -17,7 +17,8 @@
     "destacado": true,
     "oferta": true,
     "precio_oferta": 155,
-    "imagen_notas": "img/productos/LattafaKhamrah.webp"
+    "imagen_notas": "img/productos/LattafaKhamrah.webp",
+    "ocasion": "Citas,Noche"
   },
   {
     "id": "p2",
@@ -36,7 +37,8 @@
     "descripcion": "Combinación tropical y cremosa con acordes de piña brulée y especias.",
     "destacado": false,
     "oferta": false,
-    "imagen_notas": "img/productos/LattafaKhamrah.webp"
+    "imagen_notas": "img/productos/LattafaKhamrah.webp",
+    "ocasion": "Versátil,Diario"
   },
   {
     "id": "p3",
@@ -55,7 +57,8 @@
     "descripcion": "Fusión del clásico Khamrah con un fondo estimulante de café tostado.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": "img/productos/LattafaKhamrah.webp"
+    "imagen_notas": "img/productos/LattafaKhamrah.webp",
+    "ocasion": "Citas,Noche,Formal"
   },
   {
     "id": "p4",
@@ -74,7 +77,8 @@
     "descripcion": "Aroma cítrico frutal con notas de mandarina, haba tonka y caramelo.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": "img/productos/ArmafMandarinSky.webp"
+    "imagen_notas": "img/productos/ArmafMandarinSky.webp",
+    "ocasion": "Versátil,Diario"
   },
   {
     "id": "p5",
@@ -93,7 +97,8 @@
     "descripcion": "Fragancia fresca y enérgica de día con toques cítricos y florales.",
     "destacado": false,
     "oferta": false,
-    "imagen_notas": "img/productos/LattafaKhamrah.webp"
+    "imagen_notas": "img/productos/LattafaKhamrah.webp",
+    "ocasion": "Diario,Versátil"
   },
   {
     "id": "p6",
@@ -112,7 +117,8 @@
     "descripcion": "Perfume oriental-frutal con acordes dulces de vainilla, manzana y canela.",
     "destacado": true,
     "oferta": false,
-    "imagen_notas": "img/productos/LattafaKhamrah.webp"
+    "imagen_notas": "img/productos/LattafaKhamrah.webp",
+    "ocasion": "Citas,Noche"
   },
   {
     "id": "p7",

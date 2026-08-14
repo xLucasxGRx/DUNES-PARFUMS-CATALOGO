@@ -2238,6 +2238,26 @@ button:disabled,
     font-weight: 700;
 }
 
+/* Ajuste específico para el menú desplegable abierto de Ocasión: Diario / Oficina en una sola línea */
+#ocasion-dropdown-menu {
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: 240px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+#ocasion-dropdown-menu:not([hidden]),
+#ocasion-dropdown-menu.is-open {
+    transform: translateX(-50%) translateY(0) !important;
+}
+
+#ocasion-dropdown-menu .dunes-dropdown-option span {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+}
+
 .dunes-option-check {
     opacity: 0;
     color: #8E671D;
@@ -2324,6 +2344,55 @@ button:disabled,
 .filter-available-box {
     display: flex;
     align-items: center;
+}
+
+.filter-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-clear-filters {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #8E671D;
+    background-color: #FFFDF8;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    line-height: 1;
+}
+
+.btn-clear-filters[hidden] {
+    display: none !important;
+}
+
+.btn-clear-filters:hover {
+    background-color: #F8F2E4;
+    border-color: #C49A3E;
+    color: #5E430F;
+}
+
+.btn-clear-filters:focus-visible {
+    outline: 2px solid #C49A3E;
+    outline-offset: 2px;
+}
+
+.btn-clear-filters-icon {
+    flex-shrink: 0;
+    color: #8E671D;
+    transition: transform 0.2s ease;
+}
+
+.btn-clear-filters:hover .btn-clear-filters-icon {
+    transform: rotate(-15deg);
 }
 
 .catalog-results-counter {

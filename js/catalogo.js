@@ -94,6 +94,7 @@ function guardarEstadoCatalogo(filtroEstado) {
             formato: filtroEstado.formato || (catCompat === 'decants' ? 'decant' : 'todos'),
             tipo: filtroEstado.tipo || (['arabe', 'disenador', 'nicho'].includes(catCompat) ? catCompat : 'todos'),
             genero: filtroEstado.genero || 'todos',
+            ocasion: filtroEstado.ocasion || 'todas',
             busqueda: filtroEstado.busqueda || '',
             orden: filtroEstado.orden || 'relevancia',
             soloDisponibles: !!filtroEstado.soloDisponibles,
@@ -144,15 +145,19 @@ function limpiarEstadoCatalogoGuardado() {
 function resolverEstadoInicial() {
     let hasCatParam = false;
     let hasGenParam = false;
+    let hasOcasionParam = false;
     let catParam = null;
     let genParam = null;
+    let ocasionParam = null;
 
     try {
         const params = new URLSearchParams(window.location.search);
         hasCatParam = params.has('categoria');
         hasGenParam = params.has('genero');
+        hasOcasionParam = params.has('ocasion');
         catParam = params.get('categoria');
         genParam = params.get('genero');
+        ocasionParam = params.get('ocasion');
     } catch (e) {}
 
     const savedState = obtenerEstadoCatalogoGuardado();
@@ -184,6 +189,14 @@ function resolverEstadoInicial() {
         finalGen = savedState.genero;
     }
 
+    const ocasionValidos = ['versatil', 'diario', 'citas', 'noche', 'formal', 'todas'];
+    let finalOcasion = 'todas';
+    if (hasOcasionParam) {
+        finalOcasion = ocasionValidos.includes(ocasionParam) ? ocasionParam : 'todas';
+    } else if (savedState && ocasionValidos.includes(savedState.ocasion)) {
+        finalOcasion = savedState.ocasion;
+    }
+
     let finalSearch = '';
     let finalOrden = 'relevancia';
     let finalSoloDisp = false;
@@ -204,6 +217,7 @@ function resolverEstadoInicial() {
             formato: finalFormato,
             tipo: finalTipo,
             genero: finalGen,
+            ocasion: finalOcasion,
             busqueda: finalSearch,
             orden: finalOrden,
             soloDisponibles: finalSoloDisp
@@ -472,6 +486,35 @@ function coincideGenero(generoProducto, generoFiltro) {
 }
 
 /**
+ * Normaliza una cadena de ocasión para comparación (limpia tildes, espacios y convierte a minúsculas)
+ */
+function normalizarTextoOcasion(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+}
+
+/**
+ * Comprueba si la ocasión de un producto coincide con el filtro de ocasión seleccionado.
+ * Soporta etiquetas múltiples separadas por comas (multi-tag).
+ * Ocasiones oficiales: Versátil, Diario, Citas, Noche, Formal
+ */
+function coincideOcasion(ocasionProducto, ocasionFiltro) {
+    const filtroNorm = normalizarTextoOcasion(ocasionFiltro);
+    if (!filtroNorm || filtroNorm === 'todas' || filtroNorm === 'todos') {
+        return true;
+    }
+    if (!ocasionProducto || typeof ocasionProducto !== 'string') {
+        return false;
+    }
+    const tagsProducto = ocasionProducto.split(',').map(tag => normalizarTextoOcasion(tag));
+    return tagsProducto.includes(filtroNorm);
+}
+
+/**
  * Obtiene la configuración de cotización según el tipo
  */
 function obtenerConfiguracionCotizacion(tipo) {
@@ -521,7 +564,7 @@ function sincronizarDropdownsPersonalizados(estado) {
         genderLabel.textContent = genderMap[estado.genero] || 'Género: Todos';
     }
 
-    const genderMenu = document.getElementById('gender-dropdown-menu');
+            const genderMenu = document.getElementById('gender-dropdown-menu');
     if (genderMenu) {
         genderMenu.querySelectorAll('.dunes-dropdown-option').forEach(opt => {
             const isCurrent = opt.dataset.value === (estado.genero || 'todos');
@@ -530,7 +573,33 @@ function sincronizarDropdownsPersonalizados(estado) {
         });
     }
 
-    // 2. Ordenar por
+    // 2. Ocasión
+    const ocasionSelect = document.getElementById('filter-ocasion-select');
+    if (ocasionSelect) ocasionSelect.value = estado.ocasion || 'todas';
+
+    const ocasionLabel = document.getElementById('ocasion-dropdown-label');
+    const ocasionMap = {
+        todas: 'Ocasión: Todos',
+        versatil: 'Ocasión: Versátil',
+        diario: 'Ocasión: Diario / Oficina',
+        citas: 'Ocasión: Citas',
+        noche: 'Ocasión: Noche / Fiesta',
+        formal: 'Ocasión: Formal'
+    };
+    if (ocasionLabel) {
+        ocasionLabel.textContent = ocasionMap[estado.ocasion] || 'Ocasión: Todos';
+    }
+
+    const ocasionMenu = document.getElementById('ocasion-dropdown-menu');
+    if (ocasionMenu) {
+        ocasionMenu.querySelectorAll('.dunes-dropdown-option').forEach(opt => {
+            const isCurrent = opt.dataset.value === (estado.ocasion || 'todas');
+            opt.classList.toggle('active', isCurrent);
+            opt.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+        });
+    }
+
+    // 3. Ordenar por
     const sortSelect = document.getElementById('sort-price');
     if (sortSelect) sortSelect.value = estado.orden || 'relevancia';
 
@@ -555,6 +624,32 @@ function sincronizarDropdownsPersonalizados(estado) {
 }
 
 /**
+ * Muestra u oculta el botón 'Limpiar filtros' según si hay algún filtro activo diferente al estado inicial
+ */
+function actualizarBotonLimpiarFiltros(estado) {
+    const btnClear = document.getElementById('btn-clear-filters');
+    if (!btnClear) return;
+
+    const tieneBusqueda = !!(estado.busqueda && estado.busqueda.trim());
+    const tieneFormato = estado.formato && estado.formato !== 'todos';
+    const tieneTipo = estado.tipo && estado.tipo !== 'todos';
+    const tieneGenero = estado.genero && estado.genero !== 'todos';
+    const tieneOcasion = estado.ocasion && estado.ocasion !== 'todas' && estado.ocasion !== 'todos';
+    const tieneSoloDisp = !!estado.soloDisponibles;
+    const tieneOrden = estado.orden && estado.orden !== 'relevancia';
+
+    const hayFiltrosActivos = tieneBusqueda || tieneFormato || tieneTipo || tieneGenero || tieneOcasion || tieneSoloDisp || tieneOrden;
+
+    if (hayFiltrosActivos) {
+        btnClear.hidden = false;
+        btnClear.classList.add('is-visible');
+    } else {
+        btnClear.hidden = true;
+        btnClear.classList.remove('is-visible');
+    }
+}
+
+/**
  * Sincroniza todos los controles visuales de la interfaz con el estado actual
  */
 function sincronizarControlesInterfaz(estado) {
@@ -567,6 +662,8 @@ function sincronizarControlesInterfaz(estado) {
 
     const searchInput = document.getElementById('search-perfume');
     if (searchInput) searchInput.value = estado.busqueda || '';
+
+    actualizarBotonLimpiarFiltros(estado);
 }
 
 /**
@@ -669,6 +766,7 @@ function limpiarTodosLosFiltros(productos, estado, grid) {
     estado.formato = 'todos';
     estado.tipo = 'todos';
     estado.genero = 'todos';
+    estado.ocasion = 'todas';
     estado.busqueda = '';
     estado.soloDisponibles = false;
     estado.orden = 'relevancia';
@@ -686,6 +784,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
     const formatoBtns = document.querySelectorAll('.filter-group--formato .filter-tab-btn');
     const tipoBtns = document.querySelectorAll('.filter-group--tipo .filter-tab-btn');
     const genderSelect = document.getElementById('filter-gender-select');
+    const ocasionSelect = document.getElementById('filter-ocasion-select');
     const sortSelect = document.getElementById('sort-price');
     const availableCheckbox = document.getElementById('filter-available');
 
@@ -736,9 +835,12 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
         filtrarYRenderizar(productos, estado, grid);
     });
 
-    // Configuración Dropdown Personalizado Ocasión (Informativo / Próximamente)
-    configurarDropdownPersonalizado('ocasion-dropdown-trigger', 'ocasion-dropdown-menu', () => {
-        // Informativo: no altera filtros ni productos
+    // Configuración Dropdown Personalizado Ocasión
+    configurarDropdownPersonalizado('ocasion-dropdown-trigger', 'ocasion-dropdown-menu', (val) => {
+        estado.ocasion = val;
+        sincronizarDropdownsPersonalizados(estado);
+        guardarEstadoCatalogo(estado);
+        filtrarYRenderizar(productos, estado, grid);
     });
 
     // Configuración Dropdown Personalizado Ordenar
@@ -753,6 +855,15 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
     if (genderSelect) {
         genderSelect.addEventListener('change', (e) => {
             estado.genero = e.target.value;
+            sincronizarDropdownsPersonalizados(estado);
+            guardarEstadoCatalogo(estado);
+            filtrarYRenderizar(productos, estado, grid);
+        });
+    }
+
+    if (ocasionSelect) {
+        ocasionSelect.addEventListener('change', (e) => {
+            estado.ocasion = e.target.value;
             sincronizarDropdownsPersonalizados(estado);
             guardarEstadoCatalogo(estado);
             filtrarYRenderizar(productos, estado, grid);
@@ -777,6 +888,14 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
             filtrarYRenderizar(productos, estado, grid);
         });
     }
+
+    // Botón Limpiar Filtros
+    const clearBtn = document.getElementById('btn-clear-filters');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            limpiarTodosLosFiltros(productos, estado, grid);
+        });
+    }
 }
 
 /**
@@ -785,6 +904,8 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
 function filtrarYRenderizar(productos, estado, grid) {
     if (!grid) return;
     console.log("[CATALOGO] Estado filtros:", estado);
+
+    actualizarBotonLimpiarFiltros(estado);
 
     // Limpiar SIEMPRE el contenedor antes de procesar o renderizar
     grid.innerHTML = '';
@@ -819,7 +940,12 @@ function filtrarYRenderizar(productos, estado, grid) {
             return false;
         }
 
-        // F. Filtro por Disponibilidad (Solo disponibles)
+        // F. Filtro por Ocasión (MULTIETIQUETA: Versátil, Diario, Citas, Noche, Formal)
+        if (!coincideOcasion(prod.ocasion, estado.ocasion)) {
+            return false;
+        }
+
+        // G. Filtro por Disponibilidad (Solo disponibles)
         if (estado.soloDisponibles) {
             const catNorm = normalizarTextoCat(prod.categoria);
             const formNorm = normalizarTextoCat(prod.formato);
