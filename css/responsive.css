@@ -7,6 +7,16 @@
    Dispositivos de Escritorio Medianos y Laptops (Máx 1024px)
    ========================================================================== */
 @media screen and (max-width: 1024px) {
+  .announcement-container {
+    min-height: 30px;
+    padding: 3px 12px;
+  }
+
+  .announcement-text {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
   .container {
     padding: 0 32px;
   }
@@ -244,13 +254,71 @@
 
   .ubicacion-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 20px;
+  }
+
+  .ubicacion-card {
+    padding: 20px 18px;
+  }
+
+  .ubicacion-card-title {
+    font-size: 1.18rem;
+    margin-bottom: 8px;
+  }
+
+  .ubicacion-card-desc {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin-bottom: 12px;
+  }
+
+  .ubicacion-card-divider {
+    margin-bottom: 12px;
+  }
+
+  .ubicacion-subheading {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  .ubicacion-delivery-list {
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .ubicacion-delivery-list li {
+    font-size: 0.88rem;
+  }
+
+  .location-shipping-callout {
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+  }
+
+  .location-shipping-highlight {
+    font-size: 0.78rem;
+  }
+
+  .location-shipping-callout .ubicacion-agency-note {
+    font-size: 0.8rem;
+  }
+
+  .ubicacion-actions-box {
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .btn-location-maps,
+  .btn-location-wa {
+    height: 46px;
+    font-size: 0.84rem;
   }
 
   .ubicacion-mapa,
   .mapa-iframe-wrapper {
-    min-height: 350px;
-    height: 350px;
+    min-height: 300px;
+    height: 300px;
   }
 
   /* Header y Navegación Móvil (Fase 5) */
