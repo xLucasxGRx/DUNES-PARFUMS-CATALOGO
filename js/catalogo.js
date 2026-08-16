@@ -801,6 +801,11 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
                 estado.busqueda = val.toLowerCase().trim();
                 guardarEstadoCatalogo(estado);
                 filtrarYRenderizar(productos, estado, grid);
+
+                if (estado.busqueda.length >= 2 && typeof window !== 'undefined' && window.Analytics) {
+                    const count = grid ? grid.querySelectorAll('.product-card, .catalog-card').length : 0;
+                    window.Analytics.trackCatalogSearch(count);
+                }
             }, 180);
         });
     }
@@ -903,6 +908,7 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
  */
 function filtrarYRenderizar(productos, estado, grid) {
     if (!grid) return;
+    if (Array.isArray(productos)) window._productosCacheGrid = productos;
     console.log("[CATALOGO] Estado filtros:", estado);
 
     actualizarBotonLimpiarFiltros(estado);
@@ -1272,6 +1278,18 @@ function filtrarYRenderizar(productos, estado, grid) {
 
     actualizarContador(resultadoFinal.length);
     console.log("[CATALOGO] Render finalizado");
+
+    if (typeof window !== 'undefined' && window.Analytics && resultadoFinal.length > 0) {
+        if (!window._viewItemListSent) {
+            window._viewItemListSent = true;
+            const items = resultadoFinal.slice(0, 20).map(p => window.Analytics.formatItem(p, 1));
+            window.Analytics.trackEcommerce('view_item_list', {
+                item_list_id: 'catalogo',
+                item_list_name: 'Catálogo',
+                items: items
+            });
+        }
+    }
 }
 
 /**
@@ -1279,9 +1297,24 @@ function filtrarYRenderizar(productos, estado, grid) {
  */
 function vincularEventosGridCatalogo(grid, estado) {
     grid.querySelectorAll('a[href*="producto.html"], .btn-details-compact, .btn-select-option, .btn-view-details').forEach(link => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', (e) => {
             if (estado) {
                 guardarEstadoCatalogo(estado);
+            }
+            if (typeof window !== 'undefined' && window.Analytics) {
+                const card = link.closest('.product-card, .catalog-card');
+                const id = card ? card.dataset.id : null;
+                if (id && Array.isArray(window._productosCacheGrid)) {
+                    const prod = window._productosCacheGrid.find(p => String(p.id) === String(id));
+                    if (prod) {
+                        const item = window.Analytics.formatItem(prod, 1);
+                        window.Analytics.trackEcommerce('select_item', {
+                            item_list_id: 'catalogo',
+                            item_list_name: 'Catálogo',
+                            items: [item]
+                        });
+                    }
+                }
             }
         });
     });

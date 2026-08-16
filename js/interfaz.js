@@ -718,6 +718,15 @@ async function cargarDetalleProducto() {
         // Actualizar SEO dinámico del producto válido
         actualizarSeoProducto(prod);
 
+        if (typeof window !== 'undefined' && window.Analytics) {
+            const item = window.Analytics.formatItem(prod, 1);
+            window.Analytics.trackEcommerce('view_item', {
+                value: item.price,
+                items: [item]
+            });
+            window.Analytics.trackClarity('view_product');
+        }
+
         const esDecant = (prod.formato && String(prod.formato).toLowerCase().includes('decant')) || prod.categoria === 'decants';
         if (esDecant) {
             renderizarDetalleDecant(container, prod);
@@ -2098,6 +2107,12 @@ async function renderizarCarritoDOM() {
         summaryCol.style.opacity = '1';
         summaryCol.style.pointerEvents = 'auto';
     }
+
+    if (typeof window !== 'undefined' && window.Analytics && !window._viewCartSent) {
+        window._viewCartSent = true;
+        const subtotal = items.reduce((acc, i) => acc + ((i.precioUnitario || 0) * (i.cantidad || 1)), 0);
+        window.Analytics.trackViewCart(items, subtotal);
+    }
     const emptyBtn = document.getElementById('btn-empty-cart');
     if (emptyBtn) emptyBtn.style.display = 'inline-block';
 
@@ -3246,6 +3261,20 @@ function inicializarCheckoutForm() {
     form.querySelectorAll('input[name="tipoEntrega"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
             selectedDeliveryType = e.target.value;
+
+            // Tracking begin_checkout (una vez por sesión de checkout)
+            if (typeof window !== 'undefined' && window.Analytics) {
+                const itemsCart = window.carritoModulo.obtenerCarrito();
+                const { subtotalProductos } = obtenerTotalesPedido();
+                if (!window._beginCheckoutSent) {
+                    window._beginCheckoutSent = true;
+                    window.Analytics.trackBeginCheckout(itemsCart, subtotalProductos);
+                }
+                if (selectedDeliveryType === 'agencia' || selectedDeliveryType === 'recojo-local') {
+                    window.Analytics.trackShippingInfo(selectedDeliveryType, itemsCart, subtotalProductos);
+                }
+            }
+
             // Al cambiar de modalidad, si no es delivery-local, limpiar zona
             if (selectedDeliveryType !== 'delivery-local') {
                 resetearZonaAlCambiarModalidad();
@@ -3272,6 +3301,12 @@ function inicializarCheckoutForm() {
             targetBtn.classList.add('selected');
             targetBtn.setAttribute('aria-checked', 'true');
             selectedDeliveryZone = targetBtn.dataset.zona || targetBtn.getAttribute('data-zona');
+
+            if (typeof window !== 'undefined' && window.Analytics) {
+                const itemsCart = window.carritoModulo.obtenerCarrito();
+                const { subtotalProductos } = obtenerTotalesPedido();
+                window.Analytics.trackShippingInfo('delivery_local', itemsCart, subtotalProductos);
+            }
 
             // Limpiar avisos visuales de error al seleccionar zona
             document.querySelectorAll('.step-alert-banner').forEach(el => el.remove());
@@ -3390,6 +3425,14 @@ function confirmarPedidoWhatsApp(e) {
         resultadoCupon,
         datosEntrega
     };
+
+    if (typeof window !== 'undefined' && window.Analytics) {
+        window.Analytics.trackLead({
+            totalFinal: totalFinal,
+            tipoEntrega: selectedDeliveryType,
+            items: items
+        });
+    }
 
     window.whatsappConfig.enviarPedidoWhatsApp(pedido);
 }

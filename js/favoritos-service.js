@@ -150,6 +150,19 @@
             if (!favs.includes(targetId)) {
                 favs.push(targetId);
                 this._guardar(favs);
+
+                if (typeof window !== 'undefined' && window.Analytics) {
+                    if (window.productosModulo && typeof window.productosModulo.obtenerProductoPorId === 'function') {
+                        window.productosModulo.obtenerProductoPorId(targetId).then(prod => {
+                            if (prod) {
+                                const item = window.Analytics.formatItem(prod, 1);
+                                window.Analytics.trackEcommerce('add_to_wishlist', { items: [item] });
+                            }
+                        }).catch(() => {});
+                    } else {
+                        window.Analytics.trackEcommerce('add_to_wishlist', { items: [{ item_id: String(targetId) }] });
+                    }
+                }
             }
             return true;
         },
@@ -167,6 +180,19 @@
             const filtered = favs.filter(f => f !== targetId && f.replace(/^p/, '') !== targetId.replace(/^p/, ''));
             if (filtered.length !== favs.length) {
                 this._guardar(filtered);
+
+                if (typeof window !== 'undefined' && window.Analytics) {
+                    if (window.productosModulo && typeof window.productosModulo.obtenerProductoPorId === 'function') {
+                        window.productosModulo.obtenerProductoPorId(targetId).then(prod => {
+                            if (prod) {
+                                const item = window.Analytics.formatItem(prod, 1);
+                                window.Analytics.trackEcommerce('remove_from_wishlist', { items: [item] });
+                            }
+                        }).catch(() => {});
+                    } else {
+                        window.Analytics.trackEcommerce('remove_from_wishlist', { items: [{ item_id: String(targetId) }] });
+                    }
+                }
             }
             return false;
         },

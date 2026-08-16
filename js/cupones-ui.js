@@ -175,6 +175,11 @@ const CuponesUI = (function () {
             if (window.cuponesCheckout && typeof window.cuponesCheckout.aplicarCupon === 'function') {
                 const resultado = await window.cuponesCheckout.aplicarCupon(codigo);
 
+                if (resultado && resultado.exito && typeof window !== 'undefined' && window.Analytics) {
+                    const tipoDesc = (resultado.cupon && resultado.cupon.tipo === 'porcentaje') ? 'percentage' : 'fixed';
+                    window.Analytics.trackCouponApplied(tipoDesc, resultado.montoDescuento || 0);
+                }
+
                 // Garantizar tiempo mínimo de percepción visual (400ms)
                 const transcurrido = Date.now() - tInicio;
                 if (transcurrido < 400) {

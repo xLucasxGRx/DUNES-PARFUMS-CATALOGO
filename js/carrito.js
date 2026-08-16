@@ -194,6 +194,10 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
         actualizarContadorCarrito();
         animarBotonCarritoHeader();
 
+        if (window.Analytics && typeof window.Analytics.trackAddToCart === 'function') {
+            window.Analytics.trackAddToCart(product, precioUnitario, cantidadAAgregar, presentacionTexto);
+        }
+
         if (!limiteAlcanzado) {
             mostrarToastPremium(`S/ ${precioUnitario.toFixed(2)} - ${product.nombre} (${mlItem}ml) agregado.`);
 
@@ -298,6 +302,10 @@ async function actualizarCantidadItem(id, nuevaCantidad) {
  */
 function eliminarItem(id) {
     let carrito = obtenerCarrito();
+    const itemAEliminar = carrito.find(item => item.id === id);
+    if (itemAEliminar && window.Analytics && typeof window.Analytics.trackRemoveFromCart === 'function') {
+        window.Analytics.trackRemoveFromCart(itemAEliminar);
+    }
     carrito = carrito.filter(item => item.id !== id);
     guardarCarrito(carrito);
     actualizarContadorCarrito();
