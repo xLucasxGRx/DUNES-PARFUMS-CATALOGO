@@ -235,13 +235,23 @@ const ProductosService = (function() {
         }
     }
 
-    async function cargarProductos() {
+    let _cacheRespuestaProductos = null;
+    let _promesaCargaProductosEnProgreso = null;
+    let _lastLoadedUrl = null;
+
+    function limpiarCacheMemoria() {
+        _cacheRespuestaProductos = null;
+        _promesaCargaProductosEnProgreso = null;
+        _lastLoadedUrl = null;
+    }
+
+    async function _ejecutarCargaProductosInterna() {
         if (typeof CONFIG === 'undefined' || !CONFIG.GOOGLE_SHEETS_CSV_URL) {
             return await cargarDesdeRespaldo(new Error("CONFIG.GOOGLE_SHEETS_CSV_URL no está configurado"));
         }
 
         try {
-            // Evitar caché de fetch usando timestamp
+            // Evitar caché HTTP del navegador usando timestamp en la URL del primer fetch
             const urlConTimestamp = CONFIG.GOOGLE_SHEETS_CSV_URL + (CONFIG.GOOGLE_SHEETS_CSV_URL.includes('?') ? '&' : '?') + 'v=' + Date.now();
             const response = await fetch(urlConTimestamp, { cache: "no-store" });
             
@@ -434,8 +444,37 @@ const ProductosService = (function() {
         }
     }
 
+    async function cargarProductos() {
+        const currentUrl = typeof CONFIG !== 'undefined' ? CONFIG.GOOGLE_SHEETS_CSV_URL : null;
+        if (_lastLoadedUrl !== currentUrl) {
+            _cacheRespuestaProductos = null;
+            _promesaCargaProductosEnProgreso = null;
+        }
+
+        if (_cacheRespuestaProductos) {
+            return _cacheRespuestaProductos;
+        }
+        if (_promesaCargaProductosEnProgreso) {
+            return _promesaCargaProductosEnProgreso;
+        }
+
+        _promesaCargaProductosEnProgreso = (async () => {
+            try {
+                const resultado = await _ejecutarCargaProductosInterna();
+                _cacheRespuestaProductos = resultado;
+                _lastLoadedUrl = currentUrl;
+                return resultado;
+            } finally {
+                _promesaCargaProductosEnProgreso = null;
+            }
+        })();
+
+        return _promesaCargaProductosEnProgreso;
+    }
+
     const serviceObj = {
         cargarProductos: cargarProductos,
+        limpiarCacheMemoria: limpiarCacheMemoria,
         resolverImagen: resolverImagen,
         // Exponer parsers para facilitar pruebas unitarias/scripts
         _parseCSV: parseCSV,

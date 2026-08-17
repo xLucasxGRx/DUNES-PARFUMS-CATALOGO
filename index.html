@@ -599,15 +599,15 @@
         });
     </script>
 
-    <!-- Scripts Modulares (Cargados secuencialmente) -->
-    <script src="js/config.js"></script>
-    <script src="js/productos-service.js?v=20260721-correcion-desktop-logo-1"></script>
-    <script src="js/anuncios-service.js"></script>
-    <script src="js/anuncios-ui.js"></script>
-    <script src="js/favoritos-service.js"></script>
-    <script src="js/whatsapp.js"></script>
-    <script src="js/productos.js?v=20260721-correcion-desktop-logo-1"></script>
-    <script src="js/carrito.js?v=20260721-correcion-desktop-logo-1"></script>
-    <script src="js/interfaz.js?v=20260721-correcion-desktop-logo-1"></script>
+    <!-- Scripts Modulares (Cargados de forma diferida en orden secuencial) -->
+    <script src="js/config.js" defer></script>
+    <script src="js/productos-service.js?v=20260721-correcion-desktop-logo-1" defer></script>
+    <script src="js/anuncios-service.js" defer></script>
+    <script src="js/anuncios-ui.js" defer></script>
+    <script src="js/favoritos-service.js" defer></script>
+    <script src="js/whatsapp.js" defer></script>
+    <script src="js/productos.js?v=20260721-correcion-desktop-logo-1" defer></script>
+    <script src="js/carrito.js?v=20260721-correcion-desktop-logo-1" defer></script>
+    <script src="js/interfaz.js?v=20260721-correcion-desktop-logo-1" defer></script>
 </body>
 </html>
