@@ -763,81 +763,122 @@ async function cargarDetalleProducto() {
  * Actualiza dinámicamente los metadatos SEO, título, canonical y Schema JSON-LD de un producto existente
  * @param {Object} prod
  */
+function setOrUpdateMetaTag(property, content, isProperty = true) {
+    if (typeof document === 'undefined') return;
+    const attr = isProperty ? 'property' : 'name';
+    let el = document.querySelector(`meta[${attr}="${property}"]`);
+    if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, property);
+        document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+}
+
 function actualizarSeoProducto(prod) {
     if (!prod) return;
     const idClean = String(prod.id).trim();
     const presText = prod.presentacion ? ` ${prod.presentacion}` : '';
     const titleText = `${prod.nombre}${presText} | Dunes Parfums`;
     const descText = `Compra ${prod.nombre}${presText}, en Dunes Parfums. Consulta disponibilidad, precio y opciones de entrega en Tarapoto y todo el Perú.`;
-    const canonicalUrl = `https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO/producto.html?id=${encodeURIComponent(idClean)}`;
+    const canonicalUrl = `https://dunesparfums.com/producto.html?id=${encodeURIComponent(idClean)}`;
 
-    document.title = titleText;
+    if (typeof document !== 'undefined') {
+        document.title = titleText;
 
-    let metaDesc = document.getElementById('meta-description');
-    if (!metaDesc) {
-        metaDesc = document.createElement('meta');
-        metaDesc.id = 'meta-description';
-        metaDesc.name = 'description';
-        document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = descText;
-
-    let metaRobots = document.getElementById('meta-robots');
-    if (!metaRobots) {
-        metaRobots = document.createElement('meta');
-        metaRobots.id = 'meta-robots';
-        metaRobots.name = 'robots';
-        document.head.appendChild(metaRobots);
-    }
-    metaRobots.content = 'index, follow';
-
-    let canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (!canonicalLink) {
-        canonicalLink = document.createElement('link');
-        canonicalLink.rel = 'canonical';
-        document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.href = canonicalUrl;
-
-    // Insertar o actualizar Schema Product JSON-LD
-    let jsonLdScript = document.getElementById('schema-product-jsonld');
-    if (!jsonLdScript) {
-        jsonLdScript = document.createElement('script');
-        jsonLdScript.id = 'schema-product-jsonld';
-        jsonLdScript.type = 'application/ld+json';
-        document.head.appendChild(jsonLdScript);
-    }
-
-    const esDecant = (prod.formato && String(prod.formato).toLowerCase().includes('decant')) || prod.categoria === 'decants';
-    const mlDisp = prod.mililitrosDisponibles ?? prod.mililitros_disponibles ?? 0;
-    const precioNumerico = esDecant
-        ? (prod.presentaciones && prod.presentaciones.length > 0 ? prod.presentaciones[0].precio : (prod.precio || 15))
-        : (prod.precio || 0);
-
-    const estaAgotado = esDecant
-        ? (!prod.disponible || mlDisp <= 0)
-        : (!prod.disponible || (prod.stock ?? 0) <= 0);
-
-    const schemaData = {
-        "@context": "https://schema.org/",
-        "@type": "Product",
-        "name": prod.nombre,
-        "image": prod.imagen ? (/^https?:\/\//i.test(String(prod.imagen).trim()) ? String(prod.imagen).trim() : `https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO/${String(prod.imagen).trim()}`) : '',
-        "description": descText,
-        "brand": {
-            "@type": "Brand",
-            "name": prod.marca || "Dunes Parfums"
-        },
-        "sku": idClean,
-        "offers": {
-            "@type": "Offer",
-            "url": canonicalUrl,
-            "priceCurrency": "PEN",
-            "price": precioNumerico,
-            "availability": estaAgotado ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+        let metaDesc = document.getElementById('meta-description');
+        if (!metaDesc) {
+            metaDesc = document.createElement('meta');
+            metaDesc.id = 'meta-description';
+            metaDesc.name = 'description';
+            document.head.appendChild(metaDesc);
         }
-    };
-    jsonLdScript.textContent = JSON.stringify(schemaData, null, 2);
+        metaDesc.content = descText;
+
+        let metaRobots = document.getElementById('meta-robots');
+        if (!metaRobots) {
+            metaRobots = document.createElement('meta');
+            metaRobots.id = 'meta-robots';
+            metaRobots.name = 'robots';
+            document.head.appendChild(metaRobots);
+        }
+        metaRobots.content = 'index, follow';
+
+        let canonicalLink = document.querySelector('link[rel="canonical"]');
+        if (!canonicalLink) {
+            canonicalLink = document.createElement('link');
+            canonicalLink.rel = 'canonical';
+            document.head.appendChild(canonicalLink);
+        }
+        canonicalLink.href = canonicalUrl;
+
+        const mainImg = prod.imagen ? String(prod.imagen).trim() : '';
+        const imgUrl = mainImg
+            ? (/^https?:\/\//i.test(mainImg) ? mainImg : `https://dunesparfums.com/${mainImg.replace(/^\//, '')}`)
+            : 'https://dunesparfums.com/img/logo/logodunesparfumsfondoblanco.jpg';
+
+        // Metadatos Sociales (Open Graph / Twitter Cards)
+        setOrUpdateMetaTag('og:site_name', 'Dunes Parfums', true);
+        setOrUpdateMetaTag('og:type', 'product', true);
+        setOrUpdateMetaTag('og:title', titleText, true);
+        setOrUpdateMetaTag('og:description', descText, true);
+        setOrUpdateMetaTag('og:url', canonicalUrl, true);
+        setOrUpdateMetaTag('og:image', imgUrl, true);
+        setOrUpdateMetaTag('og:locale', 'es_PE', true);
+
+        setOrUpdateMetaTag('twitter:card', 'summary_large_image', false);
+        setOrUpdateMetaTag('twitter:title', titleText, false);
+        setOrUpdateMetaTag('twitter:description', descText, false);
+        setOrUpdateMetaTag('twitter:image', imgUrl, false);
+
+        // Schema Product JSON-LD
+        let jsonLdScript = document.getElementById('schema-product-jsonld');
+        if (!jsonLdScript) {
+            jsonLdScript = document.createElement('script');
+            jsonLdScript.id = 'schema-product-jsonld';
+            jsonLdScript.type = 'application/ld+json';
+            document.head.appendChild(jsonLdScript);
+        }
+
+        const esDecant = (prod.formato && String(prod.formato).toLowerCase().includes('decant')) || prod.categoria === 'decants';
+        const mlDisp = prod.mililitrosDisponibles ?? prod.mililitros_disponibles ?? 0;
+        const precioBase = esDecant
+            ? (prod.presentaciones && prod.presentaciones.length > 0 ? prod.presentaciones[0].precio : (prod.precio || 15))
+            : (prod.precio || 0);
+
+        const tieneOferta = Boolean(prod.oferta);
+        const precioOfertaNum = Number(prod.precio_oferta ?? prod.precioOferta);
+        const precioVentaReal = (tieneOferta && !isNaN(precioOfertaNum) && precioOfertaNum > 0) ? precioOfertaNum : precioBase;
+
+        const estaAgotado = esDecant
+            ? (!prod.disponible || mlDisp <= 0)
+            : (!prod.disponible || (prod.stock ?? 0) <= 0);
+
+        const schemaData = {
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": prod.nombre,
+            "image": imgUrl,
+            "description": descText,
+            "sku": idClean,
+            "offers": {
+                "@type": "Offer",
+                "url": canonicalUrl,
+                "priceCurrency": "PEN",
+                "price": precioVentaReal,
+                "availability": estaAgotado ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+            }
+        };
+
+        if (prod.marca && String(prod.marca).trim()) {
+            schemaData.brand = {
+                "@type": "Brand",
+                "name": String(prod.marca).trim()
+            };
+        }
+
+        jsonLdScript.textContent = JSON.stringify(schemaData, null, 2);
+    }
 }
 
 /**

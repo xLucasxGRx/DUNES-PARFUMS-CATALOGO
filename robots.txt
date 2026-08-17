@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO/sitemap.xml
+Sitemap: https://dunesparfums.com/sitemap.xml

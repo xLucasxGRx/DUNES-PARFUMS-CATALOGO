@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SITE_URL = "https://xlucasxgrx.github.io/DUNES-PARFUMS-CATALOGO";
+const SITE_URL = "https://dunesparfums.com";
 
 function escapeXml(unsafe) {
     return unsafe.replace(/[<>&'"]/g, function (c) {
@@ -85,7 +85,7 @@ function verificarSeo() {
         }
 
         // Check noindex on private pages
-        if (['carrito.html', 'favoritos.html', '404.html'].includes(file)) {
+        if (['carrito.html', 'favoritos.html', 'comparador.html', '404.html'].includes(file)) {
             if (!content.includes('name="robots"') || !content.includes('noindex')) {
                 console.warn(`[ERROR] ${file}: Debería tener <meta name="robots" content="noindex...">`);
                 errors++;
