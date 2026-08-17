@@ -244,6 +244,9 @@ function mostrarSkeletonsCatalogo(grid) {
     const cantidad = obtenerCantidadSkeletons();
     grid.style.display = 'grid';
     grid.classList.add('is-loading');
+    if (typeof grid.setAttribute === 'function') {
+        grid.setAttribute('aria-busy', 'true');
+    }
 
     const width = (window.innerWidth || (document.documentElement ? document.documentElement.clientWidth : 0)) || 1024;
     const isMobile = width <= 768;
@@ -909,6 +912,9 @@ function inicializarFiltrosInterfaz(productos, estado, grid) {
 function filtrarYRenderizar(productos, estado, grid) {
     if (!grid) return;
     if (Array.isArray(productos)) window._productosCacheGrid = productos;
+    if (typeof grid.setAttribute === 'function') {
+        grid.setAttribute('aria-busy', 'false');
+    }
     console.log("[CATALOGO] Estado filtros:", estado);
 
     actualizarBotonLimpiarFiltros(estado);

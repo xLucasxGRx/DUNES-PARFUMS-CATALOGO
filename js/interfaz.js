@@ -693,12 +693,18 @@ async function cargarDetalleProducto() {
             return;
         }
 
+        mostrarSkeletonDetalleProducto(container);
+
         let productos = [];
         if (window.productosModulo && typeof window.productosModulo.obtenerProductos === 'function') {
             productos = await window.productosModulo.obtenerProductos();
         } else if (window.ProductosService && typeof window.ProductosService.cargarProductos === 'function') {
             const res = await window.ProductosService.cargarProductos();
             productos = res ? (res.productos || []) : [];
+        }
+
+        if (typeof container.setAttribute === 'function') {
+            container.setAttribute('aria-busy', 'false');
         }
 
         if (!productos || productos.length === 0) {
@@ -863,6 +869,27 @@ function configurarSeoProductoNoEncontrado() {
     if (jsonLdScript) {
         jsonLdScript.remove();
     }
+}
+
+function mostrarSkeletonDetalleProducto(container) {
+    if (!container) return;
+    if (typeof container.setAttribute === 'function') {
+        container.setAttribute('aria-busy', 'true');
+    }
+    container.innerHTML = `
+        <div class="product-detail-skeleton" aria-hidden="true" style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 20px 0;">
+            <div class="detail-image-side-skeleton" style="width: 100%; aspect-ratio: 1/1; max-width: 480px; margin: 0 auto; background: var(--surface-card, #FFFEFC); border-radius: 16px; border: 1px solid var(--catalog-gold-border, #E7D3A5); box-shadow: 0 4px 16px rgba(0,0,0,0.04); overflow: hidden;">
+                <div class="skeleton-pulse" style="width: 100%; height: 100%; background: #F4EFE6;"></div>
+            </div>
+            <div class="detail-info-side-skeleton" style="display: flex; flex-direction: column; gap: 14px; max-width: 520px; width: 100%; margin: 0 auto;">
+                <div class="skeleton-pulse" style="width: 30%; height: 14px; background: #F4EFE6; border-radius: 4px;"></div>
+                <div class="skeleton-pulse" style="width: 85%; height: 28px; background: #F4EFE6; border-radius: 6px;"></div>
+                <div class="skeleton-pulse" style="width: 45%; height: 22px; background: #F4EFE6; border-radius: 6px;"></div>
+                <div class="skeleton-pulse" style="width: 100%; height: 60px; background: #F4EFE6; border-radius: 8px;"></div>
+                <div class="skeleton-pulse" style="width: 100%; height: 48px; background: #F4EFE6; border-radius: 8px; margin-top: 10px;"></div>
+            </div>
+        </div>
+    `;
 }
 
 function mostrarMensajeProductoNoEncontrado(container, mensaje) {
