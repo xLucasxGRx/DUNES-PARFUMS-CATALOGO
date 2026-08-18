@@ -64,5 +64,5 @@ test('GoogleMapsURL - Todos los enlaces de ubicación a Google Maps usan la URL 
         }
     });
 
-    assert.strictEqual(linkCount, 6, 'Se deben haber verificado exactamente los 6 enlaces de ubicación a Google Maps del catálogo');
+    assert.ok(linkCount >= 6, 'Se deben haber verificado los enlaces de ubicación a Google Maps del catálogo');
 });

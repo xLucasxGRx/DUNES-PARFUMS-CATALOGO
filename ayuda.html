@@ -639,46 +639,98 @@
         </div>
     </div>
 
-    <!-- 7. PIE DE PÁGINA (FOOTER) -->
+    <!-- 8. PIE DE PÁGINA (FOOTER) -->
     <footer class="footer-main">
-        <div class="container footer-container">
-            <div class="footer-brand">
-                <img src="img/logo/logohorizontaldunesparfums.png?v=20260721-logo-transparente-1" alt="Dunes Parfums" class="footer-logo">
-                <p class="footer-desc">Catálogo exclusivo de perfumería fina y decants en Tarapoto, Perú.</p>
-                <div class="social-links" style="margin-top: 12px;">
-                    <a href="https://www.instagram.com/dunes.parfums" target="_blank" rel="noopener noreferrer" class="social-btn social-link--instagram" aria-label="Visitar Instagram de Dunes Parfums">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>
-                    </a>
-                    <a href="https://www.tiktok.com/@dunes.parfums" target="_blank" rel="noopener noreferrer" class="social-btn social-link--tiktok" aria-label="Visitar TikTok de Dunes Parfums">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-5.11 6.2 6.34 6.34 0 0 0 10.86 4.48 6.27 6.27 0 0 0 1.79-4.48V8.62a8.31 8.31 0 0 0 4.57 1.35V6.52a4.85 4.85 0 0 1-2-.17z"/>
-                        </svg>
-                    </a>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Columna: Marca y Redes -->
+                <div class="footer-col footer-col--brand">
+                    <h3 class="footer-title">Dunes Parfums</h3>
+                    <p class="footer-about-text">
+                        Especialistas en alta perfumería árabe, de diseñador, exclusividades de nicho y decants seleccionados para amantes de aromas exclusivos.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/dunes.parfums" target="_blank" rel="noopener noreferrer" class="social-btn social-link--instagram" aria-label="Visitar Instagram de Dunes Parfums">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="https://www.tiktok.com/@dunes.parfums" target="_blank" rel="noopener noreferrer" class="social-btn social-link--tiktok" aria-label="Visitar TikTok de Dunes Parfums">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-5.11 6.2 6.34 6.34 0 0 0 10.86 4.48 6.27 6.27 0 0 0 1.79-4.48V8.62a8.31 8.31 0 0 0 4.57 1.35V6.52a4.85 4.85 0 0 1-2-.17z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Columna: Menú Rápido -->
+                <div class="footer-col footer-col--accordion">
+                    <button type="button" class="footer-accordion-btn" aria-expanded="false" aria-controls="footer-menu-nav">
+                        <span>Navegación</span>
+                        <svg class="footer-accordion-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="footer-accordion-content" id="footer-menu-nav">
+                        <ul class="footer-links">
+                            <li><a href="index.html" class="footer-link">Inicio</a></li>
+                            <li><a href="catalogo.html" class="footer-link">Catálogo</a></li>
+                            <li><a href="index.html#ofertas" class="footer-link">Ofertas Especiales</a></li>
+                            <li><a href="carrito.html" class="footer-link">Ver Carrito</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Columna: Categorías -->
+                <div class="footer-col footer-col--accordion">
+                    <button type="button" class="footer-accordion-btn" aria-expanded="false" aria-controls="footer-menu-cat">
+                        <span>Categorías</span>
+                        <svg class="footer-accordion-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="footer-accordion-content" id="footer-menu-cat">
+                        <ul class="footer-links">
+                            <li><a href="catalogo.html?categoria=arabe" class="footer-link">Perfumes Árabes</a></li>
+                            <li><a href="catalogo.html?categoria=disenador" class="footer-link">Diseñador</a></li>
+                            <li><a href="catalogo.html?categoria=nicho" class="footer-link">Nicho</a></li>
+                            <li><a href="catalogo.html?categoria=decants" class="footer-link">Decants / Muestras</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Columna: Contacto -->
+                <div class="footer-col footer-col--accordion">
+                    <button type="button" class="footer-accordion-btn" aria-expanded="false" aria-controls="footer-menu-contact">
+                        <span>Contacto</span>
+                        <svg class="footer-accordion-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="footer-accordion-content" id="footer-menu-contact">
+                        <ul class="footer-info-list">
+                            <li>
+                                <span>Cacatachi, Tarapoto · Delivery local · Envíos a todo el Perú</span>
+                            </li>
+                            <li>
+                                <a href="https://www.google.com/maps/search/?api=1&query=-6.4626252,-76.4491609" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); text-decoration: underline;" aria-label="Ver ubicación de Dunes Parfums en Google Maps">Ver ubicación</a>
+                            </li>
+                            <li>
+                                <span>Atención por WhatsApp</span>
+                            </li>
+                            <li>
+                                <span>dunesparfums@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="footer-links">
-                <h4 class="footer-title">Navegación</h4>
-                <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="catalogo.html">Catálogo</a></li>
-                    <li><a href="index.html#ofertas">Ofertas</a></li>
-                    <li><a href="catalogo.html?categoria=decants">Decants</a></li>
-                    <li><a href="ayuda.html">Ayuda / FAQ</a></li>
-                </ul>
+
+            <!-- Aviso Comercial Importante -->
+            <div class="footer-disclaimer">
+                <strong>Importante:</strong> Dunes Parfums es un catálogo digital. Todas las órdenes y compras se confirman, coordinan y finalizan a través de nuestro WhatsApp de atención directa.
             </div>
-            <div class="footer-contact">
-                <h4 class="footer-title">Contacto</h4>
-                <p>Cacatachi, San Martín, Perú</p>
-                <p>Atención directa por WhatsApp</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <p>&copy; 2026 Dunes Parfums. Todos los derechos reservados.</p>
+
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 Dunes Parfums. Todos los derechos reservados. Diseñado para experiencias olfativas exclusivas.</p>
+                <p>By:LucasGR</p>
             </div>
         </div>
     </footer>

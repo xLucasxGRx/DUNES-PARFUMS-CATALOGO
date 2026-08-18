@@ -521,7 +521,6 @@ async function cargarOfertaEspecialHome() {
         const imgEl = document.getElementById('weekly-offer-img');
         const subtitleEl = document.getElementById('weekly-offer-subtitle');
         const titleEl = document.getElementById('weekly-offer-title');
-        const descEl = document.getElementById('weekly-offer-desc');
         const priceOldEl = document.getElementById('weekly-offer-price-old');
         const priceNewEl = document.getElementById('weekly-offer-price-new');
         const stockEl = document.getElementById('weekly-offer-stock');
@@ -541,11 +540,6 @@ async function cargarOfertaEspecialHome() {
         // Título
         if (titleEl) {
             titleEl.textContent = `${prod.nombre} - ${prod.marca}`;
-        }
-
-        // Descripción
-        if (descEl) {
-            descEl.textContent = prod.descripcion || 'Descubre esta fragancia seleccionada especialmente por Dunes Parfums.';
         }
 
         // Imagen
@@ -3534,7 +3528,12 @@ window.inicializarCheckoutForm = inicializarCheckoutForm;
  */
 function inicializarAcordeonFooter() {
     const buttons = document.querySelectorAll('.footer-accordion-btn');
+    if (!buttons || buttons.length === 0) return;
+
     buttons.forEach(btn => {
+        if (btn.dataset.accordionBound === 'true') return;
+        btn.dataset.accordionBound = 'true';
+
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             if (window.innerWidth >= 769) return;
@@ -3548,6 +3547,14 @@ function inicializarAcordeonFooter() {
                     btn.setAttribute('aria-expanded', 'false');
                     contentEl.classList.remove('active');
                 } else {
+                    buttons.forEach(otherBtn => {
+                        if (otherBtn !== btn) {
+                            otherBtn.setAttribute('aria-expanded', 'false');
+                            const otherId = otherBtn.getAttribute('aria-controls');
+                            const otherEl = otherId ? document.getElementById(otherId) : null;
+                            if (otherEl) otherEl.classList.remove('active');
+                        }
+                    });
                     btn.setAttribute('aria-expanded', 'true');
                     contentEl.classList.add('active');
                 }

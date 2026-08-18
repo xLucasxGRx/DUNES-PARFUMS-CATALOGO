@@ -100,3 +100,11 @@ test('RotaciónFraganciaSemana - 4. Excluye productos sin precio_oferta o sin im
     assert.ok(res);
     assert.equal(res.id, 'p2');
 });
+
+test('RotaciónFraganciaSemana - 5. La tarjeta Fragancia de la Semana NO contiene elemento de descripción (weekly-offer-desc)', () => {
+    const indexHtml = fs.readFileSync('index.html', 'utf8');
+    const interfazJs = fs.readFileSync('js/interfaz.js', 'utf8');
+
+    assert.ok(!indexHtml.includes('id="weekly-offer-desc"'), 'index.html no debe contener el elemento weekly-offer-desc');
+    assert.ok(!interfazJs.includes('weekly-offer-desc'), 'js/interfaz.js no debe manipular weekly-offer-desc');
+});
