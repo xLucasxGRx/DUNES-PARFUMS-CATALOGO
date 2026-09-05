@@ -348,6 +348,57 @@ function formatearMoneda(valor) {
 }
 
 /**
+ * Normaliza y convierte de forma segura cualquier valor (numérico o texto monetario) a Number.
+ * Soporta montos con separadores de miles y decimales estándar (es-PE "1,000.00", EU "1.000,00", "1,000", etc.)
+ * @param {number|string} valor
+ * @returns {number}
+ */
+function parsearMonto(valor) {
+    if (typeof valor === 'number') {
+        return Number.isFinite(valor) ? valor : 0;
+    }
+    if (valor === null || valor === undefined) {
+        return 0;
+    }
+
+    let str = String(valor).trim();
+    if (str === '') return 0;
+
+    // Remover prefijos de moneda (S/, $, etc.) y caracteres no numéricos iniciales o finales
+    str = str.replace(/^[^\d\.\,\-]+/, '').replace(/[^\d\.\,\-]+$/, '').trim();
+    if (str === '') return 0;
+
+    // Detectar y normalizar separadores de miles y decimales
+    if (str.includes(',') && str.includes('.')) {
+        const posComa = str.lastIndexOf(',');
+        const posPunto = str.lastIndexOf('.');
+        if (posComa < posPunto) {
+            // Formato estándar es-PE / US: "1,000.00" -> quitar comas de miles
+            str = str.replace(/,/g, '');
+        } else {
+            // Formato EU / ES: "1.000,00" -> quitar puntos de miles y coma por punto
+            str = str.replace(/\./g, '').replace(/,/g, '.');
+        }
+    } else if (str.includes(',')) {
+        const partes = str.split(',');
+        if (partes.length > 2) {
+            // Múltiples comas: "1,000,000" -> separador de miles
+            str = str.replace(/,/g, '');
+        } else if (partes[1] && partes[1].length === 3 && partes[0].length <= 3) {
+            // Una sola coma seguida de 3 dígitos: "1,000" -> separador de miles
+            str = str.replace(/,/g, '');
+        } else {
+            // Coma decimal: "15,50" -> sustituir por punto
+            str = str.replace(',', '.');
+        }
+    }
+
+    const num = Number(str);
+    return Number.isFinite(num) ? num : 0;
+}
+
+
+/**
  * Carga y renderiza los productos destacados en el index.html
  */
 async function cargarProductosDestacadosHome() {
@@ -2256,29 +2307,67 @@ async function renderizarCarritoDOM() {
  * Vincula los eventos de cantidad y eliminación en el carrito
  */
 function vincularEventosCarritoDOM(container) {
+    if (!container) return;
+
     // Aumentar cantidad
     container.querySelectorAll('.btn-cart-plus').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const id = e.currentTarget.dataset.id;
-            const qty = parseInt(e.currentTarget.dataset.qty) || 1;
-            window.carritoModulo.actualizarCantidadItem(id, qty + 1);
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const btnEl = e.currentTarget;
+            if (btnEl.disabled) return;
+
+            const id = btnEl.dataset.id;
+            const qty = parseInt(btnEl.dataset.qty, 10) || 1;
+
+            btnEl.disabled = true;
+            try {
+                if (window.carritoModulo && typeof window.carritoModulo.actualizarCantidadItem === 'function') {
+                    await window.carritoModulo.actualizarCantidadItem(id, qty + 1);
+                }
+            } finally {
+                btnEl.disabled = false;
+            }
         });
     });
 
     // Disminuir cantidad
     container.querySelectorAll('.btn-cart-minus').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const id = e.currentTarget.dataset.id;
-            const qty = parseInt(e.currentTarget.dataset.qty) || 1;
-            window.carritoModulo.actualizarCantidadItem(id, qty - 1);
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const btnEl = e.currentTarget;
+            if (btnEl.disabled) return;
+
+            const id = btnEl.dataset.id;
+            const qty = parseInt(btnEl.dataset.qty, 10) || 1;
+
+            btnEl.disabled = true;
+            try {
+                if (window.carritoModulo && typeof window.carritoModulo.actualizarCantidadItem === 'function') {
+                    await window.carritoModulo.actualizarCantidadItem(id, qty - 1);
+                }
+            } finally {
+                btnEl.disabled = false;
+            }
         });
     });
 
     // Eliminar producto
     container.querySelectorAll('.btn-remove-item').forEach(btn => {
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
         btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             const id = e.currentTarget.dataset.id;
-            window.carritoModulo.eliminarItem(id);
+            if (window.carritoModulo && typeof window.carritoModulo.eliminarItem === 'function') {
+                window.carritoModulo.eliminarItem(id);
+            }
         });
     });
 
@@ -3444,8 +3533,7 @@ function confirmarPedidoWhatsApp(e) {
     const totalDOMText = document.getElementById('cart-total-price') ? document.getElementById('cart-total-price').textContent : '';
     let totalDOMNum = null;
     if (totalDOMText) {
-        const match = totalDOMText.match(/[\d.]+/);
-        if (match) totalDOMNum = parseFloat(match[0]);
+        totalDOMNum = parsearMonto(totalDOMText);
     }
 
     if (totalDOMNum !== null && Math.abs(totalDOMNum - totalFinal) > 0.01) {
@@ -3500,6 +3588,8 @@ function confirmarPedidoWhatsApp(e) {
 }
 
 window.renderizarCarritoDOM = renderizarCarritoDOM;
+window.formatearMoneda = formatearMoneda;
+window.parsearMonto = parsearMonto;
 window.CONFIG_DELIVERY_LOCAL = CONFIG_DELIVERY_LOCAL;
 window.obtenerTipoEntregaSeleccionado = obtenerTipoEntregaSeleccionado;
 window.obtenerZonaSeleccionada = obtenerZonaSeleccionada;

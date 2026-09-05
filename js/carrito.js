@@ -183,7 +183,7 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
                 tipo: product.tipo,
                 categoria: product.categoria,
                 presentacion: presentacionTexto,
-                tamanoMl: mlItem,
+                tamanoMl: esDecant ? mlItem : null,
                 precioUnitario: precioUnitario,
                 cantidad: cantidadFinal,
                 subtotal: precioUnitario * cantidadFinal
@@ -224,75 +224,145 @@ async function agregarAlCarrito(idProducto, cantidadAAgregar = 1, tamanoMl = nul
     }
 }
 
+// Control de concurrencia para evitar condiciones de carrera por clics rápidos
+const _bloqueosActualizacionCantidad = new Set();
+
 /**
  * Actualiza la cantidad de un ítem ya existente en el carrito con chequeo estricto
- * @param {string} id - ID único del ítem en carrito (ej: "p1" o "d1-3")
+ * @param {string|number} id - ID único del ítem en carrito (ej: "2", 2 o "d1-3")
  * @param {number} nuevaCantidad - Cantidad deseada
  */
 async function actualizarCantidadItem(id, nuevaCantidad) {
+    if (id === undefined || id === null) return;
+    const idKey = String(id);
+
+    if (_bloqueosActualizacionCantidad.has(idKey)) {
+        return; // Evitar llamadas concurrentes sobre el mismo ítem
+    }
+    _bloqueosActualizacionCantidad.add(idKey);
+
     try {
         let carrito = obtenerCarrito();
-        const item = carrito.find(i => i.id === id);
+        const item = carrito.find(i => String(i.id) === idKey);
         if (!item) return;
 
-        if (nuevaCantidad <= 0) {
-            eliminarItem(id);
+        const cantidadActual = parseInt(item.cantidad, 10) || 1;
+        const cantidadSolicitada = parseInt(nuevaCantidad, 10);
+
+        // Si la acción proviene de reducir cantidad a 0 o menor (ej. botón -)
+        if (cantidadSolicitada <= 0) {
+            eliminarItem(item.id);
             return;
         }
 
-        const product = await window.productosModulo.obtenerProductoPorId(item.idProducto);
-        if (!product) return;
+        const idCatalogo = item.idProducto !== undefined && item.idProducto !== null ? item.idProducto : item.id;
+        let product = null;
+        if (window.productosModulo && typeof window.productosModulo.obtenerProductoPorId === 'function') {
+            product = await window.productosModulo.obtenerProductoPorId(idCatalogo);
+        }
 
-        const formNorm = (product.formato || '').toLowerCase();
-        const catNorm = (product.categoria || '').toLowerCase();
-        const esDecant = formNorm.includes('decant') || catNorm.includes('decant') || !!item.tamanoMl;
+        // Si el producto no se encuentra o el catálogo no responde:
+        // Comportamiento defensivo: NO eliminar, NO cambiar cantidad a 0, conservar el item.
+        if (!product) {
+            if (cantidadSolicitada > cantidadActual) {
+                mostrarToastPremium('No hay más unidades disponibles de este producto.', true);
+            }
+            return;
+        }
+
+        const formNorm = String(product.formato || '').toLowerCase().trim();
+        const catNorm = String(product.categoria || '').toLowerCase().trim();
+
+        // Determinar si es decant de forma inequívoca
+        let esDecant = false;
+        if (formNorm.includes('decant') || catNorm.includes('decant')) {
+            esDecant = true;
+        } else if (formNorm === 'sellado' || catNorm === 'sellados') {
+            esDecant = false;
+        } else if (item.tamanoMl && [3, 5, 10].includes(Number(item.tamanoMl))) {
+            esDecant = true;
+        }
+
         let stockMaximo = 0;
         let limiteAlcanzado = false;
 
-        const mlTotalesDisp = product.mililitrosDisponibles ?? product.mililitros_disponibles ?? 0;
-
         if (esDecant) {
-            // Calcular mililitros de otras variantes del mismo perfume
+            // Lógica existente de Decants basada en mililitros totales disponibles
+            const mlTotalesDisp = Number(product.mililitrosDisponibles ?? product.mililitros_disponibles ?? 0);
+            const tamanoMl = Number(item.tamanoMl) || 3;
+
             const mlOtros = carrito
-                .filter(i => i.idProducto === item.idProducto && i.id !== id)
-                .reduce((acc, i) => acc + (i.tamanoMl * i.cantidad), 0);
+                .filter(i => String(i.idProducto || i.id) === String(idCatalogo) && String(i.id) !== idKey)
+                .reduce((acc, i) => acc + (Number(i.tamanoMl) * Number(i.cantidad)), 0);
 
             const mlDisponiblesParaItem = mlTotalesDisp - mlOtros;
-            stockMaximo = Math.floor(mlDisponiblesParaItem / item.tamanoMl);
+            stockMaximo = Math.floor(mlDisponiblesParaItem / tamanoMl);
 
-            if (nuevaCantidad > stockMaximo) {
-                item.cantidad = Math.max(0, stockMaximo);
-                limiteAlcanzado = true;
+            if (!Number.isFinite(stockMaximo) || stockMaximo < 0) {
+                stockMaximo = 0;
+            }
+
+            if (cantidadSolicitada > cantidadActual) {
+                // Intento de incremento (+)
+                if (cantidadActual < stockMaximo) {
+                    item.cantidad = cantidadActual + 1;
+                } else {
+                    item.cantidad = cantidadActual;
+                    limiteAlcanzado = true;
+                }
             } else {
-                item.cantidad = nuevaCantidad;
+                // Reducción (-)
+                item.cantidad = cantidadSolicitada;
             }
         } else {
-            // Sellado
-            stockMaximo = product.stock;
-            if (nuevaCantidad > stockMaximo) {
-                item.cantidad = stockMaximo;
-                limiteAlcanzado = true;
+            // Producto Sellado: stock en unidades físicas
+            const stockCatalogo = Number(product.stock);
+            if (!Number.isFinite(stockCatalogo) || stockCatalogo < 0) {
+                // Stock inválido o no numérico: comportamiento defensivo
+                if (cantidadSolicitada > cantidadActual) {
+                    mostrarToastPremium('No hay más unidades disponibles de este producto.', true);
+                }
+                return;
+            }
+
+            stockMaximo = stockCatalogo;
+
+            if (cantidadSolicitada > cantidadActual) {
+                // REGLA FUNDAMENTAL:
+                // si cantidadActual < stockActual: aumentar 1
+                // si cantidadActual >= stockActual: mantener cantidad y mostrar aviso
+                if (cantidadActual < stockMaximo) {
+                    item.cantidad = cantidadActual + 1;
+                } else {
+                    item.cantidad = cantidadActual;
+                    limiteAlcanzado = true;
+                }
             } else {
-                item.cantidad = nuevaCantidad;
+                // Reducción (-)
+                item.cantidad = cantidadSolicitada;
             }
         }
 
-        item.subtotal = item.precioUnitario * item.cantidad;
+        // Actualizar subtotal
+        const precioUnitario = Number(item.precioUnitario) || 0;
+        item.subtotal = precioUnitario * item.cantidad;
 
+        // Mostrar aviso exacto de límite únicamente cuando se intenta superar el stock
         if (limiteAlcanzado) {
-            mostrarToastPremium(`Stock máximo alcanzado (${stockMaximo} unidades).`, true);
+            mostrarToastPremium('No hay más unidades disponibles de este producto.', true);
         }
 
-        // Si la cantidad es 0 por falta de ml, eliminarlo
-        if (item.cantidad <= 0) {
-            carrito = carrito.filter(i => i.id !== id);
-        }
-
+        // Guardar estado actualizado en localStorage
         guardarCarrito(carrito);
         actualizarContadorCarrito();
-        if (window.renderizarCarritoDOM) window.renderizarCarritoDOM();
+
+        if (window.renderizarCarritoDOM) {
+            await window.renderizarCarritoDOM();
+        }
     } catch (e) {
         console.error('Error al actualizar cantidad:', e);
+    } finally {
+        _bloqueosActualizacionCantidad.delete(idKey);
     }
 }
 
@@ -375,11 +445,24 @@ async function obtenerItemsCarritoDetallados() {
  * @param {boolean} esAdvertencia 
  */
 function mostrarToastPremium(mensaje, esAdvertencia = false) {
+    if (typeof window !== 'undefined' && typeof window.mostrarToastPremium === 'function' && window.mostrarToastPremium !== mostrarToastPremium) {
+        window.mostrarToastPremium(mensaje, esAdvertencia);
+        return;
+    }
+
     let container = document.getElementById('toast-container');
     if (!container) {
         container = document.createElement('div');
         container.id = 'toast-container';
         document.body.appendChild(container);
+    }
+
+    // Evitar toasts duplicados idénticos en pantalla simultáneamente
+    const toastsActivos = container.querySelectorAll('.toast-text');
+    for (const t of toastsActivos) {
+        if (t && t.textContent.trim() === String(mensaje).trim()) {
+            return; // Ya existe una alerta idéntica visible en pantalla
+        }
     }
 
     const toast = document.createElement('div');
