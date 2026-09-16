@@ -2275,16 +2275,10 @@
   .products-grid .product-card.out-of-stock,
   #catalogo-productos-grid .product-card.is-soldout,
   .products-grid .product-card.is-soldout {
-    background: linear-gradient(180deg, rgba(255, 244, 244, 0.95), rgba(255, 250, 250, 0.98)) !important;
-    border: 1px solid #e6b8b8 !important;
-    border-top: 4px solid #c96b6b !important;
-    box-shadow: 0 4px 14px rgba(120, 40, 40, 0.08) !important;
-  }
-
-  #catalogo-productos-grid .product-card.out-of-stock .product-image-container,
-  .products-grid .product-card.out-of-stock .product-image-container,
-  #catalogo-productos-grid .product-card.is-soldout .product-image-container {
-    background: radial-gradient(circle at center, rgba(190, 70, 70, 0.10), transparent 65%), #fff8f8 !important;
+    background: #FAF8F7 !important;
+    border: 1px solid #DFCECE !important;
+    border-top: 3px solid #B83A3A !important;
+    box-shadow: 0 4px 14px rgba(60, 30, 30, 0.05) !important;
   }
 
   #catalogo-productos-grid .product-image-container,
@@ -2304,6 +2298,51 @@
     justify-content: center !important;
     box-sizing: border-box !important;
     flex-shrink: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-image-container,
+  .products-grid .product-card.out-of-stock .product-image-container,
+  #catalogo-productos-grid .product-card.is-soldout .product-image-container,
+  .products-grid .product-card.is-soldout .product-image-container {
+    background: radial-gradient(circle at center, rgba(160, 140, 140, 0.10), transparent 70%), #F4F1F0 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-img,
+  .products-grid .product-card.out-of-stock .product-img,
+  #catalogo-productos-grid .product-card.is-soldout .product-img,
+  .products-grid .product-card.is-soldout .product-img {
+    filter: grayscale(85%) contrast(0.88) opacity(0.48) !important;
+  }
+
+  /* Distintivo Central "AGOTADO" Móvil */
+  #catalogo-productos-grid .product-card.out-of-stock .product-image-container::after,
+  .products-grid .product-card.out-of-stock .product-image-container::after,
+  #catalogo-productos-grid .product-card.is-soldout .product-image-container::after,
+  .products-grid .product-card.is-soldout .product-image-container::after {
+    content: "AGOTADO" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(30, 22, 22, 0.85) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    color: #FFFFFF !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 9.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    padding: 3px 10px !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28) !important;
+    pointer-events: none !important;
+    z-index: 4 !important;
+    white-space: nowrap !important;
   }
 
   #catalogo-productos-grid .product-image,
@@ -2442,6 +2481,24 @@
     gap: 3px !important;
   }
 
+  #catalogo-productos-grid .product-card.out-of-stock .product-stock-status.out,
+  .products-grid .product-card.out-of-stock .product-stock-status.out,
+  #catalogo-productos-grid .product-card.is-soldout .product-stock-status.out,
+  .products-grid .product-card.is-soldout .product-stock-status.out {
+    background-color: #FEE2E2 !important;
+    color: #991B1B !important;
+    border: 1px solid #FCA5A5 !important;
+    font-weight: 700 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-stock-status.out .stock-dot,
+  .products-grid .product-card.out-of-stock .product-stock-status.out .stock-dot,
+  #catalogo-productos-grid .product-card.is-soldout .product-stock-status.out .stock-dot,
+  .products-grid .product-card.is-soldout .product-stock-status.out .stock-dot {
+    background-color: #DC2626 !important;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+  }
+
   #catalogo-productos-grid .product-price-row,
   .products-grid .product-price-row {
     margin-top: 3px !important;
@@ -2467,6 +2524,14 @@
     color: var(--catalog-text, #171717) !important;
     line-height: 1 !important;
     margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .price-current,
+  .products-grid .product-card.out-of-stock .price-current,
+  #catalogo-productos-grid .product-card.is-soldout .price-current,
+  .products-grid .product-card.is-soldout .price-current {
+    color: #857972 !important;
+    font-weight: 600 !important;
   }
 
   #catalogo-productos-grid .price-old,
@@ -2764,49 +2829,56 @@
 
   /* Cuadrícula Vertical de Productos en Tablet (769px - 1023px) */
   #catalogo-productos-grid,
+  #productos-destacados-grid,
   #favorites-products-grid,
   .products-grid {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 18px !important;
+    gap: 16px !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
     max-width: 100% !important;
     margin: 0 !important;
-    align-items: stretch !important;
+    align-items: start !important;
   }
 
   #catalogo-productos-grid .product-card,
+  #productos-destacados-grid .product-card,
   #favorites-products-grid .product-card,
   .products-grid .product-card {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
     grid-template-columns: none !important;
     grid-template-areas: none !important;
     gap: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     min-height: 0 !important;
     aspect-ratio: auto !important;
     padding: 0 !important;
     border-radius: 14px !important;
     overflow: hidden !important;
     box-shadow: 0 4px 16px rgba(31, 24, 12, 0.06) !important;
+    box-sizing: border-box !important;
   }
 
   #catalogo-productos-grid .product-image-container,
+  #productos-destacados-grid .product-image-container,
   #favorites-products-grid .product-image-container,
   .products-grid .product-image-container {
     width: 100% !important;
-    height: 200px !important;
-    min-height: 200px !important;
+    height: 125px !important;
+    min-height: 125px !important;
+    max-height: 125px !important;
     position: relative !important;
-    padding: 14px !important;
+    padding: 8px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 14px 14px 0 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   #catalogo-productos-grid .product-category-badge,
@@ -2866,22 +2938,48 @@
 
 /* ==========================================================================
    FASE M25 — OPTIMIZACIÓN EXCLUSIVA DEL CATÁLOGO EN LAPTOP / ESCRITORIO (Min 1024px)
+   FASE M32 — REDUCCIÓN DE TAMAÑO DE TARJETAS DEL CATÁLOGO EN LAPTOP/DESKTOP
+   FASE M32.1 — AJUSTE VERTICAL DE ETIQUETAS EN TARJETAS DESKTOP
+   FASE M32.2 — REDUCCIÓN DE ALTURA TOTAL DE TARJETAS EN LAPTOP/DESKTOP
+   FASE M32.3 — REDUCCIÓN REAL Y VISIBLE DE LA ALTURA DE TARJETAS EN LAPTOP/DESKTOP
+   FASE M32.4 — CORRECCIÓN DEFINITIVA DE ALTURA DE TARJETAS DEL CATÁLOGO EN LAPTOP/DESKTOP
+   FASE M32.5 — CORRECCIÓN DE ALTURA VERTICAL DE TARJETAS EN LAPTOP / PC
+   FASE M32.6 — UNIFORMIDAD DE TARJETAS, DISTRIBUCIÓN VERTICAL Y CORRECCIÓN DE ALTURA DE FRASCOS EN LAPTOP / DESKTOP
    ========================================================================== */
 @media screen and (min-width: 1024px) {
-  /* Grilla de 4 Columnas Compacta y Equilibrada */
+  /* FASE M32: Contenedor del Catálogo Centrado con Márgenes Laterales Visibles en Laptop/Desktop */
+  #page-catalogo main.container,
+  #page-catalogo main.section-padding {
+    max-width: 1080px !important;
+    margin-inline: auto !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  #page-catalogo .catalog-filters-bar {
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+  }
+
+  /* Grilla de 4 Columnas Uniforme y Equilibrada (align-items: stretch garantiza que todas las tarjetas tengan el mismo tamaño en cada fila) */
   #catalogo-productos-grid,
+  #productos-destacados-grid,
   #favorites-products-grid,
   .products-grid {
     display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 18px !important;
-    max-width: 1340px !important;
+    gap: 16px !important;
+    max-width: 1060px !important;
+    width: 100% !important;
+    margin-inline: auto !important;
     margin: 0 auto !important;
     align-items: stretch !important;
   }
 
-  /* Tarjeta de Producto Desktop Compacta (~20-25% menor altura visual) */
+  /* Tarjeta de Producto Desktop de Altura Uniforme y Misma Estructura en Todas las Tarjetas */
   #catalogo-productos-grid .product-card,
+  #productos-destacados-grid .product-card,
   #favorites-products-grid .product-card,
   .products-grid .product-card {
     display: flex !important;
@@ -2891,43 +2989,163 @@
     height: 100% !important;
     min-height: 0 !important;
     padding: 0 !important;
-    border-radius: 14px !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
     background-color: var(--catalog-card-background, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
     box-shadow: 0 4px 14px rgba(31, 24, 12, 0.05) !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    box-sizing: border-box !important;
   }
 
   #catalogo-productos-grid .product-card:hover,
+  #productos-destacados-grid .product-card:hover,
   #favorites-products-grid .product-card:hover,
   .products-grid .product-card:hover {
     transform: translateY(-3px) !important;
     box-shadow: 0 8px 22px rgba(31, 24, 12, 0.12) !important;
   }
 
-  /* Contenedor de Imagen Compacto (185px, sin recortes) */
+  /* Estado Agotado en Catálogo Desktop (Alta Claridad Visual, Desaturación y Distintivo Central Premium) */
+  #catalogo-productos-grid .product-card.out-of-stock,
+  #productos-destacados-grid .product-card.out-of-stock,
+  #favorites-products-grid .product-card.out-of-stock,
+  .products-grid .product-card.out-of-stock,
+  #catalogo-productos-grid .product-card.is-soldout,
+  #productos-destacados-grid .product-card.is-soldout,
+  #favorites-products-grid .product-card.is-soldout,
+  .products-grid .product-card.is-soldout {
+    background: #FAF8F7 !important;
+    border: 1px solid #DFCECE !important;
+    border-top: 3px solid #B83A3A !important;
+    box-shadow: 0 4px 14px rgba(60, 30, 30, 0.05) !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock:hover,
+  #productos-destacados-grid .product-card.out-of-stock:hover,
+  #favorites-products-grid .product-card.out-of-stock:hover,
+  .products-grid .product-card.out-of-stock:hover,
+  #catalogo-productos-grid .product-card.is-soldout:hover,
+  #productos-destacados-grid .product-card.is-soldout:hover,
+  #favorites-products-grid .product-card.is-soldout:hover,
+  .products-grid .product-card.is-soldout:hover {
+    transform: translateY(-2px) !important;
+    border-color: #D2BDBD !important;
+    border-top-color: #A32E2E !important;
+    box-shadow: 0 6px 18px rgba(60, 30, 30, 0.09) !important;
+  }
+
+  /* Contenedor de Imagen Proporcional en Desktop (188px, muestra el frasco de perfume íntegro con aire vertical perfecto) */
   #catalogo-productos-grid .product-image-container,
+  #productos-destacados-grid .product-image-container,
   #favorites-products-grid .product-image-container,
   .products-grid .product-image-container {
     width: 100% !important;
-    height: 185px !important;
-    min-height: 185px !important;
-    padding: 12px !important;
+    height: 188px !important;
+    min-height: 188px !important;
+    max-height: 188px !important;
+    padding: 8px 12px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 14px 14px 0 0 !important;
+    border-radius: 12px 12px 0 0 !important;
     background: radial-gradient(circle at center, rgba(196, 154, 62, 0.1), transparent 70%), #fffdf8 !important;
     box-sizing: border-box !important;
     flex-shrink: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
 
-  /* Imagen en Desktop con object-fit contain (FRASCOS INTEGROS SIN RECORTAR) */
+  #catalogo-productos-grid .product-card.out-of-stock .product-image-container,
+  #productos-destacados-grid .product-card.out-of-stock .product-image-container,
+  #favorites-products-grid .product-card.out-of-stock .product-image-container,
+  .products-grid .product-card.out-of-stock .product-image-container,
+  #catalogo-productos-grid .product-card.is-soldout .product-image-container,
+  #productos-destacados-grid .product-card.is-soldout .product-image-container,
+  #favorites-products-grid .product-card.is-soldout .product-image-container,
+  .products-grid .product-card.is-soldout .product-image-container {
+    background: radial-gradient(circle at center, rgba(160, 140, 140, 0.10), transparent 70%), #F4F1F0 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-img,
+  #productos-destacados-grid .product-card.out-of-stock .product-img,
+  #favorites-products-grid .product-card.out-of-stock .product-img,
+  .products-grid .product-card.out-of-stock .product-img,
+  #catalogo-productos-grid .product-card.is-soldout .product-img,
+  #productos-destacados-grid .product-card.is-soldout .product-img,
+  #favorites-products-grid .product-card.is-soldout .product-img,
+  .products-grid .product-card.is-soldout .product-img {
+    filter: grayscale(85%) contrast(0.88) opacity(0.48) !important;
+    transition: filter 0.25s ease, opacity 0.25s ease !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock:hover .product-img,
+  #productos-destacados-grid .product-card.out-of-stock:hover .product-img,
+  #favorites-products-grid .product-card.out-of-stock:hover .product-img,
+  .products-grid .product-card.out-of-stock:hover .product-img,
+  #catalogo-productos-grid .product-card.is-soldout:hover .product-img,
+  #productos-destacados-grid .product-card.is-soldout:hover .product-img,
+  #favorites-products-grid .product-card.is-soldout:hover .product-img,
+  .products-grid .product-card.is-soldout:hover .product-img {
+    filter: grayscale(75%) contrast(0.92) opacity(0.65) !important;
+  }
+
+  /* Distintivo Central "AGOTADO" Sobre el Frasco en Desktop */
+  #catalogo-productos-grid .product-card.out-of-stock .product-image-container::after,
+  #productos-destacados-grid .product-card.out-of-stock .product-image-container::after,
+  #favorites-products-grid .product-card.out-of-stock .product-image-container::after,
+  .products-grid .product-card.out-of-stock .product-image-container::after,
+  #catalogo-productos-grid .product-card.is-soldout .product-image-container::after,
+  #productos-destacados-grid .product-card.is-soldout .product-image-container::after,
+  #favorites-products-grid .product-card.is-soldout .product-image-container::after,
+  .products-grid .product-card.is-soldout .product-image-container::after {
+    content: "AGOTADO" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(30, 22, 22, 0.85) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    color: #FFFFFF !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    padding: 5px 14px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+    pointer-events: none !important;
+    z-index: 4 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Enlace contenedor de imagen */
+  #catalogo-productos-grid .product-img-link,
+  #productos-destacados-grid .product-img-link,
+  #favorites-products-grid .product-img-link,
+  .products-grid .product-img-link {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    text-decoration: none !important;
+  }
+
+  /* Imagen en Desktop con object-fit contain (FRASCOS ÍNTEGROS COMPLETOS SIN RECORTAR NI DEFORMAR) */
   #catalogo-productos-grid .product-image,
+  #productos-destacados-grid .product-image,
   #favorites-products-grid .product-image,
   .products-grid .product-image,
   #catalogo-productos-grid .product-img,
+  #productos-destacados-grid .product-img,
   #favorites-products-grid .product-img,
   .products-grid .product-img {
     height: 100% !important;
@@ -2938,77 +3156,371 @@
     object-position: center !important;
   }
 
-  /* Bloque de Información Optimizado */
+  /* Botón Ver Detalles en Overlay Hover en Desktop (Compacto, 34px y Centrado) */
+  #catalogo-productos-grid .product-actions-overlay .btn-view-details,
+  #productos-destacados-grid .product-actions-overlay .btn-view-details,
+  #favorites-products-grid .product-actions-overlay .btn-view-details,
+  .products-grid .product-actions-overlay .btn-view-details,
+  .product-actions-overlay .btn-view-details {
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+    padding: 0 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    line-height: 1 !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.6px !important;
+    text-transform: uppercase !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+    color: #171717 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(177, 130, 37, 0.5) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    backdrop-filter: blur(4px) !important;
+    transition: all 0.2s ease !important;
+  }
+
+  #catalogo-productos-grid .product-actions-overlay .btn-view-details:hover,
+  #productos-destacados-grid .product-actions-overlay .btn-view-details:hover,
+  #favorites-products-grid .product-actions-overlay .btn-view-details:hover,
+  .products-grid .product-actions-overlay .btn-view-details:hover,
+  .product-actions-overlay .btn-view-details:hover {
+    background: #FFFFFF !important;
+    color: var(--color-primary, #B18225) !important;
+    border-color: var(--color-primary, #B18225) !important;
+    transform: scale(1.04) !important;
+  }
+
+  /* Botón de Favoritos Compacto en Imagen Desktop */
+  #catalogo-productos-grid .favorite-toggle-btn,
+  #productos-destacados-grid .favorite-toggle-btn,
+  #favorites-products-grid .favorite-toggle-btn,
+  .products-grid .favorite-toggle-btn {
+    top: 8px !important;
+    right: 8px !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  /* Etiquetas de Producto Generales y Unificadas (Optimizadas Verticalmente) */
+  #catalogo-productos-grid .product-tag,
+  #productos-destacados-grid .product-tag,
+  #favorites-products-grid .product-tag,
+  .products-grid .product-tag {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 2px 8px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    line-height: 1.15 !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Cinta de Oferta (Superior Izquierda) */
+  #catalogo-productos-grid .product-tag.promo-tag,
+  #productos-destacados-grid .product-tag.promo-tag,
+  #favorites-products-grid .product-tag.promo-tag,
+  .products-grid .product-tag.promo-tag {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 2px 8px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    line-height: 1.15 !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    z-index: 3 !important;
+  }
+
+  /* Etiqueta Agotado (Superior Izquierda) */
+  /* Etiqueta Agotado (Eliminada del encabezado superior; el estado se muestra exclusivamente en la cápsula central sobre el frasco) */
+  #catalogo-productos-grid .product-tag.out-tag,
+  #productos-destacados-grid .product-tag.out-tag,
+  #favorites-products-grid .product-tag.out-tag,
+  .products-grid .product-tag.out-tag {
+    display: none !important;
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 2px 8px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    line-height: 1.15 !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    z-index: 3 !important;
+  }
+
+  /* Cápsula de Categoría (Eliminada del encabezado sobre la imagen para evitar cruces con la etiqueta de oferta y el botón de favoritos) */
+  #catalogo-productos-grid .product-category-badge,
+  #productos-destacados-grid .product-category-badge,
+  #favorites-products-grid .product-category-badge,
+  .products-grid .product-category-badge {
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: absolute !important;
+    top: 40px !important;
+    right: 8px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 2px 8px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    line-height: 1.15 !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+    z-index: 4 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  /* Bloque de Información Proporcional y Distribuido */
   #catalogo-productos-grid .product-info,
+  #productos-destacados-grid .product-info,
   #favorites-products-grid .product-info,
   .products-grid .product-info {
     display: flex !important;
     flex-direction: column !important;
-    padding: 12px 14px 6px 14px !important;
+    padding: 10px 12px 0 12px !important;
     flex: 1 1 auto !important;
     justify-content: flex-start !important;
-    gap: 2px !important;
+    box-sizing: border-box !important;
   }
 
   #catalogo-productos-grid .product-brand,
+  #productos-destacados-grid .product-brand,
   #favorites-products-grid .product-brand,
   .products-grid .product-brand {
-    margin-bottom: 2px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.8px !important;
+    line-height: 1.2 !important;
+    margin: 0 0 2px 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   #catalogo-productos-grid .product-title,
+  #productos-destacados-grid .product-title,
   #favorites-products-grid .product-title,
-  .products-grid .product-title,
+  .products-grid .product-title {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-size: clamp(15px, 1vw, 16.5px) !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    min-height: 2.5em !important;
+    margin: 2px 0 4px 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    word-break: break-word !important;
+  }
+
   #catalogo-productos-grid .product-title-link,
+  #productos-destacados-grid .product-title-link,
   #favorites-products-grid .product-title-link,
   .products-grid .product-title-link {
-    min-height: 2.4em !important;
-    line-height: 1.22 !important;
-    margin: 1px 0 3px 0 !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    color: var(--catalog-text, #171717) !important;
+    text-decoration: none !important;
+    display: inline !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-volume,
+  #productos-destacados-grid .product-volume,
+  #favorites-products-grid .product-volume,
+  .products-grid .product-volume {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    margin: 0 0 4px 0 !important;
+    color: var(--catalog-text-secondary, #6F6F6F) !important;
   }
 
   #catalogo-productos-grid .product-stock-row,
+  #productos-destacados-grid .product-stock-row,
   #favorites-products-grid .product-stock-row,
   .products-grid .product-stock-row {
     margin: 2px 0 4px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    min-height: 18px !important;
+  }
+
+  #catalogo-productos-grid .product-stock-status,
+  #productos-destacados-grid .product-stock-status,
+  #favorites-products-grid .product-stock-status,
+  .products-grid .product-stock-status {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+    line-height: 1.1 !important;
+    border-radius: 4px !important;
   }
 
   #catalogo-productos-grid .product-price-row,
+  #productos-destacados-grid .product-price-row,
   #favorites-products-grid .product-price-row,
   .products-grid .product-price-row {
-    margin-top: auto !important;
-    padding-top: 4px !important;
+    margin-top: 4px !important;
+    margin-bottom: 6px !important;
+    padding-top: 0 !important;
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 8px !important;
   }
 
-  /* Pie de Tarjeta y Alineación Inferior Obligatoria */
+  #catalogo-productos-grid .price-current,
+  #productos-destacados-grid .price-current,
+  #favorites-products-grid .price-current,
+  .products-grid .price-current {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .price-current,
+  #productos-destacados-grid .product-card.out-of-stock .price-current,
+  #favorites-products-grid .product-card.out-of-stock .price-current,
+  .products-grid .product-card.out-of-stock .price-current,
+  #catalogo-productos-grid .product-card.is-soldout .price-current,
+  #productos-destacados-grid .product-card.is-soldout .price-current,
+  #favorites-products-grid .product-card.is-soldout .price-current,
+  .products-grid .product-card.is-soldout .price-current {
+    color: #857972 !important;
+    font-weight: 600 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-title,
+  #productos-destacados-grid .product-card.out-of-stock .product-title,
+  #favorites-products-grid .product-card.out-of-stock .product-title,
+  .products-grid .product-card.out-of-stock .product-title,
+  #catalogo-productos-grid .product-card.is-soldout .product-title,
+  #productos-destacados-grid .product-card.is-soldout .product-title,
+  #favorites-products-grid .product-card.is-soldout .product-title,
+  .products-grid .product-card.is-soldout .product-title {
+    color: #4A4440 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-stock-status.out,
+  #productos-destacados-grid .product-card.out-of-stock .product-stock-status.out,
+  #favorites-products-grid .product-card.out-of-stock .product-stock-status.out,
+  .products-grid .product-card.out-of-stock .product-stock-status.out,
+  #catalogo-productos-grid .product-card.is-soldout .product-stock-status.out,
+  #productos-destacados-grid .product-card.is-soldout .product-stock-status.out,
+  #favorites-products-grid .product-card.is-soldout .product-stock-status.out,
+  .products-grid .product-card.is-soldout .product-stock-status.out {
+    background-color: #FEE2E2 !important;
+    color: #991B1B !important;
+    border: 1px solid #FCA5A5 !important;
+    font-weight: 700 !important;
+  }
+
+  #catalogo-productos-grid .product-card.out-of-stock .product-stock-status.out .stock-dot,
+  #productos-destacados-grid .product-card.out-of-stock .product-stock-status.out .stock-dot,
+  #favorites-products-grid .product-card.out-of-stock .product-stock-status.out .stock-dot,
+  .products-grid .product-card.out-of-stock .product-stock-status.out .stock-dot,
+  #catalogo-productos-grid .product-card.is-soldout .product-stock-status.out .stock-dot,
+  #productos-destacados-grid .product-card.is-soldout .product-stock-status.out .stock-dot,
+  #favorites-products-grid .product-card.is-soldout .product-stock-status.out .stock-dot,
+  .products-grid .product-card.is-soldout .product-stock-status.out .stock-dot {
+    background-color: #DC2626 !important;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+  }
+
+  #catalogo-productos-grid .price-old,
+  #productos-destacados-grid .price-old,
+  #favorites-products-grid .price-old,
+  .products-grid .price-old {
+    font-size: 0.82rem !important;
+    line-height: 1 !important;
+  }
+
+  #catalogo-productos-grid .discount-badge,
+  #productos-destacados-grid .discount-badge,
+  #favorites-products-grid .discount-badge,
+  .products-grid .discount-badge {
+    font-size: 0.72rem !important;
+    padding: 2px 6px !important;
+    line-height: 1 !important;
+  }
+
+  /* Pie de Tarjeta Equilibrado (margin-top: auto alinea todos los botones al fondo en la misma posición exacta) */
   #catalogo-productos-grid .product-card-footer,
+  #productos-destacados-grid .product-card-footer,
   #favorites-products-grid .product-card-footer,
   .products-grid .product-card-footer {
     margin-top: auto !important;
-    padding: 0 14px 14px 14px !important;
+    padding: 0 12px 10px 12px !important;
     width: 100% !important;
     box-sizing: border-box !important;
     flex-shrink: 0 !important;
   }
 
   #catalogo-productos-grid .product-card-footer .card-buttons-flex,
+  #productos-destacados-grid .product-card-footer .card-buttons-flex,
   #favorites-products-grid .product-card-footer .card-buttons-flex,
   .products-grid .product-card-footer .card-buttons-flex {
     display: flex !important;
     flex-direction: row !important;
-    gap: 8px !important;
+    gap: 6px !important;
     width: 100% !important;
     align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
   }
 
-  /* Alineación de Productos Agotados (CONSULTAR Ocupa la Misma Zona Inferior) */
+  /* Alineación de Productos Agotados (CONSULTAR Ocupa la Misma Zona Inferior con el Mismo Tamaño) */
   #catalogo-productos-grid .product-card-footer .card-buttons-flex.out-of-stock-buttons,
+  #productos-destacados-grid .product-card-footer .card-buttons-flex.out-of-stock-buttons,
   #favorites-products-grid .product-card-footer .card-buttons-flex.out-of-stock-buttons,
   .products-grid .product-card-footer .card-buttons-flex.out-of-stock-buttons,
   #catalogo-productos-grid .product-card.out-of-stock .card-buttons-flex,
+  #productos-destacados-grid .product-card.out-of-stock .card-buttons-flex,
   #favorites-products-grid .product-card.out-of-stock .card-buttons-flex,
   .products-grid .product-card.out-of-stock .card-buttons-flex,
   #catalogo-productos-grid .product-card.is-soldout .card-buttons-flex,
+  #productos-destacados-grid .product-card.is-soldout .card-buttons-flex,
   #favorites-products-grid .product-card.is-soldout .card-buttons-flex,
   .products-grid .product-card.is-soldout .card-buttons-flex {
     display: flex !important;
@@ -3016,52 +3528,94 @@
     width: 100% !important;
   }
 
-  /* Botones Desktop en UNA SOLA FILA HORIZONTAL (Ícono + Texto Centrados) */
+  /* Botones Desktop en UNA SOLA FILA HORIZONTAL (Mismo Tamaño 34px, Tipografía y Centrado Óptico) */
   #catalogo-productos-grid .product-card-footer .btn,
+  #productos-destacados-grid .product-card-footer .btn,
   #favorites-products-grid .product-card-footer .btn,
-  .products-grid .product-card-footer .btn {
-    flex: 1 !important;
-    width: auto !important;
-    height: 40px !important;
-    min-height: 40px !important;
-    padding: 6px 10px !important;
+  .products-grid .product-card-footer .btn,
+  #catalogo-productos-grid .product-card-footer .btn-details-compact,
+  #productos-destacados-grid .product-card-footer .btn-details-compact,
+  #favorites-products-grid .product-card-footer .btn-details-compact,
+  .products-grid .product-card-footer .btn-details-compact,
+  #catalogo-productos-grid .product-card-footer .btn-add-cart,
+  #productos-destacados-grid .product-card-footer .btn-add-cart,
+  #favorites-products-grid .product-card-footer .btn-add-cart,
+  .products-grid .product-card-footer .btn-add-cart,
+  #catalogo-productos-grid .product-card-footer .btn-select-option,
+  #productos-destacados-grid .product-card-footer .btn-select-option,
+  #favorites-products-grid .product-card-footer .btn-select-option,
+  .products-grid .product-card-footer .btn-select-option,
+  #catalogo-productos-grid .product-card-footer .btn-query-wa,
+  #productos-destacados-grid .product-card-footer .btn-query-wa,
+  #favorites-products-grid .product-card-footer .btn-query-wa,
+  .products-grid .product-card-footer .btn-query-wa {
+    flex: 1 1 0 !important;
+    width: 100% !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+    padding: 0 8px !important;
     display: inline-flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
+    text-align: center !important;
     white-space: nowrap !important;
-    gap: 6px !important;
+    gap: 5px !important;
     margin: 0 !important;
     border-radius: 6px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
   }
 
   #catalogo-productos-grid .product-card-footer .btn .btn-icon-svg,
+  #productos-destacados-grid .product-card-footer .btn .btn-icon-svg,
   #favorites-products-grid .product-card-footer .btn .btn-icon-svg,
   .products-grid .product-card-footer .btn .btn-icon-svg,
   #catalogo-productos-grid .product-card-footer .btn .whatsapp-icon-svg,
+  #productos-destacados-grid .product-card-footer .btn .whatsapp-icon-svg,
   #favorites-products-grid .product-card-footer .btn .whatsapp-icon-svg,
-  .products-grid .product-card-footer .btn .whatsapp-icon-svg {
+  .products-grid .product-card-footer .btn .whatsapp-icon-svg,
+  #catalogo-productos-grid .btn-details-compact .btn-icon-svg,
+  #productos-destacados-grid .btn-details-compact .btn-icon-svg,
+  .products-grid .btn-details-compact .btn-icon-svg {
     display: inline-block !important;
     flex-shrink: 0 !important;
-    width: 14px !important;
-    height: 14px !important;
+    width: 13px !important;
+    height: 13px !important;
     margin: 0 !important;
+    vertical-align: middle !important;
   }
 
-  /* Botón CONSULTAR Desktop: Ocupa todo el ancho del bloque inferior en 1 sola fila */
+  /* Botón CONSULTAR Desktop: Ocupa todo el ancho del bloque inferior en 1 sola fila con misma altura 34px */
   #catalogo-productos-grid .product-card-footer .btn-query-wa,
+  #productos-destacados-grid .product-card-footer .btn-query-wa,
   #favorites-products-grid .product-card-footer .btn-query-wa,
   .products-grid .product-card-footer .btn-query-wa {
     width: 100% !important;
     max-width: 100% !important;
-    height: 40px !important;
-    min-height: 40px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
     display: inline-flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
+    text-align: center !important;
     white-space: nowrap !important;
-    gap: 6px !important;
+    gap: 5px !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.4px !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
   }
 }
 
@@ -4090,6 +4644,28 @@
     margin-left: auto !important;
     margin-right: auto !important;
   }
+
+  /* FASE M32 — Catálogo Laptop 1366px: Cuadrícula compacta de 4 columnas centrada con aire lateral intencional */
+  #page-catalogo main.container,
+  #page-catalogo main.section-padding {
+    max-width: 1080px !important;
+    margin-inline: auto !important;
+  }
+
+  #page-catalogo .catalog-filters-bar {
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+  }
+
+  #page-catalogo #catalogo-productos-grid,
+  #catalogo-productos-grid,
+  #productos-destacados-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+    gap: 20px !important;
+    align-items: stretch !important;
+  }
 }
 
 @media screen and (min-width: 1440px) {
@@ -4102,6 +4678,29 @@
   .products-grid {
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 24px !important;
+    align-items: stretch !important;
+  }
+
+  /* FASE M32 — Catálogo Laptop/Desktop 1440px: 4 columnas compactas centradas con generoso margen lateral */
+  #page-catalogo main.container,
+  #page-catalogo main.section-padding {
+    max-width: 1080px !important;
+    margin-inline: auto !important;
+  }
+
+  #page-catalogo .catalog-filters-bar {
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+  }
+
+  #page-catalogo #catalogo-productos-grid,
+  #catalogo-productos-grid,
+  #productos-destacados-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+    gap: 20px !important;
+    align-items: stretch !important;
   }
 }
 
@@ -4115,6 +4714,29 @@
   .products-grid {
     grid-template-columns: repeat(5, 1fr) !important;
     gap: 28px !important;
+    align-items: stretch !important;
+  }
+
+  /* FASE M32 — Catálogo Pantallas Anchas 1920px: 4 columnas compactas centradas (NUNCA 5 COLUMNAS EN CATÁLOGO) */
+  #page-catalogo main.container,
+  #page-catalogo main.section-padding {
+    max-width: 1080px !important;
+    margin-inline: auto !important;
+  }
+
+  #page-catalogo .catalog-filters-bar {
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+  }
+
+  #page-catalogo #catalogo-productos-grid,
+  #catalogo-productos-grid,
+  #productos-destacados-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+    gap: 20px !important;
+    align-items: stretch !important;
   }
 }
 
@@ -4533,4 +5155,226 @@
   }
 }
 
+/* ==========================================================================
+   FASE M33 — ORGANIZACIÓN DE FILTROS EN LAPTOP / DESKTOP (Min-width 992px)
+   Reorganiza los filtros del catálogo en 2 columnas equilibradas (FORMATO y TIPO)
+   en una sola fila con separador visual, reduciendo altura y eliminando espacios muertos
+   ========================================================================== */
+@media screen and (min-width: 992px) {
+  #page-catalogo .catalog-filters-bar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) !important;
+    gap: 14px 24px !important;
+    padding: 18px 22px 14px 22px !important;
+    background-color: var(--surface-card, #FFFEFC) !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(31, 24, 12, 0.05) !important;
+    max-width: 1060px !important;
+    margin-inline: auto !important;
+    margin-bottom: 20px !important;
+    position: relative !important;
+    z-index: 100 !important;
+  }
 
+  #page-catalogo .catalog-filters-bar.has-open-dropdown,
+  #page-catalogo .catalog-filters-bar:focus-within {
+    z-index: 500 !important;
+  }
+
+  /* 1. Buscador Full Width en Fila Superior */
+  #page-catalogo .filter-search-box {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    margin: 0 !important;
+    position: relative !important;
+  }
+
+  #page-catalogo .filter-search-box input {
+    width: 100% !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 8px 14px 8px 42px !important;
+    font-family: var(--font-body, 'Montserrat', sans-serif) !important;
+    font-size: 0.88rem !important;
+    color: #171717 !important;
+    background-color: #FFFDF8 !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    border-radius: 8px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    box-sizing: border-box !important;
+  }
+
+  #page-catalogo .filter-search-box input:focus {
+    outline: none !important;
+    border-color: #C49A3E !important;
+    box-shadow: 0 0 0 3px rgba(196, 154, 62, 0.15) !important;
+  }
+
+  #page-catalogo .filter-search-box .search-icon {
+    position: absolute !important;
+    left: 14px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #8C7B65 !important;
+    display: flex !important;
+    align-items: center !important;
+    pointer-events: none !important;
+  }
+
+  /* 2. Sección FORMATO en Columna 1 con divisor sutil */
+  #page-catalogo .filter-group--formato {
+    grid-column: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    width: 100% !important;
+    padding-right: 20px !important;
+    border-right: 1px solid rgba(231, 211, 165, 0.45) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 3. Sección TIPO en Columna 2 */
+  #page-catalogo .filter-group--tipo {
+    grid-column: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    width: 100% !important;
+    padding-left: 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Etiquetas de Grupo Unificadas y Alineadas */
+  #page-catalogo .filter-group-label {
+    font-family: var(--font-body, 'Montserrat', sans-serif) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.8px !important;
+    color: #7A6953 !important;
+    text-transform: uppercase !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Contenedor de Botones Horizontal sin Desbordamiento */
+  #page-catalogo .filter-buttons-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Botones Píldora de Filtro Elegantes y Proporcionados */
+  #page-catalogo .filter-tab-btn {
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 14px !important;
+    font-family: var(--font-body, 'Montserrat', sans-serif) !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.4px !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    background-color: #FFFDF8 !important;
+    color: #4A3F31 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    transition: all 0.2s ease !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #page-catalogo .filter-tab-btn:hover {
+    border-color: #C49A3E !important;
+    color: #171717 !important;
+  }
+
+  #page-catalogo .filter-tab-btn.active {
+    background: linear-gradient(135deg, #C49A3E 0%, #9E792B 100%) !important;
+    color: #FFFFFF !important;
+    border-color: #9E792B !important;
+    box-shadow: 0 2px 6px rgba(196, 154, 62, 0.3) !important;
+  }
+
+  /* 4. Fila de Dropdowns (Género, Ocasión, Ordenar) Abarca Ambas Columnas */
+  #page-catalogo .filter-selects-row {
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 20 !important;
+    margin-top: 2px !important;
+  }
+
+  #page-catalogo .dunes-dropdown-trigger {
+    height: 36px !important;
+    padding: 0 12px !important;
+    background-color: #FFFDF8 !important;
+    border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
+    border-radius: 6px !important;
+    font-family: var(--font-body, 'Montserrat', sans-serif) !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: #332B20 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-sizing: border-box !important;
+  }
+
+  #page-catalogo .dunes-dropdown-trigger:hover,
+  #page-catalogo .dunes-dropdown-trigger[aria-expanded="true"] {
+    border-color: #C49A3E !important;
+    box-shadow: 0 0 0 3px rgba(196, 154, 62, 0.12) !important;
+  }
+
+  /* 5. Fila Inferior Abarca Ambas Columnas */
+  #page-catalogo .filter-bottom-row {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding-top: 10px !important;
+    margin-top: 2px !important;
+    border-top: 1px solid rgba(231, 211, 165, 0.45) !important;
+  }
+
+  #page-catalogo .filter-available-box {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #page-catalogo .checkbox-container {
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #4A3F31 !important;
+    padding-left: 26px !important;
+  }
+
+  #page-catalogo .filter-actions-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  #page-catalogo .catalog-results-counter {
+    display: flex !important;
+    align-items: center !important;
+    font-size: 0.84rem !important;
+    font-weight: 600 !important;
+    color: #8C7B65 !important;
+    margin: 0 !important;
+  }
+}

@@ -4527,7 +4527,6 @@ function renderProductosRelacionados(productoActual, productosRelacionados) {
         divContainer.innerHTML = `
             ${tagHtml}
             ${favBtnHtml}
-            <span class="product-category-badge">${categoryBadgeText}</span>
             <a href="producto.html?id=${encodeURIComponent(prod.id)}" class="product-image-link" tabindex="-1">
                 <img src="${typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png';">
             </a>

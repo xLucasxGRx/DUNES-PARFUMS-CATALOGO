@@ -1092,8 +1092,6 @@ function filtrarYRenderizar(productos, estado, grid) {
                 }
             }
             tagHtml = `<span class="product-tag promo-tag">${promoText}</span>`;
-        } else if (estaAgotado) {
-            tagHtml = `<span class="product-tag out-tag">AGOTADO</span>`;
         }
 
         let categoryBadgeText = 'CATÁLOGO';
@@ -1203,7 +1201,6 @@ function filtrarYRenderizar(productos, estado, grid) {
         divContainer.innerHTML = `
             ${tagHtml}
             ${favBtnHtml}
-            <span class="product-category-badge">${categoryBadgeText}</span>
             <a href="producto.html?id=${prod.id}" class="product-img-link" aria-label="Ver detalles de ${prod.nombre}">
                 <img src="${typeof resolverImagen === 'function' ? resolverImagen(prod.imagen) : prod.imagen}" alt="${prod.nombre} - ${prod.marca}" class="product-img" loading="${loadingAttr}" decoding="async" onerror="this.onerror=null; this.src='img/logo/logohorizontaldunesparfums.png'; console.warn('[Catálogo] Imagen no disponible para producto:', '${prod.id}');">
             </a>
