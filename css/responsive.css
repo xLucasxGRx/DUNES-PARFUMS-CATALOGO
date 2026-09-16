@@ -5377,4 +5377,23 @@
     color: #8C7B65 !important;
     margin: 0 !important;
   }
+
+  /* Reducción sutil y calibrada del tamaño de precios en tarjetas desktop (FASE M33.1) */
+  #catalogo-productos-grid .price-current,
+  #productos-destacados-grid .price-current,
+  #favorites-products-grid .price-current,
+  .products-grid .price-current {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+
+  #catalogo-productos-grid .price-old,
+  #productos-destacados-grid .price-old,
+  #favorites-products-grid .price-old,
+  .products-grid .price-old {
+    font-size: 11.5px !important;
+    line-height: 1 !important;
+  }
 }
