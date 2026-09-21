@@ -117,25 +117,89 @@
     --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     /* ==========================================================================
-       5. Tokens Unificados de Tarjetas y Contenedores (Fase U5)
+       5. Tokens Unificados de Tarjetas y Contenedores (Fase U5 & FASE 2)
        ========================================================================== */
     --surface-card: #FFFEFC;
     --border-card: 1px solid var(--catalog-gold-border, #E7D3A5);
     --border-card-hover: 1px solid var(--catalog-gold-hover, #C49A3E);
     --radius-card: 18px;
     --radius-control: 8px;
-    --shadow-card: 0 8px 24px rgba(31, 24, 12, 0.08), 0 2px 6px rgba(31, 24, 12, 0.04);
-    --shadow-card-hover: 0 16px 35px rgba(31, 24, 12, 0.14);
+    --shadow-card: 0 4px 16px rgba(31, 24, 12, 0.06), 0 1px 3px rgba(31, 24, 12, 0.04);
+    --shadow-card-hover: 0 14px 34px -4px rgba(31, 24, 12, 0.13), 0 4px 14px rgba(182, 138, 50, 0.12);
+    --card-transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                       box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                       border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    --card-img-transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    --card-img-scale: scale(1.035);
+    --card-showcase-bg: radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.13) 0%, rgba(212, 175, 55, 0.03) 52%, transparent 72%), #FFFDF9;
+    --card-showcase-bg-hover: radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.19) 0%, rgba(212, 175, 55, 0.05) 54%, transparent 72%), #FFFDF9;
+    --badge-promo-bg: #141414;
+    --badge-promo-color: #DFBA6B;
+    --badge-promo-border: 1px solid rgba(182, 138, 50, 0.55);
+    --badge-promo-radius: 6px;
     --space-card: 24px;
     --gap-card: 20px;
+
+    /* ==========================================================================
+       6. Tokens del Sistema de Botones Dunes Parfums (FASE 1)
+       ========================================================================== */
+    --btn-font-family: var(--font-body, 'Montserrat', sans-serif);
+    --btn-font-weight: 600;
+    --btn-letter-spacing: 0.06em;
+    --btn-transition-timing: cubic-bezier(0.16, 1, 0.3, 1);
+    --btn-transition-duration: 220ms;
+    --btn-transition: background-color var(--btn-transition-duration) var(--btn-transition-timing),
+                      color var(--btn-transition-duration) var(--btn-transition-timing),
+                      border-color var(--btn-transition-duration) var(--btn-transition-timing),
+                      box-shadow var(--btn-transition-duration) var(--btn-transition-timing),
+                      transform var(--btn-transition-duration) var(--btn-transition-timing);
+
+    /* Alturas estándar de controles */
+    --btn-height-sm: 34px;
+    --btn-height-md: 44px;
+    --btn-height-lg: 50px;
+
+    /* Radios normalizados de botones */
+    --btn-radius-sm: 6px;
+    --btn-radius-md: 8px;
+    --btn-radius-lg: 12px;
+    --btn-radius-pill: 9999px;
+
+    /* Sombras refinadas con tinte cálido */
+    --btn-shadow-primary: 0 4px 14px rgba(18, 18, 18, 0.16), 0 1px 3px rgba(18, 18, 18, 0.08);
+    --btn-shadow-primary-hover: 0 8px 24px rgba(18, 18, 18, 0.28), 0 0 14px rgba(182, 138, 50, 0.25);
+    --btn-shadow-secondary: 0 2px 6px rgba(31, 24, 12, 0.04);
+    --btn-shadow-secondary-hover: 0 4px 14px rgba(31, 24, 12, 0.08);
+
+    /* Paleta de Botón Primario Dunes (Negro Carbón + Oro Champán) */
+    --btn-primary-bg: #141414;
+    --btn-primary-color: #FFFFFF;
+    --btn-primary-border: rgba(182, 138, 50, 0.55);
+    --btn-primary-hover-bg: #222222;
+    --btn-primary-hover-border: rgba(223, 186, 107, 0.90);
+
+    /* Paleta de Botón Secundario Dunes (Subordinado / Crema Elegante) */
+    --btn-secondary-bg: transparent;
+    --btn-secondary-color: #171717;
+    --btn-secondary-border: rgba(182, 138, 50, 0.38);
+    --btn-secondary-hover-bg: rgba(182, 138, 50, 0.08);
+    --btn-secondary-hover-border: rgba(182, 138, 50, 0.70);
+
+    /* Paleta de Botón Ghost / Minimal */
+    --btn-ghost-color: #555555;
+    --btn-ghost-hover-bg: rgba(182, 138, 50, 0.08);
+    --btn-ghost-hover-color: #171717;
+
+    /* Estado Inactivo */
+    --btn-disabled-opacity: 0.45;
 }
 
 /* ==========================================================================
    5. Focus Accesible Global
    ========================================================================== */
 :focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 3px;
+    outline: 2px solid var(--catalog-gold, #B18225);
+    outline-offset: 2px;
 }
 
 /* Selección de texto elegante */

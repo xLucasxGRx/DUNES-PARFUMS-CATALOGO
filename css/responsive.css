@@ -2993,8 +2993,8 @@
     overflow: hidden !important;
     background-color: var(--catalog-card-background, #FFFEFC) !important;
     border: 1px solid var(--catalog-gold-border, #E7D3A5) !important;
-    box-shadow: 0 4px 14px rgba(31, 24, 12, 0.05) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    box-shadow: var(--shadow-card, 0 4px 16px rgba(31, 24, 12, 0.06)) !important;
+    transition: var(--card-transition, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1)) !important;
     box-sizing: border-box !important;
   }
 
@@ -3002,8 +3002,9 @@
   #productos-destacados-grid .product-card:hover,
   #favorites-products-grid .product-card:hover,
   .products-grid .product-card:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 8px 22px rgba(31, 24, 12, 0.12) !important;
+    transform: translateY(-4px) !important;
+    border-color: var(--card-border-hover, rgba(182, 138, 50, 0.70)) !important;
+    box-shadow: var(--shadow-card-hover, 0 14px 34px -4px rgba(31, 24, 12, 0.13), 0 4px 14px rgba(182, 138, 50, 0.12)) !important;
   }
 
   /* Estado Agotado en Catálogo Desktop (Alta Claridad Visual, Desaturación y Distintivo Central Premium) */
@@ -3049,11 +3050,19 @@
     align-items: center !important;
     justify-content: center !important;
     border-radius: 12px 12px 0 0 !important;
-    background: radial-gradient(circle at center, rgba(196, 154, 62, 0.1), transparent 70%), #fffdf8 !important;
+    background: var(--card-showcase-bg, radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.13) 0%, rgba(212, 175, 55, 0.03) 52%, transparent 72%), #FFFDF9) !important;
     box-sizing: border-box !important;
     flex-shrink: 0 !important;
     position: relative !important;
     overflow: hidden !important;
+    transition: background 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  #catalogo-productos-grid .product-card:hover .product-image-container,
+  #productos-destacados-grid .product-card:hover .product-image-container,
+  #favorites-products-grid .product-card:hover .product-image-container,
+  .products-grid .product-card:hover .product-image-container {
+    background: var(--card-showcase-bg-hover, radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.19) 0%, rgba(212, 175, 55, 0.05) 54%, transparent 72%), #FFFDF9) !important;
   }
 
   #catalogo-productos-grid .product-card.out-of-stock .product-image-container,
@@ -3154,9 +3163,27 @@
     max-width: 100% !important;
     object-fit: contain !important;
     object-position: center !important;
+    transition: var(--card-img-transition, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)) !important;
   }
 
-  /* Botón Ver Detalles en Overlay Hover en Desktop (Compacto, 34px y Centrado) */
+  #catalogo-productos-grid .product-card:not(.out-of-stock):not(.is-soldout):hover .product-img,
+  #productos-destacados-grid .product-card:not(.out-of-stock):not(.is-soldout):hover .product-img,
+  #favorites-products-grid .product-card:not(.out-of-stock):not(.is-soldout):hover .product-img,
+  .products-grid .product-card:not(.out-of-stock):not(.is-soldout):hover .product-img {
+    transform: var(--card-img-scale, scale(1.035)) !important;
+  }
+
+  /* Overlay de Acciones en Desktop (Transparencia Cristalina sin Oscurecer la Botella) */
+  #catalogo-productos-grid .product-actions-overlay,
+  #productos-destacados-grid .product-actions-overlay,
+  #favorites-products-grid .product-actions-overlay,
+  .products-grid .product-actions-overlay {
+    background: linear-gradient(180deg, rgba(20, 20, 20, 0.02) 0%, rgba(20, 20, 20, 0.16) 100%) !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Botón Ver Detalles en Overlay Hover en Desktop (Cápsula Flotante de Lujo) */
   #catalogo-productos-grid .product-actions-overlay .btn-view-details,
   #productos-destacados-grid .product-actions-overlay .btn-view-details,
   #favorites-products-grid .product-actions-overlay .btn-view-details,
@@ -3165,25 +3192,37 @@
     height: 34px !important;
     min-height: 34px !important;
     max-height: 34px !important;
-    padding: 0 16px !important;
+    padding: 0 18px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
     line-height: 1 !important;
-    font-family: 'Montserrat', sans-serif !important;
+    font-family: var(--btn-font-family, 'Montserrat', sans-serif) !important;
     font-size: 11px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.6px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.07em !important;
     text-transform: uppercase !important;
-    border-radius: 6px !important;
+    border-radius: 9999px !important;
     box-sizing: border-box !important;
     color: #171717 !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    border: 1px solid rgba(177, 130, 37, 0.5) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-    backdrop-filter: blur(4px) !important;
-    transition: all 0.2s ease !important;
+    background: rgba(255, 254, 252, 0.92) !important;
+    border: 1px solid rgba(182, 138, 50, 0.55) !important;
+    box-shadow: 0 4px 16px rgba(31, 24, 12, 0.14), 0 0 10px rgba(182, 138, 50, 0.10) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    pointer-events: auto !important;
+    transform: translateY(6px) !important;
+    opacity: 0 !important;
+  }
+
+  #catalogo-productos-grid .product-card:hover .btn-view-details,
+  #productos-destacados-grid .product-card:hover .btn-view-details,
+  #favorites-products-grid .product-card:hover .btn-view-details,
+  .products-grid .product-card:hover .btn-view-details {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
   }
 
   #catalogo-productos-grid .product-actions-overlay .btn-view-details:hover,
@@ -3191,10 +3230,42 @@
   #favorites-products-grid .product-actions-overlay .btn-view-details:hover,
   .products-grid .product-actions-overlay .btn-view-details:hover,
   .product-actions-overlay .btn-view-details:hover {
-    background: #FFFFFF !important;
-    color: var(--color-primary, #B18225) !important;
-    border-color: var(--color-primary, #B18225) !important;
-    transform: scale(1.04) !important;
+    background: #141414 !important;
+    color: #FFFFFF !important;
+    border-color: rgba(223, 186, 107, 0.90) !important;
+    transform: translateY(-2px) scale(1.03) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28), 0 0 14px rgba(182, 138, 50, 0.28) !important;
+  }
+
+  /* Ocultar completamente 'Ver Detalles' y su overlay en Tarjetas Agotadas en Desktop */
+  #catalogo-productos-grid .product-card.out-of-stock .product-actions-overlay,
+  #productos-destacados-grid .product-card.out-of-stock .product-actions-overlay,
+  #favorites-products-grid .product-card.out-of-stock .product-actions-overlay,
+  .products-grid .product-card.out-of-stock .product-actions-overlay,
+  #catalogo-productos-grid .product-card.is-soldout .product-actions-overlay,
+  #productos-destacados-grid .product-card.is-soldout .product-actions-overlay,
+  #favorites-products-grid .product-card.is-soldout .product-actions-overlay,
+  .products-grid .product-card.is-soldout .product-actions-overlay,
+  #catalogo-productos-grid .product-card.out-of-stock:hover .product-actions-overlay,
+  #productos-destacados-grid .product-card.out-of-stock:hover .product-actions-overlay,
+  #favorites-products-grid .product-card.out-of-stock:hover .product-actions-overlay,
+  .products-grid .product-card.out-of-stock:hover .product-actions-overlay,
+  #catalogo-productos-grid .product-card.is-soldout:hover .product-actions-overlay,
+  #productos-destacados-grid .product-card.is-soldout:hover .product-actions-overlay,
+  #favorites-products-grid .product-card.is-soldout:hover .product-actions-overlay,
+  .products-grid .product-card.is-soldout:hover .product-actions-overlay,
+  #catalogo-productos-grid .product-card.out-of-stock .btn-view-details,
+  #productos-destacados-grid .product-card.out-of-stock .btn-view-details,
+  #favorites-products-grid .product-card.out-of-stock .btn-view-details,
+  .products-grid .product-card.out-of-stock .btn-view-details,
+  #catalogo-productos-grid .product-card.is-soldout .btn-view-details,
+  #productos-destacados-grid .product-card.is-soldout .btn-view-details,
+  #favorites-products-grid .product-card.is-soldout .btn-view-details,
+  .products-grid .product-card.is-soldout .btn-view-details {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 
   /* Botón de Favoritos Compacto en Imagen Desktop */
@@ -3229,7 +3300,7 @@
     box-sizing: border-box !important;
   }
 
-  /* Cinta de Oferta (Superior Izquierda) */
+  /* Cinta de Oferta (Superior Izquierda - Acabado Joya en Desktop) */
   #catalogo-productos-grid .product-tag.promo-tag,
   #productos-destacados-grid .product-tag.promo-tag,
   #favorites-products-grid .product-tag.promo-tag,
@@ -3242,14 +3313,18 @@
     justify-content: center !important;
     height: auto !important;
     min-height: 0 !important;
-    padding: 2px 8px !important;
-    font-family: 'Montserrat', sans-serif !important;
+    padding: 3px 8px !important;
+    background: var(--badge-promo-bg, #141414) !important;
+    color: var(--badge-promo-color, #DFBA6B) !important;
+    border: var(--badge-promo-border, 1px solid rgba(182, 138, 50, 0.55)) !important;
+    font-family: var(--btn-font-family, 'Montserrat', sans-serif) !important;
     font-size: 10px !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.8px !important;
+    letter-spacing: 0.06em !important;
     line-height: 1.15 !important;
-    border-radius: 4px !important;
+    border-radius: var(--badge-promo-radius, 6px) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12) !important;
     box-sizing: border-box !important;
     z-index: 3 !important;
   }

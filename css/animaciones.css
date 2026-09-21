@@ -84,32 +84,18 @@
    Efectos de Transición para Componentes
    ========================================================================== */
 
-/* Hover en Botones */
-.btn {
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
+/* Microinteracciones Físicas de Botones Dunes (FASE 1) */
+.btn:active:not(:disabled),
+button:active:not(:disabled),
+a.btn:active:not(:disabled) {
+    transform: scale(0.98);
 }
 
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.08);
-    transition: width 0.3s ease;
-    z-index: -1;
-}
-
-.btn:hover::before {
-    width: 100%;
-}
-
-/* Brillo sutil para tarjetas o banners (Gold Hover Glow) */
-.product-card:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08), 0 0 15px rgba(212, 175, 55, 0.15);
+/* Elevación y Sombra Cálida Refinada para Tarjetas (FASE 2) */
+@media (hover: hover) and (pointer: fine) {
+    .product-card:hover {
+        box-shadow: var(--shadow-card-hover, 0 14px 34px -4px rgba(31, 24, 12, 0.13), 0 4px 14px rgba(182, 138, 50, 0.12));
+    }
 }
 
 /* Efecto Ken Burns suave para imágenes de fondo o categoría */
