@@ -6,20 +6,26 @@
 
 :root {
     /* ==========================================================================
-       Tipografía Premium Unificada (Fase U2)
-       Cormorant Garamond: Encabezados, títulos y nombres de productos.
-       Montserrat: Interfaz, botones, precios, formularios y navegación.
+       1. COLORES BASE & SUPERFICIES
        ========================================================================== */
-    --font-heading: 'Cormorant Garamond', Georgia, serif;
-    --font-title: 'Cormorant Garamond', Georgia, serif;
-    --font-titles: 'Cormorant Garamond', Georgia, serif;
-    --font-product-name: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'Montserrat', Arial, sans-serif;
-    --font-ui: 'Montserrat', Arial, sans-serif;
+    /* Negros y Fondos Oscuros */
+    --color-black: #121212;
+    --color-black-soft: #1A1A1A;
+    --color-black-rgb: 18, 18, 18;
+    --color-bg-dark: #121212;
+    --color-bg-card-dark: #1E1E1E;
 
-    /* ==========================================================================
-       Paleta Premium del Catálogo (Fase 7.3)
-       ========================================================================== */
+    /* Dorados y Metálicos Oficiales */
+    --color-gold: #B68A32;
+    --color-gold-dark: #9A7B1C;
+    --color-gold-light: #F3E5AB;
+    --color-gold-rgb: 212, 175, 55;
+    --color-gold-gradient: linear-gradient(135deg, #DFBA6B 0%, #C5A059 50%, #9E7D3B 100%);
+    --color-primary: #D4AF37;
+    --color-primary-light: #F3E5AB;
+    --color-primary-dark: #9A7B1C;
+
+    /* Paleta Boutique del Catálogo */
     --catalog-background: #FAF8F4;
     --catalog-card-background: #FFFEFC;
     --catalog-text: #171717;
@@ -31,45 +37,38 @@
     --catalog-black-button: #171717;
     --catalog-white: #FFFFFF;
 
-    /* ==========================================================================
-       1. Paleta Oficial de Colores
-       ========================================================================== */
-    --color-black: #121212;
-    --color-black-soft: #1A1A1A;
-    --color-gold: #B68A32;
-    --color-gold-dark: #9A7B1C;
-    --color-gold-light: #F3E5AB;
-    --color-gold-gradient: linear-gradient(135deg, #DFBA6B 0%, #C5A059 50%, #9E7D3B 100%);
-
-    /* Valores RGB para superposiciones transparentes */
-    --color-gold-rgb: 212, 175, 55;
-    --color-black-rgb: 18, 18, 18;
-    --color-success-rgb: 31, 122, 77;
-    --color-danger-rgb: 220, 53, 69;
-
-    /* Superficies y Fondos */
+    /* Superficies y Fondos Claros */
     --color-white: #FFFFFF;
     --color-surface: #FFFFFF;
     --color-background: #F9F9FB;
+    --color-bg-light: #F9F9FB;
     --color-card: #FFFFFF;
+    --color-bg-card-light: #FFFFFF;
 
     /* Textos */
     --color-text-primary: #1A1A1A;
+    --color-text-dark: #1A1A1A;
     --color-text-secondary: #7A7A7A;
+    --color-text-muted: #7A7A7A;
     --color-text-light: #FFFFFF;
 
-    /* Estados y Bordes */
+    /* Bordes */
+    --color-border: #E5E5E5;
     --color-border-light: #E5E5E5;
     --color-border-gold: rgba(212, 175, 55, 0.3);
-    --color-success: #1F7A4D;
-    --color-danger: #DC3545;
-    --color-info: #17A2B8;
-    --color-whatsapp: #25D366;
     --color-focus: rgba(212, 175, 55, 0.5);
 
     /* ==========================================================================
-       2. Tipografías y Escala (Unificada en Fase U2)
+       2. TIPOGRAFÍAS Y ESCALA MODULAR
        ========================================================================== */
+    --font-heading: 'Cormorant Garamond', Georgia, serif;
+    --font-title: 'Cormorant Garamond', Georgia, serif;
+    --font-titles: 'Cormorant Garamond', Georgia, serif;
+    --font-product-name: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Montserrat', Arial, sans-serif;
+    --font-ui: 'Montserrat', Arial, sans-serif;
+
+    /* Escala de Tamaños */
     --text-xs: 0.75rem;
     --text-sm: 0.875rem;
     --text-base: 1rem;
@@ -80,7 +79,7 @@
     --text-3xl: clamp(2.25rem, 5vw, 3.5rem);
 
     /* ==========================================================================
-       3. Escala de Espaciados y Secciones
+       3. ESPACIADO & Z-INDEX
        ========================================================================== */
     --space-1: 0.25rem;
     --space-2: 0.5rem;
@@ -93,23 +92,59 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+
     --section-padding-y: 80px;
     --section-padding-y-mobile: 48px;
+    --space-card: 24px;
+    --gap-card: 20px;
+
+    /* Z-Index Jerárquico Centralizado */
+    --z-dropdown: 200;
+    --z-sticky: 900;
+    --z-drawer: 1000;
+    --z-modal: 1100;
+    --z-toast: 1200;
 
     /* ==========================================================================
-       4. Radios de Borde, Sombras y Transiciones
+       4. RADIOS DE BORDE
        ========================================================================== */
-    --border-radius-sm: 6px;
-    --border-radius-md: 10px;
+    --border-radius-sm: 4px;   /* Preserva el valor activo de estilos.css para compatibilidad */
+    --border-radius-md: 8px;   /* Preserva el valor activo de estilos.css para compatibilidad */
     --border-radius-lg: 16px;
     --border-radius-xl: 24px;
     --border-radius-pill: 9999px;
 
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-control: 8px;
+    --radius-md: 10px;
+    --radius-card: 16px;
+    --radius-pill: 9999px;
+
+    /* ==========================================================================
+       5. SOMBRAS (ELEVACIONES)
+       ========================================================================== */
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);  /* Preserva valor activo de estilos.css */
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
-    --shadow-gold: 0 0 15px rgba(212, 175, 55, 0.25);
+    --shadow-gold: 0 0 15px rgba(212, 175, 55, 0.3); /* Preserva valor activo de estilos.css */
+
+    /* ==========================================================================
+       6. MOTION (TRANSICIONES, DURACIONES Y CURVAS)
+       ========================================================================== */
+    --duration-fast: 150ms;
+    --duration-base: 220ms;
+    --duration-slow: 350ms;
+
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-standard: cubic-bezier(0.25, 0.8, 0.25, 1);
 
     --transition-fast: 150ms cubic-bezier(0.25, 0.8, 0.25, 1);
     --transition-base: 220ms cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -117,31 +152,7 @@
     --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     /* ==========================================================================
-       5. Tokens Unificados de Tarjetas y Contenedores (Fase U5 & FASE 2)
-       ========================================================================== */
-    --surface-card: #FFFEFC;
-    --border-card: 1px solid var(--catalog-gold-border, #E7D3A5);
-    --border-card-hover: 1px solid var(--catalog-gold-hover, #C49A3E);
-    --radius-card: 18px;
-    --radius-control: 8px;
-    --shadow-card: 0 4px 16px rgba(31, 24, 12, 0.06), 0 1px 3px rgba(31, 24, 12, 0.04);
-    --shadow-card-hover: 0 14px 34px -4px rgba(31, 24, 12, 0.13), 0 4px 14px rgba(182, 138, 50, 0.12);
-    --card-transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                       box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                       border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    --card-img-transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    --card-img-scale: scale(1.035);
-    --card-showcase-bg: radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.13) 0%, rgba(212, 175, 55, 0.03) 52%, transparent 72%), #FFFDF9;
-    --card-showcase-bg-hover: radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.19) 0%, rgba(212, 175, 55, 0.05) 54%, transparent 72%), #FFFDF9;
-    --badge-promo-bg: #141414;
-    --badge-promo-color: #DFBA6B;
-    --badge-promo-border: 1px solid rgba(182, 138, 50, 0.55);
-    --badge-promo-radius: 6px;
-    --space-card: 24px;
-    --gap-card: 20px;
-
-    /* ==========================================================================
-       6. Tokens del Sistema de Botones Dunes Parfums (FASE 1)
+       7. TOKENS DE BOTONES (FASE 1)
        ========================================================================== */
     --btn-font-family: var(--font-body, 'Montserrat', sans-serif);
     --btn-font-weight: 600;
@@ -154,44 +165,166 @@
                       box-shadow var(--btn-transition-duration) var(--btn-transition-timing),
                       transform var(--btn-transition-duration) var(--btn-transition-timing);
 
-    /* Alturas estándar de controles */
     --btn-height-sm: 34px;
     --btn-height-md: 44px;
     --btn-height-lg: 50px;
 
-    /* Radios normalizados de botones */
     --btn-radius-sm: 6px;
     --btn-radius-md: 8px;
     --btn-radius-lg: 12px;
     --btn-radius-pill: 9999px;
 
-    /* Sombras refinadas con tinte cálido */
     --btn-shadow-primary: 0 4px 14px rgba(18, 18, 18, 0.16), 0 1px 3px rgba(18, 18, 18, 0.08);
     --btn-shadow-primary-hover: 0 8px 24px rgba(18, 18, 18, 0.28), 0 0 14px rgba(182, 138, 50, 0.25);
     --btn-shadow-secondary: 0 2px 6px rgba(31, 24, 12, 0.04);
     --btn-shadow-secondary-hover: 0 4px 14px rgba(31, 24, 12, 0.08);
 
-    /* Paleta de Botón Primario Dunes (Negro Carbón + Oro Champán) */
     --btn-primary-bg: #141414;
     --btn-primary-color: #FFFFFF;
     --btn-primary-border: rgba(182, 138, 50, 0.55);
     --btn-primary-hover-bg: #222222;
     --btn-primary-hover-border: rgba(223, 186, 107, 0.90);
 
-    /* Paleta de Botón Secundario Dunes (Subordinado / Crema Elegante) */
     --btn-secondary-bg: transparent;
     --btn-secondary-color: #171717;
     --btn-secondary-border: rgba(182, 138, 50, 0.38);
     --btn-secondary-hover-bg: rgba(182, 138, 50, 0.08);
     --btn-secondary-hover-border: rgba(182, 138, 50, 0.70);
 
-    /* Paleta de Botón Ghost / Minimal */
     --btn-ghost-color: #555555;
     --btn-ghost-hover-bg: rgba(182, 138, 50, 0.08);
     --btn-ghost-hover-color: #171717;
-
-    /* Estado Inactivo */
     --btn-disabled-opacity: 0.45;
+
+    /* ==========================================================================
+       8. TOKENS DE TARJETAS (CARDS - FASE 2)
+       ========================================================================== */
+    --surface-card: #FFFEFC;
+    --border-card: 1px solid rgba(197, 160, 89, 0.45);
+    --border-card-hover: 1px solid rgba(182, 138, 50, 0.85);
+    --shadow-card: 0 6px 20px -2px rgba(31, 24, 12, 0.08), 0 2px 6px -1px rgba(182, 138, 50, 0.05);
+    --shadow-card-hover: 0 18px 40px -4px rgba(31, 24, 12, 0.16), 0 8px 24px -2px rgba(182, 138, 50, 0.20), 0 0 1px rgba(182, 138, 50, 0.35);
+    --card-transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                       box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                       border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --card-img-transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    --card-img-scale: scale(1.05);
+    --card-showcase-bg: radial-gradient(ellipse at 50% 48%, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.05) 55%, transparent 75%), #FFFDF9;
+    --card-showcase-bg-hover: radial-gradient(ellipse at 50% 46%, rgba(212, 175, 55, 0.30) 0%, rgba(212, 175, 55, 0.10) 58%, transparent 78%), #FFFDF9;
+
+    /* ==========================================================================
+       9. TOKENS DE BADGES & OFERTAS (FASE 3)
+       ========================================================================== */
+    --badge-promo-bg: #141414;
+    --badge-promo-color: #DFBA6B;
+    --badge-promo-border: 1px solid rgba(182, 138, 50, 0.55);
+    --badge-promo-radius: 6px;
+    --badge-promo-shadow: 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12);
+
+    --badge-featured-bg: #FAF6EE;
+    --badge-featured-color: #8A6825;
+    --badge-featured-border: 1px solid rgba(197, 160, 89, 0.45);
+    --badge-featured-radius: 6px;
+    --badge-featured-shadow: 0 2px 6px rgba(31, 24, 12, 0.06);
+
+    --price-current-color: #171717;
+    --price-old-color: #777777;
+    --price-out-color: #857972;
+
+    /* ==========================================================================
+       10. TOKENS DE FORMULARIOS & CONTROLES
+       ========================================================================== */
+    --input-height: 44px;
+    --input-bg: #FFFDF8;
+    --input-border: 1px solid var(--catalog-gold-border, #E7D3A5);
+    --input-border-focus: var(--catalog-gold-hover, #C49A3E);
+    --input-shadow-focus: 0 0 0 3px rgba(196, 154, 62, 0.15);
+    --input-radius: 8px;
+
+    /* ==========================================================================
+       11. TOKENS DE CHECKOUT & CARRITO (FASE 4)
+       ========================================================================== */
+    --checkout-surface: #FFFEFC;
+    --checkout-surface-card: #FFFEFC;
+    --checkout-surface-muted: #FAF8F4;
+    --checkout-border: 1px solid rgba(197, 160, 89, 0.38);
+    --checkout-border-subtle: 1px solid rgba(197, 160, 89, 0.18);
+    --checkout-border-focus: rgba(177, 130, 37, 0.22);
+    --checkout-radius-card: 16px;
+    --checkout-radius-control: 8px;
+    --checkout-accent-gold: #B18225;
+    --checkout-champagne: #DFBA6B;
+    --checkout-total-bg: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(197, 160, 89, 0.03) 100%);
+    --checkout-whatsapp-bg: linear-gradient(135deg, #1E9E56 0%, #158245 100%);
+    --checkout-whatsapp-hover-bg: linear-gradient(135deg, #23B261 0%, #178F4C 100%);
+    --checkout-whatsapp-shadow: 0 4px 18px rgba(21, 130, 69, 0.30);
+    --checkout-whatsapp-hover-shadow: 0 8px 26px rgba(21, 130, 69, 0.42), 0 0 12px rgba(212, 175, 55, 0.20);
+
+    /* ==========================================================================
+       12. TOKENS DEL DRAWER DE NAVEGACIÓN MÓVIL (FASE 4A)
+       ========================================================================== */
+    --drawer-bg: #121110;
+    --drawer-surface: #181615;
+    --drawer-border: 1px solid rgba(197, 160, 89, 0.30);
+    --drawer-shadow: -12px 0 40px -4px rgba(0, 0, 0, 0.70), -2px 0 10px rgba(0, 0, 0, 0.35);
+    --drawer-overlay-bg: rgba(10, 9, 8, 0.65);
+    --drawer-overlay-blur: 4px;
+    --drawer-header-bg: #181615;
+    --drawer-header-border: 1px solid rgba(197, 160, 89, 0.20);
+    --drawer-brand-title: #FFFEFC;
+    --drawer-brand-sub: #C5A059;
+    --drawer-close-bg: rgba(28, 26, 24, 0.85);
+    --drawer-close-border: 1px solid rgba(197, 160, 89, 0.25);
+    --drawer-close-hover-border: rgba(212, 175, 55, 0.60);
+    --drawer-link-color: #F5EFE6;
+    --drawer-link-hover-bg: rgba(197, 160, 89, 0.08);
+    --drawer-link-hover-color: #FFFFFF;
+    --drawer-link-active-bg: linear-gradient(90deg, rgba(197, 160, 89, 0.14) 0%, rgba(197, 160, 89, 0.03) 100%);
+    --drawer-link-active-border: 3.5px solid #DFBA6B;
+    --drawer-link-active-color: #DFBA6B;
+    --drawer-icon-color: #C5A059;
+    --drawer-icon-active: #DFBA6B;
+    --drawer-chevron-color: rgba(255, 255, 255, 0.35);
+    --drawer-chevron-active: #DFBA6B;
+    --drawer-submenu-bg: rgba(197, 160, 89, 0.03);
+    --drawer-submenu-border: 1.5px solid rgba(197, 160, 89, 0.30);
+
+    /* ==========================================================================
+       13. TOKENS DE ESTADOS SEMÁNTICOS & STOCK
+       ========================================================================== */
+    /* Estados Semánticos Generales */
+    --color-success: #1A7F42;
+    --color-success-bg: rgba(26, 127, 66, 0.08);
+    --color-success-rgb: 31, 122, 77;
+    --color-danger: #DC2626;
+    --color-danger-bg: rgba(220, 38, 38, 0.06);
+    --color-danger-border: rgba(220, 38, 38, 0.35);
+    --color-danger-rgb: 220, 53, 69;
+    --color-warning: #8C6A1E;
+    --color-warning-bg: rgba(212, 175, 55, 0.10);
+    --color-info: #17A2B8;
+    --color-whatsapp: #25D366;
+
+    /* Estados de Stock: DISPONIBLE (Verde boutique) */
+    --stock-in-color: #1A7F42;
+    --stock-in-bg: rgba(26, 127, 66, 0.08);
+    --stock-in-border: 1px solid rgba(26, 127, 66, 0.20);
+    --stock-in-dot: #1A7F42;
+    --stock-in-dot-glow: 0 0 0 2px rgba(26, 127, 66, 0.18);
+
+    /* Estados de Stock: INFORMATIVO / ÚLTIMAS UNIDADES / CONSULTAR (Ámbar dorado) */
+    --stock-info-color: #8C6A1E;
+    --stock-info-bg: rgba(212, 175, 55, 0.10);
+    --stock-info-border: 1px solid rgba(182, 138, 50, 0.30);
+    --stock-info-dot: #C5A059;
+    --stock-info-dot-glow: 0 0 0 2px rgba(197, 160, 89, 0.22);
+
+    /* Estados de Stock: AGOTADO (Tono Neutro editorial) */
+    --stock-out-color: #6E645D;
+    --stock-out-bg: #F4F1ED;
+    --stock-out-border: 1px solid #D6CECE;
+    --stock-out-dot: #8A7E77;
+    --stock-out-dot-glow: 0 0 0 2px rgba(138, 126, 119, 0.20);
 }
 
 /* ==========================================================================

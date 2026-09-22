@@ -3,59 +3,11 @@
  * Establece la identidad visual, tipografías, variables y diseño de secciones.
  */
 
-/* Variables de Diseño */
-:root {
-    /* Paleta de Colores Premium */
-    --color-primary: #D4AF37;
-    /* Dorado Metálico */
-    --color-primary-light: #F3E5AB;
-    /* Dorado Claro */
-    --color-primary-dark: #9A7B1C;
-    /* Dorado Oscuro */
-    --color-gold-gradient: linear-gradient(135deg, #DFBA6B 0%, #C5A059 50%, #9E7D3B 100%);
-
-    --color-bg-dark: #121212;
-    /* Fondo Negro Carbón */
-    --color-bg-card-dark: #1E1E1E;
-    /* Tarjetas Oscuras */
-    --color-bg-light: #F9F9FB;
-    /* Fondo Neutro Claro */
-    --color-bg-card-light: #FFFFFF;
-    /* Tarjetas Claras */
-
-    --color-text-dark: #1A1A1A;
-    /* Texto Oscuro */
-    --color-text-light: #FFFFFF;
-    /* Texto Claro */
-    --color-text-muted: #7A7A7A;
-    /* Texto Atenuado */
-    --color-border: #E5E5E5;
-    /* Bordes Neutros */
-    --color-border-gold: rgba(212, 175, 55, 0.3);
-
-    --color-whatsapp: #25D366;
-    /* Color WhatsApp Oficial */
-
-    /* Tipografías Oficiales Unificadas (Fase U2) */
-    --font-heading: 'Cormorant Garamond', Georgia, serif;
-    --font-title: 'Cormorant Garamond', Georgia, serif;
-    --font-titles: 'Cormorant Garamond', Georgia, serif;
-    --font-product-name: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'Montserrat', Arial, sans-serif;
-    --font-ui: 'Montserrat', Arial, sans-serif;
-
-    /* Variables de Espaciado y Bordes */
-    --border-radius-sm: 4px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 16px;
-    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-    /* Sombras */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
-    --shadow-gold: 0 0 15px rgba(212, 175, 55, 0.3);
-}
+/* ==========================================================================
+   Variables de Diseño del Ecosistema Dunes Parfums
+   Consolidadas en css/design-system.css como Fuente Única de Verdad (FASE 5.1).
+   css/design-system.css se carga previo a esta hoja de estilo en todos los documentos.
+   ========================================================================== */
 
 /* Reset y Estilos Base */
 * {
@@ -1165,10 +1117,10 @@ button:disabled,
 /* Tarjeta Principal del Catálogo & Destacados (Fase 2 Visual Redesign) */
 .product-card {
     background: var(--surface-card, #FFFEFC);
-    border: var(--border-card, 1px solid var(--catalog-gold-border, #E7D3A5));
-    border-radius: var(--radius-card, 18px);
+    border: var(--border-card, 1px solid rgba(197, 160, 89, 0.45));
+    border-radius: var(--radius-card, 16px);
     overflow: hidden;
-    box-shadow: var(--shadow-card, 0 4px 16px rgba(31, 24, 12, 0.06));
+    box-shadow: var(--shadow-card, 0 6px 20px -2px rgba(31, 24, 12, 0.08), 0 2px 6px -1px rgba(182, 138, 50, 0.05));
     transition: var(--card-transition);
     display: flex;
     flex-direction: column;
@@ -1180,13 +1132,13 @@ button:disabled,
 
 @media (hover: hover) and (pointer: fine) {
     .product-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--card-border-hover, rgba(182, 138, 50, 0.70));
-        box-shadow: var(--shadow-card-hover, 0 14px 34px -4px rgba(31, 24, 12, 0.13), 0 4px 14px rgba(182, 138, 50, 0.12));
+        transform: translateY(-6px);
+        border-color: var(--card-border-hover, rgba(182, 138, 50, 0.85));
+        box-shadow: var(--shadow-card-hover, 0 18px 40px -4px rgba(31, 24, 12, 0.16), 0 8px 24px -2px rgba(182, 138, 50, 0.20), 0 0 1px rgba(182, 138, 50, 0.35));
     }
 
     .product-card:hover .product-img {
-        transform: var(--card-img-scale, scale(1.035));
+        transform: var(--card-img-scale, scale(1.05));
     }
 }
 
@@ -1195,18 +1147,18 @@ button:disabled,
     position: relative;
     height: clamp(150px, 14vw, 188px);
     padding: 6px 8px;
-    background: var(--card-showcase-bg, radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.13) 0%, rgba(212, 175, 55, 0.03) 52%, transparent 72%), #FFFDF9);
+    background: var(--card-showcase-bg, radial-gradient(ellipse at 50% 48%, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.05) 55%, transparent 75%), #FFFDF9);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     box-sizing: border-box;
     width: 100%;
-    transition: background 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card:hover .product-image-container {
-    background: var(--card-showcase-bg-hover, radial-gradient(ellipse at 50% 45%, rgba(212, 175, 55, 0.19) 0%, rgba(212, 175, 55, 0.05) 54%, transparent 72%), #FFFDF9);
+    background: var(--card-showcase-bg-hover, radial-gradient(ellipse at 50% 46%, rgba(212, 175, 55, 0.30) 0%, rgba(212, 175, 55, 0.10) 58%, transparent 78%), #FFFDF9);
 }
 
 .product-img {
@@ -1216,8 +1168,8 @@ button:disabled,
     max-width: 100%;
     object-fit: contain;
     object-position: center;
-    transform-origin: center;
-    transition: var(--card-img-transition, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1));
+    transform-origin: center center;
+    transition: var(--card-img-transition, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 /* Cápsula de Categoría (Oculta del contenedor de imagen para evitar solapamientos con la oferta y el botón de favoritos) */
@@ -1262,7 +1214,29 @@ button:disabled,
     border-radius: var(--badge-promo-radius, 6px);
     z-index: 3;
     line-height: 1.15;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12);
+    box-shadow: var(--badge-promo-shadow, 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12));
+}
+
+/* Etiqueta de Producto Destacado (Dorado Sobrio / Crema Cálido) */
+.product-tag.featured-tag,
+.product-tag.destacado-tag,
+.product-tag.destacado {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--badge-featured-bg, #FAF6EE);
+    color: var(--badge-featured-color, #8A6825);
+    border: var(--badge-featured-border, 1px solid rgba(197, 160, 89, 0.45));
+    font-family: var(--btn-font-family, var(--font-body, 'Montserrat', sans-serif));
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: var(--badge-featured-radius, 6px);
+    z-index: 3;
+    line-height: 1.15;
+    box-shadow: var(--badge-featured-shadow, 0 2px 6px rgba(31, 24, 12, 0.06));
 }
 
 /* Etiqueta Agotado (Oculta del encabezado; el estado se muestra en la cápsula central sobre el frasco) */
@@ -1286,14 +1260,14 @@ button:disabled,
     box-shadow: 0 2px 6px rgba(140, 40, 40, 0.25);
 }
 
-/* Acciones Hover Overlay (Transparencia Cristalina sin Oscurecer la Botella) */
+/* Acciones Hover Overlay (Transparente sin velo que oscurezca la botella) */
 .product-actions-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(20, 20, 20, 0.02) 0%, rgba(20, 20, 20, 0.16) 100%);
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1407,7 +1381,7 @@ button:disabled,
     line-height: 1.35;
 }
 
-/* Stock en Línea Limpia con Diferenciación */
+/* Stock en Línea Limpia con Diferenciación (FASE 3) */
 .product-stock-status {
     display: inline-flex;
     align-items: center;
@@ -1417,29 +1391,54 @@ button:disabled,
     padding: 3px 8px;
     border-radius: 4px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
-    line-height: 1.3;
+    line-height: 1.25;
 }
 
 .product-stock-status.in-stock {
-    color: #159447;
-    background-color: rgba(21, 148, 71, 0.08);
+    color: var(--stock-in-color, #1A7F42);
+    background-color: var(--stock-in-bg, rgba(26, 127, 66, 0.08));
+    border: var(--stock-in-border, 1px solid rgba(26, 127, 66, 0.20));
+}
+
+.product-stock-status.low-stock,
+.product-stock-status.info {
+    color: var(--stock-info-color, #8C6A1E);
+    background-color: var(--stock-info-bg, rgba(212, 175, 55, 0.10));
+    border: var(--stock-info-border, 1px solid rgba(182, 138, 50, 0.30));
 }
 
 .product-stock-status.out {
-    color: #9C2727;
-    background-color: rgba(200, 50, 50, 0.12);
-    font-weight: 700;
+    color: var(--stock-out-color, #6E645D);
+    background-color: var(--stock-out-bg, #F4F1ED);
+    border: var(--stock-out-border, 1px solid #D6CECE);
+    font-weight: 600;
 }
 
 .stock-dot {
     display: inline-block;
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     flex-shrink: 0;
     border-radius: 50%;
     background-color: currentColor;
+}
+
+.product-stock-status.in-stock .stock-dot {
+    background-color: var(--stock-in-dot, #1A7F42);
+    box-shadow: var(--stock-in-dot-glow, 0 0 0 2px rgba(26, 127, 66, 0.18));
+}
+
+.product-stock-status.low-stock .stock-dot,
+.product-stock-status.info .stock-dot {
+    background-color: var(--stock-info-dot, #C5A059);
+    box-shadow: var(--stock-info-dot-glow, 0 0 0 2px rgba(197, 160, 89, 0.22));
+}
+
+.product-stock-status.out .stock-dot {
+    background-color: var(--stock-out-dot, #8A7E77);
+    box-shadow: var(--stock-out-dot-glow, 0 0 0 2px rgba(138, 126, 119, 0.20));
 }
 
 /* Fila de Precios */
@@ -1465,7 +1464,7 @@ button:disabled,
     font-family: 'Montserrat', sans-serif;
     font-size: clamp(17px, 1.25vw, 18.5px);
     font-weight: 700;
-    color: var(--catalog-text, #171717);
+    color: var(--price-current-color, #171717);
     line-height: 1;
     white-space: nowrap;
     flex: 0 0 auto;
@@ -1475,7 +1474,7 @@ button:disabled,
     font-family: 'Montserrat', sans-serif;
     font-size: 11.5px;
     font-weight: 400;
-    color: #777777;
+    color: var(--price-old-color, #777777);
     text-decoration: line-through;
     white-space: nowrap;
     flex: 0 0 auto;
@@ -1487,14 +1486,16 @@ button:disabled,
     justify-content: center;
     flex: 0 0 auto;
     max-width: 100%;
-    padding: 4px 8px;
-    background: #F1D89C;
-    color: #8B4315;
-    border-radius: 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1;
+    padding: 2px 6px;
+    background: var(--badge-promo-bg, #141414);
+    color: var(--badge-promo-color, #DFBA6B);
+    border: var(--badge-promo-border, 1px solid rgba(182, 138, 50, 0.55));
+    border-radius: 4px;
+    font-family: var(--btn-font-family, 'Montserrat', sans-serif);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
     white-space: nowrap;
     box-sizing: border-box;
 }
@@ -1720,19 +1721,19 @@ button:disabled,
     color: #4A4440 !important;
 }
 
-/* Badge de stock con contraste nítido */
+/* Badge de stock con tono neutro editorial en producto agotado */
 .product-card.out-of-stock .product-stock-status.out,
 .product-card.is-soldout .product-stock-status.out {
-    background-color: #FEE2E2 !important;
-    color: #991B1B !important;
-    border: 1px solid #FCA5A5 !important;
-    font-weight: 700 !important;
+    background-color: var(--stock-out-bg, #F4F1ED) !important;
+    color: var(--stock-out-color, #6E645D) !important;
+    border: var(--stock-out-border, 1px solid #D6CECE) !important;
+    font-weight: 600 !important;
 }
 
 .product-card.out-of-stock .product-stock-status.out .stock-dot,
 .product-card.is-soldout .product-stock-status.out .stock-dot {
-    background-color: #DC2626 !important;
-    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+    background-color: var(--stock-out-dot, #8A7E77) !important;
+    box-shadow: var(--stock-out-dot-glow, 0 0 0 2px rgba(138, 126, 119, 0.20)) !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1805,14 +1806,17 @@ button:disabled,
     position: absolute;
     top: 24px;
     left: 24px;
-    background: var(--color-gold-gradient);
-    color: var(--color-text-light);
+    background: var(--badge-promo-bg, #141414);
+    color: var(--badge-promo-color, #DFBA6B);
+    border: var(--badge-promo-border, 1px solid rgba(182, 138, 50, 0.55));
+    font-family: var(--btn-font-family, 'Montserrat', sans-serif);
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 600;
     padding: 6px 14px;
-    border-radius: var(--border-radius-sm);
-    letter-spacing: 1px;
+    border-radius: var(--badge-promo-radius, 6px);
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    box-shadow: var(--badge-promo-shadow, 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12));
 }
 
 .offer-content-side {
@@ -1823,11 +1827,12 @@ button:disabled,
 }
 
 .offer-pre {
+    font-family: var(--btn-font-family, 'Montserrat', sans-serif);
     font-size: 0.8rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--color-primary-dark);
+    letter-spacing: 2.5px;
+    color: var(--color-primary-dark, #8E671D);
 }
 
 .offer-title {
@@ -2826,18 +2831,23 @@ button:disabled,
 }
 
 .product-stock-status {
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #34c759;
-    background-color: rgba(52, 199, 89, 0.1);
+    color: var(--stock-in-color, #1A7F42);
+    background-color: var(--stock-in-bg, rgba(26, 127, 66, 0.08));
+    border: var(--stock-in-border, 1px solid rgba(26, 127, 66, 0.20));
     padding: 3px 8px;
-    border-radius: 12px;
-    display: inline-block;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .product-stock-status.out {
-    color: #ff3b30;
-    background-color: rgba(255, 59, 48, 0.1);
+    color: var(--stock-out-color, #6E645D);
+    background-color: var(--stock-out-bg, #F4F1ED);
+    border: var(--stock-out-border, 1px solid #D6CECE);
 }
 
 /* --- Ficha de Detalle de Producto --- */
@@ -3288,22 +3298,28 @@ body.lightbox-open {
 }
 
 .detail-stock-badge {
-    display: inline-block;
-    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    font-family: 'Montserrat', sans-serif;
     font-size: 0.85rem;
     font-weight: 600;
-    border-radius: var(--border-radius-sm);
+    border-radius: 6px;
     margin-bottom: 24px;
+    line-height: 1.2;
 }
 
 .detail-stock-badge.in-stock {
-    background-color: rgba(52, 199, 89, 0.1);
-    color: #34c759;
+    background-color: var(--stock-in-bg, rgba(26, 127, 66, 0.08));
+    color: var(--stock-in-color, #1A7F42);
+    border: var(--stock-in-border, 1px solid rgba(26, 127, 66, 0.20));
 }
 
 .detail-stock-badge.out-of-stock {
-    background-color: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
+    background-color: var(--stock-out-bg, #F4F1ED);
+    color: var(--stock-out-color, #6E645D);
+    border: var(--stock-out-border, 1px solid #D6CECE);
 }
 
 .detail-divider {
@@ -3470,11 +3486,12 @@ body.lightbox-open {
 
 #page-carrito .cart-table-wrapper,
 .cart-table-wrapper {
-    background-color: var(--surface-card, #FFFEFC);
-    border: var(--border-card, 1px solid var(--catalog-gold-border, #E7D3A5));
-    border-radius: var(--radius-card, 18px);
+    background-color: var(--checkout-surface, #FFFEFC);
+    border: var(--checkout-border, 1px solid rgba(197, 160, 89, 0.38));
+    border-radius: var(--checkout-radius-card, 16px);
     overflow: hidden;
-    box-shadow: var(--shadow-card, 0 8px 24px rgba(31, 24, 12, 0.08));
+    box-shadow: 0 4px 20px -2px rgba(31, 24, 12, 0.06), 0 0 1px rgba(182, 138, 50, 0.25);
+    transition: var(--transition-base);
 }
 
 .cart-table {
@@ -3484,24 +3501,31 @@ body.lightbox-open {
 }
 
 .cart-table th {
-    background-color: var(--color-bg-dark);
-    color: var(--color-text-light);
+    background-color: #141414;
+    color: #FAF6EE;
     padding: 16px 20px;
     font-family: var(--font-body);
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
+    font-size: 0.74rem;
+    letter-spacing: 1.2px;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.30);
 }
 
 .cart-table td {
-    padding: 20px;
-    border-bottom: 1px solid var(--color-border);
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.14);
     vertical-align: middle;
+    background-color: #FFFEFC;
+    transition: background-color 200ms ease;
 }
 
 .cart-table tr:last-child td {
     border-bottom: none;
+}
+
+.cart-table tbody tr:hover td {
+    background-color: #FFFDF9;
 }
 
 .cart-td-product {
@@ -3511,89 +3535,162 @@ body.lightbox-open {
 }
 
 .cart-item-img {
-    width: 70px;
-    height: 70px;
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    min-height: 72px;
     object-fit: contain;
-    background-color: #f7f7f7;
-    border-radius: var(--border-radius-sm);
+    background: radial-gradient(circle at center, rgba(196, 154, 62, 0.12) 0%, transparent 68%), #FFFDF9;
+    border-radius: 10px;
     padding: 6px;
-    border: 1px solid rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(197, 160, 89, 0.28);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.cart-table tbody tr:hover .cart-item-img {
+    transform: scale(1.03);
+    border-color: rgba(182, 138, 50, 0.60);
 }
 
 .cart-item-meta {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
+    min-width: 0;
 }
 
 .cart-item-brand {
-    font-size: 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
     text-transform: uppercase;
-    color: var(--color-primary-dark);
+    color: var(--catalog-gold, #B18225);
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
+    margin: 0;
 }
 
 .cart-item-title {
-    font-size: 0.95rem;
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.15rem;
     font-weight: 600;
-    color: var(--color-text-dark);
+    color: var(--color-text-dark, #171717);
+    line-height: 1.25;
+    margin: 0;
 }
 
 .cart-item-volume {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--color-text-muted, #6F6F6F);
+    font-weight: 500;
+    margin: 0;
 }
 
 .cart-td-price,
 .cart-td-subtotal {
+    font-family: var(--font-body);
     font-weight: 600;
     font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
 }
 
 .cart-td-subtotal {
-    color: var(--color-primary-dark);
+    color: var(--color-primary-dark, #8E671D);
+    font-weight: 700;
+}
+
+.qty-picker.compact {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    border-radius: 8px;
+    background: #FFFFFF;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .qty-picker.compact .qty-btn {
-    width: 28px;
-    height: 28px;
-}
-
-.qty-picker.compact input {
-    width: 35px;
-    height: 28px;
-    font-size: 0.85rem;
-}
-
-.btn-remove-item {
-    background: none;
+    width: 32px;
+    height: 32px;
+    background: #FAF8F4;
     border: none;
-    min-width: 36px;
-    min-height: 36px;
+    color: #171717;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
-    color: #DC2626;
+    transition: background-color 200ms ease, color 200ms ease;
+    user-select: none;
+}
+
+.qty-picker.compact .qty-btn:hover:not(:disabled) {
+    background: #F4ECE0;
+    color: var(--catalog-gold, #B18225);
+}
+
+.qty-picker.compact .qty-btn:active:not(:disabled) {
+    background: #E8DECE;
+}
+
+.qty-picker.compact input {
+    width: 38px;
+    height: 32px;
+    border: none;
+    border-left: 1px solid rgba(197, 160, 89, 0.20);
+    border-right: 1px solid rgba(197, 160, 89, 0.20);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    background: #FFFFFF;
+    color: #171717;
+    padding: 0;
+    outline: none;
+}
+
+.btn-remove-item {
+    background: transparent;
+    border: 1px solid rgba(192, 57, 43, 0.22);
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    color: #C0392B;
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
+    border-radius: 50%;
+    transition: background-color 200ms ease, color 200ms ease, transform 200ms ease, border-color 200ms ease;
     line-height: 1;
+    padding: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .btn-remove-item:hover:not(:disabled) {
-        background-color: rgba(220, 38, 38, 0.08);
-        color: #DC2626;
+        background-color: rgba(192, 57, 43, 0.08);
+        border-color: rgba(192, 57, 43, 0.45);
+        color: #9C2727;
         transform: translateY(-1px);
     }
+}
+
+.btn-remove-item:active:not(:disabled) {
+    transform: scale(0.96);
 }
 
 .cart-actions-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
+    margin-top: 4px;
 }
 
 /* Resumen del Carrito */
@@ -3604,31 +3701,34 @@ body.lightbox-open {
 
 #page-carrito .summary-box,
 .summary-box {
-    background-color: var(--surface-card, #FFFEFC);
-    border: var(--border-card, 1px solid var(--catalog-gold-border, #E7D3A5));
-    border-radius: var(--radius-card, 18px);
-    padding: 32px;
-    box-shadow: var(--shadow-card, 0 8px 24px rgba(31, 24, 12, 0.08));
+    background-color: var(--checkout-surface, #FFFEFC);
+    border: var(--checkout-border, 1px solid rgba(197, 160, 89, 0.38));
+    border-radius: var(--checkout-radius-card, 16px);
+    padding: 28px 30px;
+    box-shadow: 0 4px 20px -2px rgba(31, 24, 12, 0.06), 0 0 1px rgba(182, 138, 50, 0.25);
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
 .summary-box-title {
-    font-size: 1.3rem;
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.45rem;
     font-weight: 700;
-    color: var(--color-text-dark);
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 12px;
+    color: var(--color-text-dark, #171717);
+    border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+    padding-bottom: 14px;
+    margin: 0;
+    letter-spacing: 0.5px;
 }
 
 .summary-details {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 15px;
+    gap: 12px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.22);
+    padding-bottom: 18px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -3636,8 +3736,8 @@ body.lightbox-open {
 /* Bloque de Cupones */
 .coupon-section {
     margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--color-border);
+    padding-top: 14px;
+    border-top: 1px dashed rgba(197, 160, 89, 0.35);
     width: 100%;
     box-sizing: border-box;
 }
@@ -3652,15 +3752,16 @@ body.lightbox-open {
 .coupon-input {
     flex: 1 1 auto;
     min-width: 0;
-    height: 42px;
-    padding: 0 12px;
-    font-family: var(--font-primary, 'Montserrat', sans-serif);
+    height: 44px;
+    padding: 0 14px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.88rem;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
-    color: var(--color-text-dark);
+    letter-spacing: 0.5px;
+    color: var(--color-text-dark, #171717);
     background-color: var(--color-bg-light, #FFFFFF);
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(197, 160, 89, 0.40);
     border-radius: 8px;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -3668,33 +3769,35 @@ body.lightbox-open {
 
 .coupon-input::placeholder {
     text-transform: none;
-    color: var(--color-text-muted);
+    color: var(--color-text-muted, #7A7A7A);
     font-size: 0.84rem;
+    font-weight: 400;
 }
 
 .coupon-input:focus {
-    border-color: var(--color-primary-dark);
-    box-shadow: 0 0 0 2px rgba(142, 103, 29, 0.15);
+    border-color: var(--catalog-gold, #B18225);
+    box-shadow: 0 0 0 3px rgba(177, 130, 37, 0.18);
 }
 
 .coupon-input:disabled {
-    background-color: #F5F5F5;
+    background-color: #F8F7F5;
     opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .btn-coupon-apply {
     flex: 0 0 auto;
-    height: 42px;
-    padding: 0 18px;
-    min-width: 124px;
-    font-family: var(--btn-font-family, var(--font-primary, 'Montserrat', sans-serif));
+    height: 44px;
+    padding: 0 20px;
+    min-width: 120px;
+    font-family: var(--btn-font-family, var(--font-body, 'Montserrat', sans-serif));
     font-size: 0.82rem;
     font-weight: var(--btn-font-weight, 600);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #FFFFFF;
     background-color: var(--btn-primary-bg, #141414);
-    border: 1px solid var(--btn-primary-border, rgba(182, 138, 50, 0.55));
+    border: 1px solid var(--btn-primary-border, rgba(182, 138, 50, 0.60));
     border-radius: var(--btn-radius-md, 8px);
     cursor: pointer;
     white-space: nowrap;
@@ -3758,47 +3861,48 @@ body.lightbox-open {
 
 .coupon-feedback {
     margin-top: 8px;
+    font-family: var(--font-body);
     font-size: 0.82rem;
     line-height: 1.35;
-    padding: 8px 10px;
-    border-radius: 6px;
-    font-weight: 500;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-weight: 600;
 }
 
 .coupon-feedback.feedback-success {
-    color: #2E7D32;
-    background-color: rgba(46, 125, 50, 0.08);
-    border: 1px solid rgba(46, 125, 50, 0.2);
+    color: #159447;
+    background-color: rgba(21, 148, 71, 0.08);
+    border: 1px solid rgba(21, 148, 71, 0.25);
 }
 
 .coupon-feedback.feedback-warning {
-    color: #D84315;
-    background-color: rgba(216, 67, 21, 0.08);
-    border: 1px solid rgba(216, 67, 21, 0.2);
+    color: #B25E09;
+    background-color: rgba(178, 94, 9, 0.08);
+    border: 1px solid rgba(178, 94, 9, 0.25);
 }
 
 .coupon-feedback.feedback-error {
-    color: #C62828;
-    background-color: rgba(198, 40, 40, 0.08);
-    border: 1px solid rgba(198, 40, 40, 0.2);
+    color: #C0392B;
+    background-color: rgba(192, 57, 43, 0.08);
+    border: 1px solid rgba(192, 57, 43, 0.25);
 }
 
 .coupon-applied-state {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 10px 12px;
-    background-color: rgba(142, 103, 29, 0.08);
-    border: 1px solid rgba(142, 103, 29, 0.25);
+    gap: 10px;
+    padding: 12px 14px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(197, 160, 89, 0.04) 100%);
+    border: 1px dashed rgba(177, 130, 37, 0.45);
     border-radius: 8px;
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
 .coupon-applied-info {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     min-width: 0;
     flex: 1 1 auto;
 }
@@ -3806,28 +3910,29 @@ body.lightbox-open {
 .coupon-applied-icon {
     width: 16px;
     height: 16px;
-    color: var(--color-primary-dark);
+    color: var(--catalog-gold, #B18225);
     flex-shrink: 0;
 }
 
 .coupon-applied-code {
     font-weight: 700;
-    font-size: 0.88rem;
-    color: var(--color-primary-dark);
+    font-size: 0.9rem;
+    color: var(--color-primary-dark, #8E671D);
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .coupon-applied-saving {
-    font-size: 0.82rem;
-    color: #2E7D32;
-    font-weight: 600;
+    font-size: 0.84rem;
+    color: #159447;
+    font-weight: 700;
     margin-left: 4px;
 }
 
 .coupon-remove-btn {
-    background: none;
+    background: transparent;
     border: none;
-    color: #C62828;
+    color: #C0392B;
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
@@ -3844,19 +3949,21 @@ body.lightbox-open {
 
 .summary-row {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 12px;
     width: 100%;
     min-width: 0;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     box-sizing: border-box;
+    font-family: var(--font-body);
 }
 
 .summary-row-label {
     flex: 1 1 auto;
     min-width: 0;
-    color: var(--color-text-muted);
+    color: var(--color-text-muted, #6F6F6F);
+    font-weight: 500;
 }
 
 .summary-row-value {
@@ -3864,33 +3971,49 @@ body.lightbox-open {
     max-width: 60%;
     text-align: right;
     font-weight: 600;
-    color: var(--color-text-dark);
+    color: var(--color-text-dark, #171717);
     white-space: normal;
     word-break: normal;
+    font-variant-numeric: tabular-nums;
 }
 
 #cart-subtotal-price.summary-row-value,
 .summary-total-price {
     white-space: nowrap;
-    color: var(--color-primary-dark);
+    color: var(--color-primary-dark, #8E671D);
 }
 
+/* Fila de Total Destacada (NIVEL 1 DE JERARQUÍA) */
 .summary-total-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    font-size: 1.1rem;
-    font-weight: 600;
+    gap: 14px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(197, 160, 89, 0.03) 100%);
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    border-radius: 10px;
+    margin-bottom: 22px;
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
 }
 
-.summary-total-price {
-    font-size: 1.5rem;
+.summary-total-row > span:first-child {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
     font-weight: 700;
-    color: var(--color-primary-dark);
+    color: #171717;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-total-price {
+    font-family: var(--font-body);
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #171717;
+    font-variant-numeric: tabular-nums;
 }
 
 .checkout-form {
@@ -3900,12 +4023,14 @@ body.lightbox-open {
 }
 
 .form-section-title {
+    font-family: var(--font-body);
     font-size: 0.95rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--color-text-dark);
+    letter-spacing: 0.6px;
+    color: var(--color-text-dark, #171717);
     margin-top: 10px;
-    font-weight: 600;
+    margin-bottom: 4px;
+    font-weight: 700;
 }
 
 .form-group {
@@ -3915,55 +4040,67 @@ body.lightbox-open {
 }
 
 .form-group label {
-    font-size: 0.8rem;
+    font-family: var(--font-body);
+    font-size: 0.84rem;
     font-weight: 600;
-    color: var(--color-text-dark);
+    color: var(--color-text-dark, #171717);
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-    padding: 10px 14px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
+    padding: 11px 14px;
+    border: 1px solid rgba(197, 160, 89, 0.38);
+    border-radius: var(--border-radius-sm, 8px);
     font-family: var(--font-body);
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     outline: none;
-    transition: var(--transition-smooth);
-    background-color: var(--color-bg-light);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+    background-color: var(--color-bg-light, #FFFFFF);
+    color: #171717;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: var(--color-primary-dark);
-    box-shadow: 0 0 4px rgba(197, 160, 89, 0.15);
+    border-color: var(--catalog-gold, #B18225);
+    box-shadow: 0 0 0 3px rgba(177, 130, 37, 0.18);
 }
 
 .btn-checkout {
     width: 100%;
-    min-height: 52px;
-    padding: 14px 22px;
-    margin-top: 10px;
+    min-height: 54px;
+    padding: 14px 24px;
+    margin-top: 12px;
     font-family: var(--btn-font-family, var(--font-primary, 'Montserrat', sans-serif));
-    font-weight: 600;
-    font-size: 0.94rem;
+    font-weight: 700;
+    font-size: 0.95rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    border-radius: var(--btn-radius-md, 8px);
+    border-radius: var(--btn-radius-md, 10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #1E9E56 0%, #158245 100%);
     transition: var(--btn-transition);
-    box-shadow: 0 4px 16px rgba(31, 139, 76, 0.28);
+    box-shadow: 0 4px 18px rgba(21, 130, 69, 0.30), 0 1px 3px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .btn-checkout:hover:not(:disabled) {
+        background: linear-gradient(135deg, #23B261 0%, #178F4C 100%);
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(31, 139, 76, 0.40);
+        box-shadow: 0 8px 26px rgba(21, 130, 69, 0.42), 0 0 12px rgba(212, 175, 55, 0.20);
+        color: #FFFFFF;
     }
 }
 
 .btn-checkout:active:not(:disabled) {
-    transform: scale(0.98);
+    transform: scale(0.985);
 }
 
 .btn-recojo-maps {
@@ -3987,10 +4124,11 @@ body.lightbox-open {
 }
 
 .checkout-note {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    color: var(--color-text-muted, #6F6F6F);
     line-height: 1.5;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 /* --- Estilos de Opciones de Zona de Delivery --- */
@@ -4010,16 +4148,17 @@ body.lightbox-open {
     width: 100%;
     padding: 12px 16px;
     background-color: #FFFEFC;
-    border: 1px solid var(--catalog-gold-border, #E7D3A5);
-    border-radius: 12px;
+    border: 1px solid rgba(197, 160, 89, 0.38);
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: left;
     box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .zone-option-btn:hover {
-    border-color: var(--catalog-gold, #B18225);
+    border-color: rgba(182, 138, 50, 0.85);
     background-color: #FFFDF8;
 }
 
@@ -4040,7 +4179,7 @@ body.lightbox-open {
 
 .delivery-zone-separator {
     flex: 1;
-    border-bottom: 1px dashed #D8D2C6;
+    border-bottom: 1px dashed rgba(197, 160, 89, 0.30);
     min-width: 16px;
     margin-bottom: 2px;
 }
@@ -4051,34 +4190,40 @@ body.lightbox-open {
     font-weight: 700;
     color: var(--catalog-text, #171717);
     white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
 .delivery-zone-price.gratis {
     color: #159447;
-    background-color: #EBF7EE;
+    background-color: rgba(21, 148, 71, 0.10);
     font-size: 11px;
     font-weight: 700;
     padding: 3px 8px;
     border-radius: 12px;
     letter-spacing: 0.5px;
     display: inline-block;
-    border: 1px solid rgba(21, 148, 71, 0.2);
+    border: 1px solid rgba(21, 148, 71, 0.25);
 }
 
 .empty-cart-message {
     text-align: center;
-    padding: 60px 40px;
+    padding: 70px 40px;
     color: var(--color-text-muted);
 }
 
 .empty-cart-message h3 {
-    color: var(--color-text-dark);
-    margin-bottom: 8px;
-    font-size: 1.4rem;
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    color: var(--color-text-dark, #171717);
+    margin-bottom: 10px;
+    font-size: 1.65rem;
+    font-weight: 700;
 }
 
 .empty-cart-message p {
-    font-weight: 300;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.92rem;
+    color: #6F6F6F;
 }
 
 /* Adaptación Responsiva Específica de Detalle y Carrito */
@@ -4304,15 +4449,15 @@ body.lightbox-open {
     align-items: center;
     gap: 12px;
     padding: 14px 16px;
-    border: var(--border-card, 1px solid var(--catalog-gold-border, #E7D3A5));
-    border-radius: var(--radius-control, 8px);
-    background-color: var(--surface-card, #FFFEFC);
+    border: 1px solid rgba(197, 160, 89, 0.38);
+    border-radius: 10px;
+    background-color: #FFFEFC;
     cursor: pointer;
-    transition: var(--transition-base);
+    transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: var(--shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 #page-carrito .delivery-option-card > *:not(input) {
@@ -4320,9 +4465,10 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-option-card:hover {
-    border-color: var(--catalog-gold-hover, #C49A3E);
+    border-color: rgba(182, 138, 50, 0.85);
+    background-color: #FFFDF9;
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm, 0 4px 12px rgba(0, 0, 0, 0.05));
+    box-shadow: 0 4px 14px rgba(31, 24, 12, 0.06);
 }
 
 #page-carrito .delivery-option-card:focus-within,
@@ -4336,15 +4482,15 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-option-card.selected {
-    border: 2px solid var(--color-primary-dark, #8E671D);
-    background-color: rgba(212, 175, 55, 0.06);
-    box-shadow: 0 4px 15px rgba(197, 160, 89, 0.12);
+    border: 2px solid #B18225;
+    background-color: rgba(212, 175, 55, 0.07);
+    box-shadow: 0 4px 16px rgba(177, 130, 37, 0.14);
 }
 
 #page-carrito .delivery-option-card input[type="radio"] {
     accent-color: var(--color-primary-dark, #8E671D);
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
 }
 
@@ -4364,15 +4510,15 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-option-title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-weight: 700;
-    font-size: 0.92rem;
+    font-size: 0.94rem;
     color: var(--catalog-text, #171717);
     line-height: 1.25;
 }
 
 #page-carrito .delivery-option-desc {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.78rem;
     color: var(--catalog-text-secondary, #6F6F6F);
     line-height: 1.35;
@@ -4381,12 +4527,13 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-option-badge {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--color-primary-dark, #8E671D);
-    background-color: rgba(212, 175, 55, 0.08);
-    padding: 3px 9px;
+    background-color: rgba(212, 175, 55, 0.10);
+    border: 1px solid rgba(182, 138, 50, 0.25);
+    padding: 3px 10px;
     border-radius: 9999px;
     white-space: nowrap;
     text-align: right;
@@ -4395,17 +4542,10 @@ body.lightbox-open {
 #page-carrito .delivery-option-badge.gratis {
     color: #159447;
     background-color: rgba(21, 148, 71, 0.10);
-    border: 1px solid rgba(21, 148, 71, 0.25);
+    border: 1px solid rgba(21, 148, 71, 0.28);
 }
 
 /* Zonas de Delivery Local */
-#page-carrito .zone-selector-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-}
-
 #page-carrito .zone-selector-group {
     display: flex;
     flex-direction: column;
@@ -4420,8 +4560,8 @@ body.lightbox-open {
     width: 100%;
     gap: 12px;
     padding: 12px 14px;
-    border: 1px solid var(--catalog-gold-border, #E7D3A5);
-    border-radius: var(--radius-control, 10px);
+    border: 1px solid rgba(197, 160, 89, 0.38);
+    border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -4432,6 +4572,7 @@ body.lightbox-open {
     text-align: left;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 #page-carrito .zone-option-btn * {
@@ -4439,7 +4580,7 @@ body.lightbox-open {
 }
 
 #page-carrito .zone-option-btn:hover {
-    border-color: var(--catalog-gold-hover, #C49A3E);
+    border-color: rgba(182, 138, 50, 0.85);
     background-color: #FFFDF8;
 }
 
@@ -4456,7 +4597,7 @@ body.lightbox-open {
     border-color: var(--color-primary-dark, #8E671D);
     background-color: var(--color-primary-dark, #8E671D);
     color: #FFFFFF;
-    box-shadow: 0 4px 12px rgba(142, 103, 29, 0.2);
+    box-shadow: 0 4px 14px rgba(142, 103, 29, 0.22);
 }
 
 /* Indicador Radio Visual */
@@ -4464,7 +4605,7 @@ body.lightbox-open {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 2px solid var(--catalog-gold-hover, #C49A3E);
+    border: 2px solid rgba(197, 160, 89, 0.60);
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -4504,7 +4645,7 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-zone-name {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.88rem;
     font-weight: 700;
     line-height: 1.25;
@@ -4516,7 +4657,7 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-zone-ref {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.76rem;
     font-weight: 400;
     line-height: 1.3;
@@ -4537,10 +4678,11 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-zone-price {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.84rem;
     font-weight: 700;
     white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
 #page-carrito .delivery-zone-price.gratis {
@@ -4568,7 +4710,7 @@ body.lightbox-open {
 }
 
 #page-carrito label {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--color-text-dark, #171717);
@@ -4578,7 +4720,7 @@ body.lightbox-open {
 }
 
 #page-carrito label .required-star {
-    color: #C93B3B;
+    color: #C0392B;
     font-weight: 700;
 }
 
@@ -4594,9 +4736,9 @@ body.lightbox-open {
     min-height: 46px;
     padding: 11px 14px;
     background: #FFFFFF;
-    border: 1px solid var(--catalog-gold-border, #E7D3A5);
-    border-radius: var(--radius-control, 8px);
-    font-family: 'Montserrat', sans-serif;
+    border: 1px solid rgba(197, 160, 89, 0.38);
+    border-radius: 8px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 14px;
     color: var(--catalog-text, #171717);
     box-sizing: border-box;
@@ -4617,7 +4759,7 @@ body.lightbox-open {
 }
 
 #page-carrito .validation-error-msg {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.78rem;
     color: #9C2727;
     margin-top: 4px;
@@ -4626,16 +4768,47 @@ body.lightbox-open {
 }
 
 #page-carrito .checkout-warning-box {
-    background-color: rgba(220, 53, 69, 0.05);
-    border: 1px dashed rgba(220, 53, 69, 0.4);
-    border-radius: var(--radius-control, 8px);
+    background-color: rgba(192, 57, 43, 0.06);
+    border: 1px dashed rgba(192, 57, 43, 0.35);
+    border-radius: 8px;
     padding: 12px 16px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.85rem;
-    color: #9C2727;
+    color: #8A1C14;
     margin-bottom: 20px;
     text-align: center;
     font-weight: 600;
+}
+
+#page-carrito #block-total-pagar {
+    margin-top: 24px !important;
+    margin-bottom: 16px !important;
+    padding: 16px 18px !important;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(197, 160, 89, 0.03) 100%) !important;
+    border: 1px solid rgba(197, 160, 89, 0.35) !important;
+    border-top: 2.5px solid var(--color-primary-dark, #8E671D) !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+#page-carrito #total-monto-pagar {
+    font-family: var(--font-body, 'Montserrat', sans-serif) !important;
+    font-size: 1.7rem !important;
+    font-weight: 800 !important;
+    color: #171717 !important;
+    display: block !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+#page-carrito .recojo-alert-card {
+    background: linear-gradient(135deg, #FFFDFB 0%, #FAF5EE 100%) !important;
+    border: 1px solid #E5D5BA !important;
+    border-left: 4px solid #B18225 !important;
+    border-radius: 10px !important;
+    padding: 16px 18px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 4px 14px rgba(177, 130, 37, 0.08) !important;
 }
 
 /* ==========================================================================

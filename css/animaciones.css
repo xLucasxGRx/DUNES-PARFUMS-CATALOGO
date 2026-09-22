@@ -94,7 +94,7 @@ a.btn:active:not(:disabled) {
 /* Elevación y Sombra Cálida Refinada para Tarjetas (FASE 2) */
 @media (hover: hover) and (pointer: fine) {
     .product-card:hover {
-        box-shadow: var(--shadow-card-hover, 0 14px 34px -4px rgba(31, 24, 12, 0.13), 0 4px 14px rgba(182, 138, 50, 0.12));
+        box-shadow: var(--shadow-card-hover, 0 18px 40px -4px rgba(31, 24, 12, 0.16), 0 8px 24px -2px rgba(182, 138, 50, 0.20), 0 0 1px rgba(182, 138, 50, 0.35));
     }
 }
 
