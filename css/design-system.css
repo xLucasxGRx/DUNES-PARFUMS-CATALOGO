@@ -221,11 +221,11 @@
     --badge-promo-radius: 6px;
     --badge-promo-shadow: 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12);
 
-    --badge-featured-bg: #FAF6EE;
-    --badge-featured-color: #8A6825;
-    --badge-featured-border: 1px solid rgba(197, 160, 89, 0.45);
+    --badge-featured-bg: #1A1A1A;
+    --badge-featured-color: #F5EFE6;
+    --badge-featured-border: 1px solid rgba(197, 160, 89, 0.30);
     --badge-featured-radius: 6px;
-    --badge-featured-shadow: 0 2px 6px rgba(31, 24, 12, 0.06);
+    --badge-featured-shadow: 0 2px 6px rgba(0, 0, 0, 0.20);
 
     --price-current-color: #171717;
     --price-old-color: #777777;
@@ -492,4 +492,602 @@
         font-size: 0.88rem;
         max-width: 600px;
     }
+}
+
+/*
+==========================================================================
+DUNES UI COMPONENTS FOUNDATION
+FASE 5.2
+COMPONENTES BASE - SIN MIGRACIÓN
+Biblioteca de componentes reutilizables con namespace exclusivo (.dunes-)
+==========================================================================
+*/
+
+/* ==========================================================================
+   1. DUNES CARD FOUNDATION
+   ========================================================================== */
+.dunes-card {
+    background-color: var(--surface-card, #FFFEFC);
+    border: var(--border-card, 1px solid rgba(197, 160, 89, 0.45));
+    border-radius: var(--radius-card, 16px);
+    box-shadow: var(--shadow-card, 0 6px 20px -2px rgba(31, 24, 12, 0.08), 0 2px 6px -1px rgba(182, 138, 50, 0.05));
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    transition: transform var(--duration-base, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)),
+                box-shadow var(--duration-base, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)),
+                border-color var(--duration-base, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.dunes-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-card-hover, rgba(182, 138, 50, 0.85));
+    box-shadow: var(--shadow-card-hover, 0 18px 40px -4px rgba(31, 24, 12, 0.16), 0 8px 24px -2px rgba(182, 138, 50, 0.20), 0 0 1px rgba(182, 138, 50, 0.35));
+}
+
+.dunes-card:focus-within {
+    border-color: var(--catalog-gold-hover, #C49A3E);
+    box-shadow: 0 0 0 3px rgba(196, 154, 62, 0.15), var(--shadow-card);
+}
+
+.dunes-card__header {
+    padding: var(--spacing-md, 16px) var(--spacing-lg, 24px) var(--spacing-sm, 8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm, 8px);
+    box-sizing: border-box;
+}
+
+.dunes-card__body {
+    padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+    flex: 1 1 auto;
+    box-sizing: border-box;
+}
+
+.dunes-card__footer {
+    padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px) var(--spacing-md, 16px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm, 8px);
+    margin-top: auto;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. DUNES BADGE FOUNDATION
+   ========================================================================== */
+.dunes-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 3px var(--spacing-sm, 8px);
+    border-radius: var(--badge-promo-radius, 6px);
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+/* Variante Oferta / Promoción (Puente FASE 5.3.2) */
+.dunes-badge--gold,
+.product-tag.promo-tag,
+.promo-tag {
+    background-color: var(--badge-promo-bg, #141414);
+    color: var(--badge-promo-color, #DFBA6B);
+    border-color: rgba(182, 138, 50, 0.55);
+    box-shadow: var(--badge-promo-shadow, 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12));
+}
+
+/* Variante Oferta Semanal Hero (Puente FASE 5.3.5) */
+.offer-badge,
+.offer-badge.dunes-badge,
+.weekly-offer-section .dunes-badge--gold {
+    background: var(--color-gold-gradient, linear-gradient(135deg, #DFBA6B 0%, #C5A059 50%, #9E7D3B 100%));
+    color: var(--color-text-dark, #121212);
+    border-color: rgba(158, 125, 59, 0.45);
+    box-shadow: 0 2px 8px rgba(182, 138, 50, 0.35), 0 1px 3px rgba(0, 0, 0, 0.12);
+    font-weight: 700;
+}
+
+/* Variante Oscura / Producto Destacado (Puente FASE 5.3.3) */
+.dunes-badge--dark,
+.product-tag.featured-tag,
+.featured-tag.dunes-badge,
+.product-tag.destacado-tag,
+.product-tag.destacado {
+    background-color: var(--badge-featured-bg, #1A1A1A);
+    color: var(--badge-featured-color, #F5EFE6);
+    border-color: rgba(197, 160, 89, 0.30);
+    box-shadow: var(--badge-featured-shadow, 0 2px 6px rgba(0, 0, 0, 0.20));
+}
+
+/* Variante Éxito / Stock Disponible / Entrega Gratis (Puente FASE 5.3.4 / FASE 5.3.6) */
+.dunes-badge--success,
+.product-stock-status.in-stock,
+.detail-stock-badge.in-stock,
+.delivery-option-badge.gratis,
+.delivery-zone-price.gratis {
+    background-color: var(--stock-in-bg, rgba(26, 127, 66, 0.08));
+    color: var(--color-success, #1A7F42);
+    border-color: rgba(26, 127, 66, 0.20);
+}
+
+/* Badges Informativos de Entrega y Checkout (Puente FASE 5.3.6) */
+.delivery-option-badge,
+.delivery-zone-price.gratis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    box-sizing: border-box;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+/* Variante Advertencia / Últimas Unidades (Puente FASE 5.3.4) */
+.dunes-badge--warning,
+.product-stock-status.low-stock,
+.product-stock-status.info,
+.detail-stock-badge.low-stock {
+    background-color: var(--stock-info-bg, rgba(212, 175, 55, 0.10));
+    color: var(--stock-info-color, #8C6A1E);
+    border-color: rgba(182, 138, 50, 0.30);
+}
+
+/* Variante Peligro / Estado Crítico */
+.dunes-badge--danger {
+    background-color: var(--color-danger-bg, rgba(220, 38, 38, 0.06));
+    color: var(--color-danger, #DC2626);
+    border-color: var(--color-danger-border, rgba(220, 38, 38, 0.35));
+}
+
+/* Variante Neutra / Agotado (Puente FASE 5.3.4) */
+.dunes-badge--neutral,
+.product-stock-status.out,
+.detail-stock-badge.out-of-stock {
+    background-color: var(--stock-out-bg, #F4F1ED);
+    color: var(--stock-out-color, #6E645D);
+    border-color: var(--stock-out-border, #D6CECE);
+}
+
+/* ==========================================================================
+   3. DUNES BUTTON FOUNDATION
+   ========================================================================== */
+.dunes-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm, 8px);
+    min-height: var(--btn-height-md, 44px);
+    padding: 0 var(--spacing-lg, 24px);
+    border: 1px solid transparent;
+    border-radius: var(--btn-radius-md, 8px);
+    font-family: var(--btn-font-family, var(--font-body, 'Montserrat', sans-serif));
+    font-size: 13px;
+    font-weight: var(--btn-font-weight, 600);
+    letter-spacing: var(--btn-letter-spacing, 0.06em);
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    box-sizing: border-box;
+    user-select: none;
+    transition: background-color var(--btn-transition-duration, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)),
+                color var(--btn-transition-duration, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)),
+                border-color var(--btn-transition-duration, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)),
+                box-shadow var(--btn-transition-duration, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)),
+                transform var(--btn-transition-duration, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.dunes-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.dunes-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.dunes-btn:focus-visible {
+    outline: 2px solid var(--catalog-gold, #B18225);
+    outline-offset: 2px;
+}
+
+.dunes-btn:disabled,
+.dunes-btn.disabled {
+    opacity: var(--btn-disabled-opacity, 0.45);
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none;
+    box-shadow: none;
+    filter: grayscale(35%);
+}
+
+.dunes-btn--primary {
+    background-color: var(--btn-primary-bg, #141414);
+    color: var(--btn-primary-color, #FFFFFF);
+    border-color: var(--btn-primary-border, rgba(182, 138, 50, 0.55));
+    box-shadow: var(--btn-shadow-primary);
+}
+
+.dunes-btn--primary:hover:not(:disabled) {
+    background-color: var(--btn-primary-hover-bg, #222222);
+    border-color: var(--btn-primary-hover-border, rgba(223, 186, 107, 0.90));
+    color: #FFFFFF;
+    box-shadow: var(--btn-shadow-primary-hover);
+}
+
+.dunes-btn--secondary {
+    background-color: var(--btn-secondary-bg, transparent);
+    color: var(--btn-secondary-color, #171717);
+    border-color: var(--btn-secondary-border, rgba(182, 138, 50, 0.38));
+    box-shadow: var(--btn-shadow-secondary);
+}
+
+.dunes-btn--secondary:hover:not(:disabled) {
+    background-color: var(--btn-secondary-hover-bg, rgba(182, 138, 50, 0.08));
+    border-color: var(--btn-secondary-hover-border, rgba(182, 138, 50, 0.70));
+    color: #171717;
+    box-shadow: var(--btn-shadow-secondary-hover);
+}
+
+.dunes-btn--ghost {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--btn-ghost-color, #555555);
+    font-weight: 500;
+}
+
+.dunes-btn--ghost:hover:not(:disabled) {
+    background-color: var(--btn-ghost-hover-bg, rgba(182, 138, 50, 0.08));
+    color: var(--btn-ghost-hover-color, #171717);
+    border-color: transparent;
+}
+
+.dunes-btn--gold {
+    background: var(--color-gold-gradient);
+    color: #FFFFFF;
+    border-color: var(--color-primary-dark, #9A7B1C);
+    box-shadow: 0 4px 14px rgba(177, 130, 37, 0.28);
+}
+
+.dunes-btn--gold:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(177, 130, 37, 0.40);
+    filter: brightness(1.05);
+}
+
+.dunes-btn--danger {
+    background-color: transparent;
+    color: var(--color-danger, #DC2626);
+    border-color: var(--color-danger-border, rgba(220, 38, 38, 0.35));
+}
+
+.dunes-btn--danger:hover:not(:disabled) {
+    background-color: var(--color-danger-bg, rgba(220, 38, 38, 0.06));
+    border-color: var(--color-danger, #DC2626);
+    color: var(--color-danger, #DC2626);
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12);
+}
+
+/* ==========================================================================
+   4. DUNES INPUT FOUNDATION
+   ========================================================================== */
+.dunes-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dunes-label {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: var(--text-sm, 0.875rem);
+    font-weight: 600;
+    color: var(--color-text-dark, #171717);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dunes-input {
+    width: 100%;
+    min-height: var(--input-height, 44px);
+    padding: 10px 14px;
+    background-color: var(--input-bg, #FFFDF8);
+    border: var(--input-border, 1px solid var(--catalog-gold-border, #E7D3A5));
+    border-radius: var(--input-radius, 8px);
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 14px;
+    color: var(--color-text-dark, #171717);
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color var(--duration-fast, 150ms) ease,
+                box-shadow var(--duration-fast, 150ms) ease,
+                background-color var(--duration-fast, 150ms) ease;
+}
+
+.dunes-input:focus {
+    border-color: var(--input-border-focus, #C49A3E);
+    box-shadow: var(--input-shadow-focus, 0 0 0 3px rgba(196, 154, 62, 0.15));
+}
+
+.dunes-input--error {
+    border-color: var(--color-danger, #DC2626);
+    background-color: #FFF8F8;
+}
+
+.dunes-input--error:focus {
+    border-color: var(--color-danger, #DC2626);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.dunes-input--success {
+    border-color: var(--color-success, #1A7F42);
+    background-color: #F8FFF9;
+}
+
+.dunes-input--success:focus {
+    border-color: var(--color-success, #1A7F42);
+    box-shadow: 0 0 0 3px rgba(26, 127, 66, 0.15);
+}
+
+.dunes-input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background-color: #F5F3EE;
+    border-color: #E0DACF;
+}
+
+.dunes-helper-text {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: var(--text-xs, 0.75rem);
+    color: var(--color-text-secondary, #7A7A7A);
+    line-height: 1.3;
+}
+
+.dunes-helper-text--error {
+    color: var(--color-danger, #DC2626);
+    font-weight: 600;
+}
+
+.dunes-helper-text--success {
+    color: var(--color-success, #1A7F42);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   5. DUNES MODAL FOUNDATION
+   ========================================================================== */
+.dunes-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-modal, 1100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md, 16px);
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--duration-base, 220ms) ease,
+                visibility var(--duration-base, 220ms) ease;
+}
+
+.dunes-modal.is-open,
+.dunes-modal:not([hidden]).is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.dunes-modal__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(18, 17, 16, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.dunes-modal__container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 520px;
+    background-color: var(--surface-card, #FFFEFC);
+    border: 1px solid var(--border-card, rgba(197, 160, 89, 0.45));
+    border-radius: var(--radius-card, 16px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 20px rgba(182, 138, 50, 0.15);
+    box-sizing: border-box;
+    overflow: hidden;
+    transform: scale(0.95) translateY(10px);
+    transition: transform var(--duration-base, 220ms) var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.dunes-modal.is-open .dunes-modal__container,
+.dunes-modal:not([hidden]).is-visible .dunes-modal__container {
+    transform: scale(1) translateY(0);
+}
+
+.dunes-modal__header {
+    padding: var(--spacing-lg, 24px) var(--spacing-lg, 24px) var(--spacing-sm, 8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm, 8px);
+    border-bottom: 1px solid rgba(197, 160, 89, 0.18);
+    box-sizing: border-box;
+}
+
+.dunes-modal__body {
+    padding: var(--spacing-lg, 24px);
+    max-height: calc(85vh - 140px);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.dunes-modal__footer {
+    padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-sm, 8px);
+    border-top: 1px solid rgba(197, 160, 89, 0.18);
+    background-color: var(--catalog-background, #FAF8F4);
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   6. DUNES EMPTY STATE FOUNDATION
+   ========================================================================== */
+.dunes-empty-state,
+.empty-cart-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-xxl, 48px) var(--spacing-lg, 24px);
+    background-color: var(--surface-card, #FFFEFC);
+    border: var(--border-card, 1px solid rgba(197, 160, 89, 0.45));
+    border-radius: var(--radius-card, 16px);
+    max-width: 520px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.05));
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+}
+
+/* En el carrito, si se encuentra contenido dentro de .cart-table-wrapper, unificar esteticamente */
+.cart-table-wrapper > .empty-cart-message,
+.cart-table-wrapper > .dunes-empty-state {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    max-width: 100%;
+    padding: clamp(36px, 6vw, 56px) 24px;
+}
+
+.dunes-empty-state__icon,
+.empty-cart-message > div[aria-hidden="true"],
+.empty-cart-message > div:first-child {
+    margin-bottom: var(--spacing-md, 18px) !important;
+    color: var(--catalog-gold, #B18225);
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.04) 70%, transparent 100%);
+    border: 1px solid rgba(197, 160, 89, 0.35);
+    box-shadow: 0 4px 16px rgba(177, 130, 37, 0.10);
+    box-sizing: border-box;
+}
+
+.dunes-empty-state__icon svg,
+.empty-cart-message > div[aria-hidden="true"] svg,
+.empty-cart-message > div:first-child svg,
+.empty-cart-message [data-lucide] {
+    width: 32px;
+    height: 32px;
+    stroke-width: 1.75;
+}
+
+.dunes-empty-state__title,
+.empty-cart-message h3 {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--color-text-dark, #171717);
+    margin: 0 0 var(--spacing-xs, 8px) 0;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+}
+
+.dunes-empty-state__text,
+.empty-cart-message p {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.94rem;
+    color: var(--catalog-text-secondary, #6F6F6F);
+    line-height: 1.6;
+    max-width: 440px;
+    margin: 0 auto var(--spacing-lg, 24px);
+}
+
+.dunes-empty-state__actions,
+.empty-cart-message > a.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0 !important;
+}
+
+/* ==========================================================================
+   7. DUNES ALERT / FEEDBACK FOUNDATION
+   ========================================================================== */
+.dunes-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm, 8px);
+    padding: 12px var(--spacing-md, 16px);
+    border-radius: var(--radius-control, 8px);
+    border: 1px solid transparent;
+    border-left-width: 4px;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    box-sizing: border-box;
+}
+
+.dunes-alert--success {
+    background-color: var(--color-success-bg, rgba(26, 127, 66, 0.08));
+    border-color: rgba(26, 127, 66, 0.25);
+    border-left-color: var(--color-success, #1A7F42);
+    color: #105E2E;
+}
+
+.dunes-alert--warning {
+    background-color: var(--color-warning-bg, rgba(212, 175, 55, 0.10));
+    border-color: rgba(182, 138, 50, 0.30);
+    border-left-color: var(--catalog-gold, #B18225);
+    color: #735313;
+}
+
+.dunes-alert--danger {
+    background-color: var(--color-danger-bg, rgba(220, 38, 38, 0.06));
+    border-color: var(--color-danger-border, rgba(220, 38, 38, 0.35));
+    border-left-color: var(--color-danger, #DC2626);
+    color: #9C2020;
+}
+
+.dunes-alert--info {
+    background-color: rgba(23, 162, 184, 0.08);
+    border-color: rgba(23, 162, 184, 0.25);
+    border-left-color: var(--color-info, #17A2B8);
+    color: #0E6573;
 }

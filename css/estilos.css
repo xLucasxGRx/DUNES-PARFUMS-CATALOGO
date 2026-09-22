@@ -1197,46 +1197,73 @@ button:disabled,
     display: none;
 }
 
-/* Cinta de Oferta (Superior Izquierda - Acabado Joya) */
-.product-tag.promo-tag {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+/* Cinta de Oferta (Superior Izquierda - Transición Segura FASE 5.3.2: Badge Oferta hacia Dunes UI Foundation) */
+.product-tag.promo-tag,
+.promo-tag.dunes-badge,
+.dunes-badge--gold {
     background: var(--badge-promo-bg, #141414);
     color: var(--badge-promo-color, #DFBA6B);
     border: var(--badge-promo-border, 1px solid rgba(182, 138, 50, 0.55));
-    font-family: var(--btn-font-family, var(--font-body, 'Montserrat', sans-serif));
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 10.5px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding: 4px 9px;
     border-radius: var(--badge-promo-radius, 6px);
-    z-index: 3;
     line-height: 1.15;
     box-shadow: var(--badge-promo-shadow, 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12));
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Etiqueta de Producto Destacado (Dorado Sobrio / Crema Cálido) */
-.product-tag.featured-tag,
-.product-tag.destacado-tag,
-.product-tag.destacado {
+.product-tag.promo-tag {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: var(--badge-featured-bg, #FAF6EE);
-    color: var(--badge-featured-color, #8A6825);
-    border: var(--badge-featured-border, 1px solid rgba(197, 160, 89, 0.45));
-    font-family: var(--btn-font-family, var(--font-body, 'Montserrat', sans-serif));
+    z-index: 3;
+}
+
+/* Etiqueta de Producto Destacado (Transición Segura FASE 5.3.3: Badge Destacado hacia Dunes UI Foundation .dunes-badge--dark) */
+.product-tag.featured-tag,
+.featured-tag.dunes-badge,
+.product-tag.destacado-tag,
+.product-tag.destacado,
+.dunes-badge--dark {
+    background: var(--badge-featured-bg, #1A1A1A);
+    color: var(--badge-featured-color, #F5EFE6);
+    border: var(--badge-featured-border, 1px solid rgba(197, 160, 89, 0.30));
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding: 3px 8px;
     border-radius: var(--badge-featured-radius, 6px);
-    z-index: 3;
     line-height: 1.15;
-    box-shadow: var(--badge-featured-shadow, 0 2px 6px rgba(31, 24, 12, 0.06));
+    box-shadow: var(--badge-featured-shadow, 0 2px 6px rgba(0, 0, 0, 0.20));
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-tag.featured-tag,
+.product-tag.destacado-tag,
+.product-tag.destacado {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+}
+
+/* Separación visual cuando conviven badge de oferta y badge destacado en la misma tarjeta */
+.product-tag.promo-tag ~ .product-tag.featured-tag,
+.product-tag.promo-tag ~ .product-tag.destacado-tag,
+.product-tag.promo-tag ~ .product-tag.destacado {
+    top: 38px;
 }
 
 /* Etiqueta Agotado (Oculta del encabezado; el estado se muestra en la cápsula central sobre el frasco) */
@@ -1381,7 +1408,7 @@ button:disabled,
     line-height: 1.35;
 }
 
-/* Stock en Línea Limpia con Diferenciación (FASE 3) */
+/* Stock en Línea Limpia con Diferenciación (Transición Segura FASE 5.3.4 hacia Dunes UI Foundation) */
 .product-stock-status {
     display: inline-flex;
     align-items: center;
@@ -1389,11 +1416,13 @@ button:disabled,
     gap: 6px;
     margin: 2px 0 0;
     padding: 3px 8px;
-    border-radius: 4px;
-    font-family: 'Montserrat', sans-serif;
+    border-radius: var(--radius-sm, 6px);
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 11.5px;
     font-weight: 600;
     line-height: 1.25;
+    box-sizing: border-box;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
 }
 
 .product-stock-status.in-stock {
@@ -1802,21 +1831,33 @@ button:disabled,
     filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15));
 }
 
-.offer-badge {
+/* Badge de Oferta Semanal (Transición Segura FASE 5.3.5: Oferta Semanal Hero hacia Dunes UI Foundation) */
+.offer-badge,
+.offer-badge.dunes-badge,
+.weekly-offer-section .dunes-badge--gold {
     position: absolute;
     top: 24px;
     left: 24px;
-    background: var(--badge-promo-bg, #141414);
-    color: var(--badge-promo-color, #DFBA6B);
-    border: var(--badge-promo-border, 1px solid rgba(182, 138, 50, 0.55));
-    font-family: var(--btn-font-family, 'Montserrat', sans-serif);
-    font-size: 0.75rem;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--color-gold-gradient, linear-gradient(135deg, #DFBA6B 0%, #C5A059 50%, #9E7D3B 100%));
+    color: var(--color-text-dark, #121212);
+    border: 1px solid rgba(158, 125, 59, 0.45);
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 700;
+    line-height: 1.15;
     padding: 6px 14px;
     border-radius: var(--badge-promo-radius, 6px);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    box-shadow: var(--badge-promo-shadow, 0 2px 8px rgba(0, 0, 0, 0.22), 0 0 6px rgba(182, 138, 50, 0.12));
+    box-shadow: 0 2px 8px rgba(182, 138, 50, 0.35), 0 1px 3px rgba(0, 0, 0, 0.12);
+    z-index: 2;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
 }
 
 .offer-content-side {
@@ -2830,24 +2871,9 @@ button:disabled,
     margin-bottom: 8px;
 }
 
-.product-stock-status {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--stock-in-color, #1A7F42);
-    background-color: var(--stock-in-bg, rgba(26, 127, 66, 0.08));
-    border: var(--stock-in-border, 1px solid rgba(26, 127, 66, 0.20));
-    padding: 3px 8px;
-    border-radius: 4px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.product-stock-status.out {
-    color: var(--stock-out-color, #6E645D);
-    background-color: var(--stock-out-bg, #F4F1ED);
-    border: var(--stock-out-border, 1px solid #D6CECE);
+/* Reglas consolidadas FASE 5.3.4 heredan de .product-stock-status y Dunes UI Foundation */
+.product-stock-row .product-stock-status {
+    border-radius: var(--radius-sm, 6px);
 }
 
 /* --- Ficha de Detalle de Producto --- */
@@ -3297,23 +3323,32 @@ body.lightbox-open {
     color: var(--color-bg-dark);
 }
 
+/* Estado de Stock en Vista Detalle (Transición Segura FASE 5.3.4 hacia Dunes UI Foundation) */
 .detail-stock-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 5px 12px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.85rem;
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: var(--radius-sm, 6px);
     margin-bottom: 24px;
     line-height: 1.2;
+    box-sizing: border-box;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
 }
 
 .detail-stock-badge.in-stock {
     background-color: var(--stock-in-bg, rgba(26, 127, 66, 0.08));
     color: var(--stock-in-color, #1A7F42);
     border: var(--stock-in-border, 1px solid rgba(26, 127, 66, 0.20));
+}
+
+.detail-stock-badge.low-stock {
+    background-color: var(--stock-info-bg, rgba(212, 175, 55, 0.10));
+    color: var(--stock-info-color, #8C6A1E);
+    border: var(--stock-info-border, 1px solid rgba(182, 138, 50, 0.30));
 }
 
 .detail-stock-badge.out-of-stock {
@@ -4193,37 +4228,62 @@ body.lightbox-open {
     font-variant-numeric: tabular-nums;
 }
 
+/* Badge GRATIS en Selector de Zonas (Transición Segura FASE 5.3.6 hacia Dunes UI Foundation .dunes-badge--success) */
 .delivery-zone-price.gratis {
-    color: #159447;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    color: var(--catalog-green, #159447);
     background-color: rgba(21, 148, 71, 0.10);
+    border: 1px solid rgba(21, 148, 71, 0.25);
     font-size: 11px;
     font-weight: 700;
     padding: 3px 8px;
-    border-radius: 12px;
-    letter-spacing: 0.5px;
-    display: inline-block;
-    border: 1px solid rgba(21, 148, 71, 0.25);
+    border-radius: var(--radius-sm, 6px);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    line-height: 1.15;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
 }
 
-.empty-cart-message {
+/* Transición segura FASE 5.3.1: Empty State Carrito hacia Dunes UI Foundation */
+.empty-cart-message,
+.dunes-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 70px 40px;
-    color: var(--color-text-muted);
+    box-sizing: border-box;
 }
 
-.empty-cart-message h3 {
+.cart-table-wrapper > .empty-cart-message,
+.cart-table-wrapper > .dunes-empty-state {
+    padding: clamp(36px, 6vw, 56px) 24px;
+}
+
+.empty-cart-message h3,
+.dunes-empty-state__title {
     font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
     color: var(--color-text-dark, #171717);
-    margin-bottom: 10px;
-    font-size: 1.65rem;
-    font-weight: 700;
+    margin: 0 0 8px 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
 }
 
-.empty-cart-message p {
-    font-family: var(--font-body);
+.empty-cart-message p,
+.dunes-empty-state__text {
+    font-family: var(--font-body, 'Montserrat', sans-serif);
     font-weight: 400;
-    font-size: 0.92rem;
-    color: #6F6F6F;
+    font-size: 0.94rem;
+    color: var(--catalog-text-secondary, #6F6F6F);
+    line-height: 1.6;
+    max-width: 440px;
+    margin: 0 auto 24px auto;
 }
 
 /* Adaptación Responsiva Específica de Detalle y Carrito */
@@ -4526,23 +4586,32 @@ body.lightbox-open {
     overflow-wrap: break-word;
 }
 
+/* Badges Informativos de Entrega en Carrito (Transición Segura FASE 5.3.6 hacia Dunes UI Foundation) */
 #page-carrito .delivery-option-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-family: var(--font-body, 'Montserrat', sans-serif);
     font-size: 0.75rem;
     font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
     color: var(--color-primary-dark, #8E671D);
     background-color: rgba(212, 175, 55, 0.10);
     border: 1px solid rgba(182, 138, 50, 0.25);
     padding: 3px 10px;
-    border-radius: 9999px;
+    border-radius: var(--border-radius-pill, 9999px);
     white-space: nowrap;
-    text-align: right;
+    box-sizing: border-box;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
 }
 
 #page-carrito .delivery-option-badge.gratis {
-    color: #159447;
+    color: var(--catalog-green, #159447);
     background-color: rgba(21, 148, 71, 0.10);
     border: 1px solid rgba(21, 148, 71, 0.28);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 /* Zonas de Delivery Local */
@@ -4686,17 +4755,28 @@ body.lightbox-open {
 }
 
 #page-carrito .delivery-zone-price.gratis {
-    color: #159447;
-    background-color: rgba(21, 148, 71, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body, 'Montserrat', sans-serif);
+    color: var(--catalog-green, #159447);
+    background-color: rgba(21, 148, 71, 0.10);
+    border: 1px solid rgba(21, 148, 71, 0.25);
     padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.78rem;
+    border-radius: var(--radius-sm, 6px);
+    font-size: 0.75rem;
     font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    line-height: 1.15;
+    transition: all var(--duration-base, 220ms) var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
 }
 
 #page-carrito .zone-option-btn.selected .delivery-zone-price.gratis {
     color: #FFFFFF;
     background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 /* Campos de Formulario e Inputs */
