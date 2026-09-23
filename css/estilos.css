@@ -881,7 +881,8 @@ button:disabled,
     position: relative;
     z-index: 2;
     filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6));
-    animation: floatingPerfume 6s ease-in-out infinite;
+    animation: heroPerfumeEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards,
+               floatingPerfume 6s ease-in-out 0.8s infinite;
 }
 
 /* Decoraciones sutiles */

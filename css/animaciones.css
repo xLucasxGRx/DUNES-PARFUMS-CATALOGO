@@ -4,6 +4,22 @@
  */
 
 /* ==========================================================================
+   Microanimación de Entrada Hero (FASE 6.1)
+   Sensación de vitrina boutique: aparición suave y ascendente
+   ========================================================================== */
+@keyframes heroPerfumeEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
    Efecto de Flotación Sutil (Hero Perfume)
    ========================================================================== */
 @keyframes floatingPerfume {
@@ -125,4 +141,54 @@ a.btn:active:not(:disabled) {
     border-top: 2px solid var(--color-primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+}
+
+/* ==========================================================================
+   Microanimación de Entrada Escalonada en Catálogo (FASE 6.1)
+   Sensación de exhibición boutique: aparición progresiva y cuidada
+   ========================================================================== */
+@keyframes cardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.products-grid .product-card {
+    animation: cardEntrance 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+/* Tarjetas con ScrollReveal preservan su comportamiento nativo */
+.product-card.reveal {
+    animation: none;
+}
+
+/* Retrasos Progresivos Escalonados (Staggered Delays FASE 6.1) */
+.products-grid .product-card:nth-child(1) { animation-delay: 0ms; }
+.products-grid .product-card:nth-child(2) { animation-delay: 80ms; }
+.products-grid .product-card:nth-child(3) { animation-delay: 160ms; }
+.products-grid .product-card:nth-child(4) { animation-delay: 240ms; }
+.products-grid .product-card:nth-child(5) { animation-delay: 320ms; }
+.products-grid .product-card:nth-child(6) { animation-delay: 400ms; }
+.products-grid .product-card:nth-child(7) { animation-delay: 480ms; }
+.products-grid .product-card:nth-child(8) { animation-delay: 560ms; }
+.products-grid .product-card:nth-child(9) { animation-delay: 640ms; }
+.products-grid .product-card:nth-child(10) { animation-delay: 720ms; }
+.products-grid .product-card:nth-child(11) { animation-delay: 800ms; }
+.products-grid .product-card:nth-child(12) { animation-delay: 880ms; }
+.products-grid .product-card:nth-child(n+13) { animation-delay: 960ms; }
+
+/* Accesibilidad: Respeto a usuarios con preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    .hero-perfume-img,
+    .products-grid .product-card {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
 }
