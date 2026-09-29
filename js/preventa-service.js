@@ -6,11 +6,14 @@
 
 const PreventaService = (function () {
     let productosCache = null;
+    let configPreventaCache = null;
     let promesaCarga = null;
+    let promesaCargaConfig = null;
     let origenDatos = 'desconocido';
 
     const CONFIG_DEFAULT = {
         sheetsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=1833078058&single=true&output=csv",
+        configSheetsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=297886514&single=true&output=csv",
         respaldoJsonUrl: null, // Desactivado para producción: Google Sheets es la única fuente oficial
         permitirFallback: false,
         timeoutMs: 8000
@@ -317,8 +320,120 @@ const PreventaService = (function () {
      */
     function limpiarCache() {
         productosCache = null;
+        configPreventaCache = null;
         promesaCarga = null;
+        promesaCargaConfig = null;
         origenDatos = 'desconocido';
+    }
+
+    /**
+     * Procesa el campo fecha_llegada como TEXTO LIBRE (FASE P5.1).
+     * Acepta cualquier contenido desde Google Sheets sin conversiones automáticas,
+     * formatos calendario, cálculos ni validaciones de fecha.
+     * @param {string} fechaStr
+     * @returns {string}
+     */
+    function formatearFechaLlegada(fechaStr) {
+        if (fechaStr === null || fechaStr === undefined) return '';
+        return String(fechaStr).trim();
+    }
+
+    /**
+     * Carga y parsea la configuración de preventa (CONFIG_PREVENTA) desde Google Sheets (FASE P5.1).
+     * @param {Object} [options]
+     * @param {boolean} [options.forzarRecarga=false]
+     * @returns {Promise<{ fecha_llegada: string, fecha_llegada_formateada: string, mensaje: string, activo: boolean }>}
+     */
+    async function cargarConfiguracionPreventa(options = {}) {
+        const { forzarRecarga = false } = options;
+
+        if (!forzarRecarga && configPreventaCache) {
+            return configPreventaCache;
+        }
+
+        if (promesaCargaConfig && !forzarRecarga) {
+            return promesaCargaConfig;
+        }
+
+        promesaCargaConfig = (async () => {
+            const config = obtenerConfig();
+            const configUrl = config.configSheetsCsvUrl || CONFIG_DEFAULT.configSheetsCsvUrl;
+
+            try {
+                const sep = configUrl.includes('?') ? '&' : '?';
+                const urlConTimestamp = `${configUrl}${sep}_t=${Date.now()}`;
+                const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+                const timeoutId = controller ? setTimeout(() => controller.abort(), config.timeoutMs || 8000) : null;
+
+                const response = await fetch(urlConTimestamp, {
+                    cache: 'no-store',
+                    headers: { 'Accept': 'text/csv,text/plain,*/*' },
+                    signal: controller ? controller.signal : undefined
+                });
+
+                if (timeoutId) clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} al cargar CONFIG_PREVENTA`);
+                }
+
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+
+                if (!rows || rows.length < 2) {
+                    throw new Error('CSV de CONFIG_PREVENTA vacío o sin datos');
+                }
+
+                const headerRow = rows[0].map(h => normalizarCabecera(h));
+                const dataRow = rows[1];
+
+                const findVal = (colNames) => {
+                    for (const name of colNames) {
+                        const idx = headerRow.findIndex(h => h === name || h.replace(/\s+/g, '_') === name);
+                        if (idx !== -1 && dataRow[idx] !== undefined) {
+                            return limpiarValor(dataRow[idx]);
+                        }
+                    }
+                    return '';
+                };
+
+                const rawFecha = findVal(['fecha_llegada', 'fecha', 'llegada']);
+                const rawMensaje = findVal(['mensaje', 'mensaje_llegada', 'texto']);
+                const rawActivo = findVal(['activo', 'habilitado', 'estado']);
+
+                const activo = normalizarBooleano(rawActivo);
+                const fechaFormateada = formatearFechaLlegada(rawFecha);
+                const mensaje = rawMensaje || 'Reserva tu fragancia y asegura tu precio especial de preventa.';
+
+                configPreventaCache = {
+                    fecha_llegada: rawFecha,
+                    fecha_llegada_formateada: fechaFormateada,
+                    mensaje: mensaje,
+                    activo: activo
+                };
+
+                return configPreventaCache;
+            } catch (err) {
+                console.warn('[PreventaService] No se pudo cargar CONFIG_PREVENTA de Google Sheets:', err.message);
+                return {
+                    fecha_llegada: '',
+                    fecha_llegada_formateada: '',
+                    mensaje: 'Reserva tu fragancia y asegura tu precio especial de preventa.',
+                    activo: false
+                };
+            } finally {
+                promesaCargaConfig = null;
+            }
+        })();
+
+        return promesaCargaConfig;
+    }
+
+    /**
+     * Retorna la configuración de preventa actualmente en memoria o null si aún no se cargó.
+     */
+    function obtenerConfiguracionPreventa() {
+        return configPreventaCache;
     }
 
     /**
@@ -377,7 +492,10 @@ const PreventaService = (function () {
         obtenerStockProducto,
         validarDisponibilidad,
         obtenerOrigen,
-        limpiarCache
+        limpiarCache,
+        cargarConfiguracionPreventa,
+        obtenerConfiguracionPreventa,
+        formatearFechaLlegada
     };
 })();
 

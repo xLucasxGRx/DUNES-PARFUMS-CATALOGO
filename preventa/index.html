@@ -192,6 +192,29 @@
                 <h1 class="preventa-hero-title">PREVENTA <span>DUNES</span></h1>
             </section>
 
+            <!-- ============================================================== -->
+            <!-- SECCIÓN 1.5: INFORMACIÓN DINÁMICA DE FECHA DE LLEGADA (FASE P5.1) -->
+            <!-- ============================================================== -->
+            <section class="preventa-arrival-section" id="preventa-arrival-section" aria-label="Próxima llegada de fragancias en preventa" style="display: none;">
+                <div class="preventa-arrival-card">
+                    <div class="preventa-arrival-badge">
+                        <span class="preventa-arrival-badge-icon" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </span>
+                        <span class="preventa-arrival-title" id="preventa-arrival-title">PRÓXIMA LLEGADA</span>
+                    </div>
+                    <div class="preventa-arrival-date-wrapper">
+                        <h2 class="preventa-arrival-date" id="preventa-arrival-date">30 DE OCTUBRE</h2>
+                    </div>
+                    <p class="preventa-arrival-subtext" id="preventa-arrival-subtext">
+                        Reserva tu fragancia y asegura tu precio especial de preventa.
+                    </p>
+                </div>
+            </section>
+
             <!-- SECCIÓN 2: ALERTA DESTACADA - SEPARACIÓN S/10 (Ocultada del flujo principal en FASE P3.3: la información ya está en el modal inicial) -->
             <section class="preventa-alert-section" id="preventa-alert" style="display: none;" aria-hidden="true">
                 <div class="preventa-alert-card">
@@ -990,6 +1013,34 @@
                 if (gridEl) {
                     gridEl.style.display = 'none';
                     gridEl.innerHTML = '';
+                }
+
+                // Carga dinámica de configuración de llegada PREVENTA (FASE P5.1)
+                try {
+                    if (window.PreventaService && typeof window.PreventaService.cargarConfiguracionPreventa === 'function') {
+                        const configLlegada = await window.PreventaService.cargarConfiguracionPreventa();
+                        const arrivalSec = document.getElementById('preventa-arrival-section');
+                        const arrivalDateEl = document.getElementById('preventa-arrival-date');
+                        const arrivalSubtextEl = document.getElementById('preventa-arrival-subtext');
+
+                        if (arrivalSec) {
+                            if (configLlegada && configLlegada.activo && configLlegada.fecha_llegada_formateada) {
+                                if (arrivalDateEl) {
+                                    arrivalDateEl.textContent = configLlegada.fecha_llegada_formateada;
+                                }
+                                if (arrivalSubtextEl && configLlegada.mensaje) {
+                                    arrivalSubtextEl.textContent = configLlegada.mensaje;
+                                }
+                                arrivalSec.style.display = 'block';
+                                arrivalSec.removeAttribute('aria-hidden');
+                            } else {
+                                arrivalSec.style.display = 'none';
+                                arrivalSec.setAttribute('aria-hidden', 'true');
+                            }
+                        }
+                    }
+                } catch (configErr) {
+                    console.warn('[Preventa UI] Error al cargar configuración de llegada:', configErr);
                 }
 
                 try {

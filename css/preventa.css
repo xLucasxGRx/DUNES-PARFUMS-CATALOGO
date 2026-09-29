@@ -157,6 +157,113 @@
 }
 
 /* ==========================================================================
+   3.0. INFORMACIÓN DINÁMICA DE FECHA DE LLEGADA PREVENTA (FASE P5.1)
+   ========================================================================== */
+.preventa-arrival-section {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto clamp(0.75rem, 1.8vw, 1.25rem);
+    padding: 0 var(--space-4, 1rem);
+    box-sizing: border-box;
+}
+
+.preventa-arrival-card {
+    background: linear-gradient(145deg, rgba(24, 22, 18, 0.95) 0%, rgba(14, 13, 11, 0.98) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 12px;
+    padding: clamp(0.9rem, 2vw, 1.25rem) clamp(1.25rem, 3vw, 2rem);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.preventa-arrival-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+    pointer-events: none;
+}
+
+.preventa-arrival-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.22rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    color: var(--color-primary, #d4af37);
+    margin-bottom: 0.35rem;
+}
+
+.preventa-arrival-badge-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-primary, #d4af37);
+}
+
+.preventa-arrival-title {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-primary, #d4af37);
+}
+
+.preventa-arrival-date-wrapper {
+    margin: 0.2rem 0 0.35rem;
+}
+
+.preventa-arrival-date {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    color: #fbf7ee;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.preventa-arrival-subtext {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: clamp(0.78rem, 1.8vw, 0.85rem);
+    font-weight: 400;
+    line-height: 1.45;
+    color: rgba(251, 247, 238, 0.78);
+    max-width: 520px;
+    margin: 0 auto;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+    .preventa-arrival-section {
+        padding: 0 0.85rem;
+        margin-bottom: 0.85rem;
+    }
+    .preventa-arrival-card {
+        padding: 0.85rem 1rem;
+        border-radius: 10px;
+    }
+    .preventa-arrival-date {
+        font-size: clamp(1.45rem, 5.5vw, 1.85rem);
+    }
+    .preventa-arrival-subtext {
+        font-size: 0.78rem;
+    }
+}
+
+/* ==========================================================================
    3.1. PANEL DE BÚSQUEDA Y FILTROS PREVENTA (FASE P3.2.1: .preventa-filter-panel)
    ========================================================================== */
 .preventa-filters,

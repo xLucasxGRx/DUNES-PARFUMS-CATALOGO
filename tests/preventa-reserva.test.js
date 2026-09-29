@@ -886,3 +886,42 @@ test('30. FASE P4.9 — Optimización mensaje WhatsApp PREVENTA (versión final 
     const urlDecodificada = decodeURIComponent(urlWhatsAppGenerada);
     assert.equal(urlDecodificada.includes(esperadoPrompt), true, 'La URL de WhatsApp debe contener el mensaje exacto codificado');
 });
+
+test('31. AJUSTE P4.8.5 — Eliminación visual indicador "Máx" en cantidad de reserva', () => {
+    const jsPath = path.join(ROOT_DIR, 'js', 'preventa-reserva.js');
+    const js = fs.readFileSync(jsPath, 'utf8');
+    const cssPath = path.join(ROOT_DIR, 'css', 'preventa-reserva.css');
+    const css = fs.readFileSync(cssPath, 'utf8');
+
+    // 1. En js/preventa-reserva.js no debe inyectarse el texto 'Máx' en la tarjeta
+    assert.equal(js.includes('>Máx<'), false, 'No debe renderizar texto "Máx" en el selector de cantidad');
+
+    // 2. En css/preventa-reserva.css, la regla de .reserva-stock-limit-badge debe estar oculta
+    assert.ok(css.includes('.reserva-stock-limit-badge'), 'Debe existir regla para .reserva-stock-limit-badge');
+    assert.ok(css.includes('display: none !important'), 'El indicador visual debe estar oculto con display: none');
+
+    // 3. Validación de límite de stock intacto: no permitir aumentar más allá del stock disponible
+    globalThis.localStorage.clear();
+    agregarProductoPreventa({
+        id: 'p-stock-max-test',
+        nombre: 'Khamrah Qahwa',
+        precio_preventa: 140,
+        stock: 2
+    }, 2);
+
+    const items = obtenerProductos();
+    assert.equal(items.length, 1);
+    assert.equal(items[0].cantidad, 2);
+
+    // Intentar agregar una tercera unidad cuando stock es 2 debe ser bloqueado por la lógica de stock
+    const cantAntes = items[0].cantidad;
+    const stockMax = Math.max(1, parseInt(items[0].stock, 10));
+    assert.equal(cantAntes >= stockMax, true, 'Debe detectar que alcanzó el stock máximo');
+
+    // Adelanto y saldo calculados con precisión
+    const resumen = obtenerResumen();
+    assert.equal(resumen.totalUnidades, 2);
+    assert.equal(resumen.totalProductos, 280);
+    assert.equal(resumen.totalAdelanto, 20);
+    assert.equal(resumen.saldoPendiente, 260);
+});

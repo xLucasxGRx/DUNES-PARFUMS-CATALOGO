@@ -398,7 +398,6 @@
                                     +
                                 </button>
                             </div>
-                            ${isMax ? '<span class="reserva-stock-limit-badge" title="Has alcanzado el límite de stock de preventa">Máx</span>' : ''}
                         </div>
 
                         <div class="reserva-item-financial-col">

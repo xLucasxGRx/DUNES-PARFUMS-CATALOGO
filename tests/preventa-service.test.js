@@ -390,6 +390,102 @@ test('15. FASE P2.3 - Grid responsive (4 col desktop, 3 col tablet, 2 col móvil
     assert.ok(html.includes('Reserva con S/ 10.00'), 'Debe renderizar mensaje de separación S/10');
 });
 
+test('16. FASE P5.1 - PreventaService.formatearFechaLlegada() trata fecha_llegada como TEXTO LIBRE exacto sin conversiones', () => {
+    const fn = globalThis.PreventaService.formatearFechaLlegada;
+    assert.equal(typeof fn, 'function');
 
+    // Ejemplos válidos requeridos por la especificación de texto libre
+    assert.equal(fn('30 DE OCTUBRE'), '30 DE OCTUBRE');
+    assert.equal(fn('FINES DE OCTUBRE'), 'FINES DE OCTUBRE');
+    assert.equal(fn('PRIMERA SEMANA DE NOVIEMBRE'), 'PRIMERA SEMANA DE NOVIEMBRE');
+    assert.equal(fn('FECHA POR CONFIRMAR'), 'FECHA POR CONFIRMAR');
 
+    // Fechas numéricas (se preservan tal cual sin conversión ni formato calendario)
+    assert.equal(fn('30/10/2026'), '30/10/2026');
+    assert.equal(fn('30-10-2026'), '30-10-2026');
+
+    // Rangos aproximados y mensajes comerciales
+    assert.equal(fn('15 al 20 de Noviembre'), '15 al 20 de Noviembre');
+    assert.equal(fn('Próximamente en tienda'), 'Próximamente en tienda');
+});
+
+test('17. FASE P5.1 - PreventaService.cargarConfiguracionPreventa() lee y parsea CONFIG_PREVENTA con activo=true y texto libre', async () => {
+    const csvSampleConfig = 'fecha_llegada,mensaje,activo\r\nFINES DE OCTUBRE,"Próxima llegada de fragancias",TRUE\r\n';
+
+    globalThis.fetch = async (url) => {
+        return {
+            ok: true,
+            text: async () => csvSampleConfig
+        };
+    };
+
+    const config = await globalThis.PreventaService.cargarConfiguracionPreventa({ forzarRecarga: true });
+
+    assert.ok(config);
+    assert.equal(config.fecha_llegada, 'FINES DE OCTUBRE');
+    assert.equal(config.fecha_llegada_formateada, 'FINES DE OCTUBRE');
+    assert.equal(config.mensaje, 'Próxima llegada de fragancias');
+    assert.equal(config.activo, true);
+
+    const configEnMemoria = globalThis.PreventaService.obtenerConfiguracionPreventa();
+    assert.equal(configEnMemoria.activo, true);
+    assert.equal(configEnMemoria.fecha_llegada, 'FINES DE OCTUBRE');
+});
+
+test('18. FASE P5.1 - PreventaService.cargarConfiguracionPreventa() con activo=false o variantes', async () => {
+    const csvInactivo = 'fecha_llegada,mensaje_llegada,activo\r\n30 DE OCTUBRE,"Próxima llegada de fragancias",FALSE\r\n';
+
+    globalThis.fetch = async (url) => {
+        return {
+            ok: true,
+            text: async () => csvInactivo
+        };
+    };
+
+    const config = await globalThis.PreventaService.cargarConfiguracionPreventa({ forzarRecarga: true });
+
+    assert.ok(config);
+    assert.equal(config.activo, false);
+    assert.equal(config.fecha_llegada_formateada, '30 DE OCTUBRE');
+    assert.equal(config.mensaje, 'Próxima llegada de fragancias');
+});
+
+test('19. FASE P5.1 - Estructura HTML y estilos CSS del bloque dinámico de próxima llegada', () => {
+    const htmlPath = path.join(ROOT_DIR, 'preventa', 'index.html');
+    const html = fs.readFileSync(htmlPath, 'utf8');
+
+    // Comprobar elementos y jerarquía
+    assert.ok(html.includes('id="preventa-arrival-section"'), 'Debe existir preventa-arrival-section');
+    assert.ok(html.includes('class="preventa-arrival-card"'), 'Debe existir preventa-arrival-card');
+    assert.ok(html.includes('id="preventa-arrival-title"'), 'Debe existir preventa-arrival-title');
+    assert.ok(html.includes('PRÓXIMA LLEGADA'), 'Debe contener título PRÓXIMA LLEGADA');
+    assert.ok(html.includes('id="preventa-arrival-date"'), 'Debe existir preventa-arrival-date');
+    assert.ok(html.includes('id="preventa-arrival-subtext"'), 'Debe existir preventa-arrival-subtext');
+    assert.ok(html.includes('Reserva tu fragancia y asegura tu precio especial de preventa.'), 'Debe contener el texto informativo requerido');
+
+    // Comprobar ubicación visual: después de preventa-hero y antes de preventa-filters
+    const heroIdx = html.indexOf('id="preventa-hero"');
+    const arrivalIdx = html.indexOf('id="preventa-arrival-section"');
+    const filtersIdx = html.indexOf('id="preventa-filters"');
+
+    assert.ok(heroIdx !== -1, 'preventa-hero debe existir');
+    assert.ok(arrivalIdx !== -1, 'preventa-arrival-section debe existir');
+    assert.ok(filtersIdx !== -1, 'preventa-filters debe existir');
+    assert.ok(heroIdx < arrivalIdx, 'preventa-arrival-section debe estar después de preventa-hero');
+    assert.ok(arrivalIdx < filtersIdx, 'preventa-arrival-section debe estar antes de preventa-filters');
+
+    // No debe estar dentro de las tarjetas
+    const gridIdx = html.indexOf('id="preventa-products-grid"');
+    assert.ok(arrivalIdx < gridIdx, 'El bloque no debe colocarse dentro de la cuadrícula de tarjetas');
+
+    // Comprobar CSS
+    const cssPath = path.join(ROOT_DIR, 'css', 'preventa.css');
+    const css = fs.readFileSync(cssPath, 'utf8');
+
+    assert.ok(css.includes('.preventa-arrival-section'), 'Debe tener selector .preventa-arrival-section');
+    assert.ok(css.includes('.preventa-arrival-card'), 'Debe tener selector .preventa-arrival-card');
+    assert.ok(css.includes('.preventa-arrival-date'), 'Debe tener selector .preventa-arrival-date');
+    assert.ok(css.includes('Cormorant Garamond'), 'Debe usar Cormorant Garamond para la fecha o tipografías');
+    assert.ok(css.includes('Montserrat'), 'Debe usar Montserrat para el texto secundario');
+});
 
