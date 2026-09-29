@@ -128,7 +128,7 @@ test('3. Fórmulas comerciales con 3 unidades (Ejemplo requerido del prompt: S/4
     assert.equal(resumen.saldoPendiente, 375);
 });
 
-test('4. Preparación de estructura del mensaje compacto para WhatsApp (FASE P4.7)', () => {
+test('4. Preparación de estructura del mensaje para WhatsApp (FASE P4.9)', () => {
     const items = [
         {
             nombre: 'Khamrah Qahwa',
@@ -157,16 +157,18 @@ test('4. Preparación de estructura del mensaje compacto para WhatsApp (FASE P4.
 
     const mensaje = prepararEstructuraMensajeWhatsApp(items, resumen);
 
-    assert.ok(mensaje.includes('Hola Dunes Parfums 👋'));
-    assert.ok(mensaje.includes('Deseo confirmar mi reserva PREVENTA:'));
+    assert.ok(mensaje.includes('Hola Dunes Parfums'));
+    assert.ok(!mensaje.includes('👋'), 'No debe contener emojis');
+    assert.ok(mensaje.includes('Deseo confirmar mi reserva de PREVENTA:'));
     assert.ok(mensaje.includes('Productos:'));
-    assert.ok(mensaje.includes('- Khamrah Qahwa x2'));
-    assert.ok(mensaje.includes('- Liquid Brun x1'));
-    assert.ok(mensaje.includes('Total:\nS/420'));
-    assert.ok(mensaje.includes('Adelanto:\nS/30'));
-    assert.ok(mensaje.includes('Saldo pendiente:\nS/390'));
-    assert.ok(mensaje.includes('El adelanto será descontado del pago final.'));
-    assert.ok(mensaje.includes('Confirmo mi reserva.'));
+    assert.ok(mensaje.includes('• Khamrah Qahwa x2'));
+    assert.ok(mensaje.includes('• Liquid Brun x1'));
+    assert.ok(mensaje.includes('Total de compra: S/420.00'));
+    assert.ok(mensaje.includes('Adelanto de reserva: S/30.00'));
+    assert.ok(mensaje.includes('Saldo restante: S/390.00'));
+    assert.ok(!mensaje.includes('Saldo pendiente'));
+    assert.ok(!mensaje.includes('El adelanto será descontado del pago final'));
+    assert.ok(mensaje.includes('Por favor, bríndenme los métodos de pago para confirmar mi reserva.'));
     assert.ok(mensaje.includes('Gracias.'));
 });
 
@@ -214,14 +216,7 @@ test('7. PreventaReserva expone los métodos y constantes requeridos para FASE P
     assert.equal(WHATSAPP_NUMERO, '51986510573');
 });
 
-test('8. Formato exacto del mensaje compacto de WhatsApp (Ejemplo del prompt FASE P4.7)', () => {
-    // Ejemplo exacto del prompt:
-    // Productos:
-    // - Khamrah Clasico x2
-    // - Khamrah Qahwa x1
-    // Total: S/357
-    // Adelanto: S/30
-    // Saldo pendiente: S/327
+test('8. Formato exacto del mensaje de WhatsApp (FASE P4.9 sin emojis y con Saldo restante)', () => {
     const items = [
         {
             nombre: 'Khamrah Clasico',
@@ -245,25 +240,27 @@ test('8. Formato exacto del mensaje compacto de WhatsApp (Ejemplo del prompt FAS
     const mensaje = construirTextoMensajeWhatsApp(items, resumen);
 
     // Encabezado
-    assert.ok(mensaje.includes('Hola Dunes Parfums 👋'));
-    assert.ok(mensaje.includes('Deseo confirmar mi reserva PREVENTA:'));
+    assert.ok(mensaje.includes('Hola Dunes Parfums'));
+    assert.ok(!mensaje.includes('👋'), 'No debe contener emojis');
+    assert.ok(mensaje.includes('Deseo confirmar mi reserva de PREVENTA:'));
 
-    // Lista de productos compacta (Producto x cantidad)
-    assert.ok(mensaje.includes('Productos:\n- Khamrah Clasico x2\n- Khamrah Qahwa x1'));
+    // Lista de productos compacta (• Producto x cantidad)
+    assert.ok(mensaje.includes('Productos:\n\n• Khamrah Clasico x2\n• Khamrah Qahwa x1'));
 
     // Desglose financiero
-    assert.ok(mensaje.includes('Total:\nS/357'));
-    assert.ok(mensaje.includes('Adelanto:\nS/30'));
-    assert.ok(mensaje.includes('Saldo pendiente:\nS/327'));
+    assert.ok(mensaje.includes('Total de compra: S/357.00'));
+    assert.ok(mensaje.includes('Adelanto de reserva: S/30.00'));
+    assert.ok(mensaje.includes('Saldo restante: S/327.00'));
+    assert.ok(!mensaje.includes('Saldo pendiente'));
 
-    // Aclaración obligatoria
-    assert.ok(mensaje.includes('El adelanto será descontado del pago final.'));
+    // Sin aclaración de descuento al momento de la entrega
+    assert.ok(!mensaje.includes('El adelanto será descontado del pago final'));
 
     // Cierre
-    assert.ok(mensaje.includes('Confirmo mi reserva.'));
+    assert.ok(mensaje.includes('Por favor, bríndenme los métodos de pago para confirmar mi reserva.'));
     assert.ok(mensaje.includes('Gracias.'));
 
-    // Regla de FASE P4.7: NO enviar imagen, categoría, marca repetida, stock, precio individual
+    // Reglas: NO enviar imagen, categoría, marca repetida, stock, precio individual
     assert.equal(mensaje.includes('Precio preventa:'), false, 'No debe enviar precio unitario repetido');
     assert.equal(mensaje.includes('c/u'), false, 'No debe enviar c/u');
     assert.equal(mensaje.includes('LATTAFA'), false, 'No debe enviar marcas repetidas');
@@ -287,11 +284,12 @@ test('9. Reglas estrictas de adelanto (S/10 por unidad: 1 -> S/10, 2 -> S/20, 5 
         saldoPendiente: 500
     };
     const msg5 = construirTextoMensajeWhatsApp(items5, resumen5);
-    assert.ok(msg5.includes('- Yara x5'));
-    assert.ok(msg5.includes('Adelanto:\nS/50'));
-    assert.ok(msg5.includes('Total:\nS/550'));
-    assert.ok(msg5.includes('Saldo pendiente:\nS/500'));
-    assert.ok(msg5.includes('El adelanto será descontado del pago final.'));
+    assert.ok(msg5.includes('• Yara x5'));
+    assert.ok(msg5.includes('Adelanto de reserva: S/50.00'));
+    assert.ok(msg5.includes('Total de compra: S/550.00'));
+    assert.ok(msg5.includes('Saldo restante: S/500.00'));
+    assert.ok(!msg5.includes('Saldo pendiente'));
+    assert.ok(!msg5.includes('El adelanto será descontado del pago final'));
 });
 
 test('10. Validación: Si no existen productos, no abre WhatsApp y retorna null', () => {
@@ -325,7 +323,8 @@ test('11. Generación de URL y preservación del storage (NO elimina la reserva)
 
     assert.ok(urlRetornada.startsWith('https://wa.me/51986510573?text='));
     assert.equal(urlAbierta, urlRetornada);
-    assert.ok(decodeURIComponent(urlRetornada).includes('Hola Dunes Parfums 👋'));
+    assert.ok(decodeURIComponent(urlRetornada).includes('Hola Dunes Parfums'));
+    assert.ok(!decodeURIComponent(urlRetornada).includes('👋'));
     assert.ok(decodeURIComponent(urlRetornada).includes('Khamrah Qahwa'));
 
     // Verificar que los productos se MANTIENEN en localStorage tras el envío
@@ -507,28 +506,24 @@ test('17. FASE P4.7 - WhatsApp compacto con varios productos y validación de f�
 
     const textoWhatsApp = construirTextoMensajeWhatsApp(items, resumen);
 
-    // Formato exacto
+    // Formato exacto FASE P4.9
     const esperado = [
-        'Hola Dunes Parfums 👋',
+        'Hola Dunes Parfums',
         '',
-        'Deseo confirmar mi reserva PREVENTA:',
+        'Deseo confirmar mi reserva de PREVENTA:',
         '',
         'Productos:',
-        '- Khamrah Clasico x2',
-        '- Khamrah Qahwa x1',
         '',
-        'Total:',
-        'S/357',
+        '• Khamrah Clasico x2',
+        '• Khamrah Qahwa x1',
         '',
-        'Adelanto:',
-        'S/30',
+        'Total de compra: S/357.00',
         '',
-        'Saldo pendiente:',
-        'S/327',
+        'Adelanto de reserva: S/30.00',
         '',
-        'El adelanto será descontado del pago final.',
+        'Saldo restante: S/327.00',
         '',
-        'Confirmo mi reserva.',
+        'Por favor, bríndenme los métodos de pago para confirmar mi reserva.',
         '',
         'Gracias.'
     ].join('\n');
@@ -788,4 +783,108 @@ test('29. FASE P4.8.4 — Refinamiento visual "Vaciar Reserva" en Mi Reserva Pre
     vaciarReservaPreventa();
     assert.equal(obtenerProductos().length, 0);
 });
+
+test('30. FASE P4.9 — Optimización mensaje WhatsApp PREVENTA (versión final sin emojis)', () => {
+    // 1. Caso oficial del prompt con Khamrah Clasico y Khamrah Clasico 2PCs
+    const items = [
+        {
+            nombre: 'Khamrah Clasico',
+            cantidad: 1,
+            precio_preventa: 135
+        },
+        {
+            nombre: 'Khamrah Clasico 2PCs',
+            cantidad: 1,
+            precio_preventa: 135
+        }
+    ];
+
+    const resumen = {
+        totalProductos: 270,
+        totalUnidades: 2,
+        totalAdelanto: 20,
+        saldoPendiente: 250
+    };
+
+    const mensaje = construirTextoMensajeWhatsApp(items, resumen);
+
+    const esperadoPrompt = [
+        'Hola Dunes Parfums',
+        '',
+        'Deseo confirmar mi reserva de PREVENTA:',
+        '',
+        'Productos:',
+        '',
+        '• Khamrah Clasico x1',
+        '• Khamrah Clasico 2PCs x1',
+        '',
+        'Total de compra: S/270.00',
+        '',
+        'Adelanto de reserva: S/20.00',
+        '',
+        'Saldo restante: S/250.00',
+        '',
+        'Por favor, bríndenme los métodos de pago para confirmar mi reserva.',
+        '',
+        'Gracias.'
+    ].join('\n');
+
+    assert.equal(mensaje, esperadoPrompt, 'El mensaje generado debe coincidir exactamente con la plantilla de FASE P4.9');
+
+    // 2. Validación estricta: Cero emojis
+    assert.equal(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u.test(mensaje), false, 'El mensaje no debe contener emojis');
+    assert.ok(!mensaje.includes('👋'), 'No debe contener emoji de saludo 👋');
+
+    // 3. Eliminación completa de aclaraciones innecesarias
+    assert.ok(!mensaje.includes('El adelanto será descontado del pago final al momento de la entrega.'), 'Debe eliminar aclaración redundante');
+    assert.ok(!mensaje.includes('El adelanto será descontado'), 'No debe contener texto de descuento de adelanto');
+
+    // 4. Cambiar Saldo pendiente por Saldo restante
+    assert.ok(!mensaje.includes('Saldo pendiente'), 'No debe contener "Saldo pendiente"');
+    assert.ok(mensaje.includes('Saldo restante: S/250.00'), 'Debe contener "Saldo restante: S/XX.00"');
+
+    // 5. Manejo de demasiados productos (MUCHOS PRODUCTOS)
+    const muchosItems = Array.from({ length: 8 }, (_, i) => ({
+        nombre: `Fragancia Exclusiva ${i + 1}`,
+        cantidad: 1
+    }));
+    const resumenMuchos = {
+        totalProductos: 1200,
+        totalUnidades: 8,
+        totalAdelanto: 80,
+        saldoPendiente: 1120
+    };
+
+    const mensajeMuchos = construirTextoMensajeWhatsApp(muchosItems, resumenMuchos);
+    assert.ok(mensajeMuchos.includes('• 8 productos en preventa'), 'Debe mostrar resumen si la reserva contiene demasiados productos');
+    assert.ok(mensajeMuchos.includes('Total de compra: S/1200.00'));
+    assert.ok(mensajeMuchos.includes('Adelanto de reserva: S/80.00'));
+    assert.ok(mensajeMuchos.includes('Saldo restante: S/1120.00'));
+    assert.ok(mensajeMuchos.includes('Por favor, bríndenme los métodos de pago para confirmar mi reserva.'));
+    assert.ok(mensajeMuchos.includes('Gracias.'));
+
+    // 6. Validación de URL generada y codificada
+    globalThis.localStorage.clear();
+    agregarProductoPreventa({
+        id: 'p-p49',
+        nombre: 'Khamrah Clasico',
+        precio_preventa: 135
+    }, 1);
+    agregarProductoPreventa({
+        id: 'p-p49-2',
+        nombre: 'Khamrah Clasico 2PCs',
+        precio_preventa: 135
+    }, 1);
+
+    let urlWhatsAppGenerada = '';
+    globalThis.window.open = (url) => {
+        urlWhatsAppGenerada = url;
+    };
+    generarMensajeWhatsAppReserva();
+
+    assert.ok(urlWhatsAppGenerada.startsWith('https://wa.me/51986510573?text='));
+    const urlDecodificada = decodeURIComponent(urlWhatsAppGenerada);
+    assert.equal(urlDecodificada.includes(esperadoPrompt), true, 'La URL de WhatsApp debe contener el mensaje exacto codificado');
+});
+
 

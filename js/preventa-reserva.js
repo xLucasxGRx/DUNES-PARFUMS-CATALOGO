@@ -104,28 +104,41 @@
      * @param {number|string} val
      * @returns {string}
      */
+    /**
+     * Formatea un número al estilo de moneda de WhatsApp (FASE P4.9: S/XXX.00)
+     * @param {number|string} val
+     * @returns {string}
+     */
     function formatearMonedaWhatsApp(val) {
         if (typeof val === 'string') {
             val = val.replace(/[^\d.-]/g, '');
         }
         const num = Number(val);
-        if (!Number.isFinite(num)) return 'S/0';
-        if (Math.round(num) === num) {
-            return 'S/' + Math.round(num);
-        }
+        if (!Number.isFinite(num)) return 'S/0.00';
         return 'S/' + (Math.round((num + Number.EPSILON) * 100) / 100).toFixed(2);
     }
 
     /**
-     * Genera el texto del mensaje estructurado y compacto de WhatsApp para confirmación de preventa (FASE P4.7)
-     * Elimina redundancias (imágenes, categoría, precios individuales unitarios, marcas repetidas)
-     * y compacta en: Producto x cantidad + Total + Adelanto + Saldo pendiente + Aclaración.
+     * Genera el texto del mensaje optimizado y profesional de WhatsApp para confirmación de preventa (FASE P4.9)
+     * - Sin emojis.
+     * - Estructura exacta y profesional:
+     *   Hola Dunes Parfums
+     *   Deseo confirmar mi reserva de PREVENTA:
+     *   Productos:
+     *   • Producto x cantidad (o '• X productos en preventa' si son demasiados)
+     *   Total de compra: S/XXX.00
+     *   Adelanto de reserva: S/XX.00
+     *   Saldo restante: S/XX.00
+     *   Por favor, bríndenme los métodos de pago para confirmar mi reserva.
+     *   Gracias.
+     * - Elimina completamente cualquier aclaración redundante.
      *
      * @param {Array} items
      * @param {Object} [resumen]
+     * @param {Object} [options]
      * @returns {string}
      */
-    function construirTextoMensajeWhatsApp(items, resumen) {
+    function construirTextoMensajeWhatsApp(items, resumen, options = {}) {
         const prodsAgrupados = new Map();
         (items || []).forEach(it => {
             const nombre = (it.nombre || 'Fragancia').trim();
@@ -133,36 +146,44 @@
             prodsAgrupados.set(nombre, (prodsAgrupados.get(nombre) || 0) + cant);
         });
 
-        const lineasProductos = [];
-        prodsAgrupados.forEach((cant, nombre) => {
-            lineasProductos.push(`- ${nombre} x${cant}`);
-        });
-
         const res = resumen || obtenerResumen();
         const total = formatearMonedaWhatsApp(res.totalProductos);
         const adelanto = formatearMonedaWhatsApp(res.totalAdelanto);
         const saldo = formatearMonedaWhatsApp(res.saldoPendiente);
 
+        // FASE P4.9: Si la reserva contiene demasiados productos y el mensaje se vuelve excesivamente largo
+        const limiteMax = (options && typeof options.maxItems === 'number') ? options.maxItems : 6;
+        const demasiadosProductos = Boolean(
+            (options && options.resumirProductos) ||
+            prodsAgrupados.size > limiteMax
+        );
+
+        let lineasProductos = [];
+        if (demasiadosProductos) {
+            const totalUnidades = res.totalUnidades || Array.from(prodsAgrupados.values()).reduce((a, b) => a + b, 0);
+            lineasProductos = [`• ${totalUnidades} productos en preventa`];
+        } else {
+            prodsAgrupados.forEach((cant, nombre) => {
+                lineasProductos.push(`• ${nombre} x${cant}`);
+            });
+        }
+
         const lineas = [
-            'Hola Dunes Parfums 👋',
+            'Hola Dunes Parfums',
             '',
-            'Deseo confirmar mi reserva PREVENTA:',
+            'Deseo confirmar mi reserva de PREVENTA:',
             '',
             'Productos:',
+            '',
             ...lineasProductos,
             '',
-            'Total:',
-            total,
+            `Total de compra: ${total}`,
             '',
-            'Adelanto:',
-            adelanto,
+            `Adelanto de reserva: ${adelanto}`,
             '',
-            'Saldo pendiente:',
-            saldo,
+            `Saldo restante: ${saldo}`,
             '',
-            'El adelanto será descontado del pago final.',
-            '',
-            'Confirmo mi reserva.',
+            'Por favor, bríndenme los métodos de pago para confirmar mi reserva.',
             '',
             'Gracias.'
         ];
@@ -283,7 +304,7 @@
         }
 
         const resumen = obtenerResumen();
-        const textoMensaje = construirTextoMensajeWhatsApp(items, resumen);
+        const textoMensaje = construirTextoMensajeWhatsApp(items, resumen, options);
         const mensajeCodificado = encodeURIComponent(textoMensaje);
         const urlWhatsApp = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensajeCodificado}`;
 
