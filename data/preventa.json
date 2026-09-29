@@ -1,0 +1,17 @@
+[
+  {
+    "id": "prev-1",
+    "nombre": "khamrah Clasico",
+    "marca": "lataffa",
+    "categoria": "arabe",
+    "genero": "unisex",
+    "formato_presentacion": "100 ml",
+    "precio_regular": 139,
+    "precio_preventa": 129,
+    "stock": 5,
+    "disponible": true,
+    "visible": true,
+    "imagen": "https://www.oechsle.pe/perfume-khamrah-de-lattafa-eau-de-parfum-100-ml-unisex-1001221305/p?srsltid=AU7gw4USuXofZU18gw_a6g4GbA3ZQjj-gMOVu2y6fjSufJZoKaZzS3uz",
+    "ocasion": "Citas,Noche"
+  }
+]

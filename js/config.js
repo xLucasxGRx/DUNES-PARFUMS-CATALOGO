@@ -5,7 +5,10 @@ const CONFIG = {
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=716279816&single=true&output=csv",
   GOOGLE_SHEETS_ANUNCIOS_CSV_URL:
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=82988812&single=true&output=csv",
+  GOOGLE_SHEETS_PREVENTA_CSV_URL:
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=1833078058&single=true&output=csv",
   PRODUCTOS_RESPALDO_URL: "data/productos.json",
+  PREVENTA_RESPALDO_URL: "data/preventa.json",
 };
 
 const CONFIG_CUPONES = {
@@ -18,4 +21,12 @@ const CONFIG_ANUNCIOS = {
   sheetsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=82988812&single=true&output=csv",
   timeoutMs: 8000,
   rotationIntervalMs: 4000
+};
+
+const CONFIG_PREVENTA = {
+  sheetsCsvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2cmX_zYElRDJ5C_Ou5mtSQ-5C74Fj9Cp7ke5KP1QQoc33SK2Bpi6qvikEQjMRixErJK2Z7bMSLCCC/pub?gid=1833078058&single=true&output=csv",
+  respaldoJsonUrl: null,
+  permitirFallback: false,
+  timeoutMs: 8000,
+  source: "google-sheets"
 };

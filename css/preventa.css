@@ -1,0 +1,2880 @@
+/**
+ * Dunes Parfums - Estilos del Módulo PREVENTA (FASE P2.1: Experiencia Visual Premium)
+ * Vitrina exclusiva de alta perfumería para próximos lanzamientos y reservas anticipadas.
+ * Totalmente desacoplado del catálogo principal y de sus componentes regulares.
+ */
+
+/* ==========================================================================
+   1. CONTENEDOR PRINCIPAL Y BASE
+   ========================================================================== */
+.preventa-main {
+    min-height: calc(100vh - 180px);
+    background-color: var(--color-bg-primary, #0c0b09);
+    background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 175, 55, 0.08) 0%, transparent 70%),
+        radial-gradient(circle at 100% 40%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+    color: var(--color-text-primary, #fbf7ee);
+    padding: 0 0 var(--space-16, 4rem);
+    position: relative;
+    overflow-x: hidden;
+}
+
+.preventa-container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-4, 1rem);
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. HERO PREVENTA (SECCIÓN 1)
+   ========================================================================== */
+.preventa-hero {
+    text-align: center;
+    padding: clamp(1.15rem, 2.5vw, 1.75rem) 1rem clamp(0.6rem, 1.5vw, 1rem);
+    position: relative;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.preventa-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--color-primary, #d4af37);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4, 1rem);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.preventa-hero-badge-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-primary, #d4af37);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--color-primary, #d4af37);
+    display: inline-block;
+}
+
+.preventa-hero-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.875rem, 4.5vw, 3.45rem);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    margin: 0;
+    text-transform: uppercase;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}
+
+.preventa-hero-title span {
+    background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 60%, #aa8228 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.preventa-hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 auto var(--space-4, 1rem);
+}
+
+.preventa-hero-divider-line {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+}
+
+.preventa-hero-divider-diamond {
+    width: 6px;
+    height: 6px;
+    background: var(--color-primary, #d4af37);
+    transform: rotate(45deg);
+    opacity: 0.85;
+}
+
+.preventa-hero-subtitle {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: clamp(0.92rem, 1.8vw, 1.05rem);
+    color: #c9c3b8;
+    max-width: 660px;
+    margin: 0 auto var(--space-6, 1.5rem);
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.preventa-hero-cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary-light, #f3e5ab);
+    text-decoration: none;
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(20, 18, 14, 0.5);
+    transition: all 0.25s ease;
+}
+
+.preventa-hero-cta-link:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+    background: rgba(212, 175, 55, 0.12);
+    transform: translateY(1px);
+}
+
+.preventa-hero-chevron {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.2s ease;
+}
+
+.preventa-hero-cta-link:hover .preventa-hero-chevron {
+    transform: translateY(2px);
+}
+
+/* ==========================================================================
+   3. ALERTA IMPORTANTE DE PREVENTA - SEPARACIÓN S/10 (SECCIÓN 2)
+   (Ocultada del flujo principal en FASE P3.3: la información ya está en el modal inicial)
+   ========================================================================== */
+.preventa-alert-section {
+    display: none !important;
+}
+
+/* ==========================================================================
+   3.1. PANEL DE BÚSQUEDA Y FILTROS PREVENTA (FASE P3.2.1: .preventa-filter-panel)
+   ========================================================================== */
+.preventa-filters,
+.preventa-filter-panel {
+    margin: 0 auto clamp(1rem, 2.5vw, 1.75rem);
+    max-width: 1080px;
+    width: 100%;
+    padding: 0 var(--space-4, 1rem);
+    box-sizing: border-box;
+}
+
+.preventa-filters-inner,
+.preventa-filter-panel-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: linear-gradient(150deg, rgba(22, 19, 15, 0.92) 0%, rgba(13, 11, 9, 0.96) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 
+        0 12px 30px -8px rgba(0, 0, 0, 0.7),
+        0 0 20px -5px rgba(212, 175, 55, 0.05);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: relative;
+    overflow: hidden;
+}
+
+.preventa-filters-inner::before,
+.preventa-filter-panel-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+}
+
+/* 1. Buscador Principal */
+.preventa-filter-search-box {
+    width: 100%;
+}
+
+.preventa-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.preventa-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-primary, #d4af37);
+    pointer-events: none;
+    opacity: 0.9;
+    width: 17px;
+    height: 17px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.preventa-search-input {
+    width: 100%;
+    height: 38px;
+    min-height: 38px;
+    background: rgba(14, 12, 9, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 8px;
+    padding: 0 2.5rem 0 2.5rem;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.85rem;
+    color: #ffffff;
+    box-sizing: border-box;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.preventa-search-input::placeholder {
+    color: #8e867b;
+    font-weight: 400;
+}
+
+.preventa-search-input:focus {
+    outline: none;
+    border-color: #d4af37;
+    background: rgba(20, 17, 13, 0.96);
+    box-shadow: 
+        0 0 0 3px rgba(212, 175, 55, 0.16),
+        inset 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.preventa-search-wrapper:focus-within .preventa-search-icon {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.08);
+}
+
+.preventa-search-input::-webkit-search-decoration,
+.preventa-search-input::-webkit-search-cancel-button,
+.preventa-search-input::-webkit-search-results-button,
+.preventa-search-input::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    display: none;
+}
+
+.preventa-search-clear-btn {
+    position: absolute;
+    right: 0.65rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #c9c3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.preventa-search-clear-btn:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.6);
+    color: #ffffff;
+}
+
+/* 2. Grupo TIPO */
+.preventa-filter-group--tipo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+.preventa-filter-label {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary, #d4af37);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.preventa-tipo-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.preventa-tab-btn {
+    background: rgba(14, 12, 9, 0.75);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    color: #c9c3b8;
+    border-radius: 6px;
+    height: 32px;
+    min-height: 32px;
+    padding: 0 16px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preventa-tab-btn:hover {
+    border-color: #d4af37;
+    color: #ffffff;
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.preventa-tab-btn.active {
+    background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 60%, #aa8228 100%);
+    border-color: #d4af37;
+    color: #0c0b09;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+    transform: translateY(-1px);
+}
+
+/* 3. Fila de Selectores (Género, Ocasión, Ordenar) - Una sola fila equilibrada */
+.preventa-filter-selects-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    padding-top: 2px;
+}
+
+.preventa-select-wrapper {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.preventa-select {
+    width: 100%;
+    height: 36px;
+    min-height: 36px;
+    line-height: 36px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: rgba(14, 12, 9, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 6px;
+    padding: 0 1.8rem 0 0.75rem;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #ded9d0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.preventa-select:hover {
+    border-color: #d4af37;
+    color: #ffffff;
+    background: rgba(22, 18, 14, 0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.preventa-select:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+    color: #ffffff;
+    background: rgba(22, 18, 14, 0.98);
+}
+
+.preventa-select option {
+    background: #14120e;
+    color: #fbf7ee;
+    padding: 8px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+}
+
+.preventa-select-chevron {
+    position: absolute;
+    right: 0.65rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-primary, #d4af37);
+    pointer-events: none;
+    opacity: 0.85;
+    width: 13px;
+    height: 13px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.preventa-select-wrapper:hover .preventa-select-chevron,
+.preventa-select-wrapper:focus-within .preventa-select-chevron {
+    opacity: 1;
+    color: #f3e5ab;
+}
+
+/* 4. Fila Inferior: Checkbox (Izquierda) + Limpiar Filtros y Contador (Derecha) - Una sola fila */
+.preventa-filter-bottom-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    gap: 8px;
+}
+
+/* Checkbox: Solo disponibles */
+.preventa-filter-checkbox-wrap {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.preventa-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    margin: 0;
+}
+
+.preventa-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.preventa-checkbox-custom {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background: rgba(14, 12, 9, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.preventa-checkbox-custom::after {
+    content: '';
+    display: none;
+    width: 4px;
+    height: 8px;
+    border: solid #0c0b09;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+}
+
+.preventa-checkbox-input:checked + .preventa-checkbox-custom {
+    background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 60%, #aa8228 100%);
+    border-color: #d4af37;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+
+.preventa-checkbox-input:checked + .preventa-checkbox-custom::after {
+    display: block;
+}
+
+.preventa-checkbox-input:focus-visible + .preventa-checkbox-custom {
+    outline: 2px solid var(--color-primary, #d4af37);
+    outline-offset: 1px;
+}
+
+.preventa-checkbox-text {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: #c9c3b8;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.preventa-checkbox-label:hover .preventa-checkbox-text {
+    color: #ffffff;
+}
+
+.preventa-checkbox-label:hover .preventa-checkbox-custom {
+    border-color: #d4af37;
+}
+
+/* Acciones Derecha: Botón Limpiar + Contador */
+.preventa-filter-actions-right {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Botón Limpiar Filtros (Outline Dorado Elegante) */
+.preventa-btn-clear-filters {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    color: #c9c3b8;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.preventa-btn-clear-filters:hover {
+    background: rgba(212, 175, 55, 0.12);
+    border-color: #d4af37;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(212, 175, 55, 0.2);
+}
+
+.preventa-btn-clear-filters:focus-visible {
+    outline: 2px solid #d4af37;
+    outline-offset: 1px;
+}
+
+.preventa-btn-clear-icon {
+    color: var(--color-primary, #d4af37);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+}
+
+.preventa-btn-clear-filters:hover .preventa-btn-clear-icon {
+    transform: rotate(-15deg);
+}
+
+/* Contador de Resultados Dinámico (Badge Cápsula) */
+.preventa-results-counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(14, 12, 9, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 9999px;
+    padding: 4px 11px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #ded9d0;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+#preventa-results-count {
+    color: #ffffff;
+}
+
+/* Responsive Móvil: Panel Compacto Dunes (Sin wrap en selectores ni en fila inferior) */
+@media (max-width: 768px) {
+    .preventa-filters,
+    .preventa-filter-panel {
+        padding: 0 var(--space-2, 0.5rem);
+        margin-bottom: var(--space-4, 1rem);
+    }
+
+    .preventa-filters-inner,
+    .preventa-filter-panel-inner {
+        padding: 10px 10px;
+        gap: 8px;
+        border-radius: 12px;
+    }
+
+    /* Buscador compacto */
+    .preventa-search-input {
+        height: 36px;
+        min-height: 36px;
+        font-size: 0.78rem;
+        padding: 0 2rem 0 2.2rem;
+        border-radius: 6px;
+    }
+
+    .preventa-search-icon {
+        left: 0.65rem;
+        width: 15px;
+        height: 15px;
+    }
+
+    /* Tipo en 4 columnas */
+    .preventa-filter-group--tipo {
+        gap: 4px;
+        width: 100%;
+    }
+
+    .preventa-filter-label {
+        font-size: 0.64rem;
+        letter-spacing: 0.08em;
+    }
+
+    .preventa-tipo-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        width: 100%;
+    }
+
+    .preventa-tab-btn {
+        width: 100%;
+        min-height: 30px;
+        height: 30px;
+        padding: 0 2px;
+        font-size: 0.67rem;
+        font-weight: 700;
+        border-radius: 6px;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+
+    /* Fila de Selectores en UNA SOLA FILA */
+    .preventa-filter-selects-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 4px;
+        width: 100%;
+        padding-top: 4px;
+    }
+
+    .preventa-select-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .preventa-select {
+        height: 34px;
+        min-height: 34px;
+        line-height: 34px;
+        padding: 0 1.25rem 0 0.45rem;
+        font-size: clamp(0.64rem, 2.3vw, 0.71rem);
+        font-weight: 600;
+        border-radius: 6px;
+    }
+
+    .preventa-select-chevron {
+        right: 0.35rem;
+        width: 11px;
+        height: 11px;
+    }
+
+    /* Fila Inferior en UNA SOLA FILA */
+    .preventa-filter-bottom-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        padding-top: 6px;
+        width: 100%;
+    }
+
+    .preventa-filter-checkbox-wrap {
+        flex-shrink: 0;
+    }
+
+    .preventa-checkbox-label {
+        gap: 4px;
+    }
+
+    .preventa-checkbox-custom {
+        width: 15px;
+        height: 15px;
+    }
+
+    .preventa-checkbox-text {
+        font-size: clamp(0.66rem, 2.3vw, 0.72rem);
+        white-space: nowrap;
+    }
+
+    .preventa-filter-actions-right {
+        display: inline-flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    .preventa-btn-clear-filters {
+        padding: 3px 6px;
+        font-size: clamp(0.64rem, 2.1vw, 0.69rem);
+        border-radius: 6px;
+        white-space: nowrap;
+        gap: 3px;
+    }
+
+    .preventa-btn-clear-icon {
+        width: 11px;
+        height: 11px;
+    }
+
+    .preventa-results-counter {
+        padding: 3px 7px;
+        font-size: clamp(0.64rem, 2.1vw, 0.69rem);
+        white-space: nowrap;
+    }
+}
+
+/* ==========================================================================
+   4. GRILLA Y TARJETAS PREVENTA (.preventa-card) (SECCIÓN 3)
+   ========================================================================== */
+.preventa-showcase-section {
+    position: relative;
+    scroll-margin-top: 2rem;
+}
+
+.preventa-products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 1.8vw, 22px);
+    width: 100%;
+    box-sizing: border-box;
+    align-items: stretch;
+}
+
+/* Animación de Entrada: Aparición ascendente tipo vitrina */
+@keyframes preventaCardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tarjeta Boutique Independiente */
+.preventa-card {
+    background: linear-gradient(180deg, rgba(22, 19, 15, 0.98) 0%, rgba(14, 12, 10, 0.99) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    border-radius: var(--radius-card, 14px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.65), 0 2px 8px -1px rgba(212, 175, 55, 0.06);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.35s ease;
+    animation: preventaCardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Retrasos secuenciales sutiles para efecto vitrina */
+.preventa-card:nth-child(1) { animation-delay: 0.04s; }
+.preventa-card:nth-child(2) { animation-delay: 0.08s; }
+.preventa-card:nth-child(3) { animation-delay: 0.12s; }
+.preventa-card:nth-child(4) { animation-delay: 0.16s; }
+.preventa-card:nth-child(5) { animation-delay: 0.20s; }
+.preventa-card:nth-child(6) { animation-delay: 0.24s; }
+.preventa-card:nth-child(7) { animation-delay: 0.28s; }
+.preventa-card:nth-child(8) { animation-delay: 0.32s; }
+.preventa-card:nth-child(n+9) { animation-delay: 0.36s; }
+
+@media (hover: hover) and (pointer: fine) {
+    .preventa-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(212, 175, 55, 0.55);
+        box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.82), 0 0 24px -2px rgba(212, 175, 55, 0.18);
+    }
+
+    .preventa-card:hover .preventa-card-img {
+        transform: scale(1.03);
+        filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 16px rgba(212, 175, 55, 0.15));
+    }
+
+    .preventa-card:hover .preventa-card-media {
+        background: 
+            radial-gradient(ellipse 70% 60% at 50% 48%, rgba(212, 175, 55, 0.30) 0%, rgba(212, 175, 55, 0.08) 52%, transparent 74%),
+            radial-gradient(ellipse 85% 35% at 50% 90%, rgba(212, 175, 55, 0.16) 0%, transparent 65%),
+            #13110e;
+    }
+}
+
+/* Área de Imagen de Vitrina (Pedestal Luminoso y Fondo Limpio) */
+.preventa-card-media {
+    position: relative;
+    width: 100%;
+    height: clamp(175px, 15vw, 215px);
+    background: 
+        radial-gradient(ellipse 65% 55% at 50% 50%, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.06) 50%, transparent 72%),
+        radial-gradient(ellipse 80% 30% at 50% 90%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
+        #13110e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 16px;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.14);
+    flex-shrink: 0;
+    transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preventa-card-img {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
+    transform-origin: center center;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.65)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* Badges de Estado Visual en la Tarjeta (Ubicación superior izquierda igual al catálogo) */
+.preventa-status-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.15;
+    box-sizing: border-box;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preventa-status-badge.status-abierta {
+    background: rgba(16, 75, 38, 0.38);
+    border: 1px solid rgba(74, 222, 128, 0.55);
+    color: #4ade80;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 0 8px rgba(74, 222, 128, 0.22);
+}
+
+.preventa-status-badge.status-ultimas {
+    background: rgba(120, 80, 15, 0.40);
+    border: 1px solid rgba(245, 158, 11, 0.65);
+    color: #fbbf24;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 0 8px rgba(245, 158, 11, 0.22);
+}
+
+.preventa-status-badge.status-cerrada {
+    background: rgba(85, 20, 20, 0.40);
+    border: 1px solid rgba(239, 68, 68, 0.55);
+    color: #f87171;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* Badge de Formato / Presentación (Superior derecha) - FASE P4.8.3 */
+.preventa-format-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.15;
+    background: rgba(18, 18, 18, 0.78);
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    color: #e5c97b;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+/* Cuerpo de la Tarjeta */
+.preventa-card-body {
+    padding: 10px 13px 13px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.preventa-card-header-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 1px;
+}
+
+.preventa-card-brand {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(223, 186, 107, 0.9);
+    line-height: 1.2;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preventa-card-category {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #8e877c;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.preventa-card-name {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.18rem, 1.35vw, 1.4rem);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.15;
+    margin: 2px 0 4px;
+    letter-spacing: 0.02em;
+    word-break: break-word;
+}
+
+/* FASE P4.8.3: Ocasión y detalles secundarios ocultados visualmente para máxima limpieza editorial */
+.preventa-card-details,
+.preventa-card-occasion,
+.preventa-card-sep {
+    display: none !important;
+}
+
+.preventa-card-volume {
+    color: #a8a296;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Bloque de Precios con Jerarquía Estricta y Espaciado Compacto */
+.preventa-card-pricing {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid rgba(212, 175, 55, 0.12);
+    margin-bottom: 8px;
+}
+
+.preventa-price-regular-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.preventa-price-regular-label {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: #736d64;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.preventa-price-regular-val {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.8rem;
+    color: #878074;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.preventa-price-preventa-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.preventa-price-preventa-val {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: clamp(1.35rem, 1.55vw, 1.6rem);
+    font-weight: 700;
+    color: #fbf7ee;
+    background: linear-gradient(135deg, #ffffff 10%, #f3e5ab 60%, #dfba6b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.28));
+}
+
+.preventa-price-preventa-badge {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #dfba6b;
+    background: rgba(212, 175, 55, 0.14);
+    border: 1px solid rgba(212, 175, 55, 0.32);
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.preventa-reserve-row {
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.preventa-reserve-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    color: #d4af37;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.preventa-reserve-icon {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+}
+
+/* Botón Visual de Preventa (FASE P3.1: Experiencia Boutique) */
+.preventa-card-btn {
+    width: 100%;
+    padding: 0.74rem 0.85rem;
+    border-radius: var(--radius-md, 8px);
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    text-decoration: none;
+    outline: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.preventa-card-btn.btn-active {
+    background: linear-gradient(135deg, #f3e5ab 0%, #dfba6b 45%, #b38b36 100%);
+    color: #0c0b09;
+    box-shadow: 0 4px 14px rgba(182, 138, 50, 0.25), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.preventa-card-btn.btn-active:hover {
+    filter: brightness(1.06);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(182, 138, 50, 0.42), 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.preventa-card-btn.btn-active:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.preventa-card-btn.btn-disabled {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #635e56;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.preventa-card-btn.btn-reserved-active {
+    background: linear-gradient(135deg, #ffffff 0%, #f3e5ab 50%, #dfba6b 100%) !important;
+    color: #0c0b09 !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.6) !important;
+    transform: scale(0.98);
+}
+
+/* PREVENTA NO TIENE FAVORITOS: Aislamiento visual estricto */
+.preventa-card .favorite-btn,
+.preventa-card .favorito-btn,
+.preventa-card .btn-favorite,
+.preventa-card-fav {
+    display: none !important;
+}
+
+/* ==========================================================================
+   5. ESTADOS BASE (CARGA, VACÍO, ERROR)
+   ========================================================================== */
+.preventa-loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12, 3rem) var(--space-4, 1rem);
+    text-align: center;
+}
+
+.preventa-spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid rgba(212, 175, 55, 0.18);
+    border-top-color: var(--color-primary, #d4af37);
+    border-radius: 50%;
+    animation: preventa-spin 0.85s linear infinite;
+    margin-bottom: var(--space-4, 1rem);
+}
+
+@keyframes preventa-spin {
+    to { transform: rotate(360deg); }
+}
+
+.preventa-loading-text {
+    font-size: 0.95rem;
+    color: #b8b1a5;
+    letter-spacing: 0.03em;
+}
+
+.preventa-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-12, 3.5rem) var(--space-6, 1.5rem);
+    background: rgba(22, 19, 15, 0.7);
+    border: 1px dashed rgba(212, 175, 55, 0.25);
+    border-radius: var(--radius-lg, 12px);
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+.preventa-empty-icon {
+    width: 52px;
+    height: 52px;
+    color: var(--color-primary, #d4af37);
+    margin-bottom: var(--space-4, 1rem);
+    opacity: 0.85;
+}
+
+.preventa-empty-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', serif);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fbf7ee;
+    margin-bottom: var(--space-2, 0.5rem);
+}
+
+.preventa-empty-desc {
+    font-size: 0.9rem;
+    color: #a8a296;
+    line-height: 1.55;
+    max-width: 440px;
+    margin-bottom: var(--space-6, 1.5rem);
+}
+
+.preventa-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: var(--radius-md, 8px);
+    background: var(--color-primary, #d4af37);
+    color: #0c0b09;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.preventa-empty-btn:hover {
+    background: var(--color-primary-light, #f3e5ab);
+    transform: translateY(-1px);
+}
+
+.preventa-error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--space-8, 2.5rem) var(--space-4, 1rem);
+    background: rgba(35, 15, 15, 0.5);
+    border: 1px solid rgba(220, 80, 80, 0.35);
+    border-radius: var(--radius-lg, 12px);
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+.preventa-error-icon {
+    width: 44px;
+    height: 44px;
+    color: #ef4444;
+    margin-bottom: var(--space-3, 0.75rem);
+}
+
+.preventa-error-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fce8e8;
+    margin-bottom: var(--space-2, 0.5rem);
+}
+
+.preventa-error-desc {
+    font-size: 0.85rem;
+    color: #d8b0b0;
+    margin-bottom: var(--space-4, 1rem);
+}
+
+.preventa-retry-btn {
+    padding: 0.5rem 1.2rem;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: var(--color-primary, #d4af37);
+    border-radius: var(--radius-sm, 6px);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.preventa-retry-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--color-primary, #d4af37);
+}
+
+/* ==========================================================================
+   6. RESPONSIVE Y ADAPTABILIDAD
+   ========================================================================== */
+/* TABLET (768px a 1023px) — 3 COLUMNAS */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .preventa-container {
+        padding: 0 var(--space-4, 1rem);
+    }
+
+    .preventa-products-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .preventa-card-media {
+        height: 165px;
+        padding: 10px 12px;
+    }
+
+    .preventa-card-body {
+        padding: 11px 12px 13px;
+    }
+
+    .preventa-card-name {
+        font-size: 1.25rem;
+    }
+
+    .preventa-price-preventa-val {
+        font-size: 1.38rem;
+    }
+
+    .preventa-card-btn {
+        padding: 0.68rem 0.75rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* DESKTOP (1024px o más) — 4 COLUMNAS */
+@media (min-width: 1024px) {
+    .preventa-container {
+        max-width: 1280px;
+        padding: 0 var(--space-4, 1rem);
+    }
+
+    .preventa-products-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 20px;
+    }
+}
+
+/* MÓVIL (hasta 767px) — 2 COLUMNAS COMPACTO Y SIN SCROLL HORIZONTAL */
+@media (max-width: 767px) {
+    .preventa-hero {
+        padding: 1.15rem 0.5rem 0.65rem;
+    }
+
+    .preventa-alert-card {
+        padding: 1.25rem 1rem;
+    }
+
+    .preventa-alert-pillars {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .preventa-container {
+        padding: 0 10px;
+    }
+
+    .preventa-products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    /* Tarjeta Compacta en Móvil */
+    .preventa-card {
+        border-radius: 12px;
+    }
+
+    .preventa-card-media {
+        height: 135px;
+        padding: 8px 8px;
+    }
+
+    .preventa-status-badge {
+        top: 7px;
+        left: 7px;
+        font-size: 0.6rem;
+        padding: 2px 6px;
+        letter-spacing: 0.04em;
+        border-radius: 4px;
+    }
+
+    .preventa-format-badge {
+        top: 7px;
+        right: 7px;
+        font-size: 0.58rem;
+        padding: 2px 6px;
+        letter-spacing: 0.04em;
+        border-radius: 4px;
+        display: inline-flex !important;
+    }
+
+    .preventa-card-body {
+        padding: 8px 10px 10px;
+    }
+
+    .preventa-card-brand {
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+    }
+
+    .preventa-card-category {
+        font-size: 0.62rem;
+    }
+
+    .preventa-card-name {
+        font-size: 1.08rem;
+        line-height: 1.15;
+        margin: 2px 0 4px;
+        min-height: 2.3em;
+    }
+
+    .preventa-card-details,
+    .preventa-card-occasion,
+    .preventa-card-sep {
+        display: none !important;
+    }
+
+    .preventa-card-pricing {
+        padding-top: 6px;
+        margin-bottom: 8px;
+    }
+
+    .preventa-price-regular-label {
+        font-size: 0.62rem;
+    }
+
+    .preventa-price-regular-val {
+        font-size: 0.72rem;
+    }
+
+    .preventa-price-preventa-row {
+        gap: 6px;
+        margin-bottom: 4px;
+    }
+
+    .preventa-price-preventa-val {
+        font-size: 1.22rem;
+    }
+
+    .preventa-price-preventa-badge {
+        font-size: 0.6rem;
+        padding: 1px 4px;
+    }
+
+    .preventa-reserve-badge {
+        font-size: 0.64rem;
+        padding: 2px 6px;
+        gap: 4px;
+    }
+
+    .preventa-reserve-icon {
+        width: 10px;
+        height: 10px;
+    }
+
+    .preventa-card-btn {
+        padding: 0.58rem 0.5rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.05em;
+        border-radius: 6px;
+    }
+}
+
+/* Pantallas Extra Pequeñas (menos de 370px) */
+@media (max-width: 370px) {
+    .preventa-container {
+        padding: 0 6px;
+    }
+
+    .preventa-products-grid {
+        gap: 8px;
+    }
+
+    .preventa-card-media {
+        height: 122px;
+        padding: 6px;
+    }
+
+    .preventa-card-body {
+        padding: 7px 8px 8px;
+    }
+
+    .preventa-card-name {
+        font-size: 1rem;
+    }
+
+    .preventa-price-preventa-val {
+        font-size: 1.15rem;
+    }
+
+    .preventa-reserve-badge {
+        font-size: 0.6rem;
+        padding: 2px 5px;
+    }
+
+    .preventa-card-btn {
+        padding: 0.52rem 0.4rem;
+        font-size: 0.66rem;
+    }
+}
+
+/* ==========================================================================
+   11. MODAL INICIAL PREVENTA (FASE P3.2: Condiciones de Reserva)
+   ========================================================================== */
+.preventa-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4, 1rem);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.45s ease;
+}
+
+.preventa-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.preventa-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 4, 3, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.preventa-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    background: linear-gradient(150deg, #181511 0%, #0d0c0a 100%);
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    border-radius: 16px;
+    padding: 1.85rem 1.65rem 1.65rem;
+    box-shadow: 
+        0 25px 60px -10px rgba(0, 0, 0, 0.9),
+        0 0 35px rgba(212, 175, 55, 0.12);
+    box-sizing: border-box;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.preventa-modal-dialog::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+}
+
+.preventa-modal.is-open .preventa-modal-dialog {
+    transform: translateY(0);
+    opacity: 1;
+    animation: preventaModalFloat 3s ease-in-out 0.45s infinite;
+}
+
+.preventa-modal.is-closing .preventa-modal-dialog {
+    animation: none;
+    transform: translateY(16px);
+    opacity: 0;
+    transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+}
+
+/* Microanimación Flotante Sutil Posterior (FASE P4.6) */
+@keyframes preventaModalFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Botón Cerrar (X) */
+.preventa-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    color: #c9c3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+    padding: 0;
+}
+
+.preventa-modal-close:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: rgba(212, 175, 55, 0.55);
+    color: #ffffff;
+    transform: scale(1.06);
+}
+
+.preventa-modal-close:focus-visible {
+    outline: 2px solid var(--color-primary, #d4af37);
+    outline-offset: 2px;
+}
+
+/* Header del Modal */
+.preventa-modal-header {
+    text-align: center;
+    margin-bottom: 1.15rem;
+}
+
+.preventa-modal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--color-primary, #d4af37);
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.preventa-modal-badge-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-primary, #d4af37);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--color-primary, #d4af37);
+}
+
+.preventa-modal-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(1.75rem, 4vw, 2.15rem);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 0.45rem;
+    line-height: 1.15;
+}
+
+.preventa-modal-title span {
+    background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 60%, #aa8228 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.preventa-modal-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 auto;
+}
+
+.preventa-modal-divider-line {
+    width: 36px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+}
+
+.preventa-modal-divider-diamond {
+    width: 5px;
+    height: 5px;
+    background: var(--color-primary, #d4af37);
+    transform: rotate(45deg);
+    opacity: 0.85;
+}
+
+/* Mensaje Principal (FASE P4.6) */
+.preventa-modal-desc {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
+    line-height: 1.45;
+    color: #f7f3ea;
+    text-align: center;
+    margin: 0 0 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+/* Lista de Beneficios Compacta (FASE P4.6) */
+.preventa-modal-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.preventa-benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(212, 175, 55, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.16);
+    border-radius: 8px;
+    padding: 0.55rem 0.85rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.preventa-benefit-item:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.preventa-benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.16);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    color: #f3e5ab;
+    font-size: 0.68rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.preventa-benefit-text {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.84rem;
+    color: #dcd7cc;
+    line-height: 1.35;
+    font-weight: 500;
+}
+
+/* Botón de Acción Refinado (FASE P4.6) */
+.preventa-modal-footer {
+    display: flex;
+    flex-direction: column;
+}
+
+.preventa-modal-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.4rem;
+    background: linear-gradient(135deg, #d4af37 0%, #aa8228 100%);
+    color: #0c0b09;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+    text-decoration: none;
+}
+
+.preventa-modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.38);
+    filter: brightness(1.06);
+}
+
+.preventa-modal-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
+.preventa-modal-btn:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+/* Bloqueo de scroll cuando el modal está abierto */
+body.preventa-modal-active {
+    overflow: hidden;
+}
+
+/* Responsive del Modal (Lectura en menos de 5s en móvil) */
+@media (max-width: 480px) {
+    .preventa-modal-dialog {
+        padding: 1.4rem 1.15rem 1.25rem;
+        border-radius: 14px;
+        max-width: 380px;
+    }
+
+    .preventa-modal-title {
+        font-size: 1.65rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .preventa-modal-desc {
+        font-size: 0.92rem;
+        line-height: 1.35;
+        margin-bottom: 1rem;
+    }
+
+    .preventa-modal-benefits {
+        gap: 0.4rem;
+        margin-bottom: 1.15rem;
+    }
+
+    .preventa-benefit-item {
+        padding: 0.45rem 0.75rem;
+    }
+
+    .preventa-benefit-text {
+        font-size: 0.78rem;
+    }
+
+    .preventa-modal-btn {
+        padding: 0.85rem 1rem;
+        font-size: 0.78rem;
+    }
+}
+
+/* ==========================================================================
+   12. COMPONENTE DE CONFIRMACIÓN VISUAL DE RESERVA (FASE P4.2)
+   Notificación boutique modal y tarjeta flotante responsive
+   ========================================================================== */
+.preventa-confirm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.preventa-confirm-modal.is-open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.preventa-confirm-modal.is-closing {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preventa-confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 11, 9, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: opacity 0.35s ease;
+}
+
+.preventa-confirm-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: #141310;
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(212, 175, 55, 0.08);
+    padding: 1.5rem;
+    color: #fbf7ee;
+    box-sizing: border-box;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.38s ease;
+    z-index: 1;
+}
+
+.preventa-confirm-modal.is-open .preventa-confirm-dialog {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.preventa-confirm-modal.is-closing .preventa-confirm-dialog {
+    transform: translateY(16px);
+    opacity: 0;
+}
+
+/* Botón Cerrar (X) */
+.preventa-confirm-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    color: #c4b595;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+    padding: 0;
+}
+
+.preventa-confirm-close:hover {
+    background: rgba(212, 175, 55, 0.15);
+    color: #d4af37;
+    border-color: rgba(212, 175, 55, 0.4);
+    transform: scale(1.05);
+}
+
+.preventa-confirm-close:focus-visible {
+    outline: 2px solid #d4af37;
+    outline-offset: 2px;
+}
+
+/* Cabecera */
+.preventa-confirm-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 1.15rem;
+    padding-right: 2rem;
+}
+
+.preventa-confirm-icon-box {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.04) 100%);
+    border: 1.5px solid #d4af37;
+    color: #d4af37;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
+}
+
+.preventa-confirm-headings {
+    flex: 1;
+}
+
+.preventa-confirm-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.25rem;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+
+.preventa-confirm-subtitle {
+    font-size: 0.82rem;
+    color: #bba98a;
+    margin: 0;
+    line-height: 1.35;
+}
+
+/* Mini Tarjeta de Producto */
+.preventa-confirm-product-card {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    padding: 0.85rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.preventa-confirm-product-media {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0c0b09;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preventa-confirm-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.preventa-confirm-product-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.preventa-confirm-brand {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d4af37;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.preventa-confirm-name {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preventa-confirm-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    margin-bottom: 4px;
+}
+
+.preventa-confirm-price-label {
+    color: #8c8273;
+    font-size: 0.74rem;
+}
+
+.preventa-confirm-price {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.preventa-confirm-qty-row {
+    display: flex;
+    align-items: center;
+}
+
+.preventa-confirm-qty-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #d4af37;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+}
+
+/* Información de Adelanto Dinámico */
+.preventa-confirm-deposit-box {
+    padding: 0.85rem 1rem;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.24);
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+}
+
+.preventa-confirm-deposit-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    gap: 0.75rem;
+}
+
+.preventa-confirm-deposit-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.preventa-confirm-deposit-label {
+    font-size: 0.72rem;
+    color: #a3957f;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.preventa-confirm-deposit-val {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #d4af37;
+    line-height: 1;
+}
+
+.preventa-confirm-balance-label {
+    font-size: 0.72rem;
+    color: #8c8273;
+    margin-bottom: 2px;
+}
+
+.preventa-confirm-balance-val {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e5ded3;
+}
+
+.preventa-confirm-deposit-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: #9c8e77;
+    line-height: 1.35;
+    padding-top: 0.45rem;
+    border-top: 1px dashed rgba(212, 175, 55, 0.15);
+}
+
+.preventa-confirm-deposit-note svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    stroke: #d4af37;
+}
+
+/* Botones de Acción */
+.preventa-confirm-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.preventa-confirm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.preventa-confirm-btn-primary {
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    background: linear-gradient(135deg, #d4af37 0%, #aa8228 100%);
+    color: #0c0b09;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+}
+
+.preventa-confirm-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(212, 175, 55, 0.4);
+    filter: brightness(1.07);
+}
+
+.preventa-confirm-btn-primary:active {
+    transform: translateY(0);
+}
+
+.preventa-confirm-btn-primary:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+.preventa-confirm-btn-secondary {
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    color: #d4af37;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.preventa-confirm-btn-secondary:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.6);
+    color: #f3e5ab;
+}
+
+.preventa-confirm-btn-secondary:active {
+    background: rgba(212, 175, 55, 0.14);
+}
+
+.preventa-confirm-btn-secondary:focus-visible {
+    outline: 2px solid #d4af37;
+    outline-offset: 2px;
+}
+
+/* Comportamiento Responsive Móvil: Tarjeta Flotante Inferior */
+@media (max-width: 768px) {
+    .preventa-confirm-modal {
+        pointer-events: none;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 0.75rem;
+        z-index: 1050;
+    }
+
+    .preventa-confirm-backdrop {
+        display: none;
+    }
+
+    .preventa-confirm-dialog {
+        pointer-events: auto;
+        width: 100%;
+        max-width: 440px;
+        margin: 0 auto 0.5rem;
+        padding: 1.15rem 1rem;
+        border-radius: 14px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 25px rgba(212, 175, 55, 0.15);
+    }
+
+    /* Elevación del botón WhatsApp para no ser tapado por la tarjeta flotante */
+    body.preventa-confirm-open .wa-float-btn {
+        transform: translateY(-80px);
+        z-index: 1060;
+        transition: transform 0.3s ease;
+    }
+
+    .preventa-confirm-actions {
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+    .preventa-confirm-btn-primary,
+    .preventa-confirm-btn-secondary {
+        flex: 1;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.74rem;
+        letter-spacing: 0.05em;
+    }
+}
+
+/* Reducción de Movimiento Accesible */
+@media (prefers-reduced-motion: reduce) {
+    .preventa-card,
+    .preventa-card-img,
+    .preventa-card-btn,
+    .preventa-hero-cta-link,
+    .preventa-modal,
+    .preventa-modal-dialog,
+    .preventa-modal-btn,
+    .preventa-modal-close,
+    .preventa-confirm-modal,
+    .preventa-confirm-dialog,
+    .preventa-confirm-btn,
+    .preventa-confirm-close,
+    .preventa-search-input,
+    .preventa-gender-pill,
+    .preventa-search-clear-btn {
+        transition: none !important;
+        transform: none !important;
+    }
+
+    .preventa-spinner {
+        animation-duration: 2s !important;
+    }
+}
+
+/* ==========================================================================
+   FASE P4.5: Badges de Stock y Alertas de Límite Preventa
+   ========================================================================== */
+
+.preventa-stock-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+}
+
+.preventa-stock-pill.stock-disponibles {
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #e5c97b;
+}
+
+.preventa-stock-pill.stock-ultimas {
+    background: rgba(217, 119, 6, 0.12);
+    border: 1px solid rgba(217, 119, 6, 0.4);
+    color: #fbbf24;
+    animation: stockPulse 2.5s infinite ease-in-out;
+}
+
+.preventa-stock-pill.stock-agotado {
+    background: rgba(100, 116, 139, 0.12);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    color: #94a3b8;
+}
+
+@keyframes stockPulse {
+    0%, 100% {
+        opacity: 0.92;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+    }
+}
+
+/* Toast de Alerta de Stock Excedido */
+.preventa-stock-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    z-index: 10050;
+    max-width: 90vw;
+    width: auto;
+    min-width: 320px;
+    padding: 0.85rem 1.25rem;
+    background: rgba(18, 15, 12, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(217, 119, 6, 0.55);
+    border-radius: 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(217, 119, 6, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.3s;
+}
+
+.preventa-stock-toast.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.preventa-stock-toast-body {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #ffffff;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.84rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.preventa-stock-toast-icon {
+    color: #fbbf24;
+    flex-shrink: 0;
+}
+
+.preventa-stock-toast-text {
+    color: #fef3c7;
+}
+
+/* ==========================================================================
+   FASE P4.8: NAVEGACIÓN Y HEADER INDEPENDIENTE PREVENTA
+   ========================================================================== */
+
+/* Botón Exclusivo de Acceso a Mi Reserva Preventa */
+.reserva-header-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.95rem;
+    color: #fbf7ee;
+    border-radius: 999px;
+    background: rgba(212, 175, 55, 0.09);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    transition: all 0.25s ease;
+    text-decoration: none;
+    user-select: none;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    box-sizing: border-box;
+}
+
+.reserva-header-btn:hover {
+    color: #ffffff;
+    background: rgba(212, 175, 55, 0.18);
+    border-color: rgba(212, 175, 55, 0.55);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 10px rgba(212, 175, 55, 0.2);
+    transform: translateY(-1px);
+}
+
+.reserva-header-btn:active {
+    transform: scale(0.97);
+}
+
+.reserva-btn-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary, #d4af37);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.reserva-header-btn:hover .reserva-btn-icon {
+    transform: scale(1.08);
+}
+
+.reserva-header-text {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fbf7ee;
+    white-space: nowrap;
+}
+
+.reserva-header-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #d4af37 0%, #aa8228 100%);
+    color: #0c0b09;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    line-height: 1;
+}
+
+/* Badge en el menú drawer */
+.reserva-nav-badge {
+    margin-left: auto;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #d4af37 0%, #aa8228 100%);
+    color: #0c0b09;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Móvil: Header ultra limpio (LOGO + Reserva + Menú) */
+@media (max-width: 768px) {
+    .reserva-header-btn {
+        padding: 0.5rem;
+        min-width: 42px;
+        min-height: 42px;
+        justify-content: center;
+        border-radius: 12px;
+    }
+
+    .reserva-header-text {
+        display: none;
+    }
+
+    .reserva-btn-icon {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* ==========================================================================
+   FASE P4.8.2: OPTIMIZACIÓN HEADER DESKTOP PREVENTA Y DISTRIBUCIÓN PREMIUM
+   ========================================================================== */
+@media screen and (min-width: 992px) {
+    /* 1. Contenedor de Cabecera: Distribución amplia y equilibrada */
+    .page-preventa .header-container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: min(100% - 48px, 1680px) !important;
+        max-width: 1680px !important;
+        margin-inline: auto !important;
+        gap: clamp(24px, 2.5vw, 42px) !important;
+        box-sizing: border-box !important;
+    }
+
+    .page-preventa .logo-container {
+        display: inline-flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* 2. Menú de Navegación Central Desktop */
+    .page-preventa .nav-menu {
+        flex: 1 1 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: auto !important;
+        max-width: none !important;
+        position: static !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        transform: none !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        pointer-events: auto !important;
+    }
+
+    /* 3. Lista de Enlaces: Separación premium 32px - 42px y protección contra saltos de línea */
+    .page-preventa .nav-list {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 36px !important;
+        gap: clamp(32px, 2.4vw, 42px) !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    .page-preventa .nav-item {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        position: relative !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 4. Enlaces de Navegación con identidad boutique Dunes */
+    .page-preventa .nav-link {
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        text-overflow: clip !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 8px 0 !important;
+        font-family: var(--font-body, 'Montserrat', sans-serif) !important;
+        font-size: clamp(0.78rem, 0.88vw, 0.88rem) !important;
+        font-weight: 600 !important;
+        letter-spacing: clamp(0.5px, 0.05vw, 1px) !important;
+        text-transform: uppercase !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        text-decoration: none !important;
+        transition: color 0.2s ease !important;
+        cursor: pointer !important;
+        border: none !important;
+        background: transparent !important;
+    }
+
+    .page-preventa .nav-link:hover,
+    .page-preventa .nav-link.active {
+        color: #D4AF37 !important;
+        background: transparent !important;
+    }
+
+    .page-preventa .nav-link.active::after {
+        content: '' !important;
+        position: absolute !important;
+        bottom: -2px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 2px !important;
+        background: #D4AF37 !important;
+        border-radius: 2px !important;
+    }
+
+    .page-preventa .nav-link-text {
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        display: inline !important;
+    }
+
+    /* 5. AJUSTES ESPECÍFICOS: COMPARAR PERFUMES en una sola línea estricta */
+    .page-preventa .nav-link[href*="comparador"],
+    .page-preventa .nav-link[href*="comparador"] .nav-link-text {
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        display: inline-flex !important;
+    }
+
+    /* 6. AJUSTES ESPECÍFICOS: MI RESERVA en una sola línea estricta */
+    .page-preventa .nav-link[href*="reserva"],
+    .page-preventa .nav-link[href*="reserva"] .nav-link-text,
+    .page-preventa .reserva-header-btn,
+    .page-preventa .reserva-header-text {
+        white-space: nowrap !important;
+        word-break: keep-all !important;
+        display: inline-flex !important;
+    }
+
+    /* 7. Acciones del Header en Desktop */
+    .page-preventa .header-actions {
+        display: flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+        gap: 16px !important;
+    }
+
+    /* 8. Ocultar estrictamente elementos móviles en Desktop */
+    .page-preventa .mobile-drawer-header,
+    .page-preventa .mobile-drawer-brand,
+    .page-preventa .mobile-drawer-close,
+    .page-preventa #mobile-menu-close,
+    .page-preventa .burger-menu-btn,
+    .page-preventa #mobile-menu-toggle,
+    .page-preventa .nav-link-icon,
+    .page-preventa .nav-link-chevron,
+    .page-preventa .nav-menu-overlay,
+    .page-preventa #nav-menu-overlay {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+}
+
+/* ==========================================================================
+   FASE P4.8: FOOTER INDEPENDIENTE Y COMPACTO PREVENTA
+   ========================================================================== */
+.preventa-footer-independent {
+    background: linear-gradient(180deg, #0e0d0b 0%, #070706 100%);
+    border-top: 1px solid rgba(212, 175, 55, 0.22);
+    color: #c9c3b8;
+    padding: 3rem 0 1.5rem;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+}
+
+.preventa-footer-independent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+}
+
+.preventa-footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    box-sizing: border-box;
+}
+
+.preventa-footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.preventa-footer-brand {
+    max-width: 460px;
+}
+
+.preventa-footer-logo-link {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    transition: opacity 0.2s ease;
+}
+
+.preventa-footer-logo-link:hover {
+    opacity: 0.9;
+}
+
+.preventa-footer-logo {
+    height: 38px;
+    width: auto;
+    display: block;
+}
+
+.preventa-footer-tagline {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #b5afa4;
+    margin: 0;
+}
+
+.preventa-footer-channels {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.preventa-footer-social {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.preventa-footer-social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    color: #e5c97b;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.preventa-footer-social-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: rgba(212, 175, 55, 0.5);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.preventa-footer-whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.15rem;
+    border-radius: 9999px;
+    background: rgba(37, 211, 102, 0.1);
+    border: 1px solid rgba(37, 211, 102, 0.35);
+    color: #25d366;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: all 0.25s ease;
+}
+
+.preventa-footer-whatsapp-link:hover {
+    background: rgba(37, 211, 102, 0.18);
+    border-color: rgba(37, 211, 102, 0.6);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.2);
+}
+
+/* Aviso Exclusivo Preventa */
+.preventa-footer-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    margin: 1.75rem auto;
+    padding: 0.85rem 1.25rem;
+    max-width: 680px;
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.preventa-footer-notice-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.18);
+    color: var(--color-primary, #d4af37);
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.preventa-footer-notice-text {
+    margin: 0;
+    font-size: 0.84rem;
+    color: #e5c97b;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+/* Copyright compacto */
+.preventa-footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    font-size: 0.75rem;
+    color: #8a8377;
+}
+
+.preventa-footer-bottom p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .preventa-footer-independent {
+        padding: 2.25rem 0 1.25rem;
+    }
+
+    .preventa-footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .preventa-footer-channels {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .preventa-footer-notice {
+        margin: 1.25rem 0;
+        text-align: left;
+        align-items: flex-start;
+    }
+
+    .preventa-footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+}
+

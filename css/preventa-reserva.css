@@ -1,0 +1,1187 @@
+/**
+ * Dunes Parfums - Estilos de la Página "Mi Reserva Preventa" (FASE P4.3)
+ * Experiencia boutique editorial exclusiva para revisión y gestión de reservas.
+ * Desacoplado 100% del carrito normal, checkout y catálogo regular.
+ */
+
+/* ==========================================================================
+   1. CONTENEDOR Y LAYOUT PRINCIPAL
+   ========================================================================== */
+.page-preventa-reserva .reserva-main {
+    min-height: calc(100vh - 180px);
+    background-color: var(--color-bg-primary, #0c0b09);
+    background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 175, 55, 0.08) 0%, transparent 70%),
+        radial-gradient(circle at 100% 40%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+    color: var(--color-text-primary, #fbf7ee);
+    padding: 1.5rem 0 5rem;
+    box-sizing: border-box;
+}
+
+.reserva-container {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. BREADCRUMB Y ACCIONES DE CABECERA
+   ========================================================================== */
+.reserva-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #8c8273;
+    margin-bottom: 1.5rem;
+}
+
+.reserva-breadcrumb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #c4b595;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.reserva-breadcrumb-link:hover {
+    color: #d4af37;
+}
+
+.reserva-breadcrumb-sep {
+    color: #554e44;
+}
+
+.reserva-breadcrumb-current {
+    color: #fbf7ee;
+    font-weight: 600;
+}
+
+.reserva-header-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    color: #d4af37;
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: all 0.25s ease;
+}
+
+.reserva-header-back-btn:hover {
+    background: rgba(212, 175, 55, 0.16);
+    border-color: rgba(212, 175, 55, 0.5);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+    .reserva-header-back-text {
+        display: none;
+    }
+    .reserva-header-back-btn {
+        padding: 0.45rem;
+    }
+}
+
+/* ==========================================================================
+   3. HERO EDITORIAL
+   ========================================================================== */
+.reserva-hero {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+}
+
+.reserva-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 9999px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    color: var(--color-primary, #d4af37);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.reserva-badge-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-primary, #d4af37);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--color-primary, #d4af37);
+    display: inline-block;
+}
+
+.reserva-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+}
+
+.reserva-title span {
+    background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 60%, #aa8228 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.reserva-subtitle {
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    color: #bba98a;
+    margin: 0 auto 1rem;
+    line-height: 1.45;
+}
+
+.reserva-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 auto;
+}
+
+.reserva-divider-line {
+    width: 42px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+}
+
+.reserva-divider-diamond {
+    width: 5px;
+    height: 5px;
+    background-color: #d4af37;
+    transform: rotate(45deg);
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.6);
+}
+
+/* ==========================================================================
+   4. LAYOUT DE 2 COLUMNAS (DESKTOP)
+   ========================================================================== */
+.reserva-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(350px, 0.95fr);
+    gap: 2.25rem;
+    align-items: start;
+}
+
+/* ==========================================================================
+   5. COLUMNA DE PRODUCTOS RESERVADOS
+   ========================================================================== */
+.reserva-products-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.reserva-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.reserva-section-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.reserva-section-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+/* FASE P4.8.1: Etiqueta de Cantidad en Una Sola Línea */
+.reserva-count-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #d4af37;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+}
+
+/* Botón Vaciar Reserva (FASE P4.8.4 - Acción Secundaria Elegante) */
+.reserva-btn-vaciar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    color: #9e9587;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0.32rem 0.75rem;
+    border-radius: 8px;
+    user-select: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.reserva-btn-vaciar-icon,
+.reserva-btn-vaciar svg {
+    width: 14px;
+    height: 14px;
+    color: #9e9587;
+    flex-shrink: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.reserva-btn-vaciar:hover {
+    color: #fbf7ee;
+    background: rgba(212, 175, 55, 0.09);
+    border-color: rgba(212, 175, 55, 0.42);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.reserva-btn-vaciar:hover .reserva-btn-vaciar-icon,
+.reserva-btn-vaciar:hover svg {
+    color: #d4af37;
+    transform: scale(1.05);
+}
+
+.reserva-btn-vaciar:active {
+    transform: scale(0.97);
+}
+
+.reserva-btn-vaciar:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.35);
+}
+
+/* Lista de Tarjetas */
+.reserva-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Tarjeta Individual Compacta de Producto (FASE P4.7) */
+.reserva-item-card {
+    background: #141310;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    padding: 0.95rem 1.15rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.reserva-item-card:hover {
+    border-color: rgba(212, 175, 55, 0.38);
+}
+
+.reserva-item-compact-grid {
+    display: grid;
+    grid-template-columns: 60px minmax(130px, 1.4fr) auto auto auto;
+    align-items: center;
+    gap: 1.15rem;
+}
+
+.reserva-item-media {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    background: #0c0b09;
+    border: 1px solid rgba(212, 175, 55, 0.16);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.reserva-item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.reserva-item-info {
+    min-width: 0;
+}
+
+.reserva-item-brand {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d4af37;
+    display: block;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reserva-item-name {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.2rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reserva-item-price-val {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #f7f3ea;
+}
+
+/* Columna de Cantidad */
+.reserva-item-qty-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.reserva-qty-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #8c8273;
+}
+
+.reserva-qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    background: #0c0b09;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 6px;
+    overflow: hidden;
+    height: 30px;
+}
+
+.reserva-qty-btn {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    color: #d4af37;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+    padding: 0;
+}
+
+.reserva-qty-btn:hover:not(:disabled):not(.is-disabled) {
+    background: rgba(212, 175, 55, 0.15);
+    color: #ffffff;
+}
+
+.reserva-qty-btn:disabled,
+.reserva-qty-btn.is-disabled {
+    color: #4f483d;
+    cursor: not-allowed;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.reserva-qty-display {
+    min-width: 32px;
+    padding: 0 0.35rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    user-select: none;
+}
+
+.reserva-stock-limit-badge {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: #fbbf24;
+    background: rgba(217, 119, 6, 0.12);
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    border-radius: 4px;
+    padding: 1px 5px;
+    white-space: nowrap;
+}
+
+/* Columna Financiera */
+.reserva-item-financial-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 105px;
+}
+
+.reserva-financial-mini-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.reserva-financial-label {
+    font-size: 0.72rem;
+    color: #8c8273;
+    font-weight: 500;
+}
+
+.reserva-financial-val {
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.reserva-financial-val.highlight-deposit {
+    color: #d4af37;
+}
+
+/* Columna Eliminar */
+.reserva-item-actions-col {
+    display: flex;
+    align-items: center;
+}
+
+.reserva-btn-remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: transparent;
+    border: none;
+    color: #7a7164;
+    font-size: 0.72rem;
+    cursor: pointer;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.reserva-btn-remove:hover {
+    color: #e57373;
+    background: rgba(229, 115, 115, 0.08);
+}
+
+/* ==========================================================================
+   6. COLUMNA DERECHA: RESUMEN COMPACTO DE RESERVA (STICKY)
+   ========================================================================== */
+.reserva-summary-aside {
+    position: sticky;
+    top: 90px;
+}
+
+.reserva-summary-card {
+    background: linear-gradient(180deg, #181612 0%, #12110e 100%);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 14px;
+    padding: 1.35rem 1.4rem;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.reserva-summary-header {
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    padding-bottom: 0.6rem;
+}
+
+.reserva-summary-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #d4af37;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.reserva-summary-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+/* Desglose Compacto de Precios */
+.reserva-summary-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.reserva-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.reserva-summary-label {
+    color: #c4b595;
+    font-size: 0.82rem;
+}
+
+.reserva-summary-val {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 0.88rem;
+    white-space: nowrap;
+}
+
+#summary-total-unidades {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.reserva-summary-divider {
+    height: 1px;
+    background: rgba(212, 175, 55, 0.15);
+    margin: 0.15rem 0;
+}
+
+/* Fila de Adelanto Destacada */
+.reserva-row-highlight {
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+}
+
+.reserva-highlight-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #d4af37;
+}
+
+.reserva-highlight-val {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #d4af37;
+}
+
+/* Fila de Saldo Pendiente */
+.reserva-row-balance {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+}
+
+.reserva-balance-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #e5ded3;
+}
+
+.reserva-balance-val {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #e5ded3;
+}
+
+/* Callout Compacto de Aclaración Obligatoria */
+.reserva-discount-callout {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: rgba(212, 175, 55, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+}
+
+.reserva-callout-icon {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    border-radius: 50%;
+    background: #d4af37;
+    color: #0c0b09;
+    font-size: 0.65rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reserva-callout-text {
+    font-size: 0.74rem;
+    color: #dcd4c5;
+    line-height: 1.3;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* 7. ACCIONES DEL RESUMEN */
+.reserva-actions-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding-top: 0.25rem;
+}
+
+.reserva-btn-whatsapp {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.95rem 1.25rem;
+    background: linear-gradient(135deg, #1E9E56 0%, #158245 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.84rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(21, 130, 69, 0.32), 0 0 12px rgba(212, 175, 55, 0.15);
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.reserva-btn-whatsapp:hover {
+    background: linear-gradient(135deg, #23B261 0%, #178F4C 100%);
+    box-shadow: 0 8px 26px rgba(21, 130, 69, 0.45), 0 0 18px rgba(212, 175, 55, 0.25);
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+.reserva-btn-whatsapp:active {
+    transform: translateY(0);
+}
+
+.reserva-btn-whatsapp:focus-visible {
+    outline: 2px solid #25D366;
+    outline-offset: 3px;
+}
+
+.reserva-btn-seguir {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.25rem;
+    background: transparent;
+    color: #d4af37;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.reserva-btn-seguir:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.6);
+    color: #f3e5ab;
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   10. ESTADO VACÍO
+   ========================================================================== */
+.reserva-empty-state {
+    padding: 2.5rem 0;
+}
+
+.reserva-empty-card {
+    background: #141310;
+    border: 1px solid rgba(212, 175, 55, 0.24);
+    border-radius: 18px;
+    padding: 3.5rem 1.5rem;
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reserva-empty-icon-box {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.02) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #d4af37;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.reserva-empty-title {
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.5rem;
+}
+
+.reserva-empty-text {
+    font-size: 0.92rem;
+    color: #bba98a;
+    line-height: 1.5;
+    margin: 0 0 2rem;
+    max-width: 380px;
+}
+
+.reserva-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 2rem;
+    background: linear-gradient(135deg, #d4af37 0%, #aa8228 100%);
+    color: #0c0b09;
+    border-radius: 8px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.84rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.28);
+    transition: all 0.25s ease;
+}
+
+.reserva-empty-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.42);
+    filter: brightness(1.07);
+}
+
+/* ==========================================================================
+   11. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 900px) {
+    .reserva-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .reserva-summary-aside {
+        position: static;
+    }
+
+    .reserva-summary-card {
+        padding: 1.35rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .reserva-main {
+        padding: 1rem 0 3.5rem;
+    }
+
+    .reserva-hero {
+        margin-bottom: 1.5rem;
+    }
+
+    .reserva-section-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .reserva-section-title-wrap {
+        gap: 0.5rem;
+    }
+
+    /* FASE P4.8.1: Garantizar "1 unidad" indivisible en móvil */
+    .reserva-count-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
+
+    .reserva-item-card {
+        padding: 0.75rem 0.85rem;
+    }
+
+    .reserva-item-compact-grid {
+        grid-template-columns: 52px 1fr auto;
+        grid-template-areas:
+            "media info remove"
+            "qty financial financial";
+        gap: 0.65rem 0.75rem;
+    }
+
+    .reserva-item-media {
+        grid-area: media;
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+    }
+
+    .reserva-item-info {
+        grid-area: info;
+    }
+
+    .reserva-item-name {
+        font-size: 1.05rem;
+    }
+
+    .reserva-item-actions-col {
+        grid-area: remove;
+        justify-self: end;
+    }
+
+    .reserva-item-qty-col {
+        grid-area: qty;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .reserva-qty-label {
+        display: none;
+    }
+
+    .reserva-qty-stepper {
+        height: 28px;
+    }
+
+    .reserva-qty-btn {
+        width: 26px;
+        height: 26px;
+    }
+
+    .reserva-item-financial-col {
+        grid-area: financial;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .reserva-financial-mini-row {
+        gap: 4px;
+    }
+
+    .reserva-financial-label {
+        font-size: 0.68rem;
+    }
+
+    .reserva-financial-val {
+        font-size: 0.8rem;
+    }
+
+    .reserva-btn-whatsapp {
+        padding: 0.85rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* ==========================================================================
+   12. NOTIFICACIÓN TOAST DE AVISO (FASE P4.4)
+   ========================================================================== */
+.reserva-alert-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #181612;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+    border-radius: 999px;
+    padding: 0.75rem 1.35rem;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    max-width: 90vw;
+}
+
+.reserva-alert-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.reserva-toast-content {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fbf7ee;
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Reducción de movimiento accesible */
+@media (prefers-reduced-motion: reduce) {
+    .reserva-item-card,
+    .reserva-btn-whatsapp,
+    .reserva-btn-seguir,
+    .reserva-empty-btn,
+    .reserva-qty-btn,
+    .reserva-header-back-btn,
+    .reserva-alert-toast,
+    .reserva-modal,
+    .reserva-modal-dialog {
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+/* ==========================================================================
+   FASE P4.8.4: MODAL DE CONFIRMACIÓN PERSONALIZADO (DUNES PREVENTA)
+   ========================================================================== */
+.reserva-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
+.reserva-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.reserva-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 7, 6, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.reserva-modal-dialog {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 440px;
+    background: #12110e;
+    background: linear-gradient(150deg, #171511 0%, #0d0c0a 100%);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 14px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 24px rgba(212, 175, 55, 0.08);
+    padding: 1.65rem 1.65rem 1.45rem;
+    box-sizing: border-box;
+    transform: scale(0.95) translateY(6px);
+    transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+}
+
+.reserva-modal.is-open .reserva-modal-dialog {
+    transform: scale(1) translateY(0);
+}
+
+.reserva-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #8c8273;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.reserva-modal-close:hover {
+    color: #fbf7ee;
+    background: rgba(212, 175, 55, 0.12);
+    border-color: rgba(212, 175, 55, 0.35);
+}
+
+.reserva-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+}
+
+.reserva-modal-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    color: #d4af37;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.reserva-modal-title {
+    margin: 0;
+    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+
+.reserva-modal-body {
+    margin-bottom: 1.35rem;
+}
+
+.reserva-modal-msg {
+    margin: 0 0 0.4rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fbf7ee;
+    line-height: 1.35;
+}
+
+.reserva-modal-subtext {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #9e9587;
+    line-height: 1.45;
+}
+
+.reserva-modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.reserva-modal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1.2rem;
+    border-radius: 10px;
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    user-select: none;
+    text-decoration: none;
+}
+
+/* Botón Cancelar (Estilo Secundario) */
+.reserva-modal-btn-cancelar {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #c9c3b8;
+    font-weight: 600;
+}
+
+.reserva-modal-btn-cancelar:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+}
+
+/* Botón Vaciar Reserva (Estilo Destacado Dunes) */
+.reserva-modal-btn-confirmar {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.24) 0%, rgba(170, 130, 40, 0.32) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.55);
+    color: #fbf7ee;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.reserva-modal-btn-confirmar:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.38) 0%, rgba(170, 130, 40, 0.48) 100%);
+    border-color: rgba(212, 175, 55, 0.85);
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.22);
+    transform: translateY(-1px);
+}
+
+.reserva-modal-btn:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+    .reserva-modal-dialog {
+        padding: 1.35rem 1.15rem 1.2rem;
+        border-radius: 12px;
+    }
+
+    .reserva-modal-actions {
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+    }
+
+    .reserva-modal-btn {
+        width: 100%;
+        padding: 0.7rem 1rem;
+    }
+}
