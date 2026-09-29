@@ -485,7 +485,24 @@ test('19. FASE P5.1 - Estructura HTML y estilos CSS del bloque dinámico de pró
     assert.ok(css.includes('.preventa-arrival-section'), 'Debe tener selector .preventa-arrival-section');
     assert.ok(css.includes('.preventa-arrival-card'), 'Debe tener selector .preventa-arrival-card');
     assert.ok(css.includes('.preventa-arrival-date'), 'Debe tener selector .preventa-arrival-date');
-    assert.ok(css.includes('Cormorant Garamond'), 'Debe usar Cormorant Garamond para la fecha o tipografías');
-    assert.ok(css.includes('Montserrat'), 'Debe usar Montserrat para el texto secundario');
+    assert.ok(css.includes('Montserrat'), 'Debe usar Montserrat para el texto y fecha');
 });
 
+test('20. FASE P5.2 - Refinamiento premium del bloque de llegada (animaciones boutique, resplandor dorado y tipografía Montserrat 700)', () => {
+    const cssPath = path.join(ROOT_DIR, 'css', 'preventa.css');
+    const css = fs.readFileSync(cssPath, 'utf8');
+
+    // Tipografía Montserrat 700 para fecha
+    assert.ok(css.includes('.preventa-arrival-date'), 'Debe contener estilos para .preventa-arrival-date');
+    assert.ok(css.includes('font-weight: 700;'), 'Debe usar peso 700 para mayor legibilidad de fechas y números');
+
+    // Animaciones y resplandores premium
+    assert.ok(css.includes('preventaArrivalFadeIn'), 'Debe incluir animación de entrada suave (0.6s)');
+    assert.ok(css.includes('translateY(10px)'), 'Debe animar translateY(10px) a 0');
+    assert.ok(css.includes('preventaGlowPulse'), 'Debe incluir resplandor dorado tenue alrededor del bloque');
+    assert.ok(css.includes('preventaBadgeGleam'), 'Debe incluir brillo periódico en el badge');
+    assert.ok(css.includes('preventaShimmer'), 'Debe incluir destello sutil en el badge');
+
+    // Soporte para prefers-reduced-motion
+    assert.ok(css.includes('prefers-reduced-motion'), 'Debe respetar preferencias de reducción de movimiento');
+});

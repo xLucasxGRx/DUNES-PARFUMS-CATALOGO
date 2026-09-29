@@ -157,7 +157,7 @@
 }
 
 /* ==========================================================================
-   3.0. INFORMACIÓN DINÁMICA DE FECHA DE LLEGADA PREVENTA (FASE P5.1)
+   3.0. INFORMACIÓN DINÁMICA DE FECHA DE LLEGADA PREVENTA (FASE P5.1 & P5.2)
    ========================================================================== */
 .preventa-arrival-section {
     width: 100%;
@@ -175,20 +175,22 @@
     text-align: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 14px rgba(212, 175, 55, 0.08), inset 0 1px 0 rgba(212, 175, 55, 0.16);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    animation: preventaArrivalFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+               preventaGlowPulse 5.5s ease-in-out infinite 0.6s;
+    will-change: transform, opacity, box-shadow, border-color;
 }
 
 .preventa-arrival-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 20%;
-    right: 20%;
+    left: 15%;
+    right: 15%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55), transparent);
     pointer-events: none;
 }
 
@@ -200,9 +202,27 @@
     padding: 0.22rem 0.85rem;
     border-radius: 9999px;
     background: rgba(212, 175, 55, 0.08);
-    border: 1px solid rgba(212, 175, 55, 0.22);
+    border: 1px solid rgba(212, 175, 55, 0.28);
     color: var(--color-primary, #d4af37);
     margin-bottom: 0.35rem;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: preventaBadgeGleam 4.5s ease-in-out infinite;
+}
+
+.preventa-arrival-badge::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+    transform: skewX(-20deg);
+    animation: preventaShimmer 5s ease-in-out infinite;
+    pointer-events: none;
 }
 
 .preventa-arrival-badge-icon {
@@ -225,10 +245,10 @@
 }
 
 .preventa-arrival-date {
-    font-family: var(--font-heading, 'Cormorant Garamond', Georgia, serif);
+    font-family: var(--font-body, 'Montserrat', Arial, sans-serif);
     font-size: clamp(1.65rem, 4.5vw, 2.35rem);
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
     line-height: 1.15;
     color: #fbf7ee;
     margin: 0;
@@ -244,6 +264,67 @@
     max-width: 520px;
     margin: 0 auto;
     letter-spacing: 0.01em;
+}
+
+/* ==========================================================================
+   ANIMACIONES BOUTIQUE DE PREVENTA (FASE P5.2)
+   ========================================================================== */
+@keyframes preventaArrivalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes preventaGlowPulse {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 12px rgba(212, 175, 55, 0.06), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+        border-color: rgba(212, 175, 55, 0.26);
+    }
+    50% {
+        box-shadow: 0 4px 22px rgba(0, 0, 0, 0.5), 0 0 22px rgba(212, 175, 55, 0.14), inset 0 1px 0 rgba(212, 175, 55, 0.28);
+        border-color: rgba(212, 175, 55, 0.38);
+    }
+}
+
+@keyframes preventaBadgeGleam {
+    0%, 100% {
+        border-color: rgba(212, 175, 55, 0.26);
+        background-color: rgba(212, 175, 55, 0.07);
+        box-shadow: 0 0 0 rgba(212, 175, 55, 0);
+    }
+    50% {
+        border-color: rgba(212, 175, 55, 0.46);
+        background-color: rgba(212, 175, 55, 0.11);
+        box-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
+    }
+}
+
+@keyframes preventaShimmer {
+    0%, 75% {
+        left: -100%;
+    }
+    100% {
+        left: 200%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preventa-arrival-card {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+    .preventa-arrival-badge {
+        animation: none;
+    }
+    .preventa-arrival-badge::after {
+        display: none;
+    }
 }
 
 @media (max-width: 768px) {
