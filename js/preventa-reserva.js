@@ -100,11 +100,6 @@
     const WHATSAPP_NUMERO = '51986510573';
 
     /**
-     * Formatea un número al estilo de moneda compacto para WhatsApp (ej. S/357 o S/119.50)
-     * @param {number|string} val
-     * @returns {string}
-     */
-    /**
      * Formatea un número al estilo de moneda de WhatsApp (FASE P4.9: S/XXX.00)
      * @param {number|string} val
      * @returns {string}

@@ -768,10 +768,13 @@
     scroll-margin-top: 2rem;
 }
 
-.preventa-products-grid {
+.preventa-products-grid,
+.preventa-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(14px, 1.8vw, 22px);
+    grid-template-columns: repeat(4, minmax(220px, 280px));
+    justify-content: center;
+    gap: 24px;
     width: 100%;
     box-sizing: border-box;
     align-items: stretch;
@@ -789,7 +792,7 @@
     }
 }
 
-/* Tarjeta Boutique Independiente */
+/* Tarjeta Boutique Independiente (FASE P3.2: Proporciones equilibradas con el catálogo) */
 .preventa-card {
     background: linear-gradient(180deg, rgba(22, 19, 15, 0.98) 0%, rgba(14, 12, 10, 0.99) 100%);
     border: 1px solid rgba(212, 175, 55, 0.22);
@@ -799,7 +802,10 @@
     flex-direction: column;
     height: 100%;
     min-width: 0;
+    max-width: 280px;
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     box-sizing: border-box;
     position: relative;
     box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.65), 0 2px 8px -1px rgba(212, 175, 55, 0.06);
@@ -840,11 +846,12 @@
     }
 }
 
-/* Área de Imagen de Vitrina (Pedestal Luminoso y Fondo Limpio) */
+/* Área de Imagen de Vitrina (Pedestal Luminoso y Fondo Limpio - FASE P3.2) */
 .preventa-card-media {
     position: relative;
     width: 100%;
-    height: clamp(175px, 15vw, 215px);
+    height: clamp(160px, 14vw, 190px);
+    max-height: 190px;
     background: 
         radial-gradient(ellipse 65% 55% at 50% 50%, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.06) 50%, transparent 72%),
         radial-gradient(ellipse 80% 30% at 50% 90%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
@@ -852,7 +859,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 16px;
+    padding: 12px 14px;
     overflow: hidden;
     box-sizing: border-box;
     border-bottom: 1px solid rgba(212, 175, 55, 0.14);
@@ -863,7 +870,7 @@
 .preventa-card-img {
     width: 100%;
     height: 100%;
-    max-height: 100%;
+    max-height: 165px;
     max-width: 100%;
     object-fit: contain;
     object-position: center;
@@ -1319,13 +1326,19 @@
         padding: 0 var(--space-4, 1rem);
     }
 
-    .preventa-products-grid {
+    .preventa-products-grid,
+    .preventa-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 16px;
     }
 
+    .preventa-card {
+        max-width: 100%;
+    }
+
     .preventa-card-media {
         height: 165px;
+        max-height: 165px;
         padding: 10px 12px;
     }
 
@@ -1347,16 +1360,36 @@
     }
 }
 
-/* DESKTOP (1024px o más) — 4 COLUMNAS */
+/* DESKTOP (1024px o más) — 4 COLUMNAS EQUILIBRADAS (FASE P3.2) */
 @media (min-width: 1024px) {
     .preventa-container {
         max-width: 1280px;
         padding: 0 var(--space-4, 1rem);
     }
 
-    .preventa-products-grid {
+    .preventa-products-grid,
+    .preventa-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(4, minmax(220px, 280px));
+        justify-content: center;
+        gap: 24px;
+    }
+
+    .preventa-card {
+        max-width: 280px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .preventa-card-media {
+        height: clamp(160px, 14vw, 190px);
+        max-height: 190px;
+        padding: 12px 14px;
+    }
+
+    .preventa-card-img {
+        max-height: 165px;
+        object-fit: contain;
     }
 }
 
@@ -1379,7 +1412,8 @@
         padding: 0 10px;
     }
 
-    .preventa-products-grid {
+    .preventa-products-grid,
+    .preventa-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
     }
@@ -1387,6 +1421,7 @@
     /* Tarjeta Compacta en Móvil */
     .preventa-card {
         border-radius: 12px;
+        max-width: 100%;
     }
 
     .preventa-card-media {

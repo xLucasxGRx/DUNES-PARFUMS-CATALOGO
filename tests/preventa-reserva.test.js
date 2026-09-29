@@ -886,5 +886,3 @@ test('30. FASE P4.9 — Optimización mensaje WhatsApp PREVENTA (versión final 
     const urlDecodificada = decodeURIComponent(urlWhatsAppGenerada);
     assert.equal(urlDecodificada.includes(esperadoPrompt), true, 'La URL de WhatsApp debe contener el mensaje exacto codificado');
 });
-
-
