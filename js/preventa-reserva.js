@@ -20,7 +20,7 @@
     function formatearPrecio(val) {
         const num = Number(val);
         if (!Number.isFinite(num)) return 'S/ 0.00';
-        return 'S/ ' + (Math.round((num + Number.EPSILON) * 100) / 100).toFixed(2);
+        return 'S/ ' + (Math.round((num + Number.EPSILON) * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     /**

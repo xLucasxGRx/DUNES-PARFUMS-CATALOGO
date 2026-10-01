@@ -629,7 +629,7 @@
 
             function formatearPrecio(val) {
                 const num = Number(val) || 0;
-                return 'S/ ' + num.toFixed(2);
+                return 'S/ ' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
 
             /**

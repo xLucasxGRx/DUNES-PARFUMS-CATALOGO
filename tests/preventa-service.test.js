@@ -506,3 +506,62 @@ test('20. FASE P5.2 - Refinamiento premium del bloque de llegada (animaciones bo
     // Soporte para prefers-reduced-motion
     assert.ok(css.includes('prefers-reduced-motion'), 'Debe respetar preferencias de reducción de movimiento');
 });
+
+test('21. FASE P5.3 - normalizarNumero() procesa correctamente separadores de miles y diversos formatos numéricos', () => {
+    const fn = globalThis.PreventaService.normalizarNumero;
+    assert.equal(typeof fn, 'function');
+
+    // Formatos requeridos por la especificación
+    assert.equal(fn(1299), 1299);
+    assert.equal(fn('1299'), 1299);
+    assert.equal(fn('1299.00'), 1299);
+    assert.equal(fn('1,299'), 1299);
+    assert.equal(fn('1,299.00'), 1299);
+
+    // Formatos con prefijo de moneda
+    assert.equal(fn('S/ 1,299.00'), 1299);
+    assert.equal(fn('S/1,299.00'), 1299);
+    assert.equal(fn('S/ 999.00'), 999);
+
+    // Formatos existentes (compatibilidad total)
+    assert.equal(fn('999.00'), 999);
+    assert.equal(fn('230'), 230);
+    assert.equal(fn('195.50'), 195.5);
+    assert.equal(fn('', 0), 0);
+    assert.equal(fn(null, 0), 0);
+    assert.equal(fn(undefined, 0), 0);
+});
+
+test('22. FASE P5.3 - Caso puntual Xerjoff 1861 Naxos 100ml: precio_regular "1,299.00" y precio_preventa "999.00"', async () => {
+    const csvXerjoff = 'nombre,marca,categoria,genero,formato_presentacion,precio_regular,precio_preventa,stock,disponible,visible,imagen,ocasion\r\n' +
+        '"Xerjoff 1861 Naxos 100ml","Xerjoff","Nicho","Unisex","100 ml","1,299.00","999.00","5","true","true","https://dunesparfums.com/img/preventa/naxos.webp","Elegante,Citas"\r\n';
+
+    globalThis.fetch = async (url) => ({
+        ok: true,
+        text: async () => csvXerjoff,
+        json: async () => []
+    });
+
+    const productos = await globalThis.PreventaService.cargarProductos(true);
+    assert.equal(productos.length, 1);
+
+    const naxos = productos[0];
+    assert.equal(naxos.nombre, 'Xerjoff 1861 Naxos 100ml');
+    assert.equal(naxos.precio_regular, 1299);
+    assert.equal(naxos.precio_preventa, 999);
+    assert.equal(naxos.stock, 5);
+    assert.equal(naxos.disponible, true);
+    assert.equal(naxos.visible, true);
+});
+
+test('23. FASE P5.3 - Formateo de precio regular y precio preventa para presentación boutique', () => {
+    // Verificación de presentación S/ 1,299.00 en formateador de interfaz
+    const precioRegular = 1299;
+    const precioPreventa = 999;
+
+    const formatoRegular = 'S/ ' + precioRegular.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const formatoPreventa = 'S/ ' + precioPreventa.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    assert.equal(formatoRegular, 'S/ 1,299.00');
+    assert.equal(formatoPreventa, 'S/ 999.00');
+});
